@@ -447,7 +447,7 @@ export const calculateChallengeRequirementMultiplier = (
                 requirementMultiplier *= 10 * Math.pow(completions / 1000, 3)
             }
             if (completions >= 9000) {
-                requirementMultiplier *= 1337
+                requirementMultiplier *= 1337e40
             }
             return (requirementMultiplier)
         case "reincarnation":

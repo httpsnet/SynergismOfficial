@@ -371,13 +371,15 @@ export function calculateOfferings(input: resetNames, calcMult = true, statistic
     }
 
     if (statistic) {
-        return productContents(arr)
+        return Math.min(1e300, productContents(arr))
     }
 
-    q = Math.floor(q) * 100 / 100
     if (player.currentChallenge.ascension === 15) {
         q *= (1 + 2 * player.cubeUpgrades[62]);
     }
+
+    q = Math.min(1e300, q);
+    q = Math.floor(q) * 100 / 100;
 
     let persecond = 0;
     if (input === "prestige") {
@@ -470,6 +472,7 @@ export const calculateObtainium = () => {
     if (player.currentChallenge.ascension === 14) {
         G['obtainiumGain'] = 0
     }
+    G['obtainiumGain'] = Math.min(1e300, G['obtainiumGain']);
     player.obtainiumpersecond = G['obtainiumGain'] / (0.1 + player.reincarnationcounter)
     player.maxobtainiumpersecond = Math.max(player.maxobtainiumpersecond, player.obtainiumpersecond);
 }
@@ -757,31 +760,34 @@ export const calculateAntSacrificeRewards = (): IAntSacRewards => {
     calculateAntSacrificeELO();
     calculateAntSacrificeMultipliers();
 
+    const maxCap = 1e300;
     const rewardsMult = G['timeMultiplier'] * G['upgradeMultiplier'];
     const rewards: IAntSacRewards = {
         antSacrificePoints: G['effectiveELO'] * rewardsMult / 85,
-        offerings: Math.min(1e300, player.offeringpersecond * 0.15 * G['effectiveELO'] * rewardsMult / 180),
-        obtainium: Math.min(1e300, player.maxobtainiumpersecond * 0.24 * G['effectiveELO'] * rewardsMult / 180),
+        offerings: Math.min(maxCap, player.offeringpersecond * 0.15 * G['effectiveELO'] * rewardsMult / 180),
+        obtainium: Math.min(maxCap, player.maxobtainiumpersecond * 0.24 * G['effectiveELO'] * rewardsMult / 180),
+        
+        
         talismanShards: (G['antELO'] > 500) 
-            ? Math.max(1, Math.floor(rewardsMult / 210 * Math.pow(1 / 4 * (Math.max(0, G['effectiveELO'] - 500)), 2))) 
+            ? Math.min(maxCap, Math.max(1, Math.floor(rewardsMult / 210 * Math.pow(1 / 4 * (Math.max(0, G['effectiveELO'] - 500)), 2))))
             : 0,
         commonFragments: (G['antELO'] > 750) 
-            ? Math.max(1, Math.floor(rewardsMult / 110 * Math.pow(1 / 9 * (Math.max(0, G['effectiveELO'] - 750)), 1.83))) 
+            ? Math.min(maxCap, Math.max(1, Math.floor(rewardsMult / 110 * Math.pow(1 / 9 * (Math.max(0, G['effectiveELO'] - 750)), 1.83))))
             : 0,
         uncommonFragments: (G['antELO'] > 1000) 
-            ? Math.max(1, Math.floor(rewardsMult / 170 * Math.pow(1 / 16 * (Math.max(0, G['effectiveELO'] - 1000)), 1.66))) 
+            ? Math.min(maxCap, Math.max(1, Math.floor(rewardsMult / 170 * Math.pow(1 / 16 * (Math.max(0, G['effectiveELO'] - 1000)), 1.66))))
             : 0,
         rareFragments: (G['antELO'] > 1500) 
-            ? Math.max(1, Math.floor(rewardsMult / 200 * Math.pow(1 / 25 * (Math.max(0, G['effectiveELO'] - 1500)), 1.50))) 
+            ? Math.min(maxCap, Math.max(1, Math.floor(rewardsMult / 200 * Math.pow(1 / 25 * (Math.max(0, G['effectiveELO'] - 1500)), 1.50))))
             : 0,
         epicFragments: (G['antELO'] > 2000) 
-            ? Math.max(1, Math.floor(rewardsMult / 200 * Math.pow(1 / 36 * (Math.max(0, G['effectiveELO'] - 2000)), 1.33))) 
+            ? Math.min(maxCap, Math.max(1, Math.floor(rewardsMult / 200 * Math.pow(1 / 36 * (Math.max(0, G['effectiveELO'] - 2000)), 1.33))))
             : 0,
         legendaryFragments: (G['antELO'] > 3000) 
-            ? Math.max(1, Math.floor(rewardsMult / 230 * Math.pow(1 / 49 * (Math.max(0, G['effectiveELO'] - 3000)), 1.16))) 
+            ? Math.min(maxCap, Math.max(1, Math.floor(rewardsMult / 230 * Math.pow(1 / 49 * (Math.max(0, G['effectiveELO'] - 3000)), 1.16))))
             : 0,
         mythicalFragments: (G['antELO'] > 5000) 
-            ? Math.max(1, Math.floor(rewardsMult / 220 * Math.pow(1 / 64 * (Math.max(0, G['effectiveELO'] - 4150)), 1))) 
+            ? Math.min(maxCap, Math.max(1, Math.floor(rewardsMult / 220 * Math.pow(1 / 64 * (Math.max(0, G['effectiveELO'] - 4150)), 1))))
             : 0
     };
 

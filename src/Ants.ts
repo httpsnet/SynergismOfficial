@@ -4,6 +4,7 @@ import { Globals as G } from './Variables';
 
 import Decimal, { DecimalSource } from 'break_infinity.js';
 import { achievementaward } from './Achievements';
+import { smallestInc } from './Utility';
 import { Confirm, revealStuff } from './UpdateHTML';
 import { redeemShards } from './Runes';
 import { updateTalismanInventory } from './Talismans';
@@ -59,7 +60,6 @@ export const calculateCrumbToCoinExp = () => {
     const exponent = player.currentChallenge.ascension !== 15
         ? 100000 + calculateSigmoidExponential(49900000, (player.antUpgrades[2-1]! + G['bonusant2']) / 5000 * 500 / 499)
         : 1/10000 * (100000 + calculateSigmoidExponential(49900000, (player.antUpgrades[2-1]! + G['bonusant2']) / 5000 * 500 / 499));
-    
     return exponent
 }
 
@@ -173,11 +173,11 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
         cashToBuy = getAntCost(originalCost, buyTo, index);
     }
     let stepdown = Math.floor(buyTo / 8);
-    while (stepdown !== 0) {
+    while (stepdown >= 1) {
         if (getAntCost(originalCost, buyTo - stepdown, index).lte(player[tag])) {
             stepdown = Math.floor(stepdown / 2);
         } else {
-            buyTo = buyTo - stepdown;
+            buyTo = buyTo - Math.max(smallestInc(buyTo), stepdown);
         }
     }
 
@@ -187,12 +187,12 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
         }
     }
     // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
-    let buyFrom = Math.max(buyTo - 7, player[key] + 1);
+    let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), player[key] + 1);
     let thisCost = getAntCost(originalCost, buyFrom, index);
-    while (buyFrom <= buyTo && player[tag].gte(getAntCost(originalCost, buyFrom, index))) {
+    while (buyFrom <= buyTo && player[tag].gte(thisCost)) {
         player[tag] = player[tag].sub(thisCost);
         player[key] = buyFrom;
-        buyFrom = buyFrom + 1;
+        buyFrom = buyFrom + smallestInc(buyFrom);
         thisCost = getAntCost(originalCost, buyFrom, index);
         player[`${pos}CostAnts` as const] = thisCost;
     }
@@ -206,7 +206,7 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
 
     const achRequirements = [2, 6, 20, 100, 500, 6666, 77777];
     for (let j = 0; j < achRequirements.length; j++) {
-        if (sacrificeMult > achRequirements[j] && player[`${G['ordinals'][j + 1 as ZeroToSeven]}OwnedAnts` as const] > 0 && player.achievements[176 + j] === 0) {
+        if (sacrificeMult.gte(achRequirements[j]) && player[`${G['ordinals'][j + 1 as ZeroToSeven]}OwnedAnts` as const] > 0 && player.achievements[176 + j] === 0) {
             achievementaward(176 + j)
         }
     }
@@ -227,11 +227,11 @@ export const buyAntUpgrade = (originalCost: DecimalSource, auto: boolean, index:
             cashToBuy = getAntUpgradeCost(originalCost, buyTo, index);
         }
         let stepdown = Math.floor(buyTo / 8);
-        while (stepdown !== 0) {
+        while (stepdown >= 1) {
             if (getAntUpgradeCost(originalCost, buyTo - stepdown, index).lte(player.antPoints)) {
                 stepdown = Math.floor(stepdown / 2);
             } else {
-                buyTo = buyTo - stepdown;
+                buyTo = buyTo - Math.max(smallestInc(buyTo), stepdown);
             }
         }
         if (!player.antMax) {
@@ -240,12 +240,12 @@ export const buyAntUpgrade = (originalCost: DecimalSource, auto: boolean, index:
             }
         }
         // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
-        let buyFrom = Math.max(buyTo - 7, 1 + player.antUpgrades[index-1]!);
+        let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), 1 + player.antUpgrades[index-1]!);
         let thisCost = getAntUpgradeCost(originalCost, buyFrom, index);
         while (buyFrom <= buyTo && player.antPoints.gte(thisCost)) {
             player.antPoints = player.antPoints.sub(thisCost);
             player.antUpgrades[index-1] = buyFrom;
-            buyFrom = buyFrom + 1;
+            buyFrom = buyFrom + smallestInc(buyFrom);
             thisCost = getAntUpgradeCost(originalCost, buyFrom, index);
         }
         calculateAnts();
@@ -296,10 +296,10 @@ export const antUpgradeDescription = (i: number) => {
 //}
 
 export const antSacrificePointsToMultiplier = (points: number) => {
-    let multiplier = Math.pow(1 + points / 5000, 2)
-    multiplier *= (1 + 0.2 * Math.log(1 + points) / Math.log(10))
+    let multiplier = Decimal.pow(1 + points / 5000, 2);
+    multiplier = multiplier.times((1 + 0.2 * Math.log(1 + points) / Math.log(10)));
     if (player.achievements[174] > 0) {
-        multiplier *= (1 + 0.4 * Math.log(1 + points) / Math.log(10))
+        multiplier = multiplier.times((1 + 0.4 * Math.log(1 + points) / Math.log(10)));
     }
     return multiplier;
 }
@@ -340,10 +340,11 @@ export const sacrificeAnts = async (auto = false) => {
         if (p) {
             const antSacrificePointsBefore = player.antSacrificePoints;
 
+            const maxCap = 1e300;
             const sacRewards = calculateAntSacrificeRewards();
             player.antSacrificePoints += sacRewards.antSacrificePoints;
-            player.runeshards += sacRewards.offerings;
-            player.researchPoints += sacRewards.obtainium;
+            player.runeshards = Math.min(maxCap, player.runeshards + sacRewards.offerings);
+            player.researchPoints = Math.min(maxCap, player.researchPoints + sacRewards.obtainium);
 
             const historyEntry: ResetHistoryEntryAntSacrifice = {
                 date: Date.now(),
@@ -360,13 +361,13 @@ export const sacrificeAnts = async (auto = false) => {
             };
 
             if (player.challengecompletions[9] > 0) {
-                player.talismanShards += sacRewards.talismanShards;
-                player.commonFragments += sacRewards.commonFragments;
-                player.uncommonFragments += sacRewards.uncommonFragments;
-                player.rareFragments += sacRewards.rareFragments;
-                player.epicFragments += sacRewards.epicFragments;
-                player.legendaryFragments += sacRewards.legendaryFragments;
-                player.mythicalFragments += sacRewards.mythicalFragments;
+                player.talismanShards = Math.min(maxCap, player.talismanShards + sacRewards.talismanShards);
+                player.commonFragments = Math.min(maxCap, player.commonFragments + sacRewards.commonFragments);
+                player.uncommonFragments = Math.min(maxCap, player.uncommonFragments + sacRewards.uncommonFragments);
+                player.rareFragments = Math.min(maxCap, player.rareFragments + sacRewards.rareFragments);
+                player.epicFragments = Math.min(maxCap, player.epicFragments + sacRewards.epicFragments);
+                player.legendaryFragments = Math.min(maxCap, player.legendaryFragments + sacRewards.legendaryFragments);
+                player.mythicalFragments = Math.min(maxCap, player.mythicalFragments + sacRewards.mythicalFragments);
             }
 
             // Refer to analogous code in Syngergism.js, function tick().

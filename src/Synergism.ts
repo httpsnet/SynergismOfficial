@@ -1585,58 +1585,14 @@ export const format = (
         const powerLookF = powerLook.toLocaleString(undefined, {
             minimumFractionDigits: 4 - powerFront, maximumFractionDigits: 4 - powerFront
         });
+        const notation = ['', '', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'UDc', 'DDc', 'TDc', 'QaDc', 'QiDc', 'SxDc', 'SpDc', 'OcDc', 'NoDc', 'Vg', 'UVg', 'DVg', 'TVg', 'QaVg', 'QiVg', 'SxVg', 'SpVg', 'OcVg', 'NoVg', 'AAAA', 'BBBB'];
+        const powerLodge = Math.floor(Math.log10(power) / 3);
         // Return relevant notations alongside the "look" power based on what the power actually is
-        if (power < 1e9) {
-            return `${mantissaLook}e${powerLookF}M`;
+        if (typeof notation[powerLodge] === 'string') {
+            return `${mantissaLook}e${powerLookF}${notation[powerLodge]}`;
         }
-        if (power < 1e12) {
-            return `${mantissaLook}e${powerLookF}B`;
-        }
-        if (power < 1e15) {
-            return `${mantissaLook}e${powerLookF}T`;
-        }
-        if (power < 1e18) {
-            return `${mantissaLook}e${powerLookF}Qa`;
-        }
-        if (power < 1e21) {
-            return `${mantissaLook}e${powerLookF}Qi`;
-        }
-        if (power < 1e24) {
-            return `${mantissaLook}e${powerLookF}Sx`;
-        }
-        if (power < 1e27) {
-            return `${mantissaLook}e${powerLookF}Sp`;
-        }
-        if (power < 1e30) {
-            return `${mantissaLook}e${powerLookF}Oc`;
-        }
-        if (power < 1e33) {
-            return `${mantissaLook}e${powerLookF}No`;
-        }
-        if (power < 1e36) {
-            return `${mantissaLook}e${powerLookF}Dc`;
-        }
-        if (power < 1e39) {
-            return `${mantissaLook}e${powerLookF}UDc`;
-        }
-        if (power < 1e42) {
-            return `${mantissaLook}e${powerLookF}DDc`;
-        }
-        if (power < 1e45) {
-            return `${mantissaLook}e${powerLookF}TDc`;
-        }
-        if (power < 1e48) {
-            return `${mantissaLook}e${powerLookF}QaDc`;
-        }
-        if (power < 1e51) {
-            return `${mantissaLook}e${powerLookF}QiDc`;
-        }
-        if (power < 1e54) {
-            return `${mantissaLook}e${powerLookF}AAAA`;
-        }
-        
         // If it doesn't fit a notation then default to mantissa e power
-        return `${mantissa}e${power}`;
+        return `e${power.toExponential(3)}`;
     } else {
         return `0 [und.]`;
     }
@@ -1916,7 +1872,7 @@ export const updateAllMultiplier = (): void => {
     c += Math.floor((0.1 * b * CalcECC('transcend', player.challengecompletions[1])))
     c += (CalcECC('transcend', player.challengecompletions[1]) * 10);
     G['freeMultiplierBoost'] = c;
-    G['totalMultiplierBoost'] = Math.pow(Math.floor(b) + c, 1 + CalcECC('reincarnation', player.challengecompletions[7]) * 0.04);
+    G['totalMultiplierBoost'] = Math.min(1e300, Math.pow(b + c, 1 + CalcECC('reincarnation', player.challengecompletions[7]) * 0.04));
 
     let c7 = 1
     if (player.challengecompletions[7] > 0.5) {
@@ -2182,7 +2138,7 @@ export const multipliers = (): void => {
     G['globalAntMult'] = G['globalAntMult'].times(Decimal.pow(Math.max(1, player.researchPoints), G['effectiveRuneBlessingPower'][5]))
     G['globalAntMult'] = G['globalAntMult'].times(Math.pow(1 + G['runeSum'] / 100, G['talisman6Power']))
     G['globalAntMult'] = G['globalAntMult'].times(Math.pow(1.1, CalcECC('reincarnation', player.challengecompletions[9])))
-    G['globalAntMult'] = G['globalAntMult'].times(G['cubeBonusMultiplier'][6])
+    G['globalAntMult'] = G['globalAntMult'].times(Math.min(1e300, G['cubeBonusMultiplier'][6]))
     if (player.achievements[169] === 1) {
         G['globalAntMult'] = G['globalAntMult'].times(Decimal.log(player.antPoints.add(10), 10))
     }
@@ -3090,6 +3046,15 @@ export const updateAll = (): void => {
     }
     if (player.researchPoints > player.maxobtainium) {
         player.maxobtainium = player.researchPoints;
+    }
+
+    // Fixed an issue where offering and obtainium would freeze the game with Infinity with a cap.
+    // The fix should use Decimal. by httpsnet
+    if (player.runeshards > 1e300) {
+        player.runeshards = 1e300;
+    }
+    if (player.researchPoints > 1e300) {
+        player.researchPoints = 1e300;
     }
 
     G['effectiveLevelMult'] = 1;

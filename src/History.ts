@@ -303,7 +303,7 @@ const resetHistoryRenderRow = (
     if (data.kind === "antsacrifice") {
         const oldMulti = antSacrificePointsToMultiplier(data.antSacrificePointsBefore);
         const newMulti = antSacrificePointsToMultiplier(data.antSacrificePointsAfter);
-        const diff = newMulti - oldMulti;
+        const diff = newMulti.sub(oldMulti);
         extra.push(
             `<span title="Ant Multiplier: ${format(oldMulti, 3, false)}--&gt;${format(newMulti, 3, false)}"><img src="Pictures/Multiplier.png" alt="Ant Multiplier">+${format(diff, 3, false)}</span>`,
             `<span title="+${formatDecimalSource(data.crumbsPerSecond)} crumbs/s"><img src="Pictures/GalacticCrumbs.png" alt="Crumbs">${extractStringExponent(formatDecimalSource(data.crumbs))}</span>`,
