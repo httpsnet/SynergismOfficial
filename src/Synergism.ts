@@ -2126,63 +2126,8 @@ export const multipliers = (): void => {
     }
 
 /*    //Update 2.5.0: Updated to have a base of 10 instead of 1x
-    G['globalAntMult'] = new Decimal(10);
-    G['globalAntMult'] = G['globalAntMult'].times(1 + 1 / 2500 * Math.pow(G['rune5level'] * G['effectiveLevelMult'] * (1 + player.researches[84] / 200 * (1 + 1 * G['effectiveRuneSpiritPower'][5] * calculateCorruptionPoints() / 400)), 2))
-    if (player.upgrades[76] === 1) {
-        G['globalAntMult'] = G['globalAntMult'].times(5)
-    }
-    G['globalAntMult'] = G['globalAntMult'].times(Decimal.pow(1 + player.upgrades[77] / 250 + player.researches[96] / 5000, player.firstOwnedAnts + player.secondOwnedAnts + player.thirdOwnedAnts + player.fourthOwnedAnts + player.fifthOwnedAnts + player.sixthOwnedAnts + player.seventhOwnedAnts + player.eighthOwnedAnts))
-    G['globalAntMult'] = G['globalAntMult'].times(1 + player.upgrades[78] * 0.005 * Math.pow(Math.log(player.maxofferings + 1) / Math.log(10), 2))
-    G['globalAntMult'] = G['globalAntMult'].times(Decimal.pow(1.11 + player.researches[101] / 1000 + player.researches[162] / 10000, player.antUpgrades[1-1] + G['bonusant1']));
-    G['globalAntMult'] = G['globalAntMult'].times(antSacrificePointsToMultiplier(player.antSacrificePoints))
-    G['globalAntMult'] = G['globalAntMult'].times(Decimal.pow(Math.max(1, player.researchPoints), G['effectiveRuneBlessingPower'][5]))
-    G['globalAntMult'] = G['globalAntMult'].times(Math.pow(1 + G['runeSum'] / 100, G['talisman6Power']))
-    G['globalAntMult'] = G['globalAntMult'].times(Math.pow(1.1, CalcECC('reincarnation', player.challengecompletions[9])))
-    G['globalAntMult'] = G['globalAntMult'].times(Math.min(1e300, G['cubeBonusMultiplier'][6]))
-    if (player.achievements[169] === 1) {
-        G['globalAntMult'] = G['globalAntMult'].times(Decimal.log(player.antPoints.add(10), 10))
-    }
-    if (player.achievements[171] === 1) {
-        G['globalAntMult'] = G['globalAntMult'].times(1.16666)
-    }
-    if (player.achievements[172] === 1) {
-        G['globalAntMult'] = G['globalAntMult'].times(1 + 2 * (1 - Math.pow(2, -Math.min(1, player.reincarnationcounter / 7200))))
-    }
-    if (player.upgrades[39] === 1) {
-        G['globalAntMult'] = G['globalAntMult'].times(1.60)
-    }
-    G['globalAntMult'] = G['globalAntMult'].times(Decimal.pow(1 + 0.1 * Decimal.log(player.ascendShards.add(1), 10), player.constantUpgrades[5]))
-    G['globalAntMult'] = G['globalAntMult'].times(Decimal.pow(1e5, CalcECC('ascension', player.challengecompletions[11])))
-    if (player.researches[147] > 0) {
-        G['globalAntMult'] = G['globalAntMult'].times(Decimal.log(player.antPoints.add(10), 10))
-    }
-    if (player.researches[177] > 0) {
-        G['globalAntMult'] = G['globalAntMult'].times(Decimal.pow(Decimal.log(player.antPoints.add(10), 10), player.researches[177]))
-    }
-
-    if (player.currentChallenge.ascension === 12) {
-        G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 0.5)
-    }
-    if (player.currentChallenge.ascension === 13) {
-        G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 0.23)
-    }
-    if (player.currentChallenge.ascension === 14) {
-        G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 0.2)
-    }
-
-    G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 1 - 0.9 / 90 * Math.min(99, sumContents(player.usedCorruptions)))
-    G['globalAntMult'] = Decimal.pow(G['globalAntMult'], G['extinctionMultiplier'][player.usedCorruptions[7]])
-    G['globalAntMult'] = G['globalAntMult'].times(G['challenge15Rewards'].antSpeed)
-    //V2.5.0: Moved ant shop upgrade as 'uncorruptable'
-    G['globalAntMult'] = G['globalAntMult'].times(Math.pow(1.125, player.shopUpgrades.antSpeed));
-
-
-    if (player.platonicUpgrades[12] > 0) {
-        G['globalAntMult'] = G['globalAntMult'].times(Decimal.pow(1 + 1 / 100 * player.platonicUpgrades[12], sumContents(player.highestchallengecompletions)))
-    }
-    if (player.currentChallenge.ascension === 15 && player.platonicUpgrades[10] > 0) {
-        G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 1.25)
-    } */
+    updateAntMultipliers();
+*/
 
     G['globalConstantMult'] = new Decimal("1")
     G['globalConstantMult'] = G['globalConstantMult'].times(Decimal.pow(1.05 + 0.01 * player.achievements[270] + 0.001 * player.platonicUpgrades[18], player.constantUpgrades[1]))
@@ -2423,7 +2368,7 @@ export const updateAntMultipliers = (): void => {
     G['globalAntMult'] = G['globalAntMult'].times(Decimal.pow(Math.max(1, player.researchPoints), G['effectiveRuneBlessingPower'][5]))
     G['globalAntMult'] = G['globalAntMult'].times(Math.pow(1 + G['runeSum'] / 100, G['talisman6Power']))
     G['globalAntMult'] = G['globalAntMult'].times(Math.pow(1.1, CalcECC('reincarnation', player.challengecompletions[9])))
-    G['globalAntMult'] = G['globalAntMult'].times(G['cubeBonusMultiplier'][6])
+    G['globalAntMult'] = G['globalAntMult'].times(Math.min(1e300, G['cubeBonusMultiplier'][6]))
     if (player.achievements[169] === 1) {
         G['globalAntMult'] = G['globalAntMult'].times(Decimal.log(player.antPoints.add(10), 10))
     }
