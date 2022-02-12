@@ -74,7 +74,7 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
             calculateObtainium();
             const obtainiumGain = calculateAutomaticObtainium();
             //Add Obtainium
-            player.researchPoints += obtainiumGain * time * timeMultiplier;
+            player.researchPoints = Math.min(1e300, player.researchPoints + obtainiumGain * time * timeMultiplier);
             //Update visual displays if appropriate
             if (G['currentTab'] === "researches") {
                 visualUpdateResearch();
@@ -86,7 +86,7 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
             //As well as cube upgrade 1x2 (2).
             G['autoOfferingCounter'] += time;
             //Any time this exceeds 1 it adds an offering
-            player.runeshards += Math.floor(G['autoOfferingCounter']);
+            player.runeshards = Math.min(1e300, player.runeshards + Math.floor(G['autoOfferingCounter']));
             G['autoOfferingCounter'] %= 1;
             break;
         case "runeSacrifice":

@@ -510,13 +510,13 @@ export const useConsumable = async (input: ShopUpgradeNames) => {
             case "offeringPotion":
                 if (player.shopUpgrades.offeringPotion > 0.5) {
                     player.shopUpgrades.offeringPotion -= 1;
-                    player.runeshards += Math.floor(7200 * player.offeringpersecond * calculateTimeAcceleration());
+                    player.runeshards = Math.min(1e300, player.runeshards + Math.floor(7200 * player.offeringpersecond * calculateTimeAcceleration()));
                 }
                 break;
             case "obtainiumPotion":
                 if (player.shopUpgrades.obtainiumPotion > 0.5) {
                     player.shopUpgrades.obtainiumPotion -= 1;
-                    player.researchPoints += Math.floor(7200 * player.maxobtainiumpersecond * calculateTimeAcceleration());
+                    player.researchPoints = Math.min(1e300, player.researchPoints + Math.floor(7200 * player.maxobtainiumpersecond * calculateTimeAcceleration()));
                 }
                 break;
         }
