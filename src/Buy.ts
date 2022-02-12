@@ -397,7 +397,7 @@ export const buyMax = (index: OneToFive, type: keyof typeof buyProducerTypes) =>
     // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
     let buyFrom = Math.max(buyStart + buyInc - 6 - smallestInc(buyInc), player[posOwnedType] + 1);
     let thisCost = getCostInternal(originalCost, buyFrom, type, num, r);
-    while (buyFrom < buyStart + buyInc && player[tag].gte(thisCost)) {
+    while (buyFrom <= buyStart + buyInc && player[tag].gte(thisCost)) {
         player[tag] = player[tag].sub(thisCost);
         player[posOwnedType] = buyFrom;
         buyFrom = buyFrom + smallestInc(buyFrom);
@@ -565,7 +565,7 @@ export const boostAccelerator = (automated?: boolean) => {
         // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
         let buyFrom = Math.max(buyStart + buyInc - 6 - smallestInc(buyInc), player.acceleratorBoostBought + 1);
         let thisCost = getAcceleratorBoostCost(player.acceleratorBoostBought);
-        while (buyFrom < buyStart + buyInc && player.prestigePoints.gte(getAcceleratorBoostCost(buyFrom))) {
+        while (buyFrom <= buyStart + buyInc && player.prestigePoints.gte(getAcceleratorBoostCost(buyFrom))) {
             player.prestigePoints = player.prestigePoints.sub(thisCost);
             player.acceleratorBoostBought = buyFrom;
             buyFrom = buyFrom + smallestInc(buyFrom);
@@ -666,7 +666,7 @@ export const buyParticleBuilding = (
     // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
     let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), player[key] + 1);
     let thisCost = getParticleCost(originalCost, buyFrom);
-    while (buyFrom < buyTo && player.reincarnationPoints.gte(thisCost)) {
+    while (buyFrom <= buyTo && player.reincarnationPoints.gte(thisCost)) {
         player.reincarnationPoints = player.reincarnationPoints.sub(thisCost);
         player[key] = buyFrom;
         buyFrom = buyFrom + smallestInc(buyFrom);
