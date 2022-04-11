@@ -18,8 +18,8 @@ type ResetHistoryEntryBase = {
 };
 
 export type ResetHistoryEntryAntSacrifice = ResetHistoryEntryBase & {
-    antSacrificePointsAfter: number
-    antSacrificePointsBefore: number
+    antSacrificePointsAfter: Decimal
+    antSacrificePointsBefore: Decimal
     baseELO: number
     crumbs: string
     crumbsPerSecond: string
@@ -224,7 +224,7 @@ const resetHistoryCorruptionImages = [
 
 const resetHistoryCorruptionTitles = [
     "Divisiveness [Multipliers]",
-    "Maladaption [Accelerators]",
+    "Viscosity [Multipliers, Accelerators]",
     "Spacial Dilation [Time]",
     "Hyperchallenged [Challenge Requirements]",
     "Scientific Illiteracy [Obtainium]",
@@ -272,7 +272,6 @@ const resetHistoryRenderRow = (
     _category: Category, 
     data: ResetHistoryEntryUnion
 ) => {
-    let colsUsed = 1;
     const row = document.createElement("tr");
     let rowContentHtml = "";
 
@@ -300,9 +299,10 @@ const resetHistoryRenderRow = (
     // Kind-dependent rendering goes here. TypeScript will automatically cast to the appropriate structure based on
     // the kind check.
     const extra: string[] = [];
+    const extra2: string[] = [];
     if (data.kind === "antsacrifice") {
-        const oldMulti = antSacrificePointsToMultiplier(data.antSacrificePointsBefore);
-        const newMulti = antSacrificePointsToMultiplier(data.antSacrificePointsAfter);
+        const oldMulti = antSacrificePointsToMultiplier(new Decimal(data.antSacrificePointsBefore));
+        const newMulti = antSacrificePointsToMultiplier(new Decimal(data.antSacrificePointsAfter));
         const diff = newMulti.sub(oldMulti);
         extra.push(
             `<span title="Ant Multiplier: ${format(oldMulti, 3, false)}--&gt;${format(newMulti, 3, false)}"><img src="Pictures/Multiplier.png" alt="Ant Multiplier">+${format(diff, 3, false)}</span>`,
@@ -317,7 +317,7 @@ const resetHistoryRenderRow = (
         const corruptions = resetHistoryFormatCorruptions(data);
         
         extra.push(corruptions[0]);
-        extra.push(corruptions[1]);
+        extra2.push(corruptions[1]);
     }
 
     // This rendering is done this way so that all rows should have the same number of columns, which makes rows
@@ -327,17 +327,18 @@ const resetHistoryRenderRow = (
     // realistically displayed; you can increase them if more gains are added.
 
     // Render the gains plus the gains filler
-    colsUsed += gains.length;
     rowContentHtml += gains.reduce((acc, value) => {
         return `${acc}<td class="history-gain">${value}</td>`;
     }, "");
-    rowContentHtml += `<td class="history-filler" colspan="${7 - colsUsed}"></td>`;
 
     // Render the other stuff
     rowContentHtml += extra.reduce((acc, value) => {
         return `${acc}<td class="history-extra">${value}</td>`;
     }, "");
-    rowContentHtml += `<td class="history-filler" colspan="${4 - extra.length}"></td>`;
+    // Render the other stuff
+    rowContentHtml += extra2.reduce((acc, value) => {
+        return `${acc}<td class="history-corruption">${value}</td>`;
+    }, "");
 
     row.innerHTML = rowContentHtml;
     return row;
@@ -376,10 +377,10 @@ export const resetHistoryTogglePerSecond = () => {
 const resetHistoryFormatCorruptions = (data: ResetHistoryEntryAscend): [string, string] => {
     let score = "Score: " + format(data.corruptionScore, 0, false);
     let corruptions = "";
-    for (let i = 0; i < resetHistoryCorruptionImages.length; ++i) {
+    for (let i = 1; i < resetHistoryCorruptionImages.length; ++i) {
         const corruptionIdx = i + 1;
         if (corruptionIdx in data.usedCorruptions && data.usedCorruptions[corruptionIdx] !== 0) {
-            corruptions += ` <img alt="${resetHistoryCorruptionTitles[i]}" src="${resetHistoryCorruptionImages[i]}" title="${resetHistoryCorruptionTitles[i]}">${data.usedCorruptions[corruptionIdx]}`;
+            corruptions += `<div><img alt="${resetHistoryCorruptionTitles[i]}" src="${resetHistoryCorruptionImages[i]}" title="${resetHistoryCorruptionTitles[i]}">${data.usedCorruptions[corruptionIdx]}</div>`;
         }
     }
     if (data.currentChallenge !== undefined) {

@@ -219,9 +219,9 @@
                 <li class="chal8" id="anttab">Anthill</li>
                 <li class="chal10" id="cubetab">WOW! Cubes</li>
                 <li class="chal11" id="traitstab">Corruption</li>
+                <li class="singularity" id="singularitytab">Singularity</li>
                 <li id="settingstab">Settings</li>
                 <li class="reincarnationunlock" id="shoptab">Shop</li>
-                <li class="singularity" id="singularitytab">Singularity</li>
             </ul>
         </nav>
     </header>
@@ -242,6 +242,7 @@
                 <td><img id="cointen" class="buyAmountBtn" src="Pictures/Transparent Pics/CoinTen.png" alt="" loading="lazy"></td>
                 <td><img id="coinhundred" class="buyAmountBtn" src="Pictures/Transparent Pics/CoinHundred.png" alt="" loading="lazy"></td>
                 <td><img id="cointhousand" class="buyAmountBtn" src="Pictures/Transparent Pics/CoinThousand.png" alt="" loading="lazy"></td>
+                <td><img id="coinmillion" class="buyAmountBtn" src="Pictures/Transparent Pics/CoinMillion.png" alt="" loading="lazy"></td>
                 </tr>
             </table>
             <p class="coinunlock3" id="togglecoinbuy">Toggle amount to buy</p>
@@ -327,10 +328,11 @@
                 <td><img id="crystalten" class="buyAmountBtn" src="Pictures/Transparent Pics/CrystalTen.png" alt="" loading="lazy"></td>
                 <td><img id="crystalhundred" class="buyAmountBtn" src="Pictures/Transparent Pics/CrystalHundred.png" alt="" loading="lazy"></td>
                 <td><img id="crystalthousand" class="buyAmountBtn" src="Pictures/Transparent Pics/CrystalThousand.png" alt="" loading="lazy"></td>
+                <td><img id="crystalmillion" class="buyAmountBtn" src="Pictures/Transparent Pics/CrystalMillion.png" alt="" loading="lazy"></td>
 
                 </tr>
             </table>
-            <p id="togglecrystalbuy">Toggle amount to buy</p>
+            <p id="togglecrystalbuy" class="coinunlock3">Toggle amount to buy</p>
         </div>
         
         <div class="buttonRow">
@@ -405,6 +407,7 @@
                 <td><img id="mythosten" class="buyAmountBtn" src="Pictures/Transparent Pics/MythosTen.png" alt="" loading="lazy"></td>
                 <td><img id="mythoshundred" class="buyAmountBtn" src="Pictures/Transparent Pics/MythosHundred.png" alt="" loading="lazy"></td>
                 <td><img id="mythosthousand" class="buyAmountBtn" src="Pictures/Transparent Pics/MythosThousand.png" alt="" loading="lazy"></td>
+                <td><img id="mythosmillion" class="buyAmountBtn" src="Pictures/Transparent Pics/MythosMillion.png" alt="" loading="lazy"></td>
                 </tr>
             </table>
             <p id="togglemythosbuy">Toggle amount to buy</p>
@@ -467,6 +470,7 @@
                 <td><img id="particleten" class="buyAmountBtn" src="Pictures/Transparent Pics/ParticleTen.png" alt="" loading="lazy"></td>
                 <td><img id="particlehundred" class="buyAmountBtn" src="Pictures/Transparent Pics/ParticleHundred.png" alt="" loading="lazy"></td>
                 <td><img id="particlethousand" class="buyAmountBtn" src="Pictures/Transparent Pics/ParticleThousand.png" alt="" loading="lazy"></td>
+                <td><img id="particlemillion" class="buyAmountBtn" src="Pictures/Transparent Pics/ParticleMillion.png" alt="" loading="lazy"></td>
                 </tr>
             </table>
             <p id="toggleparticlebuy">Toggle amount to buy</p>
@@ -534,6 +538,7 @@
                     <td><img id="tesseractten" class="buyAmountBtn" src="Pictures/Transparent Pics/TesseractTen.png" alt="" loading="lazy"></td>
                     <td><img id="tesseracthundred" class="buyAmountBtn" src="Pictures/Transparent Pics/TesseractHundred.png" alt="" loading="lazy"></td>
                     <td><img id="tesseractthousand" class="buyAmountBtn"src="Pictures/Transparent Pics/TesseractThousand.png" alt="" loading="lazy"></td>
+                    <td><img id="tesseractmillion" class="buyAmountBtn"src="Pictures/Transparent Pics/TesseractMillion.png" alt="" loading="lazy"></td>
                 </tr>
             </table>
             <p id="toggleTesseractBuy">Toggle amount to buy</p>
@@ -1198,6 +1203,7 @@
                         <td><img id="offeringten" class="buyAmountBtn" src="Pictures/Transparent Pics/OfferingTen.png" alt="" loading="lazy"></td>
                         <td><img id="offeringhundred" class="buyAmountBtn" src="Pictures/Transparent Pics/OfferingHundred.png" alt="" loading="lazy"></td>
                         <td><img id="offeringthousand" class="buyAmountBtn" src="Pictures/Transparent Pics/OfferingThousand.png" alt="" loading="lazy"></td>
+                        <td><img id="offeringmillion" class="buyAmountBtn" src="Pictures/Transparent Pics/OfferingMillion.png" alt="" loading="lazy"></td>
                         </tr>
                     </table>
                     <p id="toggleofferingbuy">Toggle the number of levels to buy per sacrifice</p>
@@ -1330,7 +1336,6 @@
                     <span id="talismanFragmentCost">Cost for 1: 1e6 Obtainium</span>
                 </div>
                 <div class="talismansContainer">
-                    <button class="talismanBtn" id="respecAllTalismans">RESPEC ALL</button>
                     <div class="talismanContainer" id="talisman1area">
                         <span class="talismanName" style="color: limegreen;">Exemption</span>
                         <img class="talismanIcon" id="talisman1" src="Pictures/taxtalisman.png" alt="" loading="lazy">
@@ -1420,6 +1425,7 @@
                     <p id="talismanLevelUpSummary" style="color: silver">-=-=- Resources Required to Level Up -=-=-</p>
                     <table>
                         <tr>
+                            <td rowspan="2"><button class="talismanBtn" id="respecAllTalismans">RESPEC ALL</button></td>
                             <td style="font-size: 0; width: 32px"><img src="Pictures/TalismanShard.png" alt="" loading="lazy"></td>
                             <td style="width: 68px; color: yellow"><p id="talismanShardCost"></p></td>
                             <td style="font-size: 0; width: 32px"><img src="Pictures/CommonTalisman.png" alt="" loading="lazy"></td>
@@ -1442,17 +1448,18 @@
 
                 <div id="talismanrespec" style="display: none">
                     <p id="talismanRespecSummary" style="color: orchid">+-==-+ Select for 3 GREEN Runes, for Respec! +-==-+</p>
-                    <button class="talismanRespecBtn" id="talismanRespecButton1">Speed Rune: POSITIVE</button>
-                    <button class="talismanRespecBtn" id="talismanRespecButton2">Duplication Rune: POSITIVE</button>
-                    <button class="talismanRespecBtn" id="talismanRespecButton3">Prism Rune: POSITIVE</button>
-                    <button class="talismanRespecBtn" id="talismanRespecButton4">Thrift Rune: POSITIVE</button>
-                    <button class="talismanRespecBtn" id="talismanRespecButton5">SI Rune: POSITIVE</button>
-                    <button class="talismanRespecBtn" id="confirmTalismanRespec" style="border: 2px solid plum">Confirm for 100,000 Offerings.</button>
-                    <button class="talismanRespecBtn" id="cancelTalismanRespec" style="border: 2px solid red">Cancel respec changes</button>
+                    <div><button class="talismanRespecBtn" id="talismanRespecButton1">Speed Rune: POSITIVE</button></div>
+                    <div><button class="talismanRespecBtn" id="talismanRespecButton2">Duplication Rune: POSITIVE</button></div>
+                    <div><button class="talismanRespecBtn" id="talismanRespecButton3">Prism Rune: POSITIVE</button></div>
+                    <div><button class="talismanRespecBtn" id="talismanRespecButton4">Thrift Rune: POSITIVE</button></div>
+                    <div><button class="talismanRespecBtn" id="talismanRespecButton5">SI Rune: POSITIVE</button></div>
+                    <div><button class="talismanRespecBtn" id="confirmTalismanRespec" style="border: 2px solid plum">Confirm for 100,000 Offerings.</button></div>
+                    <div><button class="talismanRespecBtn" id="cancelTalismanRespec" style="border: 2px solid red">Cancel respec changes</button></div>
                 </div>
             </div>
             <div id="runeContainer3" style="display: none">
                 <div class="runeBlessingPurchaseSettings">
+                    <button id="buyAllBlessings" class="runeButtons runeButtonsAvailable" style="width: 120px;">ALL Increase Level</button>
                     <input type="number" id="buyRuneBlessingInput" min="1" max="999999999" defaultValue="1">
                     <span id="buyRuneBlessingToggle" style="color: yellow">Buy up to <span id="buyRuneBlessingToggleValue" style="color: orchid">1</span> Levels per purchase, if affordable. [Input to toggle]</span>
                 </div>
@@ -1489,6 +1496,7 @@
             </div>
             <div id="runeContainer4" style="display: none">
                 <div class="runeBlessingPurchaseSettings">
+                    <button id="buyAllSpirits" class="runeButtons runeButtonsAvailable" style="width: 120px;">ALL Increase Level</button>
                     <input type="number" id="buyRuneSpiritInput" min="1" max="999999999" defaultValue="1">
                     <span id="buyRuneSpiritToggle" style="color: yellow">Buy up to <span id="buyRuneSpiritToggleValue" style="color: orchid">1</span> Levels per purchase, if affordable. [Input to toggle]</span>
                 </div>
@@ -1909,12 +1917,6 @@
                     </div>
                 </div>
                 <span id="autoAntSacrifice"></span>
-
-                <div id="sacrificeAnts" style="display: none">
-                <p id="antSacrificeTimer" style="color: white">Last Sacrifice: 1s ago</p>
-                <img id="antSacrifice" src="Pictures/AntSacrifice.png" style="cursor: pointer;" alt="" loading="lazy">
-                </div>
-
                 <div id="antSacrificeSummary" style="display: none">
                     <p id="antELO" style="color: plum">Your Ant ELO is <span id="ELO" style="color: gold">0 ELO</span> <span id="effectiveELO" style="color: white"> </span></p>
                     <p id="antUpgradeMultiplier" style="color: white">Upgrade Multiplier: <span id="SacrificeUpgradeMultiplier" style="color: gold">0.01x</span></p>
@@ -1959,6 +1961,10 @@
                             <td class="chal9x1" id="antSacrificeMythicalFragment" style="color: crimson"></td>
                         </tr>
                     </table>
+                    <div id="sacrificeAnts" style="display: none">
+                        <p id="antSacrificeTimer" class="tightText" style="color: white">Last Sacrifice: 1s ago</p>
+                        <img id="antSacrifice" src="Pictures/AntSacrifice.png" style="cursor: pointer;" alt="" loading="lazy">
+                    </div>
                 </div>
             </div>
         </div>
@@ -2000,11 +2006,12 @@
                     <div class="openGrid"> 
                         <img class="openImage" src="Pictures/WowCube.png" alt="" loading="lazy">
                         <div class="openButtons">
-                            <span class="inventory" style="color: white">You possess <span id="cubeQuantity" style="color: yellow">13</span> Wow! Cubes. Get more from harder Ascensions and other stuff.</span>
+                            <span class="inventory" style="color: white">You possess <span id="cubeQuantity" style="color: yellow; font-size: 1.2em">13</span> Wow! Cubes. Get more from harder Ascensions and other stuff.</span>
                             <div class="openBtn"> 
                                 <button class="cubeBtn" id="open1Cube">Open x1</button>
                                 <button class="cubeBtn" id="open20Cube">Open x20</button>
                                 <button class="cubeBtn" id="open1000Cube">Open x1,000</button>
+                                <button class="cubeBtn" id="open10PerCube">Open 10%</button>
                                 <button class="cubeBtn" id="openCustomCube">Custom Amount</button>
                                 <button class="cubeBtn" id="openMostCube">Open All</button>
                             </div>
@@ -2085,11 +2092,12 @@
                     <div class="openGrid"> 
                         <img class="openImage" src="Pictures/WowTessaract.png" alt="" loading="lazy">
                         <div class="openButtons">
-                            <span id="tesseractInventory" class="inventory" style="color: orchid">You possess <span id="tesseractQuantity" style="color: yellow">13</span> Wow! TESSERACTS. Get more from harder Ascensions and other stuff.</span>
+                            <span id="tesseractInventory" class="inventory" style="color: orchid">You possess <span id="tesseractQuantity" style="color: yellow; font-size: 1.2em">13</span> Wow! TESSERACTS. Get more from harder Ascensions and other stuff.</span>
                             <div class="openBtn"> 
                                 <button id="open1Tesseract" class="cubeBtn">Open x1</button>
                                 <button id="open20Tesseract" class="cubeBtn">Open x20</button>
                                 <button id="open1000Tesseract" class="cubeBtn">Open x1,000</button>
+                                <button id="open10PerTesseract" class="cubeBtn">Open 10%</button>
                                 <button id="openCustomTesseract" class="cubeBtn">Custom Amount</button>
                                 <button id="openMostTesseract" class="cubeBtn">Open All</button>
                             </div>
@@ -2170,11 +2178,12 @@
                     <div class="openGrid"> 
                         <img class="openImage" src="Pictures/WowHypercube.png" alt="" loading="lazy">
                         <div class="openButtons">
-                            <span id="hypercubeInventory" class="inventory" style="color: rgb(255, 0, 76)">You possess <span id="hypercubeQuantity" style="color: yellow">13</span> Wow! HYPERCUBES. Get more from harder Ascensions and other stuff.</span>
+                            <span id="hypercubeInventory" class="inventory" style="color: rgb(255, 0, 76)">You possess <span id="hypercubeQuantity" style="color: yellow; font-size: 1.2em">13</span> Wow! HYPERCUBES. Get more from harder Ascensions and other stuff.</span>
                             <div class="openBtn"> 
                                 <button id="open1Hypercube" class="cubeBtn">Open x1</button>
                                 <button id="open20Hypercube" class="cubeBtn">Open x20</button>
                                 <button id="open1000Hypercube" class="cubeBtn">Open x1,000</button>
+                                <button id="open10PerHypercube" class="cubeBtn">Open 10%</button>
                                 <button id="openCustomHypercube" class="cubeBtn">Custom Amount</button>
                                 <button id="openMostHypercube" class="cubeBtn">Open All</button>
                             </div>
@@ -2255,11 +2264,12 @@
                     <div class="openGrid"> 
                         <img class="openImage" src="Pictures/Platonic Cube.png" alt="" loading="lazy">
                         <div class="openButtons">
-                            <span id="platonicCubeInventory" class="inventory" style="color:orange">You possess <span id="platonicQuantity" style="color: yellow">13</span> Platonic! Cubes. Get more from really hard ascensions.</span>
+                            <span id="platonicCubeInventory" class="inventory" style="color:orange">You possess <span id="platonicQuantity" style="color: yellow; font-size: 1.2em">13</span> Platonic! Cubes. Get more from really hard ascensions.</span>
                             <div class="openBtn"> 
                                 <button id="open1PlatonicCube" class="cubeBtn">Open x1</button>
                                 <button id="open40kPlatonicCube" class="cubeBtn">Open x40,000</button>
                                 <button id="open1mPlatonicCube" class="cubeBtn">Open x1 Million</button>
+                                <button id="open10PerPlatonicCube" class="cubeBtn">Open 10%</button>
                                 <button id="openCustomPlatonicCube" class="cubeBtn">Custom Amount</button>
                                 <button id="openMostPlatonicCube" class="cubeBtn">Open All</button>
                             </div>
@@ -2322,7 +2332,7 @@
                 </div>
                 <div id="cubeTab5" class="cubeTab" style="display: none">
                     <div id="cubeTab5Wrapper"> 
-                        <p id="cubeAmount2">You have 0 Wow! Cubes</p>
+                        <p>You have <span id="cubeAmount2" style="color: yellow; font-size: 1.2em">13</span> Wow! Cubes =)</p>
                         <table id="cubeUpgradeTable">
                             <tr>
                                 <td><img id="cubeUpg1" class="gridImg" src="Pictures/Transparent Pics/CubeUpgrade1.png" alt="" loading="lazy"></td>
@@ -2413,14 +2423,14 @@
                         <p id="cubeUpgradeDescription" style="text-align: center; color: lightblue"></p>
                         <p id="cubeUpgradeCost" style="text-align:center; color:pink"></p>
                         <p id="cubeUpgradeLevel" style="text-align: center; color: crimson"></p>
-                        <button id="toggleCubeBuy" style="text-align: center;color: white;border: 2px solid pink">Upgrade: 1 Level wow</button>
+                        <div><button id="toggleCubeBuy">Upgrade: 1 Level wow</button> <button id="toggleCubeAutoBuy">Automatic: OFF</button></div>
                     </div>
                 </div>
                 <div id="cubeTab6" class="cubeTab" style="display: none">
                     <div id="c15Rewards" class="challengeContainer" style='border: 3px solid plum'>
-                        <p id="c15Reward0" class="challengePortion">Best Challenge 15 Exponent: <span id="c15Reward0Num" class="challengeNumber" style='color: gold; font-size: 1.2em;'></span></p>
-                        <p id="c15RequiredExponent" class="challengePortion">Gain <span id="c15RequiredExponentNum" class="challengeNumber" style='color: gold; font-size: 1.2em;'></span> Coin Exponent in Challenge 15 to gain more score!</p>
-                        <p id="c15RewardList" class="challengePortion" style="color: orchid;">Next Reward Unlocks at 0 coins.</p>
+                        <p id="c15Reward0" class="challengeLabel">Best Challenge 15 Exponent: <span id="c15Reward0Num" class="challengeNumber" style='color: gold; font-size: 1.2em;'></span></p>
+                        <p id="c15RequiredExponent" class="challengeLabel">Gain <span id="c15RequiredExponentNum" class="challengeNumber" style='color: gold; font-size: 1.2em;'></span> Coin Exponent in Challenge 15 to gain more score!</p>
+                        <p id="c15RewardList" class="challengeLabel" style="color: orchid;">Next Reward Unlocks at 0 coins.</p>
                         <p id="c15Reward1" class="challengePortion">1. All Cube Types I: +<span id="c15Reward1Num" class="challengeNumber"></span>%</p>
                         <p id="c15Reward2" class="challengePortion">2. Ascension Count: +<span id="c15Reward2Num" class="challengeNumber"></span>%</p>
                         <p id="c15Reward3" class="challengePortion">3. Coin Exponent: +<span id="c15Reward3Num" class="challengeNumber"></span>%</p>
@@ -2489,6 +2499,13 @@
                                     <td style="font-size: 0;"><img id="platUpg19" src="Pictures/Transparent%20Pics/PlatonicUpgrade19.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
                                     <td style="font-size: 0;"><img id="platUpg20" src="Pictures/Transparent%20Pics/PlatonicUpgrade20.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
                                 </tr>
+                                <tr>
+                                    <td style="font-size: 0;"><img id="platUpg21" src="Pictures/Transparent%20Pics/PlatonicUpgrade21.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                    <td style="font-size: 0;"><img id="platUpg22" src="Pictures/Transparent%20Pics/PlatonicUpgrade22.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                    <td style="font-size: 0;"><img id="platUpg23" src="Pictures/Transparent%20Pics/PlatonicUpgrade23.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                    <td style="font-size: 0;"><img id="platUpg24" src="Pictures/Transparent%20Pics/PlatonicUpgrade24.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                    <td style="font-size: 0;"><img id="platUpg25" src="Pictures/Transparent%20Pics/PlatonicUpgrade25.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                </tr>
                             </table>
                         </div>
                         <div id="platonicUpgradeDescriptions" class="platonicContainer" style="border: 3px solid plum">
@@ -2505,6 +2522,7 @@
                             <p id="platonicHepteractCost" class="platonicPortion">---</p>
                             <p id="platonicCanBuy" class="platonicPortion">---</p>
                         </div>
+                        <div id="cRewardBonusDescription"></div>
                     </div>
                 </div>
                 <div id="cubeTab7" class="cubeTab" style="display: none">
@@ -2514,7 +2532,7 @@
                     <div class="openGrid"> 
                         <img class="openImage" src="Pictures/Hepteract.png" alt="" loading="lazy">
                         <div class="openButtons">
-                            <span id="hepteractCubeInventory" class="inventory" style="color:pink">You possess <span id="hepteractQuantity" style="color: yellow">13</span> Hepteracts! You know where to get these, right?</span>
+                            <span id="hepteractCubeInventory" class="inventory" style="color:pink">You possess <span id="hepteractQuantity" style="color: yellow; font-size: 1.2em">13</span> Hepteracts! You know where to get these, right?</span>
                         </div>
                     </div>
 
@@ -2647,7 +2665,7 @@
                     <button id="corrStatsBtn" class="hCenter tight">Corruption Stats</button>
                     <button id="corrLoadoutsBtn" class="hCenter tight">Corruption Loadouts</button>
                 </span>
-                <div id="corruptionStats" class="corruptionContainer">
+                <div id="corruptionStats" class="corruptionContainer center">
                     <span class="corruptionStatRow chal11Corruption">
                         <img src="Pictures/Maladaption Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
                     </span>
@@ -2675,7 +2693,7 @@
                     <!-- TODO: <script>corruptionButtonsAdd()</script> -->
                 </div>
                 <div id="corruptionLoadouts" style="display: none">
-                    <table id="corruptionLoadoutTable">
+                    <table id="corruptionLoadoutTable" class="center" style="border-spacing: 3px 5px">
                         <tr>
                             <th class="corrLoadoutNameCol"></th>
                             <th>
@@ -2726,22 +2744,32 @@
                     <p id="corruptionMultiplierContribution" class="tightText"></p>
                     <p id="corruptionSpiritContribution" class="chal12 tightText"></p>
                 </div>
-                <p id="corruptionAntExponent" class="tightText" style="color: crimson">This Ascension's climate raises ant production to the power of <span id="corruptionAntExponentValue" style="color: darkorchid; font-size: 1.2em">1.000</span>.</p>
-                <p id="corruptionSpiritBonus" class="chal12 tightText" style="color: gold">However, it also multiplies Rune Spirit Effects by <span id="corruptionSpiritBonusValue" style="color: wheat; font-size: 1.2em;">1.000</span>!</p>
-                <p id="corruptionBank" class="tightText">You have <span id="corruptionBankValue" style="color: crimson">1</span> Wow! Cubes in the Ascension bank. Gain more by finishing challenges! Ascend to redeem them.</p>
-                <p id="corruptionScore" class="tightText">Your Ascension Score is <span id="corruptionScoreValue" style="color: goldenrod">1</span> (base) * <span id="corruptionMultiplierValue" style="color: crimson">4</span> (Corruption mult) = <span id="corruptionTotalScore" style="color: darkorchid">4</span></p>
-                <p id="corruptionAscensionCount" class="tightText">If you ascend now, <span id="corruptionAscensionCountValue" style="color: darkorange; font-size: 1.2em">0</span> will be added to your ascension count.</p>
-                <p id="corruptionCubes" class="tightText">If you ascend now, you will gain <span id="corruptionCubesValue" style="color: yellow; font-size: 1.2em">32</span> Wow! Cubes.</p>
-                <p id="corruptionTesseracts" class="tightText">If you ascend now, you will gain <span id="corruptionTesseractsValue" style="color: darkviolet; font-size: 1.2em">32</span> Wow! Tesseracts. [<span style="color: orchid">Get more if Score >100,000</span>]</p>
-                <p id="corruptionHypercubes" class="chal13 tightText">If you ascend now, you will gain <span id="corruptionHypercubesValue" style="color: crimson; font-size: 1.2em">32</span> Wow! Hypercubes. [<span style="color: red">Req Score: >1,000,000,000</span>]</p>
-                <p id="corruptionPlatonicCubes" class="chal14 tightText">If you ascend now, you will gain <span id="corruptionPlatonicCubesValue" style="color: lightgoldenrodyellow; font-size: 1.2em">32</span> PLATONIC CUBES. [<span style="color: lightgoldenrodyellow">Req Score: >1,337,000,000,000</span>]</p>
-                <p id="corruptionHepteracts" class="chal15 tightText">If you ascend now, you will gain <span id="corruptionHepteractsValue" style="color: pink; font-size: 1.2em">0</span> HEPTERACTS. [<span style="color: pink">Req Score: >6.66e16</span>]</p>
-                <div id="ascensionAutomation" class="cubeUpgrade10 vAlign">
-                    <input id="ascensionAmount" class="ascendunlock hCenter tight" type="number" min="1" max="999999999" defaultValue="1">
-                    <p id="autoAscend" class="ascendunlock tightText">Ascend when you've completed Sadistic Challenge I a total of <span id="autoAscendMetric" style="color: orchid">1</span> times.</p>
-                    <button id="ascensionAutoEnable" class="ascendunlock hCenter tight" style="border: 2px solid green">Auto Ascend [ON]</button>
-                    <button id="ascensionAutoToggle" class="hCenter tight" style="border:2px solid orchid;">Mode: C10 Completions</button>
-                </div>
+                <p id="corruptionAntExponent" class="tightText" style="color: crimson">This Ascension's climate raises ant production to the power of <span id="corruptionAntExponentValue" style="color: darkorchid;">1.000</span>.</p>
+                <p id="corruptionSpiritBonus" class="chal12 tightText" style="color: gold">However, it also multiplies Rune Spirit Effects by <span id="corruptionSpiritBonusValue" style="color: wheat;">1.000</span> !</p>
+                <p id="corruptionBank" class="tightText">You have <span id="corruptionBankValue" style="color: crimson">1</span> Wow! Cubes in the Ascension bank. Gain more by finishing challenges!</p>
+                <p id="corruptionScore" class="tightText">Your Ascension Score is <span id="corruptionScoreValue" style="color: goldenrod">1</span> (base) * <span id="corruptionMultiplierValue" style="color: crimson">4</span> (Corruption mult) * <span id="corruptionBonusMultiplierValue" style="color: orchid">1</span> (Bonus mult) = <span id="corruptionTotalScore" style="color: darkorchid">4</span></p>
+                <p id="corruptionAscensionCount" class="tightText">If you ascend now, <span id="corruptionAscensionCountValue" style="color: darkorange">0</span> will be added to your ascension count.</p>
+                <p id="corruptionCubes" class="tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionCubesValue" style="color: yellow; font-size: 1.2em">32</span> Wow! Cubes.</p>
+                <p id="corruptionTesseracts" class="tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionTesseractsValue" style="color: darkviolet; font-size: 1.2em">32</span> Wow! Tesseracts. [<span style="color: orchid; font-size: 0.8em">Get more if Score >100,000</span>]</p>
+                <p id="corruptionHypercubes" class="chal13 tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionHypercubesValue" style="color: crimson; font-size: 1.2em">32</span> Wow! Hypercubes. [<span style="color: red; font-size: 0.8em">Req Score: >1,000,000,000</span>]</p>
+                <p id="corruptionPlatonicCubes" class="chal14 tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionPlatonicCubesValue" style="color: lightgoldenrodyellow; font-size: 1.2em">32</span> PLATONIC CUBES. [<span style="color: lightgoldenrodyellow; font-size: 0.8em">Req Score: >2,666,000,000,000</span>]</p>
+                <p id="corruptionHepteracts" class="chal15 tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionHepteractsValue" style="color: pink; font-size: 1.2em">0</span> HEPTERACTS. [<span style="color: pink; font-size: 0.8em">Req Score: >1.666e17</span>]</p>
+                <table id="ascensionAutomation" class="cubeUpgrade10">
+                    <tr>
+                        <th>
+                            <input id="ascensionAmount" class="hCenter tight" type="number" min="1" max="999999999" defaultValue="1"> <button id="ascensionAutoEnable" class="hCenter tight" style="border: 2px solid green">Auto Ascend [ON]</button> <button id="ascensionAutoToggle" class="hCenter tight" style="border:2px solid orchid;">Mode: C10 Completions</button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <div id="autoAscend" class="tightText">Ascend when you've completed Sadistic Challenge I a total of <span id="autoAscendMetric" style="color: gold">1</span> times.</div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                        </th>
+                    </tr>
+                </table>
             </div>
         </div>
 <div id="settings">
@@ -2797,10 +2825,10 @@
                 </div>
                 <button id="exportgame" style="border:2px solid green">Export the game here</button>
                 <p id="exportinfo" class="tightText" style="color: white"></p>
-                <label title="Use $VERSION$ for version, $TIME$ for 24h time, $TIME12$ for 12h">
+                <label title="Use $VERSION$ for version, $TIME$ for 24h time, $TIME12$ for 12h, $SING$ for Singularity Count">
                     <input id="saveStringInput">
                 </label>
-                <p id="saveString" class="tightText" title="Use $VERSION$ for version, $TIME$ for 24h time, $TIME12$ for 12h"></p>
+                <p id="saveString" class="tightText" title="Use $VERSION$ for version, $TIME$ for 24h time, $TIME12$ for 12h, $SING$ for Singularity Count"></p>
                 <p id="importgame" class="tightText" style="color: limegreen">Load game below!</p>
                 <label id="importFileButton" for="importfile">Load from file</label>
                 <input type="file" id="importfile" accept=".txt" style="display: none">
@@ -2823,7 +2851,7 @@
                     <p id="currentBonus">Current Bonus: 0%</p>
                 </div>
                 <div id="patchnotes">
-                    <a href="https://docs.google.com/document/d/1YITuLirrsJUjVjz2pFwkUBUcQJDqO2dV7TZrQX8HQUU/edit" target="_blank" rel="noopener noreferrer nofollow">
+                    <a href="https://docs.google.com/document/d/12nXFubXChWMZ5abEplwKWPcXRqTsTKd1frVTGaxJMNU/edit?usp=sharing" target="_blank" rel="noopener noreferrer nofollow">
                         <img id="patchnotesicon" src="Pictures/patchnotes.png" title="Click to read the latest patch notes!" alt="" loading="lazy">
                     </a>
                 </div>
@@ -2855,19 +2883,21 @@
             <button class="statsNerds" id="kOrbPowderMult" style="border: 2px solid orchid">Orb to Powder Multipliers</button>
         </div>
         <div id="miscStats" class="statContainer">
-            <p class="prestigeunlock statPortion" id="settingtitle3" style="color: plum; font-size: 1.2em">Miscellaneous Stats</p>
-            <p class="prestigeunlock statPortion" id="prestigeCountStatistic" style="color: lightblue">Prestige Count: <span id="sMisc1" class="statNumber">0</span></p>
-            <p class="prestigeunlock statPortion" id="fastestPrestigeStatistic" style="color: lightblue">Fastest Prestige <span id="sMisc2" class="statNumber">0</span></p>
-            <p class="prestigeunlock statPortion" id="mostOfferingStatistic" style="color: orangered">Most Offerings Saved at Once: <span id="sMisc3" class="statNumber">0</span></p>
-            <p class="prestigeunlock statPortion" id="runeSumStatistic" style="color: cyan">Summative Rune Levels: <span id="sMisc4" class="statNumber">0</span></p>
-            <p class="transcendunlock statPortion" id="transcensionCountStatistic" style="color: plum">Transcension Count: <span id="sMisc5" class="statNumber">0</span></p>
-            <p class="transcendunlock statPortion" id="fastestTranscensionStatistic" style="color: plum">Fastest Transcension: <span id="sMisc6" class="statNumber">0</span></p>
-            <p class="reincarnationunlock statPortion" id="reincarnationCountStatistic" style="color: limegreen">Reincarnation Count: <span id="sMisc7" class="statNumber">0</span></p>
-            <p class="reincarnationunlock statPortion" id="fastestReincarnationStatistic" style="color: limegreen">Fastest Reincarnation: <span id="sMisc8" class="statNumber">0</span></p>
-            <p class="reincarnationunlock statPortion" id="mostObtainiumStatistic" style="color: pink">Most Obtainium Saved at Once: <span id="sMisc9" class="statNumber">0</span></p>
-            <p class="reincarnationunlock statPortion" id="mostObtainiumPerSecondStatistic" style="color: crimson">Best Obtainium/sec: <span id="sMisc10" class="statNumber">0</span></p>
-            <p class="reincarnationunlock statPortion" id="obtainiumPerSecondStatistic" style="color: crimson;">Current Obtainium/sec: <span id="sMisc11" class="statNumber">0</span></p>
-            <p class="ascendunlock statPortion" id="ascensionCountStatistic" style="color: orange">Ascension Count: <span id="sMisc12" class="statNumber">0</span></p>
+            <p class="prestigeunlock statPortion" id="settingtitle3" style="color: lightgoldenrodyellow; font-size: 1.2em">Miscellaneous Stats</p>
+            <p class="prestigeunlock statPortion" id="offlineMaximumTimerStatistic" style="color: plum">Offline Maximum Timer: <span id="sMisc1" class="statNumber">0</span></p>
+            <p class="prestigeunlock statPortion" id="quarkMaxTimerStatistic" style="color: plum">Quarks Export Maximum Timer: <span id="sMisc2" class="statNumber">0</span></p>
+            <p class="prestigeunlock statPortion" id="prestigeCountStatistic" style="color: lightblue">Prestige Count: <span id="sMisc3" class="statNumber">0</span></p>
+            <p class="prestigeunlock statPortion" id="fastestPrestigeStatistic" style="color: lightblue">Fastest Prestige <span id="sMisc4" class="statNumber">0</span></p>
+            <p class="prestigeunlock statPortion" id="mostOfferingStatistic" style="color: orangered">Most Offerings Saved at Once: <span id="sMisc5" class="statNumber">0</span></p>
+            <p class="prestigeunlock statPortion" id="runeSumStatistic" style="color: cyan">Summative Rune Levels: <span id="sMisc6" class="statNumber">0</span></p>
+            <p class="transcendunlock statPortion" id="transcensionCountStatistic" style="color: plum">Transcension Count: <span id="sMisc7" class="statNumber">0</span></p>
+            <p class="transcendunlock statPortion" id="fastestTranscensionStatistic" style="color: plum">Fastest Transcension: <span id="sMisc8" class="statNumber">0</span></p>
+            <p class="reincarnationunlock statPortion" id="reincarnationCountStatistic" style="color: limegreen">Reincarnation Count: <span id="sMisc9" class="statNumber">0</span></p>
+            <p class="reincarnationunlock statPortion" id="fastestReincarnationStatistic" style="color: limegreen">Fastest Reincarnation: <span id="sMisc10" class="statNumber">0</span></p>
+            <p class="reincarnationunlock statPortion" id="mostObtainiumStatistic" style="color: pink">Most Obtainium Saved at Once: <span id="sMisc11" class="statNumber">0</span></p>
+            <p class="reincarnationunlock statPortion" id="mostObtainiumPerSecondStatistic" style="color: crimson">Best Obtainium/sec: <span id="sMisc12" class="statNumber">0</span></p>
+            <p class="reincarnationunlock statPortion" id="obtainiumPerSecondStatistic" style="color: crimson;">Current Obtainium/sec: <span id="sMisc13" class="statNumber">0</span></p>
+            <p class="ascendunlock statPortion" id="ascensionCountStatistic" style="color: orange">Ascension Count: <span id="sMisc13" class="statNumber">0</span></p>
         </div>
         <div id="acceleratorStats" class="statContainer">
             <p id="acceleratorStatTitle" class="statPortion" style="color: goldenrod; font-size: 1.2em">Free Accelerators</p>
@@ -2930,6 +2960,7 @@
             <p id="statOff26" class="statPortion singularity">Offering Storm [GQ]: <span id="sOff26" class="statNumber">0</span></p>
             <p id="statOff27" class="statPortion singularity">Offering Tempest [GQ]: <span id="sOff27" class="statNumber">0</span></p>
             <p id="statOff28" class="statPortion singularity">Cube Upgrade Cx4: <span id="sOff28" class="statNumber">0</span></p>
+            <p id="statOff29" class="statPortion singularity">Offering Spore [GQ]: <span id="sOff29" class="statNumber">0</span></p>
             <p id="statOffT" class="statPortion statTotal" style='color: gold'>TOTAL OFFERING MULTIPLIER: <span id="sOffT" class="statNumber statTotal">0</span></p>
         </div>
         <div id="globalCubeMultiplierStats" class="statContainer">
@@ -2952,6 +2983,7 @@
             <p id="statGCM16" class="statPortion">-<span id="sGCM16" class="statNumber">-</span></p>
             <p id="statGCM17" class="statPortion">-<span id="sGCM17" class="statNumber">-</span></p>
             <p id="statGCM18" class="statPortion">-<span id="sGCM18" class="statNumber">-</span></p>
+            <p id="statGCM19" class="statPortion">-<span id="sGCM19" class="statNumber">-</span></p>
             <p id="statGCMT" class="statPortion statTotal" style="color: orange">TOTAL GLOBAL CUBE MULTIPLIER: <span
                 id="sGCMT" class="statNumber statTotal">0</span></p>
         </div>
@@ -2973,6 +3005,7 @@
             <p id="statCM14" class="statPortion chal14">Research 8x22: <span id="sCM14" class="statNumber">0</span></p>
             <p id="statCM15" class="statPortion chal14">Ascension Count Achievement: <span id="sCM15" class="statNumber">0</span></p>
             <p id="statCM16" class="statPortion singularity">Cookie Upgrade 13: <span id="sCM16" class="statNumber">0</span></p>
+            <p id="statCM17" class="statPortion singularity">Cube Exponent [GQ]: <span id="sCM17" class="statNumber">0</span></p>
             <p id="statCMT" class="statPortion statTotal" style="color: orange">TOTAL CUBE MULTIPLIER: <span
                     id="sCMT" class="statNumber statTotal">0</span></p>
         </div>
@@ -2990,6 +3023,7 @@
             <p id="statTeM10" class="statPortion">Research 6x12: <span id="sTeM10" class="statNumber">0</span></p>
             <p id="statTeM11" class="statPortion chal11">Research 7x2: <span id="sTeM11" class="statNumber">0</span></p>
             <p id="statTeM12" class="statPortion chal12">Research 7x17: <span id="sTeM12" class="statNumber">0</span></p>
+            <p id="statTeM13" class="statPortion singularity">Cube Exponent [GQ]: <span id="sTeM13" class="statNumber">0</span></p>
             <p id="statTeMT" class="statPortion statTotal" style="color: orange">TOTAL TESSERACT MULTIPLIER: <span
                     id="sTeMT" class="statNumber statTotal">0</span></p>
         </div>
@@ -3006,6 +3040,7 @@
             <p id="statHyM9" class="statPortion">Cube upgrade 5x1: <span id="sHyM9" class="statNumber">0</span></p>
             <p id="statHyM10" class="statPortion">Research 6x12: <span id="sHyM10" class="statNumber">0</span></p>
             <p id="statHyM11" class="statPortion chal11">Research 7x2: <span id="sHyM11" class="statNumber">0</span></p>
+            <p id="statHyM12" class="statPortion singularity">Cube Exponent [GQ]: <span id="sHyM12" class="statNumber">0</span></p>
             <p id="statHyMT" class="statPortion statTotal" style="color: orange">TOTAL HYPERCUBE MULTIPLIER: <span
                     id="sHyMT" class="statNumber statTotal">0</span></p>
         </div>
@@ -3021,6 +3056,7 @@
             <p id="statPlM7" class="statPortion">Cube upgrade 3x1: <span id="sPlM7" class="statNumber">0</span></p>
             <p id="statPlM8" class="statPortion">Cube upgrade 4x1: <span id="sPlM8" class="statNumber">0</span></p>
             <p id="statPlM9" class="statPortion">Cube upgrade 5x1: <span id="sPlM9" class="statNumber">0</span></p>
+            <p id="statPlM10" class="statPortion singularity">Cube Exponent [GQ]: <span id="sPlM10" class="statNumber">0</span></p>
             <p id="statPlMT" class="statPortion statTotal" style="color: orange">TOTAL PLATONIC MULTIPLIER: <span
                     id="sPlMT" class="statNumber statTotal">0</span></p>
         </div>
@@ -3034,6 +3070,7 @@
             <p id="statHeM5" class="statPortion">Cube upgrade 1x1:<span id="sHeM5" class="statNumber">0</span></p>
             <p id="statHeM6" class="statPortion">Cube upgrade 2x1: <span id="sHeM6" class="statNumber">0</span></p>
             <p id="statHeM7" class="statPortion">Cube upgrade 3x1: <span id="sHeM7" class="statNumber">0</span></p>
+            <p id="statHeM8" class="statPortion singularity">Cube Exponent [GQ]: <span id="sHeM8" class="statNumber">0</span></p>
             <p id="statHeMT" class="statPortion statTotal" style="color: orange">TOTAL HEPTERACT MULTIPLIER: <span
                     id="sHeMT" class="statNumber statTotal">0</span></p>
         </div>
@@ -3267,6 +3304,7 @@
                         <button id="resetShopUpgrades" style="border: 2px solid orangered; color: white">Reset Perm Shop [Cost: 15 Quarks]</button>
                         <button id="toggleConfirmShop" style="border: 2px solid white">Shop Confirmations: ON</button>
                         <button id="toggleBuyMaxShop" style="border: 2px solid white">Buy Max: OFF</button>
+                        <button id="resetShopExpand" style="border: 2px solid red;display: none">Reset Shop Expand</button>
                     </div>
                     <div id="shopHovers">
                         <p style="color: white; font-size: 1.2em;">Hover over each portion of the shop to see what each upgrade does!</p>
@@ -3286,55 +3324,145 @@
         <div id="singularityUpgradeContainer">
             <div id="actualSingularityUpgradeContainer">
                 <div>
-                    <img id="goldenQuarks1" src="Pictures/SingularityCurrency1.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="goldenQuarks2" src="Pictures/SingularityCurrency2.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="goldenQuarks3" src="Pictures/SingularityCurrency3.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="starterPack" src="Pictures/Singularity Starter Pack.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="wowPass" src="Pictures/Singularity Wow Pass.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="cookies" src="Pictures/SingularityCookies.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="cookies2" src="Pictures/SingularityCookies2.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="cookies3" src="Pictures/SingularityCookies3.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="cookies4" src="Pictures/SingularityCookies4.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="ascensions" src="Pictures/Singularity Ascensions.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="corruptionFourteen" src="Pictures/Singularity Corruption 14.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="corruptionFifteen" src="Pictures/Singularity Corruption 15.png" style="cursor:pointer">                </div>
-                <div>
-                    <img id="singOfferings1" src="Pictures/Singularity Offerings 1.png" style="cursor: pointer">
+                    <input type="image" id="goldenQuarks1" src="Pictures/SingularityCurrency1.png">
                 </div>
                 <div>
-                    <img id="singOfferings2" src="Pictures/Singularity Offerings 2.png" style="cursor: pointer">
+                    <input type="image" id="goldenQuarks2" src="Pictures/SingularityCurrency2.png">
                 </div>
                 <div>
-                    <img id="singOfferings3" src="Pictures/Singularity Offerings 3.png" style="cursor: pointer">
+                    <input type="image" id="goldenQuarks3" src="Pictures/SingularityCurrency3.png">
                 </div>
                 <div>
-                    <img id="singObtainium1" src="Pictures/Singularity Obtainium 1.png" style="cursor: pointer">
+                    <input type="image" id="starterPack" src="Pictures/Singularity Starter Pack.png">
                 </div>
                 <div>
-                    <img id="singObtainium2" src="Pictures/Singularity Obtainium 2.png" style="cursor: pointer">
+                    <input type="image" id="wowPass" src="Pictures/Singularity Wow Pass.png">
                 </div>
                 <div>
-                    <img id="singObtainium3" src="Pictures/Singularity Obtainium 3.png" style="cursor: pointer">
+                    <input type="image" id="cookies" src="Pictures/SingularityCookies.png">
                 </div>
                 <div>
-                    <img id="singCubes1" src="Pictures/Singularity Cubes 1.png" style="cursor: pointer">
+                    <input type="image" id="cookies2" src="Pictures/SingularityCookies2.png">
                 </div>
                 <div>
-                    <img id="singCubes2" src="Pictures/Singularity Cubes 2.png" style="cursor: pointer">
+                    <input type="image" id="cookies3" src="Pictures/SingularityCookies3.png">
                 </div>
                 <div>
-                    <img id="singCubes3" src="Pictures/Singularity Cubes 3.png" style="cursor: pointer">
+                    <input type="image" id="cookies4" src="Pictures/SingularityCookies4.png">
+                </div>
+                <div>
+                    <input type="image" id="ascensions" src="Pictures/Singularity Ascensions.png">
+                </div>
+                <div>
+                    <input type="image" id="corruptionFourteen" src="Pictures/Singularity Corruption 14.png">
+                </div>
+                <div>
+                    <input type="image" id="corruptionFifteen" src="Pictures/Singularity Corruption 15.png">
+                </div>
+                <div>
+                    <input type="image" id="singOfferings1" src="Pictures/Singularity Offerings 1.png">
+                </div>
+                <div>
+                    <input type="image" id="singOfferings2" src="Pictures/Singularity Offerings 2.png">
+                </div>
+                <div>
+                    <input type="image" id="singOfferings3" src="Pictures/Singularity Offerings 3.png">
+                </div>
+                <div>
+                    <input type="image" id="singObtainium1" src="Pictures/Singularity Obtainium 1.png">
+                </div>
+                <div>
+                    <input type="image" id="singObtainium2" src="Pictures/Singularity Obtainium 2.png">
+                </div>
+                <div>
+                    <input type="image" id="singObtainium3" src="Pictures/Singularity Obtainium 3.png">
+                </div>
+                <div>
+                    <input type="image" id="singCubes1" src="Pictures/Singularity Cubes 1.png">
+                </div>
+                <div>
+                    <input type="image" id="singCubes2" src="Pictures/Singularity Cubes 2.png">
+                </div>
+                <div>
+                    <input type="image" id="singCubes3" src="Pictures/Singularity Cubes 3.png">
+                </div>
+                <div>
+                    <input type="image" id="singOfferingsA1" src="Pictures/Singularity OfferingsA1.png">
+                </div>
+                <div>
+                    <input type="image" id="singObtainiumA1" src="Pictures/Singularity ObtainiumA1.png">
+                </div>
+                <div>
+                    <input type="image" id="singCubesA1" src="Pictures/Singularity CubesA1.png">
+                </div>
+                <div>
+                    <input type="image" id="singTimeAccel" src="Pictures/Singularity TimeAccel.png">
+                </div>
+                <div>
+                    <input type="image" id="singAscendTimeAccel" src="Pictures/Singularity AscendTimeAccel.png">
+                </div>
+                <div>
+                    <input type="image" id="singQuark" src="Pictures/Singularity Quark.png">
+                </div>
+                <div>
+                    <input type="image" id="singGolden" src="Pictures/Singularity GoldenQuark.png">
+                </div>
+                <div>
+                    <input type="image" id="bakeCookies1" src="Pictures/Singularity BakeCookies1.png">
+                </div>
+                <div>
+                    <input type="image" id="bakeCookies2" src="Pictures/Singularity BakeCookies2.png">
+                </div>
+                <div>
+                    <input type="image" id="singAutomation" src="Pictures/Singularity Automation.png">
+                </div>
+                <div>
+                    <input type="image" id="singSafeShop" src="Pictures/Singularity SafeShop.png">
+                </div>
+                <div>
+                    <input type="image" id="singChallenge" src="Pictures/Singularity Challenge.png">
+                </div>
+                <div>
+                    <input type="image" id="singOverfluxPowder" src="Pictures/Singularity OverfluxPowder.png">
+                </div>
+                <div>
+                    <input type="image" id="singCraftExpand" src="Pictures/Singularity CraftExpand.png">
+                </div>
+                <div>
+                    <input type="image" id="singMagicalTalisman" src="Pictures/Singularity MagicalTalisman.png">
+                </div>
+                <div>
+                    <input type="image" id="singGQdiscount" src="Pictures/Singularity GoldenQuarksDiscount.png">
+                </div>
+                <div>
+                    <input type="image" id="singMaterialsExponent" src="Pictures/Singularity MaterialsExponent.png">
+                </div>
+                <div>
+                    <input type="image" id="singScoreExponent" src="Pictures/Singularity C15ScoreExponent.png">
+                </div>
+                <div>
+                    <input type="image" id="singAscendScoreExponent" src="Pictures/Singularity AscendScoreExponent.png">
+                </div>
+                <div>
+                    <input type="image" id="singConstantExponent" src="Pictures/Singularity Constant Exponent.png">
+                </div>
+                <div>
+                    <input type="image" id="singCubeExponent" src="Pictures/Singularity CubesExponent.png">
+                </div>
+                <div>
+                    <input type="image" id="singAscendTimeExponent" src="Pictures/Singularity AscendTimeExponent.png">
+                </div>
+                <div>
+                    <input type="image" id="singWormhole" src="Pictures/Singularity Wormhole.png">
+                </div>
+                <div>
+                    <input type="image" id="singMaxLevelUp" src="Pictures/Singularity MaxLevelUp.png">
+                </div>
+                <div>
+                    <input type="image" id="singularityOfSingularity" src="Pictures/Singularity Singularity.png">
+                </div>
+                <div>
+                    <input type="image" id="singsingWormhole" src="Pictures/Singularity SingularityWormhole.png">
                 </div>
             </div>
         </div>

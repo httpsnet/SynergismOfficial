@@ -1,9 +1,9 @@
 import { player, format } from './Synergism';
-import { Globals as G } from './Variables';
 import { Alert, Confirm, revealStuff } from './UpdateHTML';
-import { calculateTimeAcceleration } from './Calculate';
+import { calculateTimeAcceleration, calculateSummationNonLinear } from './Calculate';
 import { Player } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
+import { IMultiBuy } from './Cubes';
 
 /**
  * Standardization of metadata contained for each shop upgrade.
@@ -265,7 +265,7 @@ export const shopData: Record<keyof Player['shopUpgrades'], IShopData> = {
         type: shopUpgradeTypes.UPGRADE,
         refundable: false,
         refundMinimumLevel: 0,
-        description: `OKAY. FINE. Here's yet ANOTHER +1% Ascension Speed per level, stacking multiplicatively like always.`
+        description: `OKAY. FINE. Here's yet ANOTHER +1.5% Ascension Speed per level, stacking multiplicatively like always.`
     },
     seasonPassY: {
         price: 10000,
@@ -308,12 +308,12 @@ type ShopUpgradeNames = 'offeringPotion' | 'obtainiumPotion' |
 
 export const getShopCosts = (input: ShopUpgradeNames) => {
 
-    if (shopData[input].type === shopUpgradeTypes.CONSUMABLE || shopData[input].maxLevel === 1){
-        return shopData[input].price
+    if (shopData[input].type === shopUpgradeTypes.CONSUMABLE || getMaxLevel(input) === 1){
+        return shopData[input].price * Math.pow(2, player.shopExpandCount)
     }
     else {
         const priceIncreaseMult = player.shopUpgrades[input]
-        return shopData[input].price + shopData[input].priceIncrease * priceIncreaseMult
+        return shopData[input].price * Math.pow(2, player.shopExpandCount) + shopData[input].priceIncrease * Math.pow(2, player.shopExpandCount) * priceIncreaseMult
     }
 }
 
@@ -393,7 +393,7 @@ export const shopDescriptions = (input: ShopUpgradeNames) => {
             lol.textContent = "CURRENT Effect: Code 'add' provides " + format(14 * player.shopUpgrades.calculator) + "% more Quarks. AutoAnswer: " + (player.shopUpgrades.calculator > 0) + ", AutoFill: " + (player.shopUpgrades.calculator == 5);
             break;
         case "calculator2":
-            lol.textContent = "CURRENT Effect: Code 'add' has " + format(2 * player.shopUpgrades.calculator2) + " more capacity. 'add' uses generate " + format((player.shopUpgrades.calculator2 === shopData['calculator2'].maxLevel) ? 25: 0) + "% more Quarks.";
+            lol.textContent = "CURRENT Effect: Code 'add' has " + format(2 * player.shopUpgrades.calculator2) + " more capacity. 'add' uses generate " + format((player.shopUpgrades.calculator2 === getMaxLevel('calculator2')) ? 25: 0) + "% more Quarks.";
             break;
         case "calculator3":
             lol.textContent = "CURRENT Effect: Code 'add' variance -" + format(10 * player.shopUpgrades.calculator3) + "%, Each use gives " + format(60 * player.shopUpgrades.calculator3) + " seconds to Ascension Timer.";
@@ -464,10 +464,10 @@ export const friendlyShopName = (input: ShopUpgradeNames) => {
 
 export const buyShopUpgrades = async (input: ShopUpgradeNames) => {
     let p = true;
-    const maxLevel = player.shopUpgrades[input] === shopData[input].maxLevel;
+    const maxLevel = player.shopUpgrades[input] === getMaxLevel(input);
     const canAfford = Number(player.worlds) >= getShopCosts(input);
 
-    if (G['shopConfirmation'] || !shopData[input].refundable) {
+    if (player.shopConfirmation || !shopData[input].refundable) {
         if (maxLevel) {
             await Alert("You can't purchase " + friendlyShopName(input) + " because you already have the max level!")
         }
@@ -483,25 +483,28 @@ export const buyShopUpgrades = async (input: ShopUpgradeNames) => {
         }
     }
 
-    if (p) {
-        if (G['shopBuyMax']) {
-            //Can't use canAfford and maxLevel here because player's quarks change and shop levels change during loop
-            while (Number(player.worlds) >= getShopCosts(input) && player.shopUpgrades[input] < shopData[input].maxLevel) {
-                player.worlds.sub(getShopCosts(input));
-                player.shopUpgrades[input] += 1
-            }
+    if (p && getMaxLevel(input) > player.shopUpgrades[input]) {
+        if (player.shopBuyMax) {
+            const price = shopData[input].price * Math.pow(2, player.shopExpandCount);
+            const priceIncrease = shopData[input].priceIncrease * Math.pow(2, player.shopExpandCount);
+            const buyAmount = Math.max(getMaxLevel(input) - player.shopUpgrades[input], 1);
+            const metaData:IMultiBuy = calculateSummationNonLinear(player.shopUpgrades[input], price, +player.worlds, priceIncrease / price, buyAmount)
+            player.worlds.sub(metaData.cost);
+            player.worlds.sub(Number(player.worlds) % 1); // If a small number appears, it will be rounded down
+            player.shopUpgrades[input] = metaData.levelCanBuy;
         } else {
             if (canAfford && !maxLevel) {
                 player.worlds.sub(getShopCosts(input));
                 player.shopUpgrades[input] += 1
             }
         }
+        revealStuff();
+        resetShopExpandUpdate();
     }
-    revealStuff();
 }
 
 export const useConsumable = async (input: ShopUpgradeNames) => {    
-    const p = G['shopConfirmation']
+    const p = player.shopConfirmation
         ? await Confirm('Would you like to use this potion?')
         : true;
 
@@ -525,7 +528,7 @@ export const useConsumable = async (input: ShopUpgradeNames) => {
 export const resetShopUpgrades = async (ignoreBoolean = false) => {
     let p = false
     if (!ignoreBoolean) {
-        p = G['shopConfirmation']
+        p = player.shopConfirmation
             ? await Confirm("This will fully refund most of your permanent upgrades for an upfront cost of 15 Quarks. Would you like to do this?")
             : true;
     }
@@ -539,13 +542,13 @@ export const resetShopUpgrades = async (ignoreBoolean = false) => {
             if(shopData[key].refundable && player.shopUpgrades[key] > shopData[key].refundMinimumLevel){
 
                 // Determines how many quarks one would not be refunded, based on minimum refund level
-                const doNotRefund = shopData[key].price * shopData[key].refundMinimumLevel +
-                                shopData[key].priceIncrease * (shopData[key].refundMinimumLevel) * (shopData[key].refundMinimumLevel - 1) / 2;
+                const doNotRefund = shopData[key].price * Math.pow(2, player.shopExpandCount) * shopData[key].refundMinimumLevel +
+                                shopData[key].priceIncrease * Math.pow(2, player.shopExpandCount) * (shopData[key].refundMinimumLevel) * (shopData[key].refundMinimumLevel - 1) / 2;
                 
                 //Refunds Quarks based on the shop level and price vals
                 player.worlds.add(
-                    shopData[key].price * player.shopUpgrades[key] +
-                    shopData[key].priceIncrease * (player.shopUpgrades[key]) * (player.shopUpgrades[key] - 1) / 2
+                    shopData[key].price * Math.pow(2, player.shopExpandCount) * player.shopUpgrades[key] +
+                    shopData[key].priceIncrease * Math.pow(2, player.shopExpandCount) * (player.shopUpgrades[key]) * (player.shopUpgrades[key] - 1) / 2
                     - doNotRefund,
                     false
                 );
@@ -556,19 +559,60 @@ export const resetShopUpgrades = async (ignoreBoolean = false) => {
         }
         player.quarksThisSingularity = singularityQuarks;
     }
-    /*if (p && player.worlds >= 15) {
-        player.worlds -= 15;
-        Object.keys(shopData).forEach(function)
-        revealStuff();
-    }*/
+    revealStuff();
+    resetShopExpandUpdate();
 }
 
 export const getQuarkInvestment = (upgrade: ShopUpgradeNames) => {
     if (!(upgrade in shopData) || !(upgrade in player.shopUpgrades)) return 0;
 
-    const val = shopData[upgrade].price * player.shopUpgrades[upgrade] + 
-                shopData[upgrade].priceIncrease * (player.shopUpgrades[upgrade] - 1) * (player.shopUpgrades[upgrade]) / 2
+    const val = shopData[upgrade].price * Math.pow(2, player.shopExpandCount) * player.shopUpgrades[upgrade] + 
+                shopData[upgrade].priceIncrease * Math.pow(2, player.shopExpandCount) * (player.shopUpgrades[upgrade] - 1) * (player.shopUpgrades[upgrade]) / 2
     console.log("gained from " + upgrade + ":" + format(val, 0, true))
     
     return val;
+}
+
+export const resetShopExpandCheck = (potion = true) => {
+    let shopMax = true;
+    for(const shopItem in shopData){
+        const key = shopItem as keyof typeof shopData;
+        if(getMaxLevel(key) > player.shopUpgrades[key] && (potion || shopData[key].type !== shopUpgradeTypes.CONSUMABLE)){
+            shopMax = false;
+            break;
+        }
+    }
+    return shopMax;
+}
+
+export const getMaxLevel = (key: ShopUpgradeNames) => {
+    if (!(key in shopData) || !(key in player.shopUpgrades)) return 0;
+    if (shopData[key].maxLevel === 1) return shopData[key].maxLevel;
+    return shopData[key].maxLevel * Math.pow(2, player.shopExpandCount);
+}
+
+export const resetShopExpandUpdate = () => {
+    DOMCacheGetOrSet("resetShopExpand").style.display = resetShopExpandCheck(false) ? "block" : "none";
+    DOMCacheGetOrSet("resetShopExpand").textContent = resetShopExpandCheck() ? "Reset Shop Expand" : "If buy all the potions???";
+}
+
+export const resetShopExpand = async () => {
+    if (!resetShopExpandCheck() || player.shopExpandCount >= 33) return;
+    let p = false;
+    let q = false;
+    p = await Confirm("Hi. Thank you for all the purchases. You can double all the maximum levels in the shop, but at the cost of double the cost. The shop will be completely reset as a sacrifice. Is it OK?");
+    if (!p) return;
+    q = await Confirm("This decision will completely reset the shop. Non-returnable Quarks will be lost forever! Are you really serious? This decision is irrevocable!");
+    if (!q) return;
+    if (Number(player.worlds) < 15) {
+        player.worlds.add(15);
+    }
+    void resetShopUpgrades(true);
+    for(const shopItem in shopData){
+        const key = shopItem as keyof typeof shopData;
+        player.shopUpgrades[key] = 0;
+    }
+    player.shopExpandCount = player.shopExpandCount + 1;
+    revealStuff();
+    resetShopExpandUpdate();
 }

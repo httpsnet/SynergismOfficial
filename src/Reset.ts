@@ -7,7 +7,7 @@ import {
 import { resetofferings } from './Runes';
 import { updateTalismanInventory, updateTalismanAppearance } from './Talismans';
 import { calculateTesseractBlessings } from './Tesseracts';
-import { revealStuff, updateChallengeDisplay } from './UpdateHTML';
+import { revealStuff, updateChallengeDisplay, Alert, Prompt, Confirm } from './UpdateHTML';
 import { upgradeupdate } from './Upgrades';
 import { Globals as G } from './Variables';
 import Decimal from 'break_infinity.js';
@@ -15,6 +15,10 @@ import { getElementById } from './Utility';
 import { ascensionAchievementCheck } from './Achievements';
 import { buyResearch } from './Research';
 import { calculateHypercubeBlessings } from './Hypercubes';
+import { singularityOverride, getGoldenQuarkCost } from './singularity';
+import { autoBuyCubeUpgrades } from './Cubes';
+
+
 import type {
     ResetHistoryEntryPrestige,
     ResetHistoryEntryTranscend,
@@ -487,7 +491,7 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         player.obtainiumpersecond = 0;
         player.maxobtainiumpersecond = 0;
         player.offeringpersecond = 0;
-        player.antSacrificePoints = 0;
+        player.antSacrificePoints = new Decimal("0");
         player.antSacrificeTimer = 0;
         player.antSacrificeTimerReal = 0;
         player.antUpgrades[12-1] = 0;
@@ -542,6 +546,8 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
             player.challengecompletions[j] = 0;
             player.highestchallengecompletions[j] = 0;
         }
+
+        autoBuyCubeUpgrades();
 
         player.challengecompletions[6] = player.highestchallengecompletions[6] = player.cubeUpgrades[49]
         player.challengecompletions[7] = player.highestchallengecompletions[7] = player.cubeUpgrades[49]
@@ -687,7 +693,8 @@ export const calculateGoldenQuarkGain = ():number => {
     const patreonMultiplier = 1 + player.worlds.BONUS/100;
 
     const singularityUpgrades = (1 + player.singularityUpgrades.goldenQuarks1.level / 20) *
-                                (1 + player.singularityUpgrades.goldenQuarks2.level / 50)
+                                (1 + player.singularityUpgrades.goldenQuarks2.level / 50) *
+                                (1 + player.singularityUpgrades.singGolden.level * player.singularityCount / 100)
 
     const cookieUpgradeMultiplier = 1 + 0.12 * player.cubeUpgrades[69];
 
@@ -697,7 +704,8 @@ export const calculateGoldenQuarkGain = ():number => {
 export const singularity = async () => {
     player.goldenQuarks += calculateGoldenQuarkGain();
     player.singularityCount += 1;
-    void resetShopUpgrades(true);
+    if (player.singularityUpgrades.singSafeShop.level < 1)
+        void resetShopUpgrades(true);
     const hold = Object.assign({}, blankSave, {
         codes: Array.from(blankSave.codes)
     }) as Player;
@@ -709,14 +717,58 @@ export const singularity = async () => {
     toggleSubTab(9, 0); // set 'corruption main'
     toggleSubTab(-1, 0); // set 'statistics main'
 
+    // Convert to Golden Quark before initializing Quark
+    const goldenQuarkCost = getGoldenQuarkCost()
+    const maxBuy = Math.floor(+player.worlds / goldenQuarkCost.cost)
+    const cost = maxBuy * goldenQuarkCost.cost
+    player.worlds.sub(cost)
+    player.goldenQuarks += maxBuy
+
     hold.singularityCount = player.singularityCount;
     hold.goldenQuarks = player.goldenQuarks;
     hold.shopUpgrades = player.shopUpgrades;
     hold.worlds = new QuarkHandler({ quarks: 0, bonus: 0 })
     hold.hepteractCrafts.quark = player.hepteractCrafts.quark
     hold.singularityUpgrades = player.singularityUpgrades
+    hold.exporttest = player.exporttest
+
+    singularityOverride(hold);
+    
     //Import Game
     await importSynergism(btoa(JSON.stringify(hold)), true);
+}
+
+export const singsing = async () => { // Almost delete savefile
+    if (player.singularityCount < 100)
+        return await Alert(`sorry. You need to arrive at #100 !`);
+    await Alert(`Congratulations! You won all singuality!`);
+    await Alert(`You are currently in front of the Eternal Synergism entrance.`);
+    await Alert(`Synergism trades to you. Synergism will give you Quarks +100%. And you sacrifice further time. The answer is... Almost Delete SaveFile.`);
+    const p = await Confirm(`Finally you have reached ##${player.singsing}. Are you ready to fly to Synergism in multidimensional universe?`);
+    if (!p)
+        return;
+    const a = window.crypto.getRandomValues(new Uint16Array(1))[0] % 999;
+    const b = window.crypto.getRandomValues(new Uint16Array(1))[0] % 999;
+    const result = await Prompt(`Answer the question to confirm you'd like to reset: what is ${a}+${b}?`)
+    if (Number(result) !== a + b)
+        return await Alert(`Answer was wrong, not resetting!`);
+    await Alert(`A crazy Ant God requests you to life. I invite you to an eternal journey. Are you ready?`);
+    const q = await Confirm(`Caution! The subsequent execution is exactly "Delete savefile" except playing "player.singsing" variables. And the game does not change anything. Do you want goodbye?`);
+    if (!q)
+        return;
+    const hold = Object.assign({}, blankSave, {
+        codes: Array.from(blankSave.codes)
+     }) as Player;
+    //Reset Displays
+    toggleTabs("buildings");
+    toggleSubTab(1, 0);
+
+    hold.singsing += 1 + player.singularityUpgrades.singsingWormhole.level;
+    hold.singularityUpgrades.singsingWormhole.level = player.singularityUpgrades.singsingWormhole.level;
+
+    //Import Game
+    await importSynergism(btoa(JSON.stringify(hold))!, true);
+    await Alert(`Goodbye World & Hello World!`);
 }
 
 const resetUpgrades = (i: number) => {

@@ -5,6 +5,7 @@ import { revealStuff } from "./UpdateHTML"
 import { Globals as G } from "./Variables"
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { updateResearchBG } from "./Research"
+import { calculateSingularityDebuff } from "./singularity"
 
 export interface IMultiBuy {
     levelCanBuy: number
@@ -32,7 +33,7 @@ const cubeUpgradeName = [
     "Wow! I want to accelerate time!",
     "Wow! I want to unlock a couple more coin upgrades.",
     "Wow! I want to improve automatic rune tools.",
-    "Wow! I want more cubes 3.",
+    "Wow! I want to hack in more score 1.",
     "Wow! I wish my Artemis was a little better 1",
     "Wow! I want opened cubes to give more tributes 2.",
     "Wow! I want Plutus Tribute bonuses to scale better 1",
@@ -42,17 +43,17 @@ const cubeUpgradeName = [
     "Wow! I want to finally render Reincarnating obsolete.",
     "Wow! I want to increase maximum Reincarnation Challenge completions.",
     "Wow! I want to arbitrarily increase my cube and tesseract gain.",
-    "Wow! I want more cubes 4.",
+    "Wow! I want to hack in more score 2.",
     "Wow! I want runes to be easier to level up over time.",
     "Wow! I want opened cubes to give more tributes 3.",
     "Wow! I want Chronos Tribute bonuses to scale better 1",
     "Wow! I want Aphrodite Tribute bonuses to scale better 1",
     "Wow! I want building power to be useful 2.",
-    "Wow! I want more rune levels 2.",
+    "Wow! I want to hack in more score 3.",
     "Wow! I want more tesseracts while corrupted!",
     "Wow! I want more score from challenge 10 completions.",
     "Wow! I want Athena Tribute bonuses to scale better 1.",
-    "Wow! I want more cubes 5.",
+    "Wow! I want to hack in more score 3.",
     "Wow! I want some Uncorruptable Obtainium.",
     "Wow! I want even more Uncorruptable Obtainium!",
     "Wow! I want Midas Tribute bonus to scale better 1.",
@@ -97,9 +98,9 @@ const researchAutomationIndices = [41, 42, 43, 44, 45, 46, 47, 48, 49, 50, // ro
                                    190]                    // row 8
 
 const cubeBaseCost = [
-    200, 200, 200, 500, 500, 500, 500, 500, 2000, 40000,
-    5000, 1000, 10000, 20000, 40000, 10000, 4000, 1e4, 50000, 12500,
-    5e4, 3e4, 3e4, 4e4, 2e5, 4e5, 1e5, 177777, 1e5, 1e6,
+    200, 200, 200, 500, 500, 500, 500, 500, 1000, 20000,
+    5000, 1000, 10000, 20000, 20000, 10000, 4000, 10000, 40000, 10000,
+    5e4, 3e4, 3e4, 4e4, 2e5, 4e5, 1e5, 1e5, 1e5, 1e6,
     5e5, 3e5, 2e6, 4e6, 2e6, 4e6, 1e6, 2e7, 5e7, 1e7,
     5e6, 1e7, 1e8, 4e7, 2e7, 4e7, 5e7, 1e8, 5e8, 1e8,
     1, 1e4, 1e8, 1e12, 1e16, 10, 1e5, 1e9, 1e13, 1e17,
@@ -109,15 +110,15 @@ const cubeBaseCost = [
 export const cubeMaxLevel = [
     3, 10, 5, 1, 1, 1, 1, 1, 1, 1,
     3, 10, 1, 10, 10, 10, 5, 1, 1, 1,
-    2, 10, 1, 10, 10, 10, 1, 1, 5, 1,
-    2, 1, 1, 10, 10, 10, 10, 1, 1, 10,
-    2, 10, 10, 10, 10, 20, 20, 1, 1, 100000,
+    5, 10, 1, 10, 10, 10, 1, 1, 5, 1,
+    5, 1, 1, 10, 10, 10, 10, 1, 1, 10,
+    5, 10, 10, 10, 10, 20, 20, 1, 1, 100000,
     1, 900, 100, 900, 900, 20, 1, 1, 400, 10000,
     900, 1, 1, 1, 1, 1, 1, 1000, 1, 975
 ];
 
 const cubeUpgradeDescriptions = [
-    "[1x1] You got it! +14% cubes from Ascending per level.",
+    "[1x1] You got it! +16.666% 3D cubes from Ascending per level.",
     "[1x2] Plutus grants you +1 Offering per second, no matter what, per level. Also a +0.5% Recycling chance!",
     "[1x3] Athena grants you +10% more Obtainium, and +80% Auto Obtainium per level.",
     "[1x4] You keep those 5 useful automation upgrades in the upgrades tab!",
@@ -127,7 +128,7 @@ const cubeUpgradeDescriptions = [
     "[1x8] Automatically buy Particle Upgrades.",
     "[1x9] The research automator in shop now automatically buys cheapest when enabled. It's like a roomba kinda!",
     "[1x10] Unlock some tools to automate Ascensions or whatever. Kinda expensive but cool.",
-    "[2x1] You got it again! +7% cubes from Ascending per level.",
+    "[2x1] You got it again! +9.09% 3D cubes from Ascending per level.",
     "[2x2] Raise building power to the power of (1 + level * 0.09).",
     "[2x3] For each 20 cubes opened at once, you get 1 additional tribute at random.",
     "[2x4] Iris shines her light on you. The effect power is now increased by +0.01 (+0.005 if >1000 tributes) per level.",
@@ -137,7 +138,7 @@ const cubeUpgradeDescriptions = [
     "[2x8] Quantum tunnelling ftw. +20% global game speed.",
     "[2x9] Unlocks new coin upgrades ranging from start of ascend to post c10 and beyond.",
     "[2x10] The rune automator in shop now spends all offerings automatically, 'splitting' them into each of the 5 runes equally.",
-    "[3x1] You got it once more! +7% cubes from Ascending per level.",
+    "[3x1] Perhaps score will benefit you more? Gain +5% more score on ascensions per level.",
     "[3x2] The exponent of the bonus of Artemis is increased by 0.05 per level.",
     "[3x3] For each 20 cubes opened at once, you get 1 additional tribute at random.",
     "[3x4] Plutus teaches you the Art of the Deal. The effect power is now increased by +0.01 (+0.0033 if >1000 tributes) per level.",
@@ -147,7 +148,7 @@ const cubeUpgradeDescriptions = [
     "[3x8] Well, I think you got it? Gain +1% of particles on Reincarnation per second.",
     "[3x9] Add +4 to Reincarnation Challenge cap per level. Completions after 25 scale faster in requirement!",
     "[3x10] You now get +25% Cubes and Tesseracts forever!",
-    "[4x1] You again? +7% cubes from Ascending per level.",
+    "[4x1] You again? +5% more score on ascensions per level.",
     "[4x2] Gain +0.1% Rune EXP per second you have spent in an Ascension. This has no cap!",
     "[4x3] For each 20 cubes opened at once, you get yet another additional tribute at random.",
     "[4x4] Chronos overclocks the universe for your personal benefit. (Rewards the same as others)",
@@ -157,7 +158,7 @@ const cubeUpgradeDescriptions = [
     "[4x8] Gain +0.5% more tesseracts on ascension for each additional level in a corruption you enable.",
     "[4x9] Instead of the multiplier being 1.03^(C10 completions), it is now 1.035^(C10 completions)!",
     "[4x10] Athena is very smart (Rewards the same as others).",
-    "[5x1] Yeah yeah yeah, +7% cubes from Ascending per level. Isn't it enough?",
+    "[5x1] Yeah yeah yeah, +5% score on Ascension per level. Isn't it enough?",
     "[5x2] You now gain +4% Obtainium per level, which is not dependent on corruptions!",
     "[5x3] Gain another +3% corruption-independent Obtainium per level.",
     "[5x4] Blah blah blah Midas works harder (same rewards as before)",
@@ -189,18 +190,20 @@ const cubeUpgradeDescriptions = [
     "[Cx20] The pinnacle of baking. Nothing you'll eat will taste better than this. Gain +4% more cubes on ascension if you have challenge 10 completions capped."
 ]
 
-const getCubeCost = (i: number, linGrowth = 0, cubic = false): IMultiBuy => {
-    const maxLevel = getCubeMax(i)
-    let amountToBuy = G['buyMaxCubeUpgrades'] ? 1e5: 1;
+const getCubeCost = (i: number): IMultiBuy => {
+    const linGrowth = (i == 50 ? 0.01 : 0);
+    const cubic = i > 50;
+    const maxLevel = getCubeMax(i);
+    let amountToBuy = player.buyMaxCubeUpgrades ? 1e5: 1;
     const cubeUpgrade = player.cubeUpgrades[i]!;
     amountToBuy = Math.min(maxLevel - cubeUpgrade, amountToBuy)
-    const singularityMultiplier = (i <= 50) ? (1 + player.singularityCount): 1;
+    const singularityMultiplier = (i <= 50) ? calculateSingularityDebuff("Cube Upgrades"): 1;
 
     let metaData:IMultiBuy
 
     if (cubic) {
         // TODO: Fix this inconsistency later.
-        amountToBuy = G['buyMaxCubeUpgrades'] ? maxLevel: Math.min(maxLevel, cubeUpgrade + 1)
+        amountToBuy = player.buyMaxCubeUpgrades ? maxLevel: Math.min(maxLevel, cubeUpgrade + 1)
         metaData = calculateCubicSumData(cubeUpgrade, cubeBaseCost[i-1],
                                          Number(player.wowCubes), amountToBuy)
     }
@@ -222,8 +225,8 @@ const getCubeMax = (i: number) => {
     return baseValue
 }
 
-export const cubeUpgradeDesc = (i: number, linGrowth = 0, cubic = false) => {
-    const metaData = getCubeCost(i, linGrowth, cubic)
+export const cubeUpgradeDesc = (i: number) => {
+    const metaData = getCubeCost(i)
     const a = DOMCacheGetOrSet("cubeUpgradeName")
     const b = DOMCacheGetOrSet("cubeUpgradeDescription")
     const c = DOMCacheGetOrSet("cubeUpgradeCost")
@@ -284,8 +287,8 @@ function awardAutosCookieUpgrade() {
     }
 }
 
-export const buyCubeUpgrades = (i: number, linGrowth = 0, cubic = false) => {
-    const metaData = getCubeCost(i,linGrowth, cubic);
+export const buyCubeUpgrades = (i: number) => {
+    const metaData = getCubeCost(i)
     const maxLevel = getCubeMax(i)
     if(Number(player.wowCubes) >= metaData.cost && player.cubeUpgrades[i]! < maxLevel){
         player.wowCubes.sub(100 / 100 * metaData.cost);
@@ -311,8 +314,40 @@ export const buyCubeUpgrades = (i: number, linGrowth = 0, cubic = false) => {
         awardAutosCookieUpgrade();
     }
 
-    cubeUpgradeDesc(i, linGrowth, cubic);
+    cubeUpgradeDesc(i);
     updateCubeUpgradeBG(i);
     revealStuff();
     calculateCubeBlessings();
+}
+
+export const autoBuyCubeUpgrades = () => {
+    if(player.buyAutoCubeUpgrades && player.singularityCount > 0) {
+        const cheapet = [];
+
+        const buyMaxCubeUpgrades = player.buyMaxCubeUpgrades;
+        player.buyMaxCubeUpgrades = true;
+
+        for (let i = 0; i < cubeBaseCost.length; i++) {
+            const maxLevel = getCubeMax(i);
+            if(player.cubeUpgrades[i]! < maxLevel) {
+                const metaData = getCubeCost(i)
+                cheapet.push([Number(i), metaData.cost]);
+            }
+        }
+
+        if(cheapet.length > 0) {
+            cheapet.sort((a,b) => {return a[1] - b[1];});
+
+            for (const value of cheapet) {
+                const maxLevel = getCubeMax(value[0]);
+                if(Number(player.wowCubes) >= value[1] && player.cubeUpgrades[value[0]]! < maxLevel) {
+                    buyCubeUpgrades(value[0]);
+                }
+            }
+
+            calculateCubeBlessings();
+        }
+
+        player.buyMaxCubeUpgrades = buyMaxCubeUpgrades;
+    }
 }

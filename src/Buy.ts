@@ -941,3 +941,24 @@ export const buyRuneBonusLevels = (type: 'Blessings' | 'Spirits', index: number)
         DOMCacheGetOrSet('runeSpiritPower' + index + 'Value2').textContent = format(1 - t + spiritMultiplierArray[index] * G['effectiveRuneSpiritPower'][index], 4, true)
     }
 }
+
+export const buyAllBlessings = (type: 'Blessings' | 'Spirits') => {
+    const runeshards = Math.floor(player.runeshards / 5);
+    const baseCost = type === 'Spirits' ? G['spiritBaseCost'] : G['blessingBaseCost'];
+
+    for (let index = 1; index < 6; index++) {
+        const baseLevels = type === 'Spirits' ? player.runeSpiritLevels[index] : player.runeBlessingLevels[index];
+        const [level, cost] = calculateSummationLinear(baseLevels, baseCost, runeshards, 1e300);
+        (type === 'Spirits') ?
+            player.runeSpiritLevels[index] = level :
+            player.runeBlessingLevels[index] = level;
+        player.runeshards -= cost;
+        if (player.runeshards < 0) {
+            player.runeshards = 0;
+        }
+    }
+
+    player.runeshards = 0;
+    buyRuneBonusLevels(type, 1);
+}
+

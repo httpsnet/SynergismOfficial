@@ -1,5 +1,5 @@
 import { player, format, clearInt, interval } from './Synergism';
-import { calculateSigmoidExponential, calculateSigmoid, calculateAnts, calculateRuneLevels, calculateMaxRunes, calculateAntSacrificeELO, calculateAntSacrificeRewards } from './Calculate';
+import { calculateSigmoidExponential, calculateAnts, calculateRuneLevels, calculateMaxRunes, calculateAntSacrificeELO, calculateAntSacrificeRewards } from './Calculate';
 import { Globals as G } from './Variables';
 
 import Decimal, { DecimalSource } from 'break_infinity.js';
@@ -52,8 +52,8 @@ const antupgdesc: Record<string, string> = {
     antupgdesc8: "Knows how to salt and pepper food [Up to 1,000x Rune EXP!]",
     antupgdesc9: "Can make your message to Ant God a little more clear [+1 all Rune Levels / level, Cap 10 Million]",
     antupgdesc10: "Has big brain energy [Additional Obtainium!]",
-    antupgdesc11: "A valuable offering to the Ant God [Gain up to 3x Sacrifice Rewards!]",
-    antupgdesc12: "Betray Ant God increasing the fragility of your dimension [Unlocks ant talisman, Up to 2x faster timers on most things]"
+    antupgdesc11: "A valuable offering to the Ant God [Additional Sacrifice Rewards!]",
+    antupgdesc12: "Betray Ant God increasing the fragility of your dimension [Unlocks ant talisman, Increase in Global Speed!]"
 }
 
 export const calculateCrumbToCoinExp = () => {
@@ -64,7 +64,7 @@ export const calculateCrumbToCoinExp = () => {
 }
 
 const antUpgradeTexts = [
-    () => "ALL Ants work at " + format(Decimal.pow(1.12 + 1 / 1000 * player.researches[101], player.antUpgrades[1-1]! + G['bonusant1']), 2) + "x speed.",
+    () => "ALL Ants work at " + format(Decimal.pow(1.11 + player.researches[101] / 1000 + player.researches[162] / 10000, player.antUpgrades[0]! + G['bonusant1']), 2) + "x speed.",
     () => "Crumb --> Coin exponent is ^" + format(calculateCrumbToCoinExp()),
     () => "Tax growth is multiplied by " + format(0.005 + 0.995 * Math.pow(0.99, player.antUpgrades[3-1]! + G['bonusant3']), 4),
     () => "Accelerator Boosts +" + format(100 * (calculateSigmoidExponential(20, (player.antUpgrades[4-1]! + G['bonusant4']) / 1000 * 20 / 19) - 1), 3) + "%",
@@ -74,8 +74,8 @@ const antUpgradeTexts = [
     () => "Rune EXP is multiplied by " + format(calculateSigmoidExponential(999, 1 / 10000 * Math.pow(player.antUpgrades[8-1]! + G['bonusant8'], 1.1)), 3) + "!",
     () => "Each rune has +" + format(1 * Math.min(1e7, (player.antUpgrades[9-1]! + G['bonusant9'])),0,true) + " effective levels.",
     () => "Obtainium x" + format(1 + 2 * Math.pow((player.antUpgrades[10-1]! + G['bonusant10']) / 50, 0.75), 4),
-    () => "Sacrificing is " + format(1 + 2 * (1 - Math.pow(2, -(player.antUpgrades[11-1]! + G['bonusant11']) / 125)), 4) + "x as effective",
-    () => "Global timer is sped up by a factor of " + format(calculateSigmoid(2, player.antUpgrades[12-1]! + G['bonusant12'], 69), 4)
+    () => "Sacrificing is x" + format(Math.pow(2, Math.log10(player.antUpgrades[11-1]! + G['bonusant11'] + 10) - 1), 4) + " as effective",
+    () => "Global timer is speed up by a factor of x" + format(Math.pow(2, Math.log10(player.antUpgrades[12-1]! + G['bonusant12'] + 10) - 1), 4)
 ]
 
 let repeatAnt: ReturnType<typeof setTimeout> | null = null;
@@ -206,7 +206,7 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
 
     const achRequirements = [2, 6, 20, 100, 500, 6666, 77777];
     for (let j = 0; j < achRequirements.length; j++) {
-        if (sacrificeMult.gte(achRequirements[j]) && player[`${G['ordinals'][j + 1 as ZeroToSeven]}OwnedAnts` as const] > 0 && player.achievements[176 + j] === 0) {
+        if (player.achievements[176 + j] === 0 && sacrificeMult.gte(achRequirements[j]) && player[`${G['ordinals'][j + 1 as ZeroToSeven]}OwnedAnts` as const] > 0) {
             achievementaward(176 + j)
         }
     }
@@ -295,11 +295,11 @@ export const antUpgradeDescription = (i: number) => {
 //    else{}
 //}
 
-export const antSacrificePointsToMultiplier = (points: number) => {
-    let multiplier = Decimal.pow(1 + points / 5000, 2);
-    multiplier = multiplier.times((1 + 0.2 * Math.log(1 + points) / Math.log(10)));
+export const antSacrificePointsToMultiplier = (points: Decimal) => {
+    let multiplier = Decimal.pow(points.dividedBy(5000).add(1), 2);
+    multiplier = multiplier.times(1 + 0.2 * Decimal.log(points.add(1), 10));
     if (player.achievements[174] > 0) {
-        multiplier = multiplier.times((1 + 0.4 * Math.log(1 + points) / Math.log(10)));
+        multiplier = multiplier.times(1 + 0.4 * Decimal.log(points.add(1), 10));
     }
     return multiplier;
 }
@@ -313,20 +313,21 @@ export const showSacrifice = () => {
     DOMCacheGetOrSet("effectiveELO").textContent = "[" + format(G['effectiveELO'], 2, false) + " effective]"
 
     DOMCacheGetOrSet("antSacrificeMultiplier").childNodes[0].textContent = "Ant Multiplier x" + format(antSacrificePointsToMultiplier(player.antSacrificePoints), 3, false) + " --> "
-    DOMCacheGetOrSet("SacrificeMultiplier").textContent = "x" + format(antSacrificePointsToMultiplier(player.antSacrificePoints + sacRewards.antSacrificePoints), 3, false)
+    DOMCacheGetOrSet("SacrificeMultiplier").textContent = "x" + format(antSacrificePointsToMultiplier(player.antSacrificePoints.add(sacRewards.antSacrificePoints)), 3, false)
 
     DOMCacheGetOrSet("SacrificeUpgradeMultiplier").textContent = format(G['upgradeMultiplier'], 3, true) + "x"
     DOMCacheGetOrSet("SacrificeTimeMultiplier").textContent = format(G['timeMultiplier'], 3, true) + "x"
     DOMCacheGetOrSet("antSacrificeOffering").textContent = "+" + format(sacRewards.offerings)
     DOMCacheGetOrSet("antSacrificeObtainium").textContent = "+" + format(sacRewards.obtainium)
     if (player.challengecompletions[9] > 0) {
-        DOMCacheGetOrSet("antSacrificeTalismanShard").textContent = "+" + format(sacRewards.talismanShards) + " [>500 ELO]"
-        DOMCacheGetOrSet("antSacrificeCommonFragment").textContent = "+" + format(sacRewards.commonFragments) + " [>750 ELO]"
-        DOMCacheGetOrSet("antSacrificeUncommonFragment").textContent = "+" + format(sacRewards.uncommonFragments) + " [>1,000 ELO]"
-        DOMCacheGetOrSet("antSacrificeRareFragment").textContent = "+" + format(sacRewards.rareFragments) + " [>1,500 ELO]"
-        DOMCacheGetOrSet("antSacrificeEpicFragment").textContent = "+" + format(sacRewards.epicFragments) + " [>2,000 ELO]"
-        DOMCacheGetOrSet("antSacrificeLegendaryFragment").textContent = "+" + format(sacRewards.legendaryFragments) + " [>3,000 ELO]"
-        DOMCacheGetOrSet("antSacrificeMythicalFragment").textContent = "+" + format(sacRewards.mythicalFragments) + " [>5,000 ELO]"
+        const textELO = G['antELO'] > 1e6
+        DOMCacheGetOrSet("antSacrificeTalismanShard").textContent = "+" + format(sacRewards.talismanShards) + (textELO ? '' : ' [>500 ELO]')
+        DOMCacheGetOrSet("antSacrificeCommonFragment").textContent = "+" + format(sacRewards.commonFragments) + (textELO ? '' : ' [>750 ELO]')
+        DOMCacheGetOrSet("antSacrificeUncommonFragment").textContent = "+" + format(sacRewards.uncommonFragments) + (textELO ? '' : ' [>1,000 ELO]')
+        DOMCacheGetOrSet("antSacrificeRareFragment").textContent = "+" + format(sacRewards.rareFragments) + (textELO ? '' : ' [>1,500 ELO]')
+        DOMCacheGetOrSet("antSacrificeEpicFragment").textContent = "+" + format(sacRewards.epicFragments) + (textELO ? '' : ' [>2,000 ELO]')
+        DOMCacheGetOrSet("antSacrificeLegendaryFragment").textContent = "+" + format(sacRewards.legendaryFragments) + (textELO ? '' : ' [>3,000 ELO]')
+        DOMCacheGetOrSet("antSacrificeMythicalFragment").textContent = "+" + format(sacRewards.mythicalFragments) + (textELO ? '' : ' [>5,000 ELO]')
     }
 }
 
@@ -334,7 +335,7 @@ export const sacrificeAnts = async (auto = false) => {
     let p = true
 
     if (player.antPoints.gte("1e40")) {
-        if (!auto && player.antSacrificePoints < 100 && player.toggles[32]) {
+        if (!auto && !player.antSacrificePoints.gte(100) && player.toggles[32]) {
             p = await Confirm("This resets your Crumbs, Ants and Ant Upgrades in exchange for some multiplier and resources. Continue?")
         }
         if (p) {
@@ -342,7 +343,7 @@ export const sacrificeAnts = async (auto = false) => {
 
             const maxCap = 1e300;
             const sacRewards = calculateAntSacrificeRewards();
-            player.antSacrificePoints += sacRewards.antSacrificePoints;
+            player.antSacrificePoints = player.antSacrificePoints.add(sacRewards.antSacrificePoints);
             player.runeshards = Math.min(maxCap, player.runeshards + sacRewards.offerings);
             player.researchPoints = Math.min(maxCap, player.researchPoints + sacRewards.obtainium);
 

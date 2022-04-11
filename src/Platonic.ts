@@ -2,6 +2,7 @@ import { player, format } from './Synergism';
 import { Synergism } from './Events';
 import { Alert, revealStuff } from './UpdateHTML';
 import { DOMCacheGetOrSet } from './Cache/DOM';
+import { c15RewardUpdate } from './Statistics';
 
 const platonicUpgradeDesc = [
     '+0.0075% cubes per corruption level per level!',
@@ -24,6 +25,11 @@ const platonicUpgradeDesc = [
     'Raise the base percentage of Constant Upgrade 1 by 0.1% and increase the base percentage cap of Constant Upgrade 2 by 0.3% per level!',
     'The diminishing return power on Chronos Hepteract changes from 0.166 to (0.166 + 0.00133 * level) [Max of 0.2333].',
     'You know, maybe some things should be left unbought.',
+    'Boosted to the Challenge 15 reward bonus by the talisman assigned rune. Calculated as "C15 Score * Rune ^ (level / 10 + 1)". The amplified effect can be checked in the Challenge 15 menu. Unlocking has no effect.',
+    'Ascension Score increases 0.01% * levels for each Challenge 10 to 16 achievement.',
+    '',
+    '',
+    '',
 ];
 
 export interface IPlatBaseCost {
@@ -239,9 +245,64 @@ export const platUpgradeBaseCosts: Record<number, IPlatBaseCost> = {
         cubes: 1e45,
         tesseracts: 1e28,
         hypercubes: 1e25,
-        platonics: 1e25,
+        platonics: 1e15,
         abyssals: Math.pow(2, 31) - 1,
         maxLevel: 1
+    },
+    21: {
+        obtainium: 1e230,
+        offerings: 1e180,
+        cubes: 1e55,
+        tesseracts: 1e34,
+        hypercubes: 1e31,
+        platonics: 1e30,
+        abyssals: Math.pow(2, 40),
+        maxLevel: 20,
+        priceMult: 1e20
+    },
+    22: {
+        obtainium: 1e280,
+        offerings: 1e220,
+        cubes: 1e65,
+        tesseracts: 1e39,
+        hypercubes: 1e37,
+        platonics: 1e35,
+        abyssals: Math.pow(2, 53),
+        maxLevel: 100,
+        priceMult: 1e100
+    },
+    23: {
+        obtainium: 1e300,
+        offerings: 1e260,
+        cubes: 1e75,
+        tesseracts: 1e44,
+        hypercubes: 1e42,
+        platonics: 1e39,
+        abyssals: Math.pow(2, 67),
+        maxLevel: 10,
+        priceMult: 1000
+    },
+    24: {
+        obtainium: 1e300,
+        offerings: 1e300,
+        cubes: 1e85,
+        tesseracts: 1e49,
+        hypercubes: 1e47,
+        platonics: 1e44,
+        abyssals: Math.pow(2, 80),
+        maxLevel: 10,
+        priceMult: 1000
+    },
+    25: {
+        obtainium: 1e300,
+        offerings: 1e300,
+        cubes: 1e100,
+        tesseracts: 1e56,
+        hypercubes: 1e55,
+        platonics: 1e52,
+        abyssals: Math.pow(2, 93),
+        maxLevel: 10,
+        priceMult: 1e10
     }
 }
 
@@ -295,8 +356,8 @@ export const createPlatonicDescription = (index: number) => {
 
     DOMCacheGetOrSet('platonicUpgradeDescription').textContent = platonicUpgradeDesc[index-1];
     DOMCacheGetOrSet('platonicUpgradeLevel').textContent = "Level: " + format(player.platonicUpgrades[index]) + "/" + format(platUpgradeBaseCosts[index].maxLevel) + maxLevelAppend
-    DOMCacheGetOrSet('platonicOfferingCost').textContent = format(player.runeshards) + "/" + format(platUpgradeBaseCosts[index].offerings * priceMultiplier) + " Offerings"
-    DOMCacheGetOrSet('platonicObtainiumCost').textContent = format(player.researchPoints) + "/" + format(platUpgradeBaseCosts[index].obtainium * priceMultiplier) + " Obtainium"
+    DOMCacheGetOrSet('platonicOfferingCost').textContent = format(player.runeshards) + "/" + format(Math.min(1e300, platUpgradeBaseCosts[index].offerings * priceMultiplier)) + " Offerings"
+    DOMCacheGetOrSet('platonicObtainiumCost').textContent = format(player.researchPoints) + "/" + format(Math.min(1e300, platUpgradeBaseCosts[index].obtainium * priceMultiplier)) + " Obtainium"
     DOMCacheGetOrSet('platonicCubeCost').textContent = format(player.wowCubes) + "/" + format(platUpgradeBaseCosts[index].cubes * priceMultiplier) + " Wow! Cubes"
     DOMCacheGetOrSet('platonicTesseractCost').textContent = format(player.wowTesseracts) + "/" + format(platUpgradeBaseCosts[index].tesseracts * priceMultiplier) + " Wow! Tesseracts"
     DOMCacheGetOrSet('platonicHypercubeCost').textContent = format(player.wowHypercubes) + "/" + format(platUpgradeBaseCosts[index].hypercubes * priceMultiplier) + " Wow! Hypercubes"
@@ -369,8 +430,8 @@ export const buyPlatonicUpgrades = (index: number) => {
     }
     if (resourceCheck.canBuy) {
         player.platonicUpgrades[index] += 1
-        player.researchPoints -= Math.floor(platUpgradeBaseCosts[index].obtainium * priceMultiplier)
-        player.runeshards -= Math.floor(platUpgradeBaseCosts[index].offerings * priceMultiplier)
+        player.researchPoints -= Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].obtainium * priceMultiplier))
+        player.runeshards -= Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].offerings * priceMultiplier))
         player.wowCubes.sub(Math.floor(platUpgradeBaseCosts[index].cubes * priceMultiplier)); 
         player.wowTesseracts.sub(Math.floor(platUpgradeBaseCosts[index].tesseracts * priceMultiplier));
         player.wowHypercubes.sub(Math.floor(platUpgradeBaseCosts[index].hypercubes * priceMultiplier));
@@ -378,11 +439,12 @@ export const buyPlatonicUpgrades = (index: number) => {
         player.hepteractCrafts.abyss.spend(Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier));
 
         Synergism.emit('boughtPlatonicUpgrade', platUpgradeBaseCosts[index]);
-        if (index === 20) {
-            return Alert('While I strongly recommended you not to buy this, you did it anyway. For that, you have unlocked the rune of Grandiloquence, for you are a richass.')
-        }
     }
     createPlatonicDescription(index)
     updatePlatonicUpgradeBG(index)
     revealStuff();
+    c15RewardUpdate()
+    if (resourceCheck.canBuy && index === 20) {
+        return Alert('While I strongly recommended you not to buy this, you did it anyway. For that, you have unlocked the rune of Grandiloquence, for you are a richass.')
+    }
 }

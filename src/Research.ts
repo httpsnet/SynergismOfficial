@@ -5,10 +5,11 @@ import { Globals as G } from './Variables';
 import { updateClassList } from './Utility';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { IMultiBuy } from './Cubes';
+import { calculateSingularityDebuff } from './singularity';
 
 const getResearchCost = (index: number, buyAmount = 1, linGrowth = 0): IMultiBuy => {
     buyAmount = Math.min(G['researchMaxLevels'][index] - player.researches[index], buyAmount)
-    const metaData = calculateSummationNonLinear(player.researches[index], G['researchBaseCosts'][index] * (1 + player.singularityCount), player.researchPoints, linGrowth, buyAmount)
+    const metaData = calculateSummationNonLinear(player.researches[index], G['researchBaseCosts'][index] * calculateSingularityDebuff("Researches"), player.researchPoints, linGrowth, buyAmount)
     return metaData
 }
 
@@ -79,7 +80,7 @@ export const updateAutoResearch = (index: number, auto: boolean) => {
 export const buyResearch = (index: number, auto = false, linGrowth = 0): boolean => {
 
     // Get our costs, and determine if anything is purchasable.
-    const buyAmount = (G['maxbuyresearch'] || auto) ? 1e5: 1;
+    const buyAmount = (player.maxbuyresearch || auto) ? 1e5: 1;
     const metaData = getResearchCost(index, buyAmount, linGrowth); /* Destructuring FTW! */
     const canBuy = (player.researchPoints >= metaData.cost);
 
@@ -162,7 +163,7 @@ const resdesc = [
     "[1x12] Gain +4% free multipliers per level.",
     "[1x13] Gain +2.5% free multipliers per level.",
     "[1x14] Gain +1.5% free multipliers per level.",
-    "[1x15] Gain +0.5% free multipliers per level.",
+    "[1x15] Gain +1% free multipliers per level.",
     "[1x16] Gain +5% free accelerator boosts per level.",
     "[1x17] Gain +5% free accelerator boosts per level.",
     "[1x18] Gain +2 free accelerator per accelerator boost.",
@@ -171,13 +172,13 @@ const resdesc = [
     "[1x21] Most rune effects are increased by 1% per level. (Excludes any recycle chance bonus)",
     "[1x22] Each Offering used increases Rune EXP by 0.6 per level.",
     "[1x23] Each Offering used increases Rune EXP by another 0.3 per level!",
-    "[1x24] Prestige and Transcensions base Offering is increased by 0.2 per level.",
+    "[1x24] Prestige and Transcensions base Offering is increased by 0.3 per level.",
     "[1x25] Reincarnations base Offering is increased by 0.6 per level.",
     "[2x1] Multiply all crystal producer production by 150% per level (multiplicative).",
     "[2x2] Multiply all crystal producer production by 150% per level (multiplicative).",
     "[2x3] Coin Exponent is increased by 0.08 per level.",
     "[2x4] Coin Exponent is increased by another 0.08 per level.",
-    "[2x5] Coin Exponent is increased by ANOTHER 0.04 per level.",
+    "[2x5] Coin Exponent is increased by ANOTHER 0.05 per level.",
     "[2x6] Want to bake cookies instead? You can go offline for 4 additional hours per level (base 72hr).",
     "[2x7] Want to bake a lot of cookies instead? Extend the offline maximum timer by another 4 hours per level!",
     "[2x8] Gain +11% more multiplier boosts from Mythos Shards per level.",
@@ -224,10 +225,10 @@ const resdesc = [
     "[3x24] Automatically gain completions for Challenge 4 while running a Reincarnation challenge",
     "[3x25] Automatically gain completions for Challenge 5 while running a Reincarnation challenge",
     "[4x1] Welcome to the land of expensive researches. Here's +10% obtainium per level to help you out!",
-    "[4x2] Increase the level cap of Thrift rune by 10 per level, and +2% exp for that rune in particular.",
-    "[4x3] Increase the level cap of Speed rune by 10 per level, and +2% exp for that rune in particular.",
-    "[4x4] Increase the level cap of Prism rune by 10 per level, and +2% exp for that rune in particular.",
-    "[4x5] Increase the level cap of Duplication rune by 10 per level, and +2% exp for that rune in particular.",
+    "[4x2] Increase the level cap of Thrift rune by 10 per level, and +4% exp for that rune in particular.",
+    "[4x3] Increase the level cap of Speed rune by 10 per level, and +4% exp for that rune in particular.",
+    "[4x4] Increase the level cap of Prism rune by 10 per level, and +4% exp for that rune in particular.",
+    "[4x5] Increase the level cap of Duplication rune by 10 per level, and +4% exp for that rune in particular.",
     "[4x6] You thought the previous researches are expensive? You're going to need this! [+10% Obtainium/level]",
     "[4x7] Permanently UNLOCK the Rune of Superior Intellect! [+%Ob / +Ant Speed / +Base Offerings.]",
     "[4x8] Taking forever to level up that SI Rune? Here's +5% SI Rune EXP per level.",
@@ -244,8 +245,8 @@ const resdesc = [
     "[4x19] +20 Multiplier per 8 Summative Rune Levels, per level.",
     "[4x20] Gain +4 base Offerings from Reincarnations by purchasing this. Math Nerds will love this!",
     "[4x21] Ants slow? Add +0.0002 to ant efficiency increase per ant purchased per level.",
-    "[4x22] Add +4 level to the first six upgradable ants per level!",
-    "[4x23] Add +4 level to the next five upgradable ants per level!",
+    "[4x22] Add +5 level to the first six upgradable ants per level!",
+    "[4x23] Add +5 level to the next five upgradable ants per level!",
     "[4x24] Is the Quark Shop too hot to resist? Get +1 Quark per hour from Exporting for each level!",
     "[4x25] Alright, Platonic is off his rocker. I don't expect you to get this but this will give +1 MORE Quark per hour from Exporting for each level!",
     "[5x1] Alright, you're past the big wall. How about adding +.001 to Inceptus Ant efficiency per level?",
@@ -258,11 +259,11 @@ const resdesc = [
     "[5x8] A simple trick makes your base ant ELO increase by 25 per level!",
     "[5x9] A more convoluted trick makes your base ant ELO increase by 25 per level again!",
     "[5x10] Gain +1% more ELO from ant sources per level because why not?",
-    "[5x11] Gotta go fast [+10 max Speed Rune Level per level, +1% EXP to that rune]",
-    "[5x12] Double Trouble [+10 max Duplication Rune level per level, +1% EXP to that rune]",
-    "[5x13] Newton's Delight [+10 max Prism Rune Level per level, +1% EXP to that rune]",
-    "[5x14] Five-Finger discounts [+10 max Thrift Rune Level per level, +1% EXP to that rune]",
-    "[5x15] Scientific Breakthrough [+10 max SI Rune Level per level +1% EXP to that rune]",
+    "[5x11] Gotta go fast [+10 max Speed Rune Level per level, +2% EXP to that rune]",
+    "[5x12] Double Trouble [+10 max Duplication Rune level per level, +2% EXP to that rune]",
+    "[5x13] Newton's Delight [+10 max Prism Rune Level per level, +2% EXP to that rune]",
+    "[5x14] Five-Finger discounts [+10 max Thrift Rune Level per level, +2% EXP to that rune]",
+    "[5x15] Scientific Breakthrough [+10 max SI Rune Level per level +2% EXP to that rune]",
     "[5x16] Talismans have +0.015 Rune levels per talisman level per level. Levelception!",
     "[5x17] Talismans have another +0.015 Rune levels per talisman level per level!",
     "[5x18] For 'neutral' talisman effects, increase by +0.06 per level!",
@@ -303,9 +304,9 @@ const resdesc = [
     "[7x3] Hey, I totally didn't steal this idea. You gain 12 tributes of Wow! Cube tier for every Tesseract opened.",
     "[7x4] Make all Tesseract buildings produce 3% faster per level. Hey, isn't that more than the last research tier?",
     "[7x5] Tome 2 of 4: How to win over the Ant universe. Another e100M Divider to Challenge 10 Base Requirement on purchase.",
-    "[7x6] What, again? Alright. +0.6% Accelerators / level.",
-    "[7x7] Gas, gas, gas. +0.6% Accelerator Boosts / level.",
-    "[7x8] Dupe DUPE DUPE. +0.6% Multipliers / level.",
+    "[7x6] What, again? Alright. +0.7% Accelerators / level.",
+    "[7x7] Gas, gas, gas. +0.7% Accelerator Boosts / level.",
+    "[7x8] Dupe DUPE DUPE. +0.7% Multipliers / level.",
     "[7x9] Somehow, I can't explain why, you reduce your taxes by 2% multiplicative, based on 3/5 * log10(Rare Fragments)!",
     "[7x10] Want a permanent blessing boost? I know you do. A permanent +25% effect to all blessings.",
     "[7x11] SIGMA KAPPA: +0.3% Rune Effectiveness each level!",
@@ -318,9 +319,9 @@ const resdesc = [
     "[7x18] Gain +0.08% tributes from cubes per level. You know, you should expect it at this point.",
     "[7x19] +4% faster Tesseract Buildings / level. It's GROWING.",
     "[7x20] Tome 3 of 4: How to totally ROCK challenge 10. e100m divisor!",
-    "[7x21] You should know how this goes. +0.4% Accelerator Boosts / level",
-    "[7x22] Accelerator Boosts += 0.004 * Accelerator Boosts",
-    "[7x23] A lot of a small +0.4% Multipliers per level",
+    "[7x21] You should know how this goes. +0.6% Accelerator Boosts / level",
+    "[7x22] Accelerator Boosts += 0.006 * Accelerator Boosts",
+    "[7x23] A lot of a small +0.6% Multipliers per level",
     "[7x24] Epic Fragments boost Blessing power by 10% * Log10(Epic Shards + 1)",
     "[7x25] Automatically buy Constant Upgrades, if they are affordable! They also no longer subtract from your constant.",
     "[8x1] Row 8 baby! +0.2% Rune Effectiveness / level.",
@@ -333,9 +334,9 @@ const resdesc = [
     "[8x8] When you open a Hypercube, you also open 100 Tesseracts! (This works with 7x3, if you were curious.)",
     "[8x9] +5% faster Tesseract Buildings / level. ASCENDED.",
     "[8x10] Tome 4 of 4: You need to prepare for your ascent. e100m divisor!",
-    "[8x11] Something something +0.2% Accelerators pretty cool!",
-    "[8x12] Something somewhere, +0.2% Accelerator Boosts!",
-    "[8x13] You are DUPLICATED. +0.2% Multipliers/level",
+    "[8x11] Something something +0.5% Accelerators pretty cool!",
+    "[8x12] Something somewhere, +0.5% Accelerator Boosts!",
+    "[8x13] You are DUPLICATED. +0.5% Multipliers/level",
     "[8x14] Legendary Fragments increase Spirit power by +15% multiplied by Log10(Legendary Fragments + 1)",
     "[8x15] Unlock Automations for all 5 of the Tesseract buildings.",
     "[8x16] +0.1% Rune Effectiveness / level. Does this even do anything at this point?",
@@ -351,7 +352,7 @@ const resdesc = [
 ];
 
 export const researchDescriptions = (i: number, auto = false, linGrowth = 0) => {
-    const buyAmount = (G['maxbuyresearch'] || auto) ? 100000 : 1;
+    const buyAmount = (player.maxbuyresearch || auto) ? 100000 : 1;
     const y = resdesc[i-1];
     let z = ""
     const p = "res" + i

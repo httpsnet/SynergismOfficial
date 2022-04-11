@@ -4,6 +4,7 @@ import { calculateSigmoidExponential, calculateCubeMultiplier, calculateOffering
 import { challenge15ScoreMultiplier } from './Challenges';
 import type { GlobalVariables } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
+import Decimal from 'break_infinity.js';
 
 const associated = new Map<string, string>([
     ['kMisc', 'miscStats'],
@@ -84,7 +85,8 @@ export const loadStatisticsCubeMultipliers = () => {
         15: {acc: 2, desc: "Cube Inferno [GQ]:"},
         16: {acc: 2, desc: "Wow Pass Z"},
         17: {acc: 2, desc: "Cookie Upgrade 16"},
-        18: {acc: 2, desc: "Cookie Upgrade 20"}
+        18: {acc: 2, desc: "Cookie Upgrade 20"},
+        19: {acc: 2, desc: "Cube Colony [GQ]"},
     }
     for (let i = 0; i < arr0.length; i++) {
         const statGCMi = DOMCacheGetOrSet(`statGCM${i + 1}`);
@@ -111,7 +113,8 @@ export const loadStatisticsCubeMultipliers = () => {
         13: {acc: 2, desc: "Spirit Power:"},
         14: {acc: 2, desc: "Platonic Cubes:"},
         15: {acc: 2, desc: "Platonic 1x1:"},
-        16: {acc: 2, desc: "Cookie Upgrade 13:"}
+        16: {acc: 2, desc: "Cookie Upgrade 13:"},
+        17: {acc: 2, desc: "Cube Exponent [GQ]:"},
     }
     for (let i = 0; i < arr.length; i++) {
         const statCMi = DOMCacheGetOrSet(`statCM${i + 1}`);
@@ -135,6 +138,7 @@ export const loadStatisticsCubeMultipliers = () => {
         10: {acc: 2, desc: "Achievement 255 Bonus:"},
         11: {acc: 2, desc: "Platonic Cubes:"},
         12: {acc: 2, desc: "Platonic 1x2:"},
+        13: {acc: 2, desc: "Cube Exponent [GQ]:"},
     }
     for (let i = 0; i < arr2.length; i++) {
         const statTeMi = DOMCacheGetOrSet(`statTeM${i + 1}`);
@@ -157,6 +161,7 @@ export const loadStatisticsCubeMultipliers = () => {
         9: {acc: 2, desc: "Platonic Cubes:"},
         10: {acc: 2, desc: "Platonic 1x3:"},
         11: {acc: 2, desc: "Hyperreal Hepteract Bonus:"},
+        12: {acc: 2, desc: "Cube Exponent [GQ]:"},
     }
     for (let i = 0; i < arr3.length; i++) {
         const statHyMi = DOMCacheGetOrSet(`statHyM${i + 1}`);
@@ -177,6 +182,7 @@ export const loadStatisticsCubeMultipliers = () => {
         7: {acc: 2, desc: "Achievement 257 Bonus:"},
         8: {acc: 2, desc: "Platonic Cubes:"},
         9: {acc: 2, desc: "Platonic 1x4:"},
+        10: {acc: 2, desc: "Cube Exponent [GQ]:"},
     }
     for (let i = 0; i < arr4.length; i++) {
         const statPlMi = DOMCacheGetOrSet(`statPlM${i + 1}`);
@@ -195,6 +201,7 @@ export const loadStatisticsCubeMultipliers = () => {
         5: {acc: 2, desc: "Achievement 264 Bonus:"},
         6: {acc: 2, desc: "Achievement 265 Bonus:"},
         7: {acc: 2, desc: "Achievement 270 Bonus:"},
+        8: {acc: 2, desc: "Cube Exponent [GQ]:"},
     }
     for (let i = 0; i < arr5.length; i++) {
         const statHeMi = DOMCacheGetOrSet(`statHeM${i + 1}`);
@@ -235,11 +242,12 @@ export const loadStatisticsOfferingMultipliers = () => {
         25: {acc: 3, desc: "Offering Charge [GQ]:"},
         26: {acc: 3, desc: "Offering Storm [GQ]:"},
         27: {acc: 3, desc: "Offering Tempest [GQ]:"},
-        28: {acc: 3, desc: "Cube Upgrade Cx4"}
+        28: {acc: 3, desc: "Cube Upgrade Cx4"},
+        29: {acc: 3, desc: "Offering Spore [GQ]"},
     }
     for (let i = 0; i < arr.length; i++) {
         const statOffi = DOMCacheGetOrSet(`statOff${i + 1}`);
-        statOffi.childNodes[0].textContent = map[i + 1].desc;
+            statOffi.childNodes[0].textContent = map[i + 1].desc;
         DOMCacheGetOrSet(`sOff${i + 1}`).textContent = `x${format(arr[i], map[i + 1].acc, true)}`;
     }
     DOMCacheGetOrSet("sOffT").textContent = `x${format(calculateOfferings("prestige", true, true), 3)}`;
@@ -265,162 +273,200 @@ export const loadPowderMultiplier = () => {
     DOMCacheGetOrSet("sPoMT").textContent = `x${format(calculatePowderConversion().mult, 3)}`;
 }
 
-export const c15RewardUpdate = () => {
+export const c15RewardUpdate = (update = true) => {
     const exponentRequirements = [750, 1.5e3, 3e3, 5e3, 7.5e3, 7.5e3, 1e4, 1e4, 2e4, 4e4, 6e4, 1e5, 1e5, 2e5, 5e5, 1e6, 3e6, 1e7, 3e7, 1e8, 5e8, 2e9, 1e10, 1e11, 1e15, 2e15, 4e15, 7e15, 1e16, 2e16, 3.33e16, 3.33e16, 3.33e16, 2e17, 1.5e18]
     type Key = keyof GlobalVariables['challenge15Rewards'];
     const keys = Object.keys(G['challenge15Rewards']) as Key[];
-    const e = player.challenge15Exponent
+    const exp = new Decimal(Math.min(1e300, player.challenge15Exponent));
+    let score = new Decimal(0);
+    const rune = player.platonicUpgrades[21] / 10;
 
     for(const obj in G['challenge15Rewards']){
         G['challenge15Rewards'][obj as Key] = 1;
     }
     G['challenge15Rewards'].freeOrbs = 0;
 
-    if(e >= exponentRequirements[0]){
+    if(exp.gte(exponentRequirements[0])){
         //All Cube Types 1 [750]
-        G['challenge15Rewards'][keys[0]] = 1 + 1 / 50 * Math.log(e / 175) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman1Effect'][1] + 1, rune));
+        G['challenge15Rewards'][keys[0]] = 1 + 1 / 50 * score.dividedBy(175).log2()
     }
-    if(e >= exponentRequirements[1]){
+    if(exp.gte(exponentRequirements[1])){
         //Ascension Count [1500]
-        G['challenge15Rewards'][keys[1]] = 1 + 1 / 20 * Math.log(e / 375) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman1Effect'][2] + 1, rune));
+        G['challenge15Rewards'][keys[1]] = 1 + 1 / 20 * score.dividedBy(375).log2()
     }
-    if(e >= exponentRequirements[2]){
+    if(exp.gte(exponentRequirements[2])){
         //Coin Exponent [3000]
-        G['challenge15Rewards'][keys[2]] = 1 + 1 / 150 * Math.log(e / 750) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman1Effect'][3] + 1, rune));
+        G['challenge15Rewards'][keys[2]] = 1 + 1 / 150 * score.dividedBy(750).log2()
     }
-    if(e >= exponentRequirements[3]){
+    if(exp.gte(exponentRequirements[3])){
         //Taxes [5000]
-        G['challenge15Rewards'][keys[3]] = Math.pow(0.98, Math.log(e / 1.25e3) / Math.log(2))
+        score = exp.times(Math.pow(G['talisman1Effect'][4] + 1, rune));
+        G['challenge15Rewards'][keys[3]] = Math.max(0.01, Math.pow(0.98, score.dividedBy(1.25e3).log(2)))
     }
-    if(e >= exponentRequirements[4]){
+    if(exp.gte(exponentRequirements[4])){
         //Obtainium [7500]
-        G['challenge15Rewards'][keys[4]] = 1 + 1 / 5 * Math.pow(e / 7.5e3, 0.75)
+        score = exp.times(Math.pow(G['talisman1Effect'][5] + 1, rune));
+        G['challenge15Rewards'][keys[4]] = 1 + 1 / 5 * score.dividedBy(7.5e3).pow(0.75).toNumber()
     }
-    if(e >= exponentRequirements[5]){
+    if(exp.gte(exponentRequirements[5])){
         //Offerings [7500]
-        G['challenge15Rewards'][keys[5]] = 1 + 1 / 5 * Math.pow(e / 7.5e3, 0.75)
+        score = exp.times(Math.pow(G['talisman2Effect'][1] + 1, rune));
+        G['challenge15Rewards'][keys[5]] = 1 + 1 / 5 * score.dividedBy(7.5e3).pow(0.75).toNumber()
     }
-    if(e >= exponentRequirements[6]){
+    if(exp.gte(exponentRequirements[6])){
         //Accelerator Boost (Uncorruptable) [10000]
-        G['challenge15Rewards'][keys[6]] = 1 + 1 / 20 * Math.log(e / 2.5e3) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman2Effect'][2] + 1, rune));
+        G['challenge15Rewards'][keys[6]] = 1 + 1 / 20 * score.dividedBy(2.5e3).log2()
     }
-    if(e >= exponentRequirements[7]){
+    if(exp.gte(exponentRequirements[7])){
         //Multiplier Boost (Uncorruptable) [10000]
-        G['challenge15Rewards'][keys[7]] = 1 + 1 / 20 * Math.log(e / 2.5e3) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman2Effect'][3] + 1, rune));
+        G['challenge15Rewards'][keys[7]] = 1 + 1 / 20 * score.dividedBy(2.5e3).log2()
     }
-    if(e >= exponentRequirements[8]){
+    if(exp.gte(exponentRequirements[8])){
         //Rune EXP [20000]
-        G['challenge15Rewards'][keys[8]] = 1 + Math.pow(e / 2e4, 1.5)
+        score = exp.times(Math.pow(G['talisman2Effect'][4] + 1, rune));
+        G['challenge15Rewards'][keys[8]] = Math.min(1e300, 1 + score.dividedBy(2e4).pow(1.5).toNumber())
     }
-    if(e >= exponentRequirements[9]){
+    if(exp.gte(exponentRequirements[9])){
         //Rune Effectiveness [40000]
-        G['challenge15Rewards'][keys[9]] = 1 + 1 / 33 * Math.log(e / 1e4) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman2Effect'][5] + 1, rune));
+        G['challenge15Rewards'][keys[9]] = 1 + 1 / 33 * score.dividedBy(1e4).log2()
     }
-    if(e >= exponentRequirements[10]){
+    if(exp.gte(exponentRequirements[10])){
         //All Cube Types II [60000]
-        G['challenge15Rewards'][keys[10]] = 1 + 1 / 100 * Math.log(e / 1.5e4) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman3Effect'][1] + 1, rune));
+        G['challenge15Rewards'][keys[10]] = 1 + 1 / 100 * score.dividedBy(1.5e4).log2()
     }
-    if(e >= exponentRequirements[11]){
+    if(exp.gte(exponentRequirements[11])){
         //Chal 1-5 Scaling [100000]
-        G['challenge15Rewards'][keys[11]] = Math.pow(0.98, Math.log(e / 2.5e4) / Math.log(2))
+        score = exp.times(Math.pow(G['talisman3Effect'][2] + 1, rune));
+        G['challenge15Rewards'][keys[11]] = Math.pow(0.98, score.dividedBy(2.5e4).log2())
     }
-    if(e >= exponentRequirements[12]){
+    if(exp.gte(exponentRequirements[12])){
         //Chal 6-10 Scaling [100000]
-        G['challenge15Rewards'][keys[12]] = Math.pow(0.98, Math.log(e / 2.5e4) / Math.log(2))
+        score = exp.times(Math.pow(G['talisman3Effect'][3] + 1, rune));
+        G['challenge15Rewards'][keys[12]] = Math.pow(0.98, score.dividedBy(2.5e4).log2())
     }
-    if(e >= exponentRequirements[13]){
+    if(exp.gte(exponentRequirements[13])){
         //Ant Speed [200k]
-        G['challenge15Rewards'][keys[13]] = Math.pow(1 + Math.log(e / 2e5) / Math.log(2), 4)
+        score = exp.times(Math.pow(G['talisman3Effect'][4] + 1, rune));
+        G['challenge15Rewards'][keys[13]] = Math.pow(1 + score.dividedBy(2e5).log2(), 4)
     }
-    if(e >= exponentRequirements[14]){
+    if(exp.gte(exponentRequirements[14])){
         //Ant Bonus Levels [500k]
-        G['challenge15Rewards'][keys[14]] = 1 + 1 / 20 * Math.log(e / 1.5e5) /Math.log(2)
+        score = exp.times(Math.pow(G['talisman3Effect'][5] + 1, rune));
+        G['challenge15Rewards'][keys[14]] = 1 + 1 / 20 * score.dividedBy(1.5e5).log2()
     }
-    if(e >= exponentRequirements[15]){
+    if(exp.gte(exponentRequirements[15])){
         //All Cube Types III [1m]
-        G['challenge15Rewards'][keys[15]] = 1 + 1 / 150 * Math.log(e / 2.5e5) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman4Effect'][1] + 1, rune));
+        G['challenge15Rewards'][keys[15]] = 1 + 1 / 150 * score.dividedBy(2.5e5).log2()
     }
-    if(e >= exponentRequirements[16]){
+    if(exp.gte(exponentRequirements[16])){
         //Talisman Effectiveness [3m]
-        G['challenge15Rewards'][keys[16]] = 1 + 1 / 20 * Math.log(e / 7.5e5) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman4Effect'][2] + 1, rune));
+        G['challenge15Rewards'][keys[16]] = 1 + 1 / 20 * score.dividedBy(7.5e5).log2()
     }
-    if(e >= exponentRequirements[17]){
+    if(exp.gte(exponentRequirements[17])){
         //Global Speed [10m]
-        G['challenge15Rewards'][keys[17]] = 1 + 1 / 20 * Math.log(e / 2.5e6) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman4Effect'][3] + 1, rune));
+        G['challenge15Rewards'][keys[17]] = 1 + 1 / 20 * score.dividedBy(2.5e6).log2()
     }
-    if(e >= exponentRequirements[18]){
+    if(exp.gte(exponentRequirements[18])){
         //Blessing Effectiveness [30m]
-        G['challenge15Rewards'][keys[18]] = 1 + 1 / 5 * Math.pow(e / 3e7, 1 / 4)
+        score = exp.times(Math.pow(G['talisman4Effect'][4] + 1, rune));
+        G['challenge15Rewards'][keys[18]] = 1 + 1 / 5 * score.dividedBy(3e7).pow(1 / 4).toNumber()
     }
-    if(e >= exponentRequirements[19]){
+    if(exp.gte(exponentRequirements[19])){
         //Tesseract Building Speed [100m]
-        G['challenge15Rewards'][keys[19]] = 1 + 1 / 5 * Math.pow(e / 1e8, 2 / 3)
+        score = exp.times(Math.pow(G['talisman4Effect'][5] + 1, rune));
+        G['challenge15Rewards'][keys[19]] = 1 + 1 / 5 * score.dividedBy(1e8).pow(2 / 3).toNumber()
     }
-    if(e >= exponentRequirements[20]){
+    if(exp.gte(exponentRequirements[20])){
         //All Cube Types IV [500m]
-        G['challenge15Rewards'][keys[20]] = 1 + 1 / 200 * Math.log(e / 1.25e8) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman5Effect'][1] + 1, rune));
+        G['challenge15Rewards'][keys[20]] = 1 + 1 / 200 * score.dividedBy(1.25e8).log2()
     }
-    if(e >= exponentRequirements[21]){
+    if(exp.gte(exponentRequirements[21])){
         //Spirit Effectiveness [2b]
-        G['challenge15Rewards'][keys[21]] = 1 + 1 / 5 * Math.pow(e / 2e9, 1 / 4)
+        score = exp.times(Math.pow(G['talisman5Effect'][2] + 1, rune));
+        G['challenge15Rewards'][keys[21]] = 1 + 1 / 5 * score.dividedBy(2e9).pow(1 / 4).toNumber()
     }
-    if(e >= exponentRequirements[22]){
+    if(exp.gte(exponentRequirements[22])){
         //Ascension Score [10b]
-        G['challenge15Rewards'][keys[22]] = 1 + 1 / 4 * Math.pow(e / 1e10 , 1 / 4)
-        if (e >= 1e20)
-            G['challenge15Rewards'][keys[22]] = 1 + 1 / 4 * Math.pow(e / 1e10, 1 / 8) * Math.pow(1e10, 1 / 8)
+        score = exp.times(Math.pow(G['talisman5Effect'][3] + 1, rune));
+        G['challenge15Rewards'][keys[22]] = 1 + 1 / 4 * score.dividedBy(1e10).pow(1 / 4).toNumber()
+        if (score.gte(1e20))
+            G['challenge15Rewards'][keys[22]] = 1 + 1 / 4 * score.dividedBy(1e10).pow(1 / 8).times(Math.pow(1e10, 1 / 8)).toNumber()
     }
-    if(e >= exponentRequirements[23]){
+    if(exp.gte(exponentRequirements[23])){
         //Quark Gain [100b]
-        G['challenge15Rewards'][keys[23]] = 1 + 1 / 100 * Math.log(e * 32 / 1e11) / Math.log(2)
+        score = exp.times(Math.pow(G['talisman5Effect'][4] + 1, rune));
+        G['challenge15Rewards'][keys[23]] = 1 + 1 / 100 * score.dividedBy(32 / 1e11).log2()
     }
-    if(e >= exponentRequirements[24]){
+    if(exp.gte(exponentRequirements[24])){
         //Unlock Hepteract gain [1Qa]
+        score = exp.times(Math.pow(G['talisman5Effect'][5] + 1, rune));
         G['challenge15Rewards'][keys[24]] = 2
     }
-    if (e >= exponentRequirements[25]) {
+    if(exp.gte(exponentRequirements[25])) {
         //Unlock Challenge hepteract [2Qa]
+        score = exp.times(Math.pow(G['talisman6Effect'][1] + 1, rune));
         void player.hepteractCrafts.challenge.unlock('the Hepteract of Challenge')
     }
-    if (e >= exponentRequirements[26]) {
+    if(exp.gte(exponentRequirements[26])) {
         //All Cube Types V [4Qa]
-        G['challenge15Rewards'][keys[25]] = 1 + 1 / 300 * Math.log2(e / (4e15 / 1024))
+        score = exp.times(Math.pow(G['talisman6Effect'][2] + 1, rune));
+        G['challenge15Rewards'][keys[25]] = 1 + 1 / 300 * score.dividedBy(4e15 * 1024).log2()
     }
-    if (e >= exponentRequirements[27]) {
+    if(exp.gte(exponentRequirements[27])) {
         //Powder Gain [7Qa]
-        G['challenge15Rewards'][keys[26]] = 1 + 1 / 50 * Math.log2(e / (7e15 / 32))
+        score = exp.times(Math.pow(G['talisman6Effect'][3] + 1, rune));
+        G['challenge15Rewards'][keys[26]] = 1 + 1 / 50 * score.dividedBy(7e15 * 32).log2()
     }
-    if (e >= exponentRequirements[28]) {
+    if(exp.gte(exponentRequirements[28])) {
         //Unlock Abyss Hepteract [10Qa]
+        score = exp.times(Math.pow(G['talisman6Effect'][4] + 1, rune));
         void player.hepteractCrafts.abyss.unlock('the Hepteract of the Abyss')
     }
-    if (e >= exponentRequirements[29]) {
+    if(exp.gte(exponentRequirements[29])) {
         //Constant Upgrade 2 [20Qa]
-        G['challenge15Rewards'][keys[27]] = calculateSigmoid(1.05, e, 1e18);
+        score = exp.times(Math.pow(G['talisman6Effect'][5] + 1, rune));
+        G['challenge15Rewards'][keys[27]] = calculateSigmoid(1.05, Math.min(1e300, score.toNumber()), 1e18);
     }
-    if (e >= exponentRequirements[30]) {
+    if(exp.gte(exponentRequirements[30])) {
         //Unlock ACCELERATOR HEPT [33.33Qa]
+        score = exp.times(Math.pow(G['talisman7Effect'][1] + 1, rune));
         void player.hepteractCrafts.accelerator.unlock('the Hepteract of Way Too Many Accelerators')
     }
-    if (e >= exponentRequirements[31]) {
+    if(exp.gte(exponentRequirements[31])) {
         //Unlock ACCELERATOR BOOST HEPT [33.33Qa]
+        score = exp.times(Math.pow(G['talisman7Effect'][2] + 1, rune));
         void player.hepteractCrafts.acceleratorBoost.unlock('the Hepteract of Way Too Many Accelerator Boosts')
     }
-    if (e >= exponentRequirements[32]) {
+    if(exp.gte(exponentRequirements[32])) {
         //Unlock MULTIPLIER Hept [33.33Qa]
+        score = exp.times(Math.pow(G['talisman7Effect'][3] + 1, rune));
         void player.hepteractCrafts.multiplier.unlock('the Hepteract of Way Too Many Multipliers')
     }
-    if (e >= exponentRequirements[33]) {
+    if(exp.gte(exponentRequirements[33])) {
         // FREE Daily Orbs
-        G['challenge15Rewards'].freeOrbs = Math.floor(200 * Math.pow(e / 2e17, 0.5))
+        score = exp.times(Math.pow(G['talisman7Effect'][4] + 1, rune));  
+        G['challenge15Rewards'].freeOrbs = Math.floor(200 * score.dividedBy(2e17).pow(1 / 2).toNumber())
     }
-    if (e >= exponentRequirements[34]) {
+    if(exp.gte(exponentRequirements[34])) {
         // Ascension Speed
-        G['challenge15Rewards'].ascensionSpeed = 1 + 5/100 + 2 * Math.log2(e / 1.5e18) / 100
+        score = exp.times(Math.pow(G['talisman7Effect'][5] + 1, rune));
+        G['challenge15Rewards'].ascensionSpeed = 1 + 5/100 + 2 * score.dividedBy(1.5e18).log2() / 100
     }
 
-
-    updateDisplayC15Rewards();
+    if (update) {
+        updateDisplayC15Rewards();
+    }
 }
 
 const updateDisplayC15Rewards = () => {
@@ -487,7 +533,22 @@ const updateDisplayC15Rewards = () => {
 
         DOMCacheGetOrSet('c15Reward'+(i+1)).style.display = (player.challenge15Exponent >= exponentRequirements[i])? 'block': 'none';
         DOMCacheGetOrSet('c15RewardList').textContent = typeof keepExponent  === 'string'
-            ? 'You have unlocked all reward types from Challenge 15!'
-            : 'Next reward type requires ' + format(keepExponent,0,true) + ' exponent.' 
+        ? 'You have unlocked all reward types from Challenge 15!'
+        : 'Next reward type requires ' + format(keepExponent,0 , true) + ' exponent.' 
     }
 }
+
+export const cRewardBonusDescription = (id = 0) => {
+    let text = '';
+    const talismanEffect = [G['talisman1Effect'], G['talisman2Effect'], G['talisman3Effect'], G['talisman4Effect'], G['talisman5Effect'], G['talisman6Effect'], G['talisman7Effect'] ] as const
+    if (id >= 0 && player.platonicUpgrades[21] > 0) {
+        const runeNames = ['', 'Exemption', 'Chronos', 'Midas', 'Metaphysics', 'Polymath', 'Mortuus Est', 'Plastic'];
+        const runeLevel = talismanEffect[Math.floor(id / 5)][id % 5 + 1] as number;
+        const rune = player.platonicUpgrades[21] / 10;
+        const score = new Decimal(player.challenge15Exponent).times(Math.pow(runeLevel + 1, rune));
+        const runeBonus = ['', 'Bonus Speed Rune Levels', 'Bonus Duplication Rune Levels', 'Bonus Prism Rune Levels', 'Bonus Thrift Rune Levels', 'Bonus SI Rune Levels'];
+        text = `${runeNames[Math.floor(id / 5 + 1)]} ${runeBonus[id % 5 + 1]}: ${format(runeLevel, 0, true)} (Score Bonus: ${format(score)})`;
+    }
+    DOMCacheGetOrSet('cRewardBonusDescription').textContent = text;
+}
+

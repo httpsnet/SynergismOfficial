@@ -13,12 +13,16 @@ export const getMaxChallenges = (i: number) => {
     if (i <= 5) {
         //Start with base 25 max completions
         maxChallenge = 25;
-        //Check Research 5x5 ('Infinite' T. Challenges)
-        if (player.researches[105] > 0) {
-            return 9001
-        }
         //Max T. Challenge depends on researches 3x16 to 3x20
         maxChallenge += 5 * player.researches[65 + i]
+        //Check Research 5x5 ('Infinite' T. Challenges)
+        if (player.researches[105] > 0) {
+            maxChallenge = 9000
+        }
+        //Singularity Challenge
+        if (player.runelevels[6] > 0 && player.singularityCount > 0) {
+            maxChallenge += player.singularityUpgrades.singChallenge.level * 150;
+        }
         return maxChallenge
     }
     //Reincarnation Challenges
@@ -41,6 +45,10 @@ export const getMaxChallenges = (i: number) => {
         if (player.platonicUpgrades[15] > 0) {
             maxChallenge += 30;
         }
+        //Singularity Challenge
+        if (player.runelevels[6] > 0 && player.singularityCount > 0) {
+            maxChallenge += player.singularityUpgrades.singChallenge.level * 2;
+        }
         return maxChallenge
     }
     //Ascension Challenge
@@ -62,6 +70,10 @@ export const getMaxChallenges = (i: number) => {
         //Platonic Upgrade 15 (OMEGA): +20
         if (player.platonicUpgrades[15] > 0) {
             maxChallenge += 20;
+        }
+        //Singularity Challenge
+        if (player.runelevels[6] > 0 && player.singularityCount > 0) {
+            maxChallenge += player.singularityUpgrades.singChallenge.level;
         }
         return maxChallenge
     }
@@ -125,7 +137,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
 
 
     if (i === 1 && G['challengefocus'] === 1) {
-        a.textContent = "No Multipliers Challenge || " + player.challengecompletions[1] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "No Multipliers Challenge || " + format(player.challengecompletions[1]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "Multipliers make the game a little too fast. Let's take them out!"
         c.textContent = "Transcend and reach the goal except Multipliers do nothing but act like Accelerators, which are nerfed by 50%!"
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i])) + " Coins in challenge."
@@ -139,7 +151,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(0.04 * CalcECC('transcend', player.challengecompletions[1]), 2, true) + " Rune EXP [Highest Completion]"
     }
     if (i === 2 && G['challengefocus'] === 2) {
-        a.textContent = "No Accelerators Challenge || " + player.challengecompletions[2] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "No Accelerators Challenge || " + format(player.challengecompletions[2]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "Who needs accelerators? They do basically nothing now."
         c.textContent = "Transcend and reach the goal except Accelerators do nothing! Multipliers are nerfed a bit as well."
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i])) + " Coins in challenge."
@@ -153,7 +165,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(0.25 * CalcECC('transcend', player.challengecompletions[2]), 2, true) + "% Accelerator Power"
     }
     if (i === 3 && G['challengefocus'] === 3) {
-        a.textContent = "No Shards Challenge || " + player.challengecompletions[3] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "No Shards Challenge || " + format(player.challengecompletions[3]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "Alright, now you're thinking, how else can I make the game harder?"
         c.textContent = "Transcend and reach the goal except you do not produce Crystals or Mythos Shards."
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i])) + " Coins in challenge."
@@ -167,7 +179,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(0.01 * CalcECC('transcend', player.challengecompletions[3]), 2, true) + " EXP"
     }
     if (i === 4 && G['challengefocus'] === 4) {
-        a.textContent = "Cost+ Challenge || " + player.challengecompletions[4] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "Cost+ Challenge || " + format(player.challengecompletions[4]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "You're getting rich now, but inflation hasn't happened yet? I don't think so!"
         c.textContent = "Transcend and reach the goal except Coin/Crystal producers, Accelerators and Multipliers cost more. [Gets harder each time!]"
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i])) + " Coins in challenge."
@@ -181,7 +193,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "Building Cost Delay +" + format(0.5 * CalcECC('transcend', player.challengecompletions[4]), 2, true) + "%"
     }
     if (i === 5 && G['challengefocus'] === 5) {
-        a.textContent = "Reduced Diamonds Challenge || " + player.challengecompletions[5] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "Reduced Diamonds Challenge || " + format(player.challengecompletions[5]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "You ever wonder how you get so many diamonds?"
         c.textContent = "Transcend and reach the goal except you gain far fewer Diamonds from all sources [Gets harder each time!]"
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i])) + " Coins in challenge."
@@ -195,7 +207,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = ""
     }
     if (i === 6 && G['challengefocus'] === 6) {
-        a.textContent = "Higher Tax Challenge || " + player.challengecompletions[6] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "Higher Tax Challenge || " + format(player.challengecompletions[6]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "The tax man caught wind that you reincarnated recently..."
         c.textContent = "Reincarnate and reach the goal except tax has a lower cap, and Coin production is divided by 1e250."
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i], 6)) + " Mythos Shards in challenge."
@@ -209,7 +221,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(2 * CalcECC('reincarnation', player.challengecompletions[6])) + "% Prestige-based Offerings"
     }
     if (i === 7 && G['challengefocus'] === 7) {
-        a.textContent = "No Multipliers/Accelerators Challenge || " + player.challengecompletions[7] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "No Multipliers/Accelerators Challenge || " + format(player.challengecompletions[7]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "You're really going to hate this one."
         c.textContent = "Reincarnate and reach the goal except Accelerators and Multipliers do nothing. Coin Production is divided by 1e1,250."
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i],7)) + " Mythos Shards in challenge."
@@ -223,7 +235,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "EXP +" + format(10 * CalcECC('reincarnation', player.challengecompletions[7])) + "%"
     }
     if (i === 8 && G['challengefocus'] === 8) {
-        a.textContent = "Cost++ Challenge || " + player.challengecompletions[8] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "Cost++ Challenge || " + format(player.challengecompletions[8]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "You thought you could outgrow inflation by Reincarnating?"
         c.textContent = "Reincarnate and reach the goal except Cost Scaling for producers and Accelerators/Multipliers scale much, much faster."
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i],8)) + " Mythos Shards in challenge."
@@ -237,7 +249,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(4 * CalcECC('reincarnation', player.challengecompletions[8]), 2, true) + "% Transcend-based offerings"
     }
     if (i === 9 && G['challengefocus'] === 9) {
-        a.textContent = "No Runes Challenge || " + player.challengecompletions[9] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "No Runes Challenge || " + format(player.challengecompletions[9]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "You'll never complain about Prism being bad again."
         c.textContent = "Reincarnate and reach the goal except runes always have level 1 effects. All coin production is divided by e2,000,000."
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i], 9)) + " Coins in challenge."
@@ -251,7 +263,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(20 * CalcECC('reincarnation', player.challengecompletions[9]), 2, true) + "% EXP"
     }
     if (i === 10 && G['challengefocus'] === 10) {
-        a.textContent = "Sadistic Challenge I || " + player.challengecompletions[10] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "Sadistic Challenge I || " + format(player.challengecompletions[10]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "I'm sorry for what I've unleashed onto the world."
         c.textContent = "Reincarnate and reach the goal except run the first five challenges AT THE SAME TIME! Coin Production /e12,500,000."
         d.textContent = "Goal: Gain " + format(challengeRequirement(i, player.challengecompletions[i], 10)) + " Coins in challenge."
@@ -265,7 +277,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(10 * CalcECC('reincarnation', player.challengecompletions[10]), 2, true) + "% Reincarnate-based offerings"
     }
     if (i === 11 && G['challengefocus'] === 11) {
-        a.textContent = "Reduced Ants Challenge || " + player.challengecompletions[11] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "Reduced Ants Challenge || " + format(player.challengecompletions[11]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "The great Ant War of '21 wiped off all of the skilled ants."
         c.textContent = "Ascend and reach the goal but only get free ant upgrades and from Challenge8/9 completions. FOR ASCENSION CHALLENGES YOU MUST CLEAR CHALLENGE 10 TO ATTEMPT THEM."
         d.textContent = "Goal: Complete Challenge 10 [Sadistic Challenge I] " + format(challengeRequirement(i, player.challengecompletions[i])) + " times."
@@ -279,7 +291,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(80 * CalcECC('ascension', player.challengecompletions[11])) + " to Rune Caps"
     }
     if (i === 12 && G['challengefocus'] === 12) {
-        a.textContent = "No Reincarnation Challenge || " + player.challengecompletions[12] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "No Reincarnation Challenge || " + format(player.challengecompletions[12]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "For some reason, you just can't do it."
         c.textContent = "Ascend and reach the goal but you do not gain Particles and you cannot Reincarnate at all! Ant production ^0.5."
         d.textContent = "Goal: Complete Challenge 10 [Sadistic Challenge I] " + format(challengeRequirement(i, player.challengecompletions[i])) + " times."
@@ -293,7 +305,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(CalcECC('ascension', player.challengecompletions[12])) + " additional Cube Tributes"
     }
     if (i === 13 && G['challengefocus'] === 13) {
-        a.textContent = "Tax+++ Challenge || " + player.challengecompletions[13] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "Tax+++ Challenge || " + format(player.challengecompletions[13]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "Good luck with the IRS, buddy."
         c.textContent = "Ascend and reach the goal, but taxes are much higher and grow with challenge completions. Ant production ^0.23"
         d.textContent = "Goal: Complete Challenge 10 [Sadistic Challenge I] " + format(challengeRequirement(i, player.challengecompletions[i])) + " times."
@@ -307,7 +319,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(3 * CalcECC('ascension', player.challengecompletions[13])) + "% Effectiveness"
     }
     if (i === 14 && G['challengefocus'] === 14) {
-        a.textContent = "No Research Challenge || " + player.challengecompletions[14] + "/" + format(maxChallenges) + " Completions"
+        a.textContent = "No Research Challenge || " + format(player.challengecompletions[14]) + "/" + format(maxChallenges) + " Completions"
         b.textContent = "The dimension that never progressed past the dark ages. Many fear to even step foot."
         c.textContent = "Ascend and reach the goal but you do not gain Obtainium nor are any researches purchasable. Ant production ^0.2."
         d.textContent = "Goal: Complete Challenge 10 [Sadistic Challenge I] " + format(challengeRequirement(i, player.challengecompletions[i])) + " times."
@@ -321,7 +333,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         n.textContent = "+" + format(200 * CalcECC('ascension', player.challengecompletions[14])) + " to Rune Caps"
     }
     if (i === 15 && G['challengefocus'] === 15) {
-        a.textContent = "SADISTIC CHALLENGE II || " + player.challengecompletions[15] + "/" + format(maxChallenges) +  " Completions"
+        a.textContent = "SADISTIC CHALLENGE II || " + format(player.challengecompletions[15]) + "/" + format(maxChallenges) +  " Completions"
         b.textContent = "The worst sin a man can do is making others suffer."
         c.textContent = "Ascend and reach the goal but you're stuck in all corruptions level 11 and must stay that way."
         d.textContent = "Goal: " + format(challengeRequirement(i, player.challengecompletions[i], 15)) + " Coins, but get bonuses based on your best attempt."
@@ -447,10 +459,19 @@ export const calculateChallengeRequirementMultiplier = (
                 requirementMultiplier *= 10 * Math.pow(completions / 1000, 3)
             }
             if (completions >= 9000) {
-                requirementMultiplier *= 1337e40
+                requirementMultiplier *= Math.pow(completions / 9000, 20)
+            }
+            if (completions >= 50000) {
+                requirementMultiplier *= Math.pow(completions / 50000, 50)
+            }
+            if (completions >= 100000) {
+                requirementMultiplier *= Math.pow(completions / 100000, 100)
             }
             return (requirementMultiplier)
         case "reincarnation":
+            if (completions >= 120) {
+                requirementMultiplier *= Math.pow(1.05, completions - 120)
+            }
             if (completions >= 100 && (special === 9 || special === 10)) {
                 requirementMultiplier *= Math.pow(1.05, (completions - 100) * (1 + (completions - 100) / 20))
             }
@@ -545,7 +566,7 @@ export const challengeRequirement = (challenge: number, completion: number, spec
     } else if (challenge <= 14) {
         return calculateChallengeRequirementMultiplier("ascension", completion, special)
     } else if (challenge === 15) {
-        return Decimal.pow(10, 1 * Math.pow(10, 33) * calculateChallengeRequirementMultiplier("ascension", completion, special))
+        return Decimal.pow(10, 1 * 1e160 * calculateChallengeRequirementMultiplier("ascension", completion, special))
     }
     else {
         return 0
@@ -627,14 +648,14 @@ export const runChallengeSweep = (dt: number) => {
         let startChallenge = 1;
         for (const item of player.autoChallengeToggles.slice(1,11)) { //Why does this slice at (1,11)? because Platonic
                                                                       //is supremely moronic. -Platonic
-            if (!item) startChallenge++;
+            if (!item || !player.autoChallengeToggles[startChallenge] || player.challengecompletions[startChallenge] >= getMaxChallenges(startChallenge)) startChallenge++;
             else break;
         }
     
         /* If startChallenge equals 11, every challenge is set to not run
            In this case, we do not need this to run and will terminate
            Auto challenge.*/
-        if (startChallenge == 11) {
+        if (startChallenge > 10) {
             toggleAutoChallengeRun();
             return
         }
@@ -660,7 +681,7 @@ export const runChallengeSweep = (dt: number) => {
         let startChallenge = player.autoChallengeIndex;
         for (let index = startChallenge; index <= 10; index++) {
             if (!player.autoChallengeToggles[index] ||
-                 player.challengecompletions[index] === getMaxChallenges(index))
+                 player.challengecompletions[index] >= getMaxChallenges(index))
                  startChallenge += 1;
             else break;
         }
@@ -669,8 +690,18 @@ export const runChallengeSweep = (dt: number) => {
            and thus do not need to enter more challenges. This sets our index to 1
            so in the next iteration it knows we want to start a loop. */
         if (startChallenge > 10) {
-            player.autoChallengeIndex = 1;
-            return
+            startChallenge = 1;
+            for (let index = startChallenge; index <= 10; index++) {
+                if (!player.autoChallengeToggles[index] ||
+                     player.challengecompletions[index] >= getMaxChallenges(index))
+                     startChallenge += 1;
+                else break;
+            }
+            if (startChallenge > 10) {
+                toggleAutoChallengeModeText("OFF");
+                toggleAutoChallengeRun();
+                return
+            }
         }
 
         // Sets our index to our calculated starting index and enters that challenge
@@ -686,7 +717,8 @@ export const runChallengeSweep = (dt: number) => {
 export const challenge15ScoreMultiplier = () => {
     const arr = [
         1 + 5/10000 * hepteractEffective('challenge'), // Challenge Hepteract
-        1 + 0.25 * player.platonicUpgrades[15] // Omega Upgrade
+        1 + 0.25 * player.platonicUpgrades[15], // Omega Upgrade
+        Math.pow(player.challenge15Exponent, player.singularityUpgrades.singScoreExponent.level / 10000), // C15 Score Exponent
     ]
     return productContents(arr)
 }
