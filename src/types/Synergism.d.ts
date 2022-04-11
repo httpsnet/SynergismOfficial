@@ -353,15 +353,21 @@ export interface Player {
     autoFortifyToggle: boolean,
     autoEnhanceToggle: boolean,
     autoResearchToggle: boolean,
+    maxbuyresearch: boolean,
     autoResearchMode: 'cheapest' | 'manual'
     autoResearch: number
     autoSacrifice: number
     sacrificeTimer: number
     quarkstimer: number
 
+    shopConfirmation: boolean,
+    shopBuyMax: boolean,
+    buyMaxCubeUpgrades: boolean,
+    buyAutoCubeUpgrades: boolean,
+
     antPoints: Decimal,
     antUpgrades: (null | number)[]
-    antSacrificePoints: number
+    antSacrificePoints: Decimal
     antSacrificeTimer: number
     antSacrificeTimerReal: number
 
@@ -518,6 +524,8 @@ export interface Player {
     singularityCount: number
     goldenQuarks: number
     quarksThisSingularity: number
+    shopExpandCount: number
+    singsing: number
 
     singularityUpgrades: {
         goldenQuarks1: SingularityUpgrade
@@ -541,6 +549,32 @@ export interface Player {
         singCubes1: SingularityUpgrade
         singCubes2: SingularityUpgrade
         singCubes3: SingularityUpgrade
+        singOfferingsA1: SingularityUpgrade
+        singObtainiumA1: SingularityUpgrade
+        singCubesA1: SingularityUpgrade
+        singTimeAccel: SingularityUpgrade
+        singAscendTimeAccel: SingularityUpgrade
+        singQuark: SingularityUpgrade
+        singGolden: SingularityUpgrade
+        bakeCookies1: SingularityUpgrade
+        bakeCookies2: SingularityUpgrade
+        singAutomation: SingularityUpgrade
+        singSafeShop: SingularityUpgrade
+        singChallenge: SingularityUpgrade
+        singOverfluxPowder: SingularityUpgrade
+        singCraftExpand: SingularityUpgrade
+        singMagicalTalisman: SingularityUpgrade
+        singGQdiscount: SingularityUpgrade
+        singMaterialsExponent: SingularityUpgrade
+        singScoreExponent: SingularityUpgrade
+        singAscendScoreExponent: SingularityUpgrade
+        singConstantExponent: SingularityUpgrade
+        singCubeExponent: SingularityUpgrade
+        singAscendTimeExponent: SingularityUpgrade
+        singWormhole: SingularityUpgrade
+        singMaxLevelUp: SingularityUpgrade
+        singularityOfSingularity: SingularityUpgrade
+        singsingWormhole: SingularityUpgrade
     }
     dailyCodeUsed: boolean
 }
@@ -573,11 +607,11 @@ export interface GlobalVariables {
 
     freeMultiplier: number
     totalMultiplier: number
-    multiplierPower: number
+    multiplierPower: Decimal
     multiplierEffect: Decimal
     challengeOneLog: number
-    freeMultiplierBoost: number
-    totalMultiplierBoost: number
+    freeMultiplierBoost: Decimal
+    totalMultiplierBoost: Decimal
 
     globalCoinMultiplier: Decimal
     totalCoinOwned: number
@@ -683,16 +717,11 @@ export interface GlobalVariables {
 
     maxexponent: number
 
-    maxbuyresearch: boolean,
-
     effectiveLevelMult: number
     optimalOfferingTimer: number
     optimalObtainiumTimer: number
 
     runeSum: number
-
-    shopConfirmation: boolean,
-    shopBuyMax: boolean,
 
     globalAntMult: Decimal
     antMultiplier: Decimal
@@ -807,7 +836,6 @@ export interface GlobalVariables {
     hypercubeBonusMultiplier: [null, ...number[]]
     platonicBonusMultiplier: number[]
 
-    buyMaxCubeUpgrades: boolean,
     autoOfferingCounter: number
 
     researchOrderByCost: number[],
@@ -887,6 +915,8 @@ export interface GlobalVariables {
 
     timeMultiplier: number
     upgradeMultiplier: number
+    offlineMaximumTimer: number
+    quarkMaxTimer: number
 
     historyCountMax: number
 
