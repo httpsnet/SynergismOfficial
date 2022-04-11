@@ -578,7 +578,6 @@ export const resetShopExpandCheck = (potion = true) => {
     for(const shopItem in shopData){
         const key = shopItem as keyof typeof shopData;
         if(getMaxLevel(key) > player.shopUpgrades[key] && (potion || shopData[key].type !== shopUpgradeTypes.CONSUMABLE)){
-//            console.log("no max item:" + key)
             shopMax = false;
             break;
         }

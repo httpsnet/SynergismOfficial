@@ -649,9 +649,8 @@ export const singularityOverride = (hold : Player) => {
     hold.saveString = player.saveString
     hold.shopExpandCount = player.shopExpandCount
 
-    let power = player.singularityUpgrades.singAutomation.level * Math.pow(player.singularityCount, 2);
+    const power = player.singularityUpgrades.singAutomation.level * Math.pow(player.singularityCount, 2);
     const cUnlocks = player.singularityUpgrades.corruptionFourteen.level > 0 || player.singularityUpgrades.corruptionFifteen.level > 0;
-    power = 1000000000
 
     if (power <= 0 || !isFinite(power))
         return;

@@ -31,7 +31,6 @@ export const maxCorruptionLevel = () => {
 }
 
 export const corruptionDisplay = (index: number) => {
-    console.log(`corr: ${index}`)
     if (DOMCacheGetOrSet("corruptionDetails").style.visibility !== "visible") {
         DOMCacheGetOrSet("corruptionDetails").style.visibility = "visible"
     }
