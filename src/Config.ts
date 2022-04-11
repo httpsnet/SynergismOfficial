@@ -1,4 +1,4 @@
-export const version = '2.9.0 RC8';
+export const version = '3.0.0 A1';
 // eslint-disable-next-line
 export const testing: boolean = true;
 export const lastUpdated = new Date('##LAST_UPDATED##');

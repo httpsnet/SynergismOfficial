@@ -73,7 +73,10 @@ export const getQuarkMultiplier = () => {
         multiplier *= (1 + Math.min(0.1, (player.ascensionCount) / 1e16))
     }
     if (player.singularityCount > 0) { // Singularity Modifier
-        multiplier *= (1 + player.singularityCount / 10)
+        multiplier *= (1 + player.singularityCount / 10 + (player.singularityUpgrades.singQuark.level * player.singularityCount / 100))
+    }
+    if (player.singsing > 0) { // Singularity OfSingularity
+        multiplier *= 1 + player.singsing
     }
     if (G['isEvent']) {
         multiplier *= 2; // dec 23 to jan 3
@@ -88,10 +91,7 @@ export const getQuarkMultiplier = () => {
 }
 
 export const quarkHandler = () => {
-    let maxTime = 90000 //In Seconds
-    if (player.researches[195] > 0) {
-        maxTime += 18000 * player.researches[195] // Research 8x20
-    }
+    const maxTime = G['quarkMaxTimer'] //In Seconds
 
     //Part 2: Calculate quark gain per hour
     let baseQuarkPerHour = 5;

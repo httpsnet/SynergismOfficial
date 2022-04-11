@@ -680,7 +680,7 @@ export const challengeachievementcheck = (i: number, auto?: boolean) => {
     const generatorcheck = sumContents(player.upgrades.slice(101, 106));
     
     for (const [, bar, ach] of challengeCompletionsBar.filter(([o]) => o === i)) {
-        if (player.challengecompletions[i] > bar) {
+        if (player.challengecompletions[i] > bar && player.achievements[i] < 1) {
             achievementaward(ach);
         }
     }
@@ -839,9 +839,17 @@ export const achievementaward = (num: number) => {
         DOMCacheGetOrSet("achievementprogress").textContent = "Achievement Points: " + player.achievementPoints + "/" + totalachievementpoints + " [" + (100 * player.achievementPoints / totalachievementpoints).toPrecision(4) + "%]"
         player.achievements[num] = 1;
         revealStuff()
+
+        DOMCacheGetOrSet(`ach${num}`).style.backgroundColor = "Green";
+        Synergism.emit('achievement', num);
     }
-    
-    DOMCacheGetOrSet(`ach${num}`).style.backgroundColor = "Green";
-    Synergism.emit('achievement', num);
 }
+
+export const achievementUpdate = (num: number) => {
+    if (player.achievements[num] > 0.5) {
+        DOMCacheGetOrSet(`ach${num}`).style.backgroundColor = "Green";
+        Synergism.emit('achievement', num);
+    }
+}
+
 

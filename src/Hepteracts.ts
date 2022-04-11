@@ -80,6 +80,8 @@ export class HepteractCraft {
     // Add to balance through crafting.
     craft = async (max = false): Promise<HepteractCraft | void> => {
         let craftAmount = null;
+        if (this.CAP - this.BAL <= 0)
+            return Alert('It is purchased up to the upper limit of the craft. It does not work until expand.');
         //Prompt used here. Thank you Khafra for the already made code! -Platonic
         if (!max) {
             const craftingPrompt = await Prompt('How many would you like to craft?');
@@ -87,9 +89,6 @@ export class HepteractCraft {
                 return Alert('Okay, maybe next time.');
             craftAmount = Number(craftingPrompt)
         } else {
-            const craftYesPlz = await Confirm('This will attempt to buy as many as possible. Are you sure?')
-            if (!craftYesPlz) 
-                return Alert('Okay, maybe next time.');
             craftAmount = this.CAP
         }
 
@@ -118,6 +117,11 @@ export class HepteractCraft {
 
         // Get the smallest of hepteract limit, limit found above and specified input
         const amountToCraft = Math.min(smallestItemLimit, hepteractLimit, craftAmount, this.CAP - this.BAL)
+        if (max) {
+            const craftYesPlz = await Confirm('This will attempt to buy as many as possible. You can buy up to ' + format(amountToCraft, 0, true) + ' (' + (Math.floor(amountToCraft / this.CAP * 1000) / 10) + '%) amount for an expectation. Are you sure?')
+            if (!craftYesPlz) 
+                return Alert('Okay, maybe next time.');
+        }
         this.BAL += amountToCraft
 
         // Subtract spent items from player
@@ -169,7 +173,7 @@ export class HepteractCraft {
         
         // Empties inventory in exchange for doubling maximum capacity.
         this.BAL = 0
-        this.CAP *= 2
+        this.CAP *= Math.min(1048576, Math.pow(2, 1 + player.singularityUpgrades.singCraftExpand.level));
         return Alert('Successfully expanded your inventory. You can now fit ' + format(this.CAP, 0, true) + '.');
     }
 
@@ -392,14 +396,14 @@ export const overfluxPowderWarp = async () => {
         return Alert('Sorry, but you need 25 powder to operate the warp machine.')
     if (player.dailyPowderResetUses <= 0)
         return Alert('Sorry, but this machine is on cooldown.')
-    const c = await Confirm('You stumble upon a mysterious machine. A note attached says that you can reset daily Cube openings for 25 Powder. However it only works once each real life day. You in?')
+    const c = player.overfluxPowder > 1e6 || await Confirm('You stumble upon a mysterious machine. A note attached says that you can reset daily Cube openings for 25 Powder. However it only works once each real life day. You in?')
     if (!c)
         return Alert('You walk away from the machine, powder intact.')
     else {
         player.overfluxPowder -= 25
         player.dailyPowderResetUses -= 1;
         forcedDailyReset();
-        return Alert('Upon using the machine, your cubes feel just a little more rewarding. Daily cube opening counts have been reset! [-25 Powder]')
+        return player.overfluxPowder > 1e6 || Alert('Upon using the machine, your cubes feel just a little more rewarding. Daily cube opening counts have been reset! [-25 Powder]')
     }
 }
 

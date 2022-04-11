@@ -46,9 +46,10 @@ const talismanResourceCosts = {
 const num = ["One", "Two", "Three", "Four", "Five", "Six", "Seven"] as const;
 
 export const calculateMaxTalismanLevel = (i: number) => {
-    let maxLevel = 30 * player.talismanRarity[i]
+    let maxLevel = (30 + player.singularityUpgrades.singMagicalTalisman.level) * player.talismanRarity[i]
     maxLevel += 6 * CalcECC('ascension', player.challengecompletions[13])
     maxLevel += Math.floor(player.researches[200] / 400)
+    maxLevel += player.singularityUpgrades.singMagicalTalisman.level * 5
 
     if (player.cubeUpgrades[67] > 0 && i === 3) {
         maxLevel += 1337
@@ -305,17 +306,22 @@ export const showRespecInformation = (i: number) => {
 
     const runeName = ["Speed Rune", "Duplication Rune", "Prism Rune", "Thrift Rune", "SI Rune"]
     const runeModifier = ["Positive", "Positive", "Positive", "Positive"]
+
+    let cost = i < 7 ? -100000 : -400000;
+    if (player.cubeUpgrades[20] === 1) {
+        cost = 0;
+    }
     if (i <= 6) {
         for (let k = 1; k <= 5; k++) {
             G['mirrorTalismanStats'][k] = player[`talisman${num[i]}` as const][k];
         }
-        DOMCacheGetOrSet("confirmTalismanRespec").textContent = "Confirm [-100,000 Offerings]"
+        DOMCacheGetOrSet("confirmTalismanRespec").textContent = `Confirm [${format(cost)} Offerings]`
     }
     if (i === 7) {
         for (let k = 1; k <= 5; k++) {
             G['mirrorTalismanStats'][k] = 1;
         }
-        DOMCacheGetOrSet("confirmTalismanRespec").textContent = "Confirm ALL [-400,000 Offerings]"
+        DOMCacheGetOrSet("confirmTalismanRespec").textContent = `Confirm ALL [-400,000 Offerings]`
     }
     for (let j = 1; j <= 5; j++) {
         if (G['mirrorTalismanStats'][j] === 1) {
@@ -355,17 +361,21 @@ export const changeTalismanModifier = (i: number) => {
 }
 
 export const respecTalismanConfirm = (i: number) => {
-    if (player.runeshards >= 100000 && i < 7) {
+    let cost = i < 7 ? 100000 : 400000;
+    if (player.cubeUpgrades[20] === 1) {
+        cost = 0;
+    }
+    if (player.runeshards >= cost && i < 7) {
         for (let j = 1; j <= 5; j++) {
             player[`talisman${num[i]}` as const][j] = G['mirrorTalismanStats'][j];
         }
-        player.runeshards -= 100000;
+        player.runeshards -= cost;
         DOMCacheGetOrSet("confirmTalismanRespec").style.display = "none";
         DOMCacheGetOrSet("talismanrespec").style.display = "none";
         DOMCacheGetOrSet("talismanEffect").style.display = "block";
         showTalismanEffect(i);
-    } else if (player.runeshards >= 400000 && i === 7) {
-        player.runeshards -= 400000
+    } else if (player.runeshards >= cost && i === 7) {
+        player.runeshards -= cost
         for (let j = 0; j < 7; j++) {
             for (let k = 1; k <= 5; k++) {
                 player[`talisman${num[j]}` as const][k] = G['mirrorTalismanStats'][k];

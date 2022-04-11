@@ -23,7 +23,9 @@ export const maxCorruptionLevel = () => {
     if (player.platonicUpgrades[10] > 0)
         max += 1
     if (player.singularityUpgrades.corruptionFourteen.level > 0)
-        max += 1
+        max = 14
+    if (player.singularityUpgrades.corruptionFifteen.level > 0)
+        max = 15
     
     return max
 }
@@ -319,27 +321,29 @@ export const revealCorruptions = () => {
         corruptions[i].style.display = 'none'
     }
 
+    const cUnlocks = player.singularityUpgrades.corruptionFourteen.level > 0 || player.singularityUpgrades.corruptionFifteen.level > 0;
+
     const c11Unlocks = document.getElementsByClassName("chal11Corruption") as HTMLCollectionOf<HTMLElement>;
     const c12Unlocks = document.getElementsByClassName("chal12Corruption") as HTMLCollectionOf<HTMLElement>;
     const c13Unlocks = document.getElementsByClassName("chal13Corruption") as HTMLCollectionOf<HTMLElement>;
     const c14Unlocks = document.getElementsByClassName("chal14Corruption") as HTMLCollectionOf<HTMLElement>;
 
-    if (player.challengecompletions[11] > 0) {
+    if (cUnlocks || player.challengecompletions[11] > 0) {
         for (let i = 0; i < c11Unlocks.length; i++) {
             c11Unlocks[i].style.display = 'flex'
         }
     }
-    if (player.challengecompletions[12] > 0) {
+    if (cUnlocks || player.challengecompletions[12] > 0) {
         for (let i = 0; i < c12Unlocks.length; i++) {
             c12Unlocks[i].style.display = 'flex'
         }
     }
-    if (player.challengecompletions[13] > 0) {
+    if (cUnlocks || player.challengecompletions[13] > 0) {
         for (let i = 0; i < c13Unlocks.length; i++) {
             c13Unlocks[i].style.display = 'flex'
         }
     }
-    if (player.challengecompletions[14] > 0) {
+    if (cUnlocks || player.challengecompletions[14] > 0) {
         for (let i = 0; i < c14Unlocks.length; i++) {
             c14Unlocks[i].style.display = 'flex'
         }

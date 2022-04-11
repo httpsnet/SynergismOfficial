@@ -7,7 +7,7 @@ import { calculateRuneLevels } from './Calculate';
 import { reset, resetrepeat } from './Reset';
 import { achievementaward } from './Achievements';
 import { getChallengeConditions } from './Challenges';
-import { loadStatisticsCubeMultipliers, loadStatisticsOfferingMultipliers, loadStatisticsAccelerator, loadStatisticsMultiplier, loadPowderMultiplier } from './Statistics';
+import { loadStatisticsCubeMultipliers, loadStatisticsOfferingMultipliers, loadStatisticsAccelerator, loadStatisticsMultiplier, loadPowderMultiplier, c15RewardUpdate } from './Statistics';
 import { corruptionDisplay, corruptionLoadoutTableUpdate, maxCorruptionLevel } from './Corruptions';
 import type { BuildingSubtab, Player } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
@@ -73,6 +73,10 @@ export const toggleTabs = (name: keyof typeof tabNumberConst) => {
             }
         }
     }
+    if (subTabList[player.subtabNumber].buttonID === "switchCubeSubTab6") {
+        // Call the function when the tab is opened. Used for HTML updates
+        void c15RewardUpdate();
+    }
 }
 
 export const toggleSettings = (i: number) => {
@@ -137,9 +141,9 @@ export const toggleChallenges = (i: number, auto = false) => {
 
 type ToggleBuy = 'coin' | 'crystal' | 'mythos' | 'particle' | 'offering' | 'tesseract';
 
-export const toggleBuyAmount = (quantity: 1 | 10 | 100 | 1000, type: ToggleBuy) => {
+export const toggleBuyAmount = (quantity: 1 | 10 | 100 | 1000 | 1000000, type: ToggleBuy) => {
     player[`${type}buyamount` as const] = quantity;
-    const a = ['one', 'ten', 'hundred', 'thousand'][quantity.toString().length - 1];
+    const a = ['one', 'ten', 'hundred', 'thousand', '', '', 'million'][quantity.toString().length - 1];
 
     DOMCacheGetOrSet(`${type}${a}`).style.backgroundColor = "Green";
     if (quantity !== 1) {
@@ -153,6 +157,9 @@ export const toggleBuyAmount = (quantity: 1 | 10 | 100 | 1000, type: ToggleBuy) 
     }
     if (quantity !== 1000) {
         DOMCacheGetOrSet(`${type}thousand`).style.backgroundColor = ""
+    }
+    if (quantity !== 1000000) {
+        DOMCacheGetOrSet(`${type}million`).style.backgroundColor = ""
     }
 }
 
@@ -185,7 +192,7 @@ export function tabs(mainTab: number): TabValue;
 export function tabs(mainTab?: number) {
     const tabs: Tab = {
         "-1": {tabName: "settings", unlocked: true},
-        0: {tabName: "shop", unlocked: player.unlocks.reincarnate},
+        0: {tabName: "shop", unlocked: player.unlocks.reincarnate || player.singularityCount > 0},
         1: {tabName: "buildings", unlocked: true},
         2: {tabName: "upgrades", unlocked: true},
         3: {tabName: "achievements", unlocked: player.unlocks.coinfour},
@@ -194,7 +201,8 @@ export function tabs(mainTab?: number) {
         6: {tabName: "researches", unlocked: player.unlocks.reincarnate},
         7: {tabName: "ants", unlocked: player.achievements[127] > 0},
         8: {tabName: "cubes", unlocked: player.achievements[141] > 0},
-        9: {tabName: "traits", unlocked: player.achievements[141] > 0}
+        9: {tabName: "traits", unlocked: player.challengecompletions[11] > 0},
+        10: {tabName: "singularity", unlocked: player.singularityCount > 0}
     }
 
     if (typeof mainTab === 'undefined') {
@@ -314,15 +322,22 @@ export const keyboardTabChange = (dir = 1, main = true) => {
 }
 
 export const toggleSubTab = (mainTab = 1, subTab = 0) => {
-    if (tabs(mainTab).unlocked && subTabsInMainTab(mainTab).subTabList.length > 0) {
+    const subTabs = subTabsInMainTab(mainTab)
+    if (tabs(mainTab).unlocked && subTabs.subTabList.length > 0) {
+        const subTabList = subTabs.subTabList[subTab];
         if (mainTab === -1) {
             // The first getElementById makes sure that it still works if other tabs start using the subtabSwitcher class
             const btn = DOMCacheGetOrSet("settings").getElementsByClassName("subtabSwitcher")[0].children[subTab]
-            if (subTabsInMainTab(mainTab).subTabList[subTab].unlocked)
-                subTabsInMainTab(mainTab).tabSwitcher?.(subTabsInMainTab(mainTab).subTabList[subTab].subTabID, btn)
+            if (subTabList.unlocked)
+                subTabs.tabSwitcher?.(subTabList.subTabID, btn)
         } else {
-            if (subTabsInMainTab(mainTab).subTabList[subTab].unlocked)
-                subTabsInMainTab(mainTab).tabSwitcher?.(subTabsInMainTab(mainTab).subTabList[subTab].subTabID)
+            if (subTabList.unlocked) {
+                if (subTabList.buttonID === "switchCubeSubTab6") {
+                    // Call the function when the tab is opened. Used for HTML updates
+                    void c15RewardUpdate();
+                }
+                subTabs.tabSwitcher?.(subTabList.subTabID)
+            }
         }
     }
 }
@@ -386,11 +401,11 @@ export const toggleauto = () => {
 }
 
 export const toggleResearchBuy = () => {
-    if (G['maxbuyresearch']) {
-        G['maxbuyresearch'] = false;
+    if (player.maxbuyresearch) {
+        player.maxbuyresearch = false;
         DOMCacheGetOrSet("toggleresearchbuy").textContent = "Upgrade: 1 Level"
     } else {
-        G['maxbuyresearch'] = true;
+        player.maxbuyresearch = true;
         DOMCacheGetOrSet("toggleresearchbuy").textContent = "Upgrade: MAX [if possible]"
     }
 }
@@ -653,20 +668,20 @@ const setActiveSettingScreen = async (subtab: string, clickedButton: HTMLButtonE
 
 export const toggleShopConfirmation = () => {
     const el = DOMCacheGetOrSet("toggleConfirmShop")
-    el.textContent = G['shopConfirmation']
+    el.textContent = player.shopConfirmation
         ? "Shop Confirmations: OFF"
         : "Shop Confirmations: ON";
 
-    G['shopConfirmation'] = !G['shopConfirmation'];
+    player.shopConfirmation = !player.shopConfirmation;
 }
 
 export const toggleBuyMaxShop = () => {
     const el = DOMCacheGetOrSet("toggleBuyMaxShop")
-    el.textContent = G['shopBuyMax']
+    el.textContent = player.shopBuyMax
         ? "Buy Max: OFF"
         : "Buy Max: ON";
 
-    G['shopBuyMax'] = !G['shopBuyMax'];
+    player.shopBuyMax = !player.shopBuyMax;
 }
 
 export const toggleAntMaxBuy = () => {
@@ -702,13 +717,18 @@ export const toggleAntAutoSacrifice = (mode = 0) => {
 
 export const toggleMaxBuyCube = () => {
     const el = DOMCacheGetOrSet("toggleCubeBuy")
-    if (G['buyMaxCubeUpgrades']) {
-        G['buyMaxCubeUpgrades'] = false;
+    if (player.buyMaxCubeUpgrades) {
+        player.buyMaxCubeUpgrades = false;
         el.textContent = "Upgrade: 1 Level wow"
     } else {
-        G['buyMaxCubeUpgrades'] = true;
+        player.buyMaxCubeUpgrades = true;
         el.textContent = "Upgrade: MAX [if possible wow]"
     }
+}
+
+export const toggleAutoBuyCube = () => {
+    player.buyAutoCubeUpgrades = !player.buyAutoCubeUpgrades;
+    DOMCacheGetOrSet("toggleCubeAutoBuy").textContent = player.buyAutoCubeUpgrades ? "Automatic: ON" : "Automatic: OFF";
 }
 
 export const toggleCubeSubTab = (i: number) => {

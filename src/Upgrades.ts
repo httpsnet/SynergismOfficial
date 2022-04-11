@@ -47,13 +47,13 @@ const upgdesc: Record<string, string> = {
     upgdesc35: "Gain 2% more free Multipliers.",
     upgdesc36: "Multiply crystal production by Diamonds, maximum 1e5000x.",
     upgdesc37: "Multiply mythos shard production by the squared logarithm of Diamonds.",
-    upgdesc38: "Gain +15% more offerings thanks to generous Discord Server Boosters!",
-    upgdesc39: "Gain +50% more Ant Speed thanks to generous Discord Server Boosters!",
+    upgdesc38: "Gain +25% more offerings thanks to generous Discord Server Boosters!",
+    upgdesc39: "Gain +60% more Ant Speed thanks to generous Discord Server Boosters!",
     upgdesc40: "Gain +25% more Ant Sacrifice rewards thanks to generous Discord Server Boosters!",
     upgdesc41: "Multiply production based on unspent Mythos.",
     upgdesc42: "Multiply Mythos Shard production based on unspent Diamonds.",
     upgdesc43: "Multiply coin production by 1.01 per transcension (Max: 1e30x).",
-    upgdesc44: "Multiply Mythos gain on Transcend by 1.01 per transcension (Max: 1e6x).",
+    upgdesc44: "Multiply Mythos gain on Transcend by 1.01 per transcension (Max: 1e7x).",
     upgdesc45: "Gain free Accelerators based on Mythos Shards.",
     upgdesc46: "Accelerator Boosts are 5% stronger and do not reset prestige features.",
     upgdesc47: "Multiply Mythos Shard production based on your AP.",
@@ -86,9 +86,9 @@ const upgdesc: Record<string, string> = {
     upgdesc74: "Obtainium gain is increased based on highest ever unspent offerings. [Max: 100,000 unspent]",
     upgdesc75: "Offering gain is increased based on highest ever unspent obtainium [Max: 30,000,000 obtainium]",
     upgdesc76: "Ant generation kinda slow? I agree! Make all ant tiers 5x faster!",
-    upgdesc77: "This is Synergism, right? Let's make each purchased ant make all ants 0.4% faster.",
+    upgdesc77: "This is Synergism, right? Let's make each purchased ant make all ants 0.5% faster.",
     upgdesc78: "Gain an ant speed multiplier equivalent to (1 + 0.005 * (log10(MAX offerings + 1))^2).",
-    upgdesc79: "The Ant God will accept an arbitrary number of Particles in order to give you 10% more from sacrifices.",
+    upgdesc79: "The Ant God will accept an arbitrary number of Particles in order to give you 20% more from sacrifices.",
     upgdesc80: "The Ant God will accept a larger arbitrary number of Particles to give you more ant ELO.",
     upgdesc81: "Automatically buy Workers if affordable.", //Automation Upgrades 81-100
     upgdesc82: "Automatically buy Investments if affordable.",
@@ -205,7 +205,7 @@ const upgradetexts = [
     () => "Welcome to Transcension! Coin production is multiplied by " + format(Decimal.min(1e30, Decimal.pow(player.transcendPoints.add(1), 1 / 2))) + ".",
     () => "All mythos shard producers are going into overdrive: x" + format(Decimal.min(1e50, Decimal.pow(player.prestigePoints.add(1), 1 / 50).dividedBy(2.5).add(1)), 2) + " the production!",
     () => "Multiply all coin production by " + format(Decimal.min(1e30, Decimal.pow(1.01, player.transcendCount)), 2) + "!",
-    () => "Multiply Mythos gained in Transcension by " + format(Decimal.min(1e6, Decimal.pow(1.01, player.transcendCount)), 2) + "!",
+    () => "Multiply Mythos gained in Transcension by " + format(Decimal.min(1e7, Decimal.pow(1.01, player.transcendCount)), 2) + "!",
     () => "+" + format(Math.min(2500, Math.floor(Decimal.log(player.transcendShards.add(1), 10)))) + " Accelerators!",
     () => "It's kinda self-evident, ain't it?",
     () => "Mythos-tier producers production x" + format(Math.pow(1.05, player.achievementPoints) * (player.achievementPoints + 1), 2),
@@ -246,10 +246,10 @@ const upgradetexts = [
     () => "Obtainium multiplier: x" + format((1 + 4 * Math.min(1, Math.pow(player.maxofferings / 100000, 0.5))), 2),
     () => "Offering Multiplier: x" + format((1 + 2 * Math.min(1, Math.pow(player.maxobtainium / 30000000, 0.5))), 2),
     () => "Epic 5x Ants!",
-    () => "Ant Speed Multiplier: x" + format((Decimal.pow(1.004 + 4 / 100000 * player.researches[96], player.firstOwnedAnts + player.secondOwnedAnts + player.thirdOwnedAnts + player.fourthOwnedAnts + player.fifthOwnedAnts + player.sixthOwnedAnts + player.seventhOwnedAnts + player.eighthOwnedAnts)), 3),
+    () => "Ant Speed Multiplier: x" + format((Decimal.pow(1.005 + 4 / 100000 * player.researches[96], player.firstOwnedAnts + player.secondOwnedAnts + player.thirdOwnedAnts + player.fourthOwnedAnts + player.fifthOwnedAnts + player.sixthOwnedAnts + player.seventhOwnedAnts + player.eighthOwnedAnts)), 3),
     () => "Ant Speed Multiplier: x" + format(1 + 0.005 * Math.pow(Math.log(player.maxofferings + 1)/Math.log(10),2),2,true),
     () => "You will gain +10% rewards =)",
-    () => "Ant Elo +75 if this upgrade is purchased.",
+    () => "Ant Elo +100 if this upgrade is purchased.",
     () => "All you need to know is right above this message!",
     () => "All you need to know is right above this message!",
     () => "All you need to know is right above this message!",
@@ -377,7 +377,7 @@ export const crystalupgradedescriptions = (i: number) => {
     
     const q = Decimal.pow(10, (G['crystalUpgradesCost'][i - 1] + G['crystalUpgradeCostIncrement'][i - 1] * Math.floor(Math.pow(player.crystalUpgrades[i - 1] + 0.5 - c, 2) / 2)))
     DOMCacheGetOrSet("crystalupgradedescription").textContent = returnCrystalUpgDesc(i)
-    DOMCacheGetOrSet("crystalupgradeslevel").textContent = "Level: " + p;
+    DOMCacheGetOrSet("crystalupgradeslevel").textContent = "Level: " + format(p, 0, true);
     DOMCacheGetOrSet("crystalupgradescost").textContent = "Cost: " + format(q) + " crystals"
 }
 

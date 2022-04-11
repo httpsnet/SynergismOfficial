@@ -15,7 +15,7 @@ import { CalcECC } from './Challenges';
 import { calculateHypercubeBlessings } from './Hypercubes';
 import { calculatePlatonicBlessings } from './PlatonicCubes';
 import { getQuarkMultiplier, quarkHandler } from './Quark';
-import { player } from './Synergism';
+import { format, player } from './Synergism';
 import { calculateTesseractBlessings } from './Tesseracts';
 import { Player } from './types/Synergism';
 import { Prompt, Alert } from './UpdateHTML';
@@ -92,19 +92,31 @@ export abstract class Cube {
     async openCustom() {
         // TODO: Replace this with `this`?
         const thisInPlayer = player[this.key] as Cube;
-        const amount = await Prompt(`How many cubes would you like to open? You have ${thisInPlayer.value.toLocaleString()}!`);
+        const amount = await Prompt(`How many cubes would you like to open? You have ${format(thisInPlayer.value, 0, true)}!`);
         if (amount === null)
             return Alert('OK. No cubes opened.');
         const cubesToOpen = Number(amount);
 
         if (Number.isNaN(cubesToOpen) || !Number.isFinite(cubesToOpen)) // nan + Infinity checks
             return Alert('Value must be a finite number!');
-        else if (thisInPlayer.value < cubesToOpen) // not enough cubes to open
+        else if (Number(thisInPlayer) < cubesToOpen) // not enough cubes to open
             return Alert('You don\'t have enough cubes to open!');
         else if (cubesToOpen <= 0) // 0 or less cubes to open
             return Alert('You can\'t open a negative number of cubes.');
 
-        return this.open(cubesToOpen, cubesToOpen === thisInPlayer.value);
+        return this.open(cubesToOpen, cubesToOpen === Number(thisInPlayer));
+    }
+
+    /** Open a custom amount of cubes */
+    async openPercent(cubes: number) {
+        if (cubes < 1) {
+            return 0;
+        }
+        // TODO: Replace this with `this`?
+        const thisInPlayer = player[this.key] as Cube;
+        const cubesToOpen = Math.floor(Number(thisInPlayer) / 100 * cubes);
+
+        return this.open(cubesToOpen, false);
     }
 
     /** @description Check how many quarks you should have gained through opening cubes today */

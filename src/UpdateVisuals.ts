@@ -7,7 +7,7 @@ import { calculateSigmoidExponential, calculateMaxRunes, calculateRuneExpToLevel
 import { displayRuneInformation } from './Runes';
 import { showSacrifice } from './Ants';
 import { sumContents } from './Utility';
-import { getShopCosts, shopData, shopUpgradeTypes } from './Shop';
+import { getShopCosts, shopData, shopUpgradeTypes, getMaxLevel } from './Shop';
 import { quarkHandler } from './Quark';
 import type { Player, ZeroToFour } from './types/Synergism';
 import { hepteractTypeList, hepteractTypes } from './Hepteracts';
@@ -383,7 +383,7 @@ export const visualUpdateCubes = () => {
             break;
         }
         case 4:
-            DOMCacheGetOrSet("cubeAmount2").textContent = `You have ${format(player.wowCubes, 0, true)} Wow! Cubes =)`
+            DOMCacheGetOrSet("cubeAmount2").textContent = format(player.wowCubes, 0, true)
             break;
         case 5:
             break;
@@ -443,6 +443,7 @@ export const visualUpdateCorruptions = () => {
     DOMCacheGetOrSet("corruptionBankValue").textContent = format(metaData[0]);
     DOMCacheGetOrSet("corruptionScoreValue").textContent = format(metaData[1], 0, true);
     DOMCacheGetOrSet("corruptionMultiplierValue").textContent = format(metaData[2], 1, true);
+    DOMCacheGetOrSet("corruptionBonusMultiplierValue").textContent = format(metaData[9], 2, true);
     DOMCacheGetOrSet("corruptionTotalScore").textContent = format(metaData[3], 0, true);
     DOMCacheGetOrSet("corruptionCubesValue").textContent = format(metaData[4], 0, true);
     DOMCacheGetOrSet("corruptionTesseractsValue").textContent = format(metaData[5]);
@@ -462,6 +463,8 @@ export const visualUpdateSettings = () => {
     if (G['currentTab'] !== "settings")
         return
     //I was unable to clean this up in a way that didn't somehow make it less clean, sorry.
+    DOMCacheGetOrSet("offlineMaximumTimerStatistic").childNodes[1].textContent = formatTimeShort(G['offlineMaximumTimer'])
+    DOMCacheGetOrSet("quarkMaxTimerStatistic").childNodes[1].textContent = formatTimeShort(G['quarkMaxTimer'])
     DOMCacheGetOrSet("prestigeCountStatistic").childNodes[1].textContent = format(player.prestigeCount, 0, true)
     DOMCacheGetOrSet("transcensionCountStatistic").childNodes[1].textContent = format(player.transcendCount, 0, true)
     DOMCacheGetOrSet("reincarnationCountStatistic").childNodes[1].textContent = format(player.reincarnationCount, 0, true)
@@ -486,10 +489,12 @@ export const visualUpdateSettings = () => {
     DOMCacheGetOrSet("quarktimeramount").textContent = 
         `Quarks on export: ${format(Math.floor(onExportQuarks * patreonLOL))} [Max ${format(Math.floor(maxExportQuarks * patreonLOL))}]`;
 
-    DOMCacheGetOrSet("goldenQuarkTimerDisplay").textContent = format(3600 - (player.quarkstimer % 3600.00001)) + "s until +" + format(patreonLOL, 2, true) + " export Golden Quark"
-    DOMCacheGetOrSet("goldenQuarkTimerAmount").textContent = 
-        `Golden Quarks on export: ${format(Math.floor(player.quarkstimer / 3600))} [Max ${format(Math.floor(quarkData.maxTime / 3600))}]`
-
+    const hourGQ = player.singularityUpgrades.goldenQuarks3.level;
+    if (hourGQ > 0) {
+        DOMCacheGetOrSet("goldenQuarkTimerDisplay").textContent = format((3600 / (hourGQ) - (player.quarkstimer % (3600.00001 / (hourGQ)))), 2) + "s until +" + format(patreonLOL, 2, true) + " export Golden Quark"
+        DOMCacheGetOrSet("goldenQuarkTimerAmount").textContent = 
+            `Golden Quarks on export: ${format(Math.floor(Math.floor(hourGQ * player.quarkstimer / 3600) * patreonLOL))} [Max ${format(Math.floor(Math.floor(hourGQ * quarkData.maxTime / 3600) * patreonLOL))}]`
+    }
 }
 
 export const visualUpdateShop = () => {
@@ -507,28 +512,31 @@ export const visualUpdateShop = () => {
         
         // Ignore all consumables, to be handled above, since they're different.
         if (shopItem.type === shopUpgradeTypes.UPGRADE) {
+            const maxLevel = getMaxLevel(key);
             // Case: If max level is 1, then it can be considered a boolean "bought" or "not bought" item
-            if (shopItem.maxLevel === 1) {
-                player.shopUpgrades[key] === shopItem.maxLevel ?
+            if (maxLevel === 1) {
+                player.shopUpgrades[key] === maxLevel ?
                     DOMCacheGetOrSet(`${key}Level`).textContent = "Bought!":
                     DOMCacheGetOrSet(`${key}Level`).textContent = "Not Bought!"
             }
             // Case: max level greater than 1, treat it as a fraction out of max level
             else
-                DOMCacheGetOrSet(`${key}Level`).textContent = "Level " + format(player.shopUpgrades[key]) + "/" + format(shopItem.maxLevel);
+                DOMCacheGetOrSet(`${key}Level`).textContent = "Level " + format(player.shopUpgrades[key]) + "/" + format(maxLevel);
             // Handles Button - max level needs no price indicator, otherwise it's necessary
 
-            const buyAmount = G['shopBuyMax']? Math.max(shopData[key].maxLevel - player.shopUpgrades[key], 1): 1;
-            const metaData:IMultiBuy = calculateSummationNonLinear(player.shopUpgrades[key], shopData[key].price, +player.worlds, shopData[key].priceIncrease / shopData[key].price, buyAmount)
+            const price = shopData[key].price * Math.pow(2, player.shopExpandCount);
+            const priceIncrease = shopData[key].priceIncrease * Math.pow(2, player.shopExpandCount);
+            const buyAmount = player.shopBuyMax ? Math.max(maxLevel - player.shopUpgrades[key], 1): 1;
+            const metaData:IMultiBuy = calculateSummationNonLinear(player.shopUpgrades[key], price, +player.worlds, priceIncrease / price, buyAmount)
             
-            if (!G['shopBuyMax']) {
-                player.shopUpgrades[key] === shopItem.maxLevel ?
+            if (!player.shopBuyMax) {
+                player.shopUpgrades[key] === maxLevel ?
                     DOMCacheGetOrSet(`${key}Button`).textContent = "Maxed!": 
                     DOMCacheGetOrSet(`${key}Button`).textContent = "Upgrade for " + format(getShopCosts(key)) + " Quarks";
             }
             
             else {
-                player.shopUpgrades[key] === shopItem.maxLevel ?
+                player.shopUpgrades[key] === maxLevel ?
                     DOMCacheGetOrSet(`${key}Button`).textContent = "Maxed!": 
                     DOMCacheGetOrSet(`${key}Button`).textContent = "Upgrade +"+format(metaData.levelCanBuy - player.shopUpgrades[key],0,true)+ " for " + format(metaData.cost,0,true) + " Quarks";
             }

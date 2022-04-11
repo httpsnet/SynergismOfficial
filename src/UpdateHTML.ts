@@ -2,11 +2,11 @@ import { player, format, formatTimeShort, /*formatTimeShort*/ } from './Synergis
 import { Globals as G } from './Variables';
 import Decimal from 'break_infinity.js';
 import { CalcCorruptionStuff, calculateAscensionAcceleration, calculateTimeAcceleration} from './Calculate';
-import { achievementaward, totalachievementpoints } from './Achievements';
+import { achievementUpdate, totalachievementpoints } from './Achievements';
 import { displayRuneInformation } from './Runes';
 import { visualUpdateBuildings, visualUpdateUpgrades, visualUpdateAchievements, visualUpdateRunes, visualUpdateChallenges, visualUpdateResearch, visualUpdateSettings, visualUpdateShop, visualUpdateAnts, visualUpdateCubes, visualUpdateCorruptions } from './UpdateVisuals';
 import { getMaxChallenges } from './Challenges';
-import { OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
+import { OneToFive, ZeroToFour, ZeroToSeven, Player } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { updateSingularityStats } from './singularity';
 import { revealCorruptions } from './Corruptions';
@@ -174,7 +174,7 @@ export const revealStuff = () => {
 
     const example29 = document.getElementsByClassName("cubeUpgrade10") as HTMLCollectionOf<HTMLElement>;
     for (let i = 0; i < example29.length; i++) {
-        example29[i].style.display = player.cubeUpgrades[10] > 0 ? "flex" : "none"
+        example29[i].style.display = player.cubeUpgrades[10] > 0 ? "" : "none"
     }
 
     const example30 = document.getElementsByClassName("cubeUpgrade19") as HTMLCollectionOf<HTMLElement>;
@@ -198,6 +198,11 @@ export const revealStuff = () => {
     }
     const hepts = DOMCacheGetOrSet("corruptionHepteracts");
     hepts.style.display = (player.achievements[255] > 0) ? "block" : "none";
+
+    const singularityUpgrades = Object.keys(player.singularityUpgrades) as (keyof Player['singularityUpgrades'])[];
+    for (const key of singularityUpgrades) {
+        DOMCacheGetOrSet(`${key}`).style.display = player.singularityCount >= player.singularityUpgrades[`${key}`].getUnlockCount() ? "block" : "none";
+    }
 
     const cookies1 = document.getElementsByClassName("assortedCookies1") as HTMLCollectionOf<HTMLElement>;
     const cookies2 = document.getElementsByClassName("assortedCookies2") as HTMLCollectionOf<HTMLElement>;
@@ -346,7 +351,7 @@ export const revealStuff = () => {
         DOMCacheGetOrSet('reincarnateAutoUpgrade').style.display = "block" :
         DOMCacheGetOrSet('reincarnateAutoUpgrade').style.display = "none";
 
-    player.shopUpgrades.infiniteAscent ?
+    player.challengecompletions[14] > 0 && player.shopUpgrades.infiniteAscent ?
         (DOMCacheGetOrSet('rune6area').style.display = 'flex', DOMCacheGetOrSet('runeshowpower6').style.display = "flex") :
         (DOMCacheGetOrSet('rune6area').style.display = 'none', DOMCacheGetOrSet('runeshowpower6').style.display = "none");
 
@@ -357,7 +362,10 @@ export const revealStuff = () => {
     player.singularityCount > 0 ?
         (DOMCacheGetOrSet('singularitytab').style.display = 'block'):
         (DOMCacheGetOrSet('singularitytab').style.display = 'none');
-        
+
+    if (player.unlocks.reincarnate || player.singularityCount > 0)
+        (DOMCacheGetOrSet('shoptab').style.display = 'block');
+
     (player.runelevels[6] > 0 || player.singularityCount > 0) ?
         (DOMCacheGetOrSet('singularitybtn').style.display = 'block') :
         (DOMCacheGetOrSet('singularitybtn').style.display = 'none');
@@ -366,6 +374,8 @@ export const revealStuff = () => {
     DOMCacheGetOrSet("ascHyperStats").style.display = player.challengecompletions[13] > 0 ? "" : "none";
     DOMCacheGetOrSet("ascPlatonicStats").style.display = player.challengecompletions[14] > 0 ? "" : "none";
     DOMCacheGetOrSet("ascHepteractStats").style.display = player.achievements[255] > 0 ? "" : "none";
+
+    DOMCacheGetOrSet("toggleCubeAutoBuy").style.display = player.singularityCount > 0 ? "" : "none";
 
     //I'll clean this up later. Note to 2019 Platonic: Fuck you
     // note to 2019 and 2020 Platonic, you're welcome
@@ -541,14 +551,15 @@ const visualTab: Record<typeof G['currentTab'], () => void> = {
 
 export const htmlInserts = () => {
     // ALWAYS Update these, for they are the most important resources
-    DOMCacheGetOrSet('coinDisplay').textContent = format(player.coins)
-    DOMCacheGetOrSet('offeringDisplay').textContent = format(player.runeshards)
-    DOMCacheGetOrSet('diamondDisplay').textContent = format(player.prestigePoints)
-    DOMCacheGetOrSet('mythosDisplay').textContent = format(player.transcendPoints)
-    DOMCacheGetOrSet('mythosshardDisplay').textContent = format(player.transcendShards)
-    DOMCacheGetOrSet('particlesDisplay').textContent = format(player.reincarnationPoints)
-    DOMCacheGetOrSet('quarkDisplay').textContent = format(player.worlds)
-    DOMCacheGetOrSet('obtainiumDisplay').textContent = format(player.researchPoints)
+
+    const playerRequirements = ['coins', 'runeshards', 'prestigePoints', 'transcendPoints', 'transcendShards', 'reincarnationPoints', 'worlds', 'researchPoints'] as const
+    const domRequirements = ['coinDisplay', 'offeringDisplay', 'diamondDisplay', 'mythosDisplay', 'mythosshardDisplay', 'particlesDisplay', 'quarkDisplay', 'obtainiumDisplay'] as const
+    for (let i = 0; i < playerRequirements.length; i++) {
+        const text = format(player[playerRequirements[i]])
+        const dom = DOMCacheGetOrSet(domRequirements[i])
+        if (dom.textContent != text)
+            dom.textContent = text
+    }
 
     updateAscensionStats()
 
@@ -773,8 +784,10 @@ export const updateChallengeDisplay = () => {
 export const updateChallengeLevel = (k: number) => {
     const el = DOMCacheGetOrSet("challenge" + k + "level");
     const maxChallenges = getMaxChallenges(k);
-
-    el.textContent = `${player.challengecompletions[k]} / ${maxChallenges}`;
+    if (maxChallenges >= 10000)
+        el.textContent = `${player.challengecompletions[k]}`;
+    else
+        el.textContent = `${player.challengecompletions[k]} / ${maxChallenges}`;
 }
 
 export const updateAchievementBG = () => {
@@ -792,7 +805,7 @@ export const updateAchievementBG = () => {
     }
     for (let i = 1; i < player.achievements.length; i++) {
         if (player.achievements[i] > 0.5) {
-            achievementaward(i) //This sets all completed ach to green
+            achievementUpdate(i) //This sets all completed ach to green
         }
     }
 }
@@ -852,7 +865,9 @@ const updateAscensionStats = () => {
         "ascAscensionTimeAccel": `${format(calculateAscensionAcceleration(), 3)}x`
     }
     for (const key in fillers) {
-        DOMCacheGetOrSet(key).textContent = fillers[key];
+        const dom = DOMCacheGetOrSet(key)
+        if (dom.textContent != fillers[key])
+            dom.textContent = fillers[key];
     }
 }
 

@@ -59,6 +59,7 @@ const saveFilename = () => {
             case 'VERSION': return `v${version}`;
             case 'TIME': return getRealTime();
             case 'TIME12': return getRealTime(true);
+            case 'SING': return `${player.singularityCount}`;
             default: return 'IDFK Lol';
         }
     });
@@ -69,8 +70,9 @@ const saveFilename = () => {
 export const exportSynergism = async () => {
     player.offlinetick = Date.now();
     const quarkData = quarkHandler();
-    if (player.singularityUpgrades.goldenQuarks3.level > 0) {
-        player.goldenQuarks += Math.floor(player.quarkstimer / 3600) * (1 + player.worlds.BONUS / 100);
+    const hourGQ = player.singularityUpgrades.goldenQuarks3.level;
+    if (hourGQ > 0) {
+        player.goldenQuarks += Math.floor(Math.floor(hourGQ * player.quarkstimer / 3600) * (1 + player.worlds.BONUS / 100));
     }
     if (quarkData.gain >= 1) {
         player.worlds.add(quarkData.gain);
@@ -164,7 +166,7 @@ export const importSynergism = async (input: string, reset = false) => {
 }
 
 export const promocodes = async () => {
-    const input = await Prompt('Got a code? Great! Enter it in (CaSe SeNsItIvE). \n [Note to viewer: this is for events and certain always-active codes. \n May I suggest you type in "synergism2021" or "add" perchance?]');
+    const input = await Prompt('Got a code? Great! Enter it in (CaSe SeNsItIvE). \n [Note to viewer: this is for events and certain always-active codes. \n May I suggest you type in "synergism2021" or "add" or "daily" perchance?]');
     const el = DOMCacheGetOrSet("promocodeinfo");
 
     if (input === null) {
@@ -221,7 +223,7 @@ export const promocodes = async () => {
         const realAttemptsUsed = Math.min(possibleAmount, toUse);
         let mult = Math.max(0.4 + 0.02 * player.shopUpgrades.calculator3, 2/5 + (window.crypto.getRandomValues(new Uint16Array(2))[0] % 128) / 640); // [0.4, 0.6], slightly biased in favor of 0.4. =)
         mult *= 1 + 0.14 * player.shopUpgrades.calculator // Calculator Shop Upgrade (+14% / level)
-        mult *= (player.shopUpgrades.calculator2 === shopData['calculator2'].maxLevel)? 1.25: 1; // Calculator 2 Max Level (+25%)
+        mult *= (player.shopUpgrades.calculator2 >= shopData['calculator2'].maxLevel)? 1.25: 1; // Calculator 2 Max Level (+25%)
         const quarkBase = quarkHandler().perHour
         const actualQuarks = Math.floor(quarkBase * mult * realAttemptsUsed)
         const patreonBonus = Math.floor(actualQuarks * (player.worlds.BONUS / 100));
@@ -238,7 +240,7 @@ export const promocodes = async () => {
             : '';
 
         // Calculator Maxed: you don't need to insert anything!
-        if (player.shopUpgrades.calculator === shopData['calculator'].maxLevel) {
+        if (player.shopUpgrades.calculator >= shopData['calculator'].maxLevel) {
             player.worlds.add(actualQuarks);
             addTimers('ascension', 60 * player.shopUpgrades.calculator3 * realAttemptsUsed)
             player.rngCode = v;

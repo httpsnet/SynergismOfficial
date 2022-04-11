@@ -10,7 +10,7 @@ import { padArray } from './Utility';
 import { AbyssHepteract, AcceleratorBoostHepteract, AcceleratorHepteract, ChallengeHepteract, ChronosHepteract, createHepteract, HyperrealismHepteract, MultiplierHepteract, QuarkHepteract } from './Hepteracts';
 import { WowCubes, WowHypercubes, WowPlatonicCubes, WowTesseracts } from './CubeExperimental';
 import { Alert } from './UpdateHTML';
-import { getQuarkInvestment, shopData} from './Shop';
+import { getQuarkInvestment, getMaxLevel} from './Shop';
 import { ISingularityData, singularityData, SingularityUpgrade } from './singularity';
 
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
@@ -288,7 +288,7 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
             scoreBonus: 0,
             globalSpeed: 0,
         }
-        player.platonicUpgrades = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        player.platonicUpgrades = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         player.challenge15Exponent = 0
         player.loadedNov13Vers = false;
     }
@@ -437,7 +437,14 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         player.ascStatToggles[5] = false;
     }
 
-    while (player.platonicUpgrades[20] === undefined) {
+    for (let i = 0; i < 10; i++) {
+        if (!player.corruptionLoadouts[i + 1])
+            player.corruptionLoadouts[i + 1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        if (!player.corruptionLoadoutNames[i])
+            player.corruptionLoadoutNames[i] = "Loadout " + (i + 1);
+    }
+
+    while (player.platonicUpgrades[25] === undefined) {
         player.platonicUpgrades.push(0)
     }
 
@@ -478,14 +485,25 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         }
     }
 
+    // added 3.0.0 RC1
+    if (data.singsing === undefined) {
+        player.maxbuyresearch = false
+        player.shopConfirmation = false
+        player.shopBuyMax = false
+        player.buyMaxCubeUpgrades = false
+        player.buyAutoCubeUpgrades = false
+        player.shopExpandCount = 0
+        player.singsing = 0
+    }
+
     // Update (read: check) for undefined shop upgrades. Also checks above max level.
     const shopKeys = Object.keys(blankSave['shopUpgrades']) as (keyof Player['shopUpgrades'])[];
     for (const shopUpgrade of shopKeys) {
         if (player.shopUpgrades[shopUpgrade] === undefined) {
             player.shopUpgrades[shopUpgrade] = 0;
         }
-        if (player.shopUpgrades[shopUpgrade] > shopData[shopUpgrade].maxLevel) {
-            player.shopUpgrades[shopUpgrade] = shopData[shopUpgrade].maxLevel
+        if (player.shopUpgrades[shopUpgrade] > getMaxLevel(shopUpgrade)) {
+            player.shopUpgrades[shopUpgrade] = getMaxLevel(shopUpgrade)
         }
     }
 
@@ -511,6 +529,32 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         singCubes1: new SingularityUpgrade(singularityData['singCubes1']),
         singCubes2: new SingularityUpgrade(singularityData['singCubes2']),
         singCubes3: new SingularityUpgrade(singularityData['singCubes3']),
+        singOfferingsA1: new SingularityUpgrade(singularityData['singOfferingsA1']),
+        singObtainiumA1: new SingularityUpgrade(singularityData['singObtainiumA1']),
+        singCubesA1: new SingularityUpgrade(singularityData['singCubesA1']),
+        singTimeAccel: new SingularityUpgrade(singularityData['singTimeAccel']),
+        singAscendTimeAccel: new SingularityUpgrade(singularityData['singAscendTimeAccel']),
+        singQuark: new SingularityUpgrade(singularityData['singQuark']),
+        singGolden: new SingularityUpgrade(singularityData['singGolden']),
+        bakeCookies1: new SingularityUpgrade(singularityData['bakeCookies1']),
+        bakeCookies2: new SingularityUpgrade(singularityData['bakeCookies2']),
+        singAutomation: new SingularityUpgrade(singularityData['singAutomation']),
+        singSafeShop: new SingularityUpgrade(singularityData['singSafeShop']),
+        singChallenge: new SingularityUpgrade(singularityData['singChallenge']),
+        singOverfluxPowder: new SingularityUpgrade(singularityData['singOverfluxPowder']),
+        singCraftExpand: new SingularityUpgrade(singularityData['singCraftExpand']),
+        singMagicalTalisman: new SingularityUpgrade(singularityData['singMagicalTalisman']),
+        singGQdiscount: new SingularityUpgrade(singularityData['singGQdiscount']),
+        singMaterialsExponent: new SingularityUpgrade(singularityData['singMaterialsExponent']),
+        singScoreExponent: new SingularityUpgrade(singularityData['singScoreExponent']),
+        singAscendScoreExponent: new SingularityUpgrade(singularityData['singAscendScoreExponent']),
+        singConstantExponent: new SingularityUpgrade(singularityData['singConstantExponent']),
+        singCubeExponent: new SingularityUpgrade(singularityData['singCubeExponent']),
+        singAscendTimeExponent: new SingularityUpgrade(singularityData['singAscendTimeExponent']),
+        singWormhole: new SingularityUpgrade(singularityData['singWormhole']),
+        singMaxLevelUp: new SingularityUpgrade(singularityData['singMaxLevelUp']),
+        singularityOfSingularity: new SingularityUpgrade(singularityData['singularityOfSingularity']),
+        singsingWormhole: new SingularityUpgrade(singularityData['singsingWormhole']),
     }
 
     if (data.singularityUpgrades != null) {
@@ -524,7 +568,9 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                     description: singularityData[k].description,
                     maxLevel: singularityData[k].maxLevel,
                     costPerLevel: singularityData[k].costPerLevel,
-
+                    unlockCount: singularityData[k].unlockCount,
+                    maxCapLevel: singularityData[k].maxCapLevel, 
+                    
                     level: data.singularityUpgrades[k].level,
                     goldenQuarksInvested: data.singularityUpgrades[k].goldenQuarksInvested,
                     toggleBuy: data.singularityUpgrades[k].toggleBuy
