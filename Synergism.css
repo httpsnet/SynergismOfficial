@@ -28,11 +28,11 @@ body.loading {
 }
 
 body {
-    transition-duration: 1.0s;
+    background-color: #111;
+    transition-duration: 1s;
     transition-property: background-color;
 }
 
-body,
 body.dark {
     background-color: #111;
 }
