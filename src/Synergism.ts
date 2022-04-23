@@ -2529,7 +2529,7 @@ export const updateAntMultipliers = (): void => {
 
     G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 1 - 0.9 / 90 * Math.min(99, sumContents(player.usedCorruptions)))
     G['globalAntMult'] = Decimal.pow(G['globalAntMult'], G['extinctionMultiplier'][player.usedCorruptions[7]])
-    if (G['globalAntMult'] < 1)
+    if (!G['globalAntMult'].gte(0))
         G['globalAntMult'] = new Decimal(1);
 
     G['globalAntMult'] = G['globalAntMult'].times(G['challenge15Rewards'].antSpeed)
@@ -3130,8 +3130,14 @@ export const updateAll = (): void => {
 
     // Fixed an issue where offering and obtainium would freeze the game with Infinity with a cap.
     // The fix should use Decimal. by httpsnet
+    if (isNaN(player.runeshards)) {
+        player.runeshards = 0;
+    }
     if (player.runeshards > 1e300) {
         player.runeshards = 1e300;
+    }
+    if (isNaN(player.researchPoints)) {
+        player.researchPoints = 0;
     }
     if (player.researchPoints > 1e300) {
         player.researchPoints = 1e300;

@@ -722,9 +722,9 @@ export const calculateAntSacrificeELO = () => {
         G['effectiveELO'] *= (1 + 0.03 * player.upgrades[124])
 
         if (G['extinctionMultiplier'][player.usedCorruptions[7]] < 0)
-            G['antELO'] = Decimal.pow(G['antELO'], G['extinctionMultiplier'][player.usedCorruptions[7]] / 2 + 1)
+            G['antELO'] = Math.pow(G['antELO'], G['extinctionMultiplier'][player.usedCorruptions[7]] / 2 + 1)
         if (G['extinctionMultiplier'][player.usedCorruptions[7]] < 0)
-            G['effectiveELO'] = Decimal.pow(G['effectiveELO'], G['extinctionMultiplier'][player.usedCorruptions[7]] + 1)
+            G['effectiveELO'] = Math.pow(G['effectiveELO'], G['extinctionMultiplier'][player.usedCorruptions[7]] + 1)
         G['effectiveELO'] = Math.min(1e300, G['effectiveELO'])
     }
 }
