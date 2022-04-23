@@ -16,21 +16,18 @@ html {
 }
 
 body {
+    background-color: #111;
     transform-origin: 0 0;
     overflow-x: hidden;
     color: white;
     margin: 0;
     box-sizing: border-box;
+    transition-duration: 1s;
+    transition-property: background-color;
 }
 
 body.loading {
     overflow-y: hidden;
-}
-
-body {
-    background-color: #111;
-    transition-duration: 1s;
-    transition-property: background-color;
 }
 
 body.dark {
