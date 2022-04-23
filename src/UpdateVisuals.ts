@@ -43,7 +43,8 @@ export const visualUpdateBuildings = () => {
             DOMCacheGetOrSet("buildtext" + (2 * i - 1)).textContent = names[i] + ": " + format(player[`${ith}OwnedCoin` as const], 0, true) + " [+" + format(player[`${ith}GeneratedCoin` as const]) + "]"
             DOMCacheGetOrSet("buycoin" + i).textContent = "Cost: " + format(player[`${ith}CostCoin` as const]) + " coins."
             percentage = percentage.fromMantissaExponent(place.mantissa / totalProductionDivisor.mantissa, place.exponent - totalProductionDivisor.exponent).times(100)
-            DOMCacheGetOrSet("buildtext" + (2 * i)).textContent = "Coins/Sec: " + format((place.dividedBy(G['taxdivisor'])).times(40), 2) + " [" + format(percentage, 3) + "%]"
+            const coinsec = (place.dividedBy(G['taxdivisor'])).times(40)
+            DOMCacheGetOrSet("buildtext" + (2 * i)).textContent = coinsec.gte("1e1000000") ? "Coins/Sec: " + format(coinsec, 2) : "Coins/Sec: " + format(coinsec, 2) + " [" + format(percentage, 3) + "%]"
         }
 
         DOMCacheGetOrSet("buildtext11").textContent = "Accelerators: " + format(player.acceleratorBought, 0, true) + " [+" + format(G['freeAccelerator'], 0, true) + "]"
@@ -437,6 +438,7 @@ export const visualUpdateCorruptions = () => {
         return
 
     DOMCacheGetOrSet("autoAscendMetric").textContent = format(player.autoAscendThreshold, 0, true)
+    DOMCacheGetOrSet("autoAscendSeconds").textContent = format(player.ascensionamount, 0, true)
     const metaData = CalcCorruptionStuff();
     const ascCount = calcAscensionCount();
 
@@ -489,12 +491,9 @@ export const visualUpdateSettings = () => {
     DOMCacheGetOrSet("quarktimeramount").textContent = 
         `Quarks on export: ${format(Math.floor(onExportQuarks * patreonLOL))} [Max ${format(Math.floor(maxExportQuarks * patreonLOL))}]`;
 
-    const hourGQ = player.singularityUpgrades.goldenQuarks3.level;
-    if (hourGQ > 0) {
-        DOMCacheGetOrSet("goldenQuarkTimerDisplay").textContent = format((3600 / (hourGQ) - (player.quarkstimer % (3600.00001 / (hourGQ)))), 2) + "s until +" + format(patreonLOL, 2, true) + " export Golden Quark"
-        DOMCacheGetOrSet("goldenQuarkTimerAmount").textContent = 
-            `Golden Quarks on export: ${format(Math.floor(Math.floor(hourGQ * player.quarkstimer / 3600) * patreonLOL))} [Max ${format(Math.floor(Math.floor(hourGQ * quarkData.maxTime / 3600) * patreonLOL))}]`
-    }
+    DOMCacheGetOrSet("goldenQuarkTimerDisplay").textContent = format(3600 / Math.max(1, player.singularityUpgrades.goldenQuarks3.level) - (player.goldenQuarksTimer % (3600.00001 / Math.max(1,player.singularityUpgrades.goldenQuarks3.level)))) + "s until +" + format(patreonLOL, 2, true) + " export Golden Quark"
+    DOMCacheGetOrSet("goldenQuarkTimerAmount").textContent = 
+        `Golden Quarks on export: ${format(Math.floor(player.goldenQuarksTimer * player.singularityUpgrades.goldenQuarks3.level/ 3600) * patreonLOL, 2)} [Max ${format(Math.floor(25 * player.singularityUpgrades.goldenQuarks3.level * patreonLOL))}]`
 }
 
 export const visualUpdateShop = () => {

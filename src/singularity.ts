@@ -89,7 +89,7 @@ export class SingularityUpgrade {
     }
 
     private getMaxLevel() {
-        return this.maxLevel === 1 ? 1 : Math.floor(Math.min(this.maxCapLevel, this.maxLevel * (1 + player.singularityCount * player.singularityUpgrades.singMaxLevelUp.level / 100)) + (this.maxLevel >= 1 ? player.singularityUpgrades.singsingWormhole.level : 0));
+        return this.maxLevel === 1 ? 1 : Math.floor(Math.min(this.maxCapLevel, this.maxLevel * (1 + player.singularityCount * player.singularityUpgrades.singMaxLevelUp.level / 100)) + (this.maxLevel >= 1 ? Math.floor(player.singsing) : 0));
     }
 
     public updateUpgradeHTML() {
@@ -117,14 +117,14 @@ export class SingularityUpgrade {
                 : this.toggleBuy)
             : Math.min(this.toggleBuy, this.getMaxLevel() - this.level);
 
-        if (this.name === "Singularity Of Singularity")
-            return singsing();
+        if (maxPurchasable < 1)
+            return false
 
         if (player.singularityCount < this.unlockCount)
             return Alert(`You cannot purchase because your Singularity Count is less than ${format(this.unlockCount)}.`)
 
-        if (maxPurchasable === 0)
-            return false
+        if (this.name === "Singularity Of Singularity")
+            return singsing();
 
         while (maxPurchasable > 0) {
             const cost = this.getCostTNL();
@@ -352,49 +352,49 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
     singOfferingsA1: {
         name: "Offering Spore",
         description: "Upgrade this to get +1% offerings per singularity and per level, forever!",
-        maxLevel: 20,
-        costPerLevel: 1000,
-        unlockCount: 2,
-        maxCapLevel: 100
+        maxLevel: 10,
+        costPerLevel: 5000,
+        unlockCount: 3,
+        maxCapLevel: 20
     },
     singObtainiumA1: {
         name: "Obtainium Seed",
         description: "Upgrade this to get +1% obtainiums per singularity and per level, forever!",
-        maxLevel: 20,
-        costPerLevel: 1000,
-        unlockCount: 2,
-        maxCapLevel: 100
+        maxLevel: 10,
+        costPerLevel: 5000,
+        unlockCount: 3,
+        maxCapLevel: 20
     },
     singCubesA1: {
         name: "Cube Colony",
         description: "Upgrade this to get +1% cubes per singularity and per level, forever!",
-        maxLevel: 20,
-        costPerLevel: 1000,
-        unlockCount: 2,
-        maxCapLevel: 100
+        maxLevel: 10,
+        costPerLevel: 5000,
+        unlockCount: 3,
+        maxCapLevel: 20
     },
     singTimeAccel: {
         name: "Time Accel",
         description: "Upgrade this to get +1% Global Speed Multiplier per singularity and per level, forever!",
-        maxLevel: 100,
-        costPerLevel: 50,
+        maxLevel: 10,
+        costPerLevel: 200,
         unlockCount: 1,
-        maxCapLevel: 100
+        maxCapLevel: 20
     },
     singAscendTimeAccel: {
         name: "Ascension Time Accel",
         description: "Upgrade this to get +1% Ascension Speed Multiplier per singularity and per level, forever!",
         maxLevel: 10,
-        costPerLevel: 500,
+        costPerLevel: 10000,
         unlockCount: 3,
-        maxCapLevel: 100
+        maxCapLevel: 20
     },
     singQuark: {
         name: "Singularity Quark",
         description: "Upgrade this to get +1% Quarks per singularity and per level, supreme!",
         maxLevel: 5,
         costPerLevel: 100000,
-        unlockCount: 4,
+        unlockCount: 5,
         maxCapLevel: 20
     },
     singGolden: {
@@ -402,7 +402,7 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         description: "Upgrade this to get +1% Golden Quarks per singularity and per level, supreme!",
         maxLevel: 5,
         costPerLevel: 10000,
-        unlockCount: 4,
+        unlockCount: 5,
         maxCapLevel: 20
     },
     bakeCookies1: {
@@ -411,12 +411,12 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         maxLevel: 30,
         costPerLevel: 100,
         unlockCount: 1,
-        maxCapLevel: 100
+        maxCapLevel: 60
     },
     bakeCookies2: {
         name: "Singularity Peak Offline",
         description: "Do you want to complain? Yes, it's an hour for each singularity and each level. It's the last.",
-        maxLevel: 6,
+        maxLevel: 3,
         costPerLevel: 10000,
         unlockCount: 4,
         maxCapLevel: 30
@@ -425,7 +425,7 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         name: "Singularity Automation [WIP]",
         description: "This unlocks various automations when Singularity! The power of the effect is determined by the Singularity Automation Level * SingularityCount^2.\nThe power required for each automation feature is enhanced by the progress of the game. And automation is ultimately determined by randomness.\nIn addition, some settings will be inherited. This feature is still a test and will be fixed without notice. Good luck!",
         maxLevel: -1,
-        costPerLevel: 10,
+        costPerLevel: 1,
         unlockCount: 1
     },
     singSafeShop: {
@@ -437,11 +437,11 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
     },
     singChallenge: {
         name: "Rise Challenge",
-        description: "Each purchase will increase the transcend challenges cap by +150 and the reincarnation challenges cap by +2 and the ascension challenges cap by +1.\nThis works with the purchase of Antiquities of Ant God!",
-        maxLevel: 140,
+        description: "Each purchase will increase the transcend challenges cap by +300 and the reincarnation challenges cap by +4 and the ascension challenges cap by +2.\nThis works with the purchase of Antiquities of Ant God! Watch out for Cx20!",
+        maxLevel: 70,
         costPerLevel: 500,
-        unlockCount: 5,
-        maxCapLevel: 940
+        unlockCount: 4,
+        maxCapLevel: 340
     },
     singOverfluxPowder: {
         name: "Overflux Powders",
@@ -463,7 +463,7 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         name: "Magical Talisman",
         description: "Talisman max level increase +5. Increases talisman max level for +1 each enhance.",
         maxLevel: 70,
-        costPerLevel: 200,
+        costPerLevel: 500,
         unlockCount: 6
     },
     singGQdiscount: {
@@ -476,43 +476,48 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
     },
     singMaterialsExponent: {
         name: "Materials Multiplier",
-        description: "Increases Crystals, Mythos Shard, Particles and Constant by +10%.",
+        description: "Increases Crystals, Mythos Shard, Particles and Constant by +100%. Increases all Materials bonus boosts +100%.",
         maxLevel: 100,
         costPerLevel: 10,
-        unlockCount: 3
+        unlockCount: 3,
+        maxCapLevel: 1000
     },
     singScoreExponent: {
         name: "C15 Score Exponent",
-        description: "C15 Score Exponent increases with +0.0001 Exponent in Exponent. Sanity!",
-        maxLevel: 1000,
+        description: "C15 Score Exponent increases with +0.0001 Exponent. Sanity!",
+        maxLevel: 2000,
         costPerLevel: 100,
-        unlockCount: 5
+        unlockCount: 5,
+        maxCapLevel: 5000
     },
     singAscendScoreExponent: {
         name: "Ascension Score Exponent",
-        description: "Ascension Score increases with +0.0001 Exponent in Exponent. Insane!",
-        maxLevel: 500,
+        description: "Ascension Score increases with +0.0001 Exponent. Insane!",
+        maxLevel: 1000,
         costPerLevel: 1000,
-        unlockCount: 6
+        unlockCount: 6,
+        maxCapLevel: 5000
     },
     singConstantExponent: {
         name: "Singularity Constant Exponent",
-        description: "Constant with +0.0001 Exponent in Exponent. Self-replication!",
-        maxLevel: 250,
+        description: "Constant with +0.0001 Exponent. Self-replication!",
+        maxLevel: 500,
         costPerLevel: 10000,
-        unlockCount: 7
-    },
-    singCubeExponent: {
-        name: "Cube Exponent",
-        description: "Cubes increases with +0.0001 Exponent in Exponent. Cube breeder!",
-        maxLevel: 100,
-        costPerLevel: 100000,
-        unlockCount: 8
+        unlockCount: 7,
+        maxCapLevel: 2000
     },
     singAscendTimeExponent: {
         name: "Ascension Time Exponent",
-        description: "Ascension Speed Multiplier increases with +0.0001 Exponent in Exponent. Space-time speed!",
-        maxLevel: 50,
+        description: "Ascension Speed Multiplier increases with +0.0001 Exponent. Space-time speed!",
+        maxLevel: 250,
+        costPerLevel: 100000,
+        unlockCount: 8,
+        maxCapLevel: 5000
+    },
+    singExponent: {
+        name: "Singularity Exponent",
+        description: "Set the constraint by Singularity to Exponent ^ 1 / (Level / 100000 + 1).",
+        maxLevel: 100,
         costPerLevel: 1000000,
         unlockCount: 9
     },
@@ -520,27 +525,27 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         name: "Singularity Wormhole",
         description: "When purchased, it allows to specify multiple Singularities for one Singularity execution. And can goto freely in the future and the past!",
         maxLevel: 10,
-        costPerLevel: 1000000,
-        unlockCount: 5,
-        maxCapLevel: 100
+        costPerLevel: 100000000,
+        unlockCount: 10
     },
     singMaxLevelUp: {
         name: "Singularity of Ant God",
-        description: "Increases the Singularity Count 1% (up to 10,000 level) to the maximum level of all Singularity levels 2 and above.\nYou can enjoy inflation until you finally break Synergism!",
+        description: "Increases the Singularity Count 1% (There is a maximum level limit for each) to the maximum level of all Singularity levels 2 and above.\nYou can enjoy inflation until you finally break Synergism!",
         maxLevel: 1,
         costPerLevel: 10000000,
         unlockCount: 10
     },
     singularityOfSingularity: {
-        name: "Singularity Of Singularity",
+        name: "Sing Sing",
         description: "This is an option to devote your life to Synergism. Never do it.",
-        maxLevel: 0,
+        maxLevel: 0.5,
         costPerLevel: 0,
+        maxCapLevel: 1,
         unlockCount: 100
     },
     singsingWormhole: {
-        name: "",
-        description: "",
+        name: "Sing Sing Wormhole",
+        description: "Unknown effect",
         maxLevel: 0.01,
         costPerLevel: 1000000000000000,
         unlockCount: 10000
@@ -627,6 +632,8 @@ export const calculateSingularityDebuff = (debuff: SingularityDebuffs) => {
     if (player.singularityCount > 250)
         effectiveSingularities *= player.singularityCount / 250
 
+    effectiveSingularities = Math.pow(effectiveSingularities, 1 / (1 + player.singularityUpgrades.singExponent.level / 10000))
+
     if (debuff === "Offering")
         return Math.sqrt(effectiveSingularities + 1)
     else if (debuff === "Global Speed")
@@ -649,6 +656,8 @@ export const singularityOverride = (hold : Player) => {
     hold.saveString = player.saveString
     hold.shopExpandCount = player.shopExpandCount
 
+    hold.ascensionCount = Math.floor(player.ascensionCount * player.platonicUpgrades[25] / 100)
+
     const power = player.singularityUpgrades.singAutomation.level * Math.pow(player.singularityCount, 2);
     const cUnlocks = player.singularityUpgrades.corruptionFourteen.level > 0 || player.singularityUpgrades.corruptionFifteen.level > 0;
 
@@ -664,7 +673,7 @@ export const singularityOverride = (hold : Player) => {
         hold.unlocks.transcend = true
         hold.transcendCount = 1
     }
-    if (player.singularityCount >= 1 && hold.unlocks.transcend && powerUnlock > 5000) {
+    if (player.singularityCount >= 1 && hold.unlocks.transcend && powerUnlock > 3000) {
         hold.unlocks.reincarnate = true
         hold.reincarnationCount = 1
     }
@@ -674,16 +683,16 @@ export const singularityOverride = (hold : Player) => {
         hold.ascensionCount = 1
     }
 
-    if (power > 5) { // other settings
+    if (power > 10) { // other settings
         hold.historyShowPerSecond = player.historyShowPerSecond
     }
 
-    if (power > 5) { // Building toggle settings
+    if (power > 10) { // Building toggle settings
         Object.assign(hold.toggles, player.toggles)
         Object.assign(hold.autoTesseracts, player.autoTesseracts)
     }
 
-    if (power > 10) { // Toggle amount to buy settings
+    if (power > 20) { // Toggle amount to buy settings
         hold.coinbuyamount = player.coinbuyamount
         hold.crystalbuyamount = player.crystalbuyamount
         hold.mythosbuyamount = player.mythosbuyamount
@@ -716,7 +725,7 @@ export const singularityOverride = (hold : Player) => {
         hold.autoSacrificeToggle = player.autoSacrificeToggle // Auto Runes
     }
 
-    if (power > 200) {
+    if (power > 200) { // talismans
         Object.assign(hold.talismanOne, player.talismanOne)
         Object.assign(hold.talismanTwo, player.talismanTwo)
         Object.assign(hold.talismanThree, player.talismanThree)
@@ -739,11 +748,18 @@ export const singularityOverride = (hold : Player) => {
         hold.autoAntSacTimer = player.autoAntSacTimer
     }
 
-    if (power > 1000) { // Auto Ascend
-        hold.autoAscend = player.autoAscend
-        hold.autoAscendThreshold = player.autoAscendThreshold
+    if (power > 1000) { // Auto Cubes
         hold.buyMaxCubeUpgrades = player.buyMaxCubeUpgrades
         hold.buyAutoCubeUpgrades = player.buyAutoCubeUpgrades
+        hold.autoOpenCubes = player.autoOpenCubes
+        hold.tesseractAutoBuyer = player.tesseractAutoBuyer
+    }
+
+    if (power > 1200) { // Auto Ascend
+        hold.autoAscend = player.autoAscend
+        hold.autoAscendMode = player.autoAscendMode
+        hold.ascensionamount = player.ascensionamount
+        hold.autoAscendThreshold = player.autoAscendThreshold
     }
 
     if (power > 1500) { // Auto challenge settings
@@ -766,7 +782,7 @@ export const singularityOverride = (hold : Player) => {
         hold.tesseractAutoBuyerAmount = player.tesseractAutoBuyerAmount
     }
 
-    if (power / Math.random() > 10) { // Auto Coin Buildings
+    if (power / Math.random() > 30) { // Auto Coin Buildings
         hold.upgrades[101] = player.upgrades[101]
         hold.upgrades[102] = player.upgrades[102]
         hold.upgrades[103] = player.upgrades[103]
@@ -774,13 +790,13 @@ export const singularityOverride = (hold : Player) => {
         hold.upgrades[105] = player.upgrades[105]
     }
 
-    if (power / Math.random() > 20) // Accelerators
+    if (power / Math.random() > 50) // Accelerators
         hold.upgrades[86] = player.upgrades[86]
 
-    if (power / Math.random() > 30) // Multipliers
+    if (power / Math.random() > 70) // Multipliers
         hold.upgrades[87] = player.upgrades[87]
 
-    if (power / Math.random() > 50) { // Autobuyer Coin Buildings
+    if (power / Math.random() > 100) { // Autobuyer Coin Buildings
         hold.achievements[4] = player.achievements[4]
         hold.achievements[11] = player.achievements[11]
         hold.achievements[18] = player.achievements[18]
@@ -788,10 +804,10 @@ export const singularityOverride = (hold : Player) => {
         hold.achievements[32] = player.achievements[32]
     }
 
-    if (power / Math.random() > 70) // Automatic Coin Upgrades for special
+    if (power / Math.random() > 150) // Automatic Coin Upgrades for special
         hold.upgrades[91] = player.upgrades[91]
 
-    if (power / Math.random() > 100) { // Auto Diamond Buildings
+    if (power / Math.random() > 200) { // Auto Diamond Buildings
         hold.upgrades[81] = player.upgrades[81]
         hold.upgrades[82] = player.upgrades[82]
         hold.upgrades[83] = player.upgrades[83]
@@ -799,19 +815,19 @@ export const singularityOverride = (hold : Player) => {
         hold.upgrades[85] = player.upgrades[85]
     }
 
-    if (power / Math.random() > 130) // Automatic Diamond Upgrades for special
+    if (power / Math.random() > 220) // Automatic Diamond Upgrades for special
         hold.upgrades[92] = player.upgrades[92]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 150) // Automatic Prestige
+    if (hold.unlocks.prestige && power / Math.random() > 250) // Automatic Prestige
         hold.achievements[43] = player.achievements[43]
 
-    if (power / Math.random() > 200) // Duplication Rune
+    if (power / Math.random() > 300) // Duplication Rune
         hold.achievements[38] = player.achievements[38]
 
-    if (power / Math.random() > 250) // Transcend Accelerator Boost
+    if (power / Math.random() > 350) // Transcend Accelerator Boost
         hold.upgrades[88] = player.upgrades[88]
 
-    if (hold.unlocks.prestige && power / Math.random() > 300) { // Autobuyer Diamond Buildings
+    if (hold.unlocks.prestige && power / Math.random() > 400) { // Autobuyer Diamond Buildings
         hold.achievements[78] = player.achievements[78]
         hold.achievements[85] = player.achievements[85]
         hold.achievements[92] = player.achievements[92]
@@ -819,7 +835,7 @@ export const singularityOverride = (hold : Player) => {
         hold.achievements[106] = player.achievements[106]
     }
 
-    if (hold.unlocks.prestige && power / Math.random() > 400) { // Autobuyer Crystal Upgrade
+    if (hold.unlocks.prestige && power / Math.random() > 450) { // Autobuyer Crystal Upgrade
         hold.achievements[79] = player.achievements[79]
         hold.achievements[86] = player.achievements[86]
         hold.achievements[93] = player.achievements[93]
@@ -853,61 +869,61 @@ export const singularityOverride = (hold : Player) => {
     if (hold.unlocks.transcend && power / Math.random() > 1200) // Diamond per second
         hold.upgrades[93] = player.upgrades[93]
 
-    if (hold.unlocks.transcend && hold.achievements[106] && power / Math.random() > 1400) // Complete C6
-        hold.achievements[113] = player.achievements[113]
-
-    if (hold.achievements[113] && power / Math.random() > 1500) // Complete C7
-        hold.achievements[120] = player.achievements[120]
-
-    if (hold.unlocks.transcend && power / Math.random() > 2500) // Mythos Upgrades
+    if (hold.unlocks.transcend && power / Math.random() > 2000) // Mythos Upgrades
         hold.upgrades[99] = player.upgrades[99]
 
-    if (hold.unlocks.transcend && power / Math.random() > 3000) // Mythos per second
+    if (hold.unlocks.transcend && power / Math.random() > 2300) // Mythos per second
         hold.upgrades[100] = player.upgrades[100]
 
-    if (hold.achievements[120] && power / Math.random() > 4000) // 10 Complete C7 Unlock 5 new researches
+    if (hold.achievements[120] && power / Math.random() > 2500) // 10 Complete C7 Unlock 5 new researches
         hold.achievements[124] = player.achievements[124]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 5000) // Atomic production
+    if (hold.unlocks.reincarnate && power / Math.random() > 3000) // Atomic production
         hold.achievements[50] = player.achievements[50]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 6000) // Reincarnations Accelerator Boost
+    if (hold.unlocks.reincarnate && power / Math.random() > 3500) // Reincarnations Accelerator Boost
         hold.researches[41] = player.researches[41]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 7000) // Reincarnations Generators
+    if (hold.unlocks.reincarnate && power / Math.random() > 4000) // Reincarnations Generators
         hold.researches[42] = player.researches[42]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 8000) // Reincarnations Coin Upgrades
+    if (hold.unlocks.reincarnate && power / Math.random() > 4500) // Reincarnations Coin Upgrades
         hold.researches[43] = player.researches[43]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 9000) // Particles Upgrades
+    if (hold.unlocks.reincarnate && hold.achievements[106] && power / Math.random() > 5000) // Complete C6
+        hold.achievements[113] = player.achievements[113]
+
+    if (hold.unlocks.reincarnate && power / Math.random() > 6000) // Particles Upgrades
         hold.researches[47] = player.researches[47]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 10000) // Automatic Reincarnate
+    if (hold.unlocks.reincarnate && power / Math.random() > 7000) // Automatic Reincarnate
         hold.researches[46] = player.researches[46]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 11000) // Reincarnations Diamond Upgrades
+    if (hold.unlocks.reincarnate && power / Math.random() > 8000) // Reincarnations Diamond Upgrades
         hold.researches[44] = player.researches[44]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 12000) // Reincarnations Diamond Buildings
+    if (hold.unlocks.reincarnate && power / Math.random() > 9000) // Reincarnations Diamond Buildings
         hold.researches[45] = player.researches[45]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 13000) { // Reincarnation upgrades 1
+    if (hold.achievements[113] && power / Math.random() > 10000) // Complete C7
+        hold.achievements[120] = player.achievements[120]
+
+    if (hold.unlocks.reincarnate && power / Math.random() > 12000) { // Reincarnation upgrades 1
         hold.researches[47] = player.researches[47]
         hold.researches[48] = player.researches[48]
         hold.researches[49] = player.researches[49]
     }
 
-    if (hold.achievements[120] && power / Math.random() > 13000) // Complete C8 Unlock 20 new researches
-        hold.achievements[127] = player.achievements[127]
-
-    if (hold.unlocks.reincarnate && power / Math.random() > 17000) // Thrift Rune
+    if (hold.unlocks.reincarnate && power / Math.random() > 13000) // Thrift Rune
         hold.achievements[102] = player.achievements[102]
 
-    if (hold.researches[49] && power / Math.random() > 20000) // Reincarnation upgrades 2
+    if (hold.achievements[120] && power / Math.random() > 15000) // Complete C8 Unlock 20 new researches
+        hold.achievements[127] = player.achievements[127]
+
+    if (hold.researches[49] && power / Math.random() > 17000) // Reincarnation upgrades 2
         hold.researches[50] = player.researches[50]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 22000) { // Auto Ant Buy 1
+    if (hold.unlocks.reincarnate && power / Math.random() > 20000) { // Auto Ant Buy 1
         hold.achievements[176] = player.achievements[176]
         hold.achievements[177] = player.achievements[177]
         hold.achievements[178] = player.achievements[178]
@@ -919,7 +935,7 @@ export const singularityOverride = (hold : Player) => {
     if (hold.achievements[120] && power / Math.random() > 30000) // Complete C9 Unlock 10 new researches
         hold.achievements[134] = player.achievements[134]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 40000) // Auto Ant Obtainium
+    if (hold.unlocks.reincarnate && power / Math.random() > 35000) // Auto Ant Obtainium
         hold.researches[61] = player.researches[61]
 
     if (hold.achievements[176] && power / Math.random() > 40000) { // Auto Ant Buy 2
@@ -931,54 +947,54 @@ export const singularityOverride = (hold : Player) => {
     if (hold.unlocks.reincarnate && power / Math.random() > 50000) // Ant Sacrifice
         hold.achievements[173] = player.achievements[173]
 
-    if (hold.unlocks.reincarnate && power / Math.random() > 70000) // Auto Ant Sacrifice
+    if (hold.unlocks.reincarnate && power / Math.random() > 60000) // Auto Ant Sacrifice
         hold.researches[124] = player.researches[124]
 
-    if (hold.achievements[179] && power / Math.random() > 80000) { // Auto Ant Buy 3
+    if (hold.achievements[179] && power / Math.random() > 70000) { // Auto Ant Buy 3
         hold.achievements[182] = player.achievements[182]
         hold.achievements[145] = player.achievements[145]
     }
 
-    if (hold.achievements[141] && power / Math.random() > 100000) // Ascension Particle Upgrades
+    if (hold.achievements[141] && power / Math.random() > 80000) // Ascension Particle Upgrades
         hold.cubeUpgrades[8] = player.cubeUpgrades[8]
 
-    if (hold.achievements[141] && power / Math.random() > 120000) // Auto challenge
+    if (hold.achievements[141] && power / Math.random() > 90000) // Auto challenge
         hold.researches[150] = player.researches[150]
+
+    if (hold.achievements[141] && power / Math.random() > 100000) // Auto Particle Buildings
+        hold.cubeUpgrades[7] = player.cubeUpgrades[7]
+
+    if (hold.achievements[141] && power / Math.random() > 110000) // Auto Fortify
+        hold.researches[130] = player.researches[130]
+
+    if (hold.achievements[141] && power / Math.random() > 120000) // Auto Enhance
+        hold.researches[135] = player.researches[135]
 
     if (hold.achievements[141] && power / Math.random() > 130000) // Complete C11 and Unlock Tesseract Gifts
         hold.achievements[197] = player.achievements[197]
 
-    if (hold.achievements[141] && power / Math.random() > 140000) // Auto Particle Buildings
-        hold.cubeUpgrades[7] = player.cubeUpgrades[7]
-
-    if (hold.achievements[141] && power / Math.random() > 160000) // Auto Fortify
-        hold.researches[130] = player.researches[130]
-
-    if (hold.achievements[141] && power / Math.random() > 200000) // Auto Enhance
-        hold.researches[135] = player.researches[135]
-
-    if (hold.achievements[197] && power / Math.random() > 230000) // Complete C12 and Unlock Spirits
-        hold.achievements[204] = player.achievements[204]
-
-    if (hold.achievements[141] && power / Math.random() > 250000) { // Auto Research
+    if (hold.achievements[141] && power / Math.random() > 140000) { // Auto Research
         hold.cubeUpgrades[9] = player.cubeUpgrades[9]
         hold.autoResearchToggle = !player.autoResearchToggle
         setTimeout(toggleAutoResearch, 1000); // Need to be done due to a bug
     }
 
-    if (hold.achievements[141] && power / Math.random() > 270000) // Automatic Ascensions
+    if (hold.achievements[141] && power / Math.random() > 150000) // Automatic Ascensions
         hold.cubeUpgrades[10] = player.cubeUpgrades[10]
 
-    if (hold.achievements[141] && power / Math.random() > 300000) // Auto Runes
+    if (hold.achievements[197] && power / Math.random() > 160000) // Complete C12 and Unlock Spirits
+        hold.achievements[204] = player.achievements[204]
+
+    if (hold.achievements[141] && power / Math.random() > 180000) // Auto Runes
         hold.cubeUpgrades[20] = player.cubeUpgrades[20]
 
-    if (hold.achievements[204] && power / Math.random() > 400000) // Complete C13 and Hypercube Benedictions
+    if (hold.achievements[204] && power / Math.random() > 250000) // Complete C13 and Hypercube Benedictions
         hold.achievements[211] = player.achievements[211]
 
-    if (hold.achievements[141] && power / Math.random() > 500000) // Auto Tesseracts
+    if (hold.achievements[141] && power / Math.random() > 300000) // Auto Tesseracts
         hold.researches[190] = player.researches[190]
 
-    if (hold.achievements[211] && power / Math.random() > 700000) // Complete C14 and Platonic Statues and Challenge 15/Platonic Upgrades
+    if (hold.achievements[211] && power / Math.random() > 400000) // Complete C14 and Platonic Statues and Challenge 15/Platonic Upgrades
         hold.achievements[218] = player.achievements[218]
 
     return hold;

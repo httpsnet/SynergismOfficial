@@ -116,7 +116,7 @@ export abstract class Cube {
         const thisInPlayer = player[this.key] as Cube;
         const cubesToOpen = Math.floor(Number(thisInPlayer) / 100 * cubes);
 
-        return this.open(cubesToOpen, false);
+        return this.open(cubesToOpen, cubes >= 100);
     }
 
     /** @description Check how many quarks you should have gained through opening cubes today */
@@ -142,6 +142,9 @@ export abstract class Cube {
 
     add(amount: number): Cube {
         this.value += amount;
+        if (Number.isNaN(this.value) || !Number.isFinite(this.value) || this.value > 1e300) {
+            this.value = 1e300;
+        }
         return this;
     }
 

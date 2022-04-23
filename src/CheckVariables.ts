@@ -494,6 +494,11 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         player.buyAutoCubeUpgrades = false
         player.shopExpandCount = 0
         player.singsing = 0
+        player.theme = 0
+        player.resettoggle3 = 1
+        player.ascensionamount = 0
+        player.autoOpenCubes = false
+        player.tesseractAutoBuyer = false
     }
 
     // Update (read: check) for undefined shop upgrades. Also checks above max level.
@@ -549,8 +554,8 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         singScoreExponent: new SingularityUpgrade(singularityData['singScoreExponent']),
         singAscendScoreExponent: new SingularityUpgrade(singularityData['singAscendScoreExponent']),
         singConstantExponent: new SingularityUpgrade(singularityData['singConstantExponent']),
-        singCubeExponent: new SingularityUpgrade(singularityData['singCubeExponent']),
         singAscendTimeExponent: new SingularityUpgrade(singularityData['singAscendTimeExponent']),
+        singExponent: new SingularityUpgrade(singularityData['singExponent']),
         singWormhole: new SingularityUpgrade(singularityData['singWormhole']),
         singMaxLevelUp: new SingularityUpgrade(singularityData['singMaxLevelUp']),
         singularityOfSingularity: new SingularityUpgrade(singularityData['singularityOfSingularity']),
@@ -591,5 +596,9 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
     if (player.usedCorruptions[1] > 0 || player.prototypeCorruptions[1] > 0) {
         player.usedCorruptions[1] = 0;
         player.prototypeCorruptions[1] = 0;
+    }
+
+    if (data.goldenQuarksTimer === undefined || player.goldenQuarksTimer === undefined) {
+        player.goldenQuarksTimer = 90000;
     }
 }

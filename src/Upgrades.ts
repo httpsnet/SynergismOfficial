@@ -149,7 +149,7 @@ const crystalupgdesc: Record<number, () => string> = {
 }
 
 const constantUpgDesc: Record<number, () => string> = {
-    1: () => `Make all Tesseract buildings ${format(5 + player.achievements[270] + 0.1 * player.platonicUpgrades[18], 1, true)}% more productive per level.`,
+    1: () => `Make all Tesseract buildings ${format(5 + player.achievements[270] + 0.1 * player.platonicUpgrades[18] + player.platonicUpgrades[24], 1, true)}% more productive per level.`,
     2: () => `Each Tesseract building bought increases the production of all of them by 0.1% per level [Max ${format(10 + player.achievements[270] + player.shopUpgrades.constantEX + 100 * (G['challenge15Rewards'].exponent - 1) + 0.3 * player.platonicUpgrades[18], 2, true)}%].`,
     3: () => "Increase offering gain +2% per level.",
     4: () => "Increase obtainium gain +4% per level.",

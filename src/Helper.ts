@@ -5,8 +5,10 @@ import { redeemShards } from "./Runes";
 import { player } from "./Synergism";
 import { visualUpdateResearch } from "./UpdateVisuals";
 import { Globals as G } from './Variables';
+import { buyTalismanResources } from "./Talismans";
+import { buyAllBlessings } from "./Buy";
 
-type TimerInput = 'prestige' | 'transcension' | 'reincarnation' | 'ascension' | 'quarks';
+type TimerInput = 'prestige' | 'transcension' | 'reincarnation' | 'ascension' | 'quarks' | 'goldenQuarks';
 
 /**
  * addTimers will add (in milliseconds) time to the reset counters, and quark export timer
@@ -14,7 +16,7 @@ type TimerInput = 'prestige' | 'transcension' | 'reincarnation' | 'ascension' | 
  * @param time 
  */
 export const addTimers = (input: TimerInput, time = 0) => {
-    const timeMultiplier = (input === "ascension" || input === "quarks") ? 1 : calculateTimeAcceleration();
+    const timeMultiplier = (input === "ascension" || input === "quarks" || input === "goldenQuarks") ? 1 : calculateTimeAcceleration();
 
     switch(input){
         case "prestige": {
@@ -40,6 +42,16 @@ export const addTimers = (input: TimerInput, time = 0) => {
             // Checks if this new time is greater than maximum, in which it will default to that time.
             // Otherwise returns itself.
             player.quarkstimer = (player.quarkstimer > maxQuarkTimer) ? maxQuarkTimer : player.quarkstimer;
+            break;
+        }
+        case "goldenQuarks": {
+            if (player.singularityUpgrades.goldenQuarks3.level === 0)
+                return
+
+            else {
+                player.goldenQuarksTimer += time * timeMultiplier;
+                player.goldenQuarksTimer = (player.goldenQuarksTimer > 90000) ? 90000 : player.goldenQuarksTimer;
+            }
             break;
         }
     }
@@ -92,21 +104,53 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
         case "runeSacrifice":
             //Every real life second this will trigger
             player.sacrificeTimer += time;
-            if (player.sacrificeTimer >= 1){
-                // If you bought cube upgrade 2x10 then it sacrifices to all runes equally
+            if (player.sacrificeTimer >= 1 && isFinite(player.runeshards)){
+                let kind = 0;
+                if(player.challengecompletions[13] >= 60){
+                    kind += 1;
+                }
+                if(player.challengecompletions[15] > 0){
+                    kind += 1;
+                }
                 if(player.cubeUpgrades[20] === 1){
-                    const notMaxed = (5 - checkMaxRunes());
-                    if(notMaxed > 0){
-                        const baseAmount = Math.floor(player.runeshards / notMaxed);
-                        for (let i = 0; i < 5; i++) {
-                            redeemShards(i+1, true, baseAmount);
+                    kind += 1;
+                }
+                kind *= 2; // Buy Offerings and Obtainium with 50% left
+
+                if(kind > 0){
+                    // Automatic purchase of Talisman Fragments
+                    if(player.challengecompletions[13] >= 60){
+                        const notMaxed = 7;
+                        const talismanItemNames = ['shard','commonFragment','uncommonFragment','rareFragment','epicFragment','legendaryFragment','mythicalFragment'] as const;
+                        for (let i = 0; i < notMaxed; i++) {
+                            buyTalismanResources(talismanItemNames[i], 100 / kind / notMaxed);
                         }
                     }
-                }
-                // If you did not buy cube upgrade 2x10 it sacrifices to selected rune.
-                else{
-                    const rune = player.autoSacrifice;
-                    redeemShards(rune, true, 0);
+
+                    // Automatic purchase of Blessings
+                    if(player.challengecompletions[15] > 0){
+                        buyAllBlessings('Blessings', 50 / kind);
+                        buyAllBlessings('Spirits', 50 / kind);
+                    }
+
+                    // If you bought cube upgrade 2x10 then it sacrifices to all runes equally
+                    if(player.cubeUpgrades[20] === 1){
+                        if(kind === 2) {
+                            kind = 1;
+                        }
+                        const notMaxed = (5 - checkMaxRunes());
+                        if(notMaxed > 0){
+                            const baseAmount = Math.floor(player.runeshards / kind / notMaxed);
+                            for (let i = 0; i < 5; i++) {
+                                redeemShards(i+1, true, baseAmount);
+                            }
+                        }
+                    }
+                    // If you did not buy cube upgrade 2x10 it sacrifices to selected rune.
+                    else{
+                        const rune = player.autoSacrifice;
+                        redeemShards(rune, true, 0);
+                    }
                 }
                 //Modulo used in event of a large delta time (this could happen for a number of reasons)
                 player.sacrificeTimer %= 1

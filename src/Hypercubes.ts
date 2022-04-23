@@ -20,6 +20,6 @@ export const calculateHypercubeBlessings = () => {
             mult *= Math.pow(1000, (1 - G['benedictionDRPower'][idx]!));
         }
 
-        G['hypercubeBonusMultiplier'][idx] = 1 + mult * G['benedictionbase'][idx]! * Math.pow(obj, power) * G['platonicBonusMultiplier'][4];
+        G['hypercubeBonusMultiplier'][idx] = Math.min(1e300, 1 + mult * G['benedictionbase'][idx]! * Math.pow(obj, power) * G['platonicBonusMultiplier'][4]);
     }
 }

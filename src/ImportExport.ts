@@ -70,9 +70,10 @@ const saveFilename = () => {
 export const exportSynergism = async () => {
     player.offlinetick = Date.now();
     const quarkData = quarkHandler();
-    const hourGQ = player.singularityUpgrades.goldenQuarks3.level;
-    if (hourGQ > 0) {
-        player.goldenQuarks += Math.floor(Math.floor(hourGQ * player.quarkstimer / 3600) * (1 + player.worlds.BONUS / 100));
+    if (player.singularityUpgrades.goldenQuarks3.level > 0) {
+        player.goldenQuarks += Math.floor(player.quarkstimer / 3600) * (1 + player.worlds.BONUS / 100);
+        player.goldenQuarks += Math.floor(player.quarkstimer / 3600) * (1 + player.worlds.BONUS / 100) * player.singularityUpgrades.goldenQuarks3.level;
+        player.goldenQuarksTimer = (player.goldenQuarksTimer % (3600 / Math.max(0.001, player.singularityUpgrades.goldenQuarks3.level)))
     }
     if (quarkData.gain >= 1) {
         player.worlds.add(quarkData.gain);
@@ -82,31 +83,27 @@ export const exportSynergism = async () => {
 
     const toClipboard = getElementById<HTMLInputElement>('saveType').checked;
     const save = 
-        await localforage.getItem<string>('Synergysave2') ?? 
-        await Promise.resolve(localStorage.getItem('Synergysave2'));
+        await localforage.getItem<Blob>('Synergysave2') ?? 
+        localStorage.getItem('Synergysave2');
+    const saveString = typeof save === 'string' ? save : await save?.text();
+
+    if (saveString === undefined) {
+        return Alert('How?');
+    }
 
     if ('clipboard' in navigator && toClipboard) {
-        await navigator.clipboard.writeText(`${save}`)
+        await navigator.clipboard.writeText(saveString)
             .catch(e => console.error(e));
     } else if (toClipboard) {
         // Old browsers (legacy Edge, Safari 13.0)
         const textArea = document.createElement('textarea');
-        textArea.value = `${save}`;
+        textArea.value = saveString;
         textArea.setAttribute('style', 'top: 0; left: 0; position: fixed;');
 
         document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            document.execCommand('copy');
-        } catch (_) {
-            console.error("Failed to copy savegame to clipboard.");
-        }
-
-        document.body.removeChild(textArea);
     } else {
         const a = document.createElement('a');
-        a.setAttribute('href', 'data:text/plain;charset=utf-8,' + save);
+        a.setAttribute('href', 'data:text/plain;charset=utf-8,' + saveString);
         a.setAttribute('download', saveFilename());
         a.setAttribute('id', 'downloadSave');
         // "Starting in Firefox 75, the click() function works even when the element is not attached to a DOM tree."
@@ -154,8 +151,14 @@ export const importSynergism = async (input: string, reset = false) => {
         (f.exporttest === false && testing) ||
         (f.exporttest === 'NO!' && testing)
     ) {
-        const item = btoa(JSON.stringify(f));
-        await localforage.setItem('Synergysave2', item);
+        const saveString = btoa(JSON.stringify(f));
+
+        if (saveString === null) {
+            return Alert('Unable to import this file!');
+        }
+
+        const item = new Blob([saveString], { type: 'text/plain' });
+        await localforage.setItem<Blob>('Synergysave2', item);
 
         localStorage.setItem('saveScumIsCheating', Date.now().toString());
         
@@ -171,6 +174,13 @@ export const promocodes = async () => {
 
     if (input === null) {
         return Alert('Alright, come back soon!')
+    }
+    if (input === "quack" && !player.codes.get(37)) {
+        player.codes.set(37, true);
+        player.quarkstimer = quarkHandler().maxTime;
+        player.goldenQuarksTimer = 90000;
+        addTimers("ascension", 18000)
+        return Alert("Quacks like a dog. Your quark timer(s) have been replenished and you have been given 5 real life hours of ascension progress!")
     }
     if (input === "synergism2021" && !player.codes.get(1)) {
         player.codes.set(1, true);

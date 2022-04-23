@@ -72,6 +72,9 @@ export const getQuarkMultiplier = () => {
     if (player.achievements[266] > 0) { // Achievement 266 [Max: 10% at 1Qa Ascensions]
         multiplier *= (1 + Math.min(0.1, (player.ascensionCount) / 1e16))
     }
+    if (player.platonicUpgrades[25] > 0) { // Platonic Upgrades 25
+        multiplier *= (1 + Math.log10(player.ascensionCount) * player.platonicUpgrades[25] / 500)
+    }
     if (player.singularityCount > 0) { // Singularity Modifier
         multiplier *= (1 + player.singularityCount / 10 + (player.singularityUpgrades.singQuark.level * player.singularityCount / 100))
     }
@@ -167,8 +170,8 @@ export class QuarkHandler {
             const { bonus, fetched } = JSON.parse(localStorage.getItem('quarkBonus')!) as { bonus: number, fetched: number };
             if (Date.now() - fetched < 60 * 1000 * 15) { // cache is younger than 15 minutes
                 console.log(
-                    `%c \tBonus of ${bonus}% quarks has been applied! \n\t(Cached at ${fetched})`, 
-                    'color:gold; font-size:60px; font-weight:bold; font-family:helvetica;'
+                    `%c Bonus of ${bonus}% quarks has been applied! \t(Cached at ${fetched})`, 
+                    'font-weight:bold; font-family:helvetica;'
                 );
                 el.textContent = `Generous patrons give you a bonus of ${bonus}% more quarks!`
                 return this.BONUS = bonus;
@@ -190,7 +193,7 @@ export class QuarkHandler {
         else if (b < 0)
             return Alert('No bonus could be applied, an error occurred. [Zero] :(');
 
-        console.log(`%c \tBonus of ${b}% quarks has been applied!`, 'color:gold; font-size:60px; font-weight:bold; font-family:helvetica;');
+        console.log(`%c \tBonus of ${b}% quarks has been applied!`, 'font-weight:bold; font-family:helvetica;');
         el.textContent = `Generous patrons give you a bonus of ${b}% more quarks!`;
         localStorage.setItem('quarkBonus', JSON.stringify({ bonus: b, fetched: Date.now() }));
         this.BONUS = b;

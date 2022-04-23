@@ -680,7 +680,7 @@ export const challengeachievementcheck = (i: number, auto?: boolean) => {
     const generatorcheck = sumContents(player.upgrades.slice(101, 106));
     
     for (const [, bar, ach] of challengeCompletionsBar.filter(([o]) => o === i)) {
-        if (player.challengecompletions[i] > bar && player.achievements[i] < 1) {
+        if (player.challengecompletions[i] > bar && player.achievements[ach] < 1) {
             achievementaward(ach);
         }
     }

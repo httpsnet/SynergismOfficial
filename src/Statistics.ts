@@ -544,7 +544,7 @@ export const cRewardBonusDescription = (id = 0) => {
     if (id >= 0 && player.platonicUpgrades[21] > 0) {
         const runeNames = ['', 'Exemption', 'Chronos', 'Midas', 'Metaphysics', 'Polymath', 'Mortuus Est', 'Plastic'];
         const runeLevel = talismanEffect[Math.floor(id / 5)][id % 5 + 1] as number;
-        const rune = player.platonicUpgrades[21] / 10;
+        const rune = player.platonicUpgrades[21] / 20;
         const score = new Decimal(player.challenge15Exponent).times(Math.pow(runeLevel + 1, rune));
         const runeBonus = ['', 'Bonus Speed Rune Levels', 'Bonus Duplication Rune Levels', 'Bonus Prism Rune Levels', 'Bonus Thrift Rune Levels', 'Bonus SI Rune Levels'];
         text = `${runeNames[Math.floor(id / 5 + 1)]} ${runeBonus[id % 5 + 1]}: ${format(runeLevel, 0, true)} (Score Bonus: ${format(score)})`;

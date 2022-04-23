@@ -20,6 +20,6 @@ export const calculatePlatonicBlessings = () => {
             mult *= Math.pow(DRThreshold[i], (1 - G['platonicDRPower'][i]));
         }
 
-        G['platonicBonusMultiplier'][i] = 1 + mult * G['platonicCubeBase'][i] * Math.pow(effectiveAmount, power);
+        G['platonicBonusMultiplier'][i] = Math.min(1e300, 1 + mult * G['platonicCubeBase'][i] * Math.pow(effectiveAmount, power));
     }
 }

@@ -1,4 +1,4 @@
-import { player, clearInt, interval, format, blankSave } from './Synergism';
+import { player, clearInt, interval, format, blankSave, autobuyTesseractBuildings } from './Synergism';
 import {
     calculateOfferings, CalcCorruptionStuff, calculateCubeBlessings, calculateRuneLevels,
     calculateAnts, calculateObtainium, calculateTalismanEffects, calculateAntSacrificeELO,
@@ -171,16 +171,22 @@ export const updateAutoReset = (i: number) => {
             player.reincarnationamount = 0;
         }
     } else if (i === 4) {
-        let v = parseFloat(getElementById<HTMLInputElement>("ascensionAmount").value);
-        v = Math.floor(v)
+        const v = Math.floor(parseFloat(getElementById<HTMLInputElement>("ascensionAmount").value));
         if (v >= 1) {
-            player.autoAscendThreshold = v
+            player.autoAscendThreshold = v;
         } else {
             player.autoAscendThreshold = 1;
         }
     } else if (i === 5) {
         const v = parseFloat(getElementById<HTMLInputElement>("autoAntSacrificeAmount").value);
         player.autoAntSacTimer = Math.max(0, v);
+    } else if (i === 6) {
+        const v = parseFloat(getElementById<HTMLInputElement>("ascensionamount").value);
+        if (v >= 0) {
+            player.ascensionamount = v;
+        } else {
+            player.ascensionamount = 1;
+        }
     }
 }
 
@@ -540,6 +546,9 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
             player.wowHypercubes.add(metaData[6]);
             player.wowPlatonicCubes.add(metaData[7]);
             player.wowAbyssals += metaData[8];
+            if (Number.isNaN(player.wowAbyssals) || !Number.isFinite(player.wowAbyssals) || player.wowAbyssals > 1e300) {
+                player.wowAbyssals = 1e300;
+            }
         }
 
         for (let j = 1; j <= 10; j++) {
@@ -547,11 +556,14 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
             player.highestchallengecompletions[j] = 0;
         }
 
-        autoBuyCubeUpgrades();
-
         player.challengecompletions[6] = player.highestchallengecompletions[6] = player.cubeUpgrades[49]
         player.challengecompletions[7] = player.highestchallengecompletions[7] = player.cubeUpgrades[49]
         player.challengecompletions[8] = player.highestchallengecompletions[8] = player.cubeUpgrades[49]
+
+        if (player.platonicUpgrades[21] > 0 && G['extinctionMultiplier'][player.prototypeCorruptions[7]] >= 0)
+            player.challengecompletions[9] = player.highestchallengecompletions[9] = 1;
+        if (player.platonicUpgrades[22] > 0 && G['extinctionMultiplier'][player.prototypeCorruptions[7]] >= 0)
+            player.challengecompletions[10] = player.highestchallengecompletions[10] = 1;
 
         DOMCacheGetOrSet(`res${player.autoResearch || 1}`).classList.remove("researchRoomba");
         player.roombaResearchIndex = 0;
@@ -567,6 +579,8 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
                 updateClassList(k, ["researchUnpurchased"], ["researchAvailable", "researchPurchased", "researchPurchasedAvailable", "researchMaxed"])
             }
         }
+
+        G['autoResetTimers'].ascension = 0;
 
         calculateAnts();
         calculateRuneLevels();
@@ -622,6 +636,8 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
              player.usedCorruptions[i] = 11;
            }
         }
+
+        autoUseCubes();
 
         corruptionStatsUpdate();
     }
@@ -958,4 +974,23 @@ const resetTalismans = () => {
     player.epicFragments = 0;
     player.legendaryFragments = 0;
     player.mythicalFragments = 0;
+}
+
+const autoUseCubes = () => {
+    autoBuyCubeUpgrades();
+
+    if (player.achievements[218] > 0 && player.autoOpenCubes) {
+        void player.wowCubes.openPercent(100);
+        if (player.achievements[218] > 0 && player.tesseractAutoBuyer) {
+            void player.wowTesseracts.openPercent(10);
+            autobuyTesseractBuildings();
+        }
+        void player.wowTesseracts.openPercent(100);
+        void player.wowHypercubes.openPercent(100);
+        void player.wowPlatonicCubes.openPercent(100);
+    } else {
+        if (player.achievements[218] > 0 && player.tesseractAutoBuyer) {
+            autobuyTesseractBuildings();
+        }
+    }
 }

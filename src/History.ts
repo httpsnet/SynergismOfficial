@@ -242,10 +242,6 @@ const extractStringExponent = (str: string) => {
 
 // Add an entry to the history. This can be called via the event system.
 const resetHistoryAdd = (category: Category, data: ResetHistoryEntryUnion) => {
-    if (typeof player.history[category] === 'undefined') {
-        player.history[category] = [];
-    }
-
     while (player.history[category].length > (G['historyCountMax'] - 1)) {
         player.history[category].shift();
     }
@@ -272,6 +268,7 @@ const resetHistoryRenderRow = (
     _category: Category, 
     data: ResetHistoryEntryUnion
 ) => {
+    let colsUsed = 1;
     const row = document.createElement("tr");
     let rowContentHtml = "";
 
@@ -327,9 +324,11 @@ const resetHistoryRenderRow = (
     // realistically displayed; you can increase them if more gains are added.
 
     // Render the gains plus the gains filler
+    colsUsed += gains.length;
     rowContentHtml += gains.reduce((acc, value) => {
         return `${acc}<td class="history-gain">${value}</td>`;
     }, "");
+    rowContentHtml += `<td class="history-filler" colspan="${7 - colsUsed}"></td>`;
 
     // Render the other stuff
     rowContentHtml += extra.reduce((acc, value) => {
@@ -339,6 +338,7 @@ const resetHistoryRenderRow = (
     rowContentHtml += extra2.reduce((acc, value) => {
         return `${acc}<td class="history-corruption">${value}</td>`;
     }, "");
+    rowContentHtml += `<td class="history-filler" colspan="${4 - extra.length - extra2.length}"></td>`;
 
     row.innerHTML = rowContentHtml;
     return row;

@@ -1,21 +1,25 @@
 import { DOMCacheGetOrSet } from './Cache/DOM';
+import { player } from "./Synergism"
+
+const themeName = ["Dark", "Gray", "Light", "Black"];
+const themeClass = ["dark", "gray", "light", "black"];
 
 export const toggleTheme = () => {
-    const current = document.body.classList.contains('light')
-        ? 'light'
-        : 'dark';
+    player.theme++;
+    if (!isFinite(player.theme) || player.theme < 0 || player.theme >= themeClass.length) {
+        player.theme = 0;
+    }
+    themeUpdate();
+}
+
+export const themeUpdate = () => {
+    if (!isFinite(player.theme) || player.theme < 0 || player.theme >= themeClass.length) {
+        player.theme = 0;
+    }
 
     const themeButton = DOMCacheGetOrSet('theme');
+    const className = (DOMCacheGetOrSet("offlineContainer")!.style.display === "none" ? "" : "loading ");
 
-    if (current === 'dark') {
-        document.body.classList.remove('dark');
-        document.body.classList.add('light');
-
-        themeButton.textContent = 'Dark Mode';
-    } else {
-        document.body.classList.remove('light');
-        document.body.classList.add('dark');
-
-        themeButton.textContent = 'Light Mode';
-    }
+    document.body.className = className + themeClass[player.theme];
+    themeButton.textContent = "Theme: " + themeName[player.theme];
 }

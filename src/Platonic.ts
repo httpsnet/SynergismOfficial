@@ -10,7 +10,7 @@ const platonicUpgradeDesc = [
     '+0.045% hypercubes per corruption level per level!',
     'Gain +2% Platonic Cubes per level! It is that simple.',
     'C10 Exponent: 1.035 --> 1.0375, Constant tax exponent +0.10, 2x faster constant production, +10/+5 Challenge caps, 2x Obtainium/Offerings, ^1.10 coin gain in C15!',
-    'Raises corruption 1 and 2 exponent ^(1 + level/30), capacity of ^1 on Mult/Accel.',
+    'Raises corruption 1 exponent ^(1 + level/30), capacity of ^1 on Viscosity.',
     'Raises speed below 1x to the power of ^(1 - level/30).',
     'Divides Hyperchallenged by (1 + 0.4 * level), with a minimum 1x challenge req. multiplier!',
     'Raise Obtainium to the power of (1+(0.09*log10(Obt owned))) and add another x2.5 multiplier (uncorruptable), up until 1e100 Obtainium!',
@@ -22,14 +22,14 @@ const platonicUpgradeDesc = [
     'You begin to find the start of the abyss. Coin Exponent +0.10 in Challenge 15, Challenge 15 Score +25%, Ascension Speed +0.2% per Corruption Level (Max: 20%), +1% all Cube types per C9 Completion (multiplicative), +20% Quarks, 1e250x Tesseract Building Multiplier, 2x Ascension Count, +30 Reincarnation Challenge Cap, +20 Ascension Challenge Cap, 6x Offerings and Obtainium (Uncorruptable)! Talk about a deep dive.',
     'Increase powder conversion rate by 1% per level, gain +2% ascension count per level and gain up to 2% more ascension count per level based on powder, up to 100,000. This will also multiply Tesseract Building production by (Powder + 1)^(10 * level), uncapped.',
     'If Viscous Corruption is set to level 10 or higher, score multiplier is raised by an exponent. That exponent is 3 + 0.04 per level of this upgrade.',
-    'Raise the base percentage of Constant Upgrade 1 by 0.1% and increase the base percentage cap of Constant Upgrade 2 by 0.3% per level!',
+    'Raise the base percentage of Constant Upgrade 1 by 1% and increase the base percentage cap of Constant Upgrade 2 by 0.3% per level!',
     'The diminishing return power on Chronos Hepteract changes from 0.166 to (0.166 + 0.00133 * level) [Max of 0.2333].',
     'You know, maybe some things should be left unbought.',
-    'Boosted to the Challenge 15 reward bonus by the talisman assigned rune. Calculated as "C15 Score * Rune ^ (level / 10 + 1)". The amplified effect can be checked in the Challenge 15 menu. Unlocking has no effect.',
-    'Ascension Score increases 0.01% * levels for each Challenge 10 to 16 achievement.',
-    '',
-    '',
-    '',
+    'When you ascend, gain 1 of challenge 9 completion. Boosted to the Challenge 15 reward bonus by the talisman assigned rune. Calculated as "C15 Score * Rune ^ (Level * 0.05 + 1)". The amplified effect can be checked in the Challenge 15 menu. Unlocking has no effect.',
+    'When you ascend, gain 1 of challenge 10 completion. Ascension Score increases 0.01% * levels for each Reincarnation and Ascension Challenges achievement. Cube gain exponent by Ascension Score + level / 2%.',
+    'Corruption Level 14 and above Current Score Multiplier will increase by level. It is multiplied at a higher level. Powder Conversion increases by +x"((1 + Level * 0.001) ^ C14 Completions)".',
+    'Blessing Power and Spirit Power Exponent increase by + 0.04 * Level. Raise the base percentage of Constant Upgrade 1 by 1%. Hepteract gain exponent by Ascension Score ^ level / 100.',
+    'Increases the maximum level of Corruption by 1. Ascension Speed is increased by +x"((1 + Level / 5000) ^ C15 Completion)". Increase the Ascension Count by a factor of +x"((Quarks * Golden Quarks) ^ Level * 0.01)". Increase the Ascension Score by a factor of +x"Ascension Count ^ Level * 0.002". Quarks increase by a percentage of "Log10(Ascension Score) * Level / 10". Level % is inherited from Ascension Count by executing Singularity. In addition, something happens at the maximum level. [WIP]',
 ];
 
 export interface IPlatBaseCost {
@@ -250,59 +250,59 @@ export const platUpgradeBaseCosts: Record<number, IPlatBaseCost> = {
         maxLevel: 1
     },
     21: {
-        obtainium: 1e230,
-        offerings: 1e180,
-        cubes: 1e55,
-        tesseracts: 1e34,
-        hypercubes: 1e31,
-        platonics: 1e30,
-        abyssals: Math.pow(2, 40),
+        obtainium: 1e290,
+        offerings: 1e230,
+        cubes: 1e65,
+        tesseracts: 1e35,
+        hypercubes: 1e33,
+        platonics: 1e32,
+        abyssals: Math.pow(2, 39),
         maxLevel: 20,
-        priceMult: 1e20
+        priceMult: 1e21
     },
     22: {
-        obtainium: 1e280,
-        offerings: 1e220,
-        cubes: 1e65,
-        tesseracts: 1e39,
-        hypercubes: 1e37,
-        platonics: 1e35,
-        abyssals: Math.pow(2, 53),
-        maxLevel: 100,
-        priceMult: 1e100
+        obtainium: 1e300,
+        offerings: 1e260,
+        cubes: 1e73,
+        tesseracts: 1e41,
+        hypercubes: 1e40,
+        platonics: 1e38,
+        abyssals: Math.pow(2, 58),
+        maxLevel: 30,
+        priceMult: 1e22
     },
     23: {
         obtainium: 1e300,
-        offerings: 1e260,
-        cubes: 1e75,
-        tesseracts: 1e44,
-        hypercubes: 1e42,
-        platonics: 1e39,
-        abyssals: Math.pow(2, 67),
-        maxLevel: 10,
-        priceMult: 1000
+        offerings: 1e300,
+        cubes: 1e84,
+        tesseracts: 1e49,
+        hypercubes: 1e50,
+        platonics: 1e47,
+        abyssals: Math.pow(2, 84),
+        maxLevel: 30,
+        priceMult: 1e23
     },
     24: {
         obtainium: 1e300,
         offerings: 1e300,
-        cubes: 1e85,
-        tesseracts: 1e49,
-        hypercubes: 1e47,
-        platonics: 1e44,
-        abyssals: Math.pow(2, 80),
-        maxLevel: 10,
-        priceMult: 1000
+        cubes: 1e105,
+        tesseracts: 1e60,
+        hypercubes: 1e63,
+        platonics: 1e58,
+        abyssals: Math.pow(2, 118),
+        maxLevel: 20,
+        priceMult: 1e30
     },
     25: {
         obtainium: 1e300,
         offerings: 1e300,
-        cubes: 1e100,
-        tesseracts: 1e56,
-        hypercubes: 1e55,
-        platonics: 1e52,
-        abyssals: Math.pow(2, 93),
-        maxLevel: 10,
-        priceMult: 1e10
+        cubes: 1e200,
+        tesseracts: 1e100,
+        hypercubes: 1e100,
+        platonics: 1e100,
+        abyssals: 1e100,
+        maxLevel: 100,
+        priceMult: 1e100
     }
 }
 
@@ -325,13 +325,13 @@ const checkPlatonicUpgrade = (index: number): Record<keyof (IPlatBaseCost & { ca
         priceMultiplier = Math.pow(platUpgradeBaseCosts[index].priceMult!, Math.pow(player.platonicUpgrades[index] / (platUpgradeBaseCosts[index].maxLevel - 1), 1.25))
     }
     for (let i = 0; i < resources.length - 1; i++) {
-        if (Math.floor(platUpgradeBaseCosts[index][resources[i]] * priceMultiplier) <= player[resourceNames[i]]) {
+        if (Math.min(1e300, Math.floor(platUpgradeBaseCosts[index][resources[i]] * priceMultiplier)) <= player[resourceNames[i]]) {
             checksum++;
             checks[resources[i]] = true
         }
     }
 
-    if (player.hepteractCrafts.abyss.BAL >= Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier) || platUpgradeBaseCosts[index].abyssals == 0) {
+    if (player.hepteractCrafts.abyss.BAL >= Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier)) || platUpgradeBaseCosts[index].abyssals == 0) {
         checksum ++
         checks['abyssals'] = true
     }
@@ -358,11 +358,11 @@ export const createPlatonicDescription = (index: number) => {
     DOMCacheGetOrSet('platonicUpgradeLevel').textContent = "Level: " + format(player.platonicUpgrades[index]) + "/" + format(platUpgradeBaseCosts[index].maxLevel) + maxLevelAppend
     DOMCacheGetOrSet('platonicOfferingCost').textContent = format(player.runeshards) + "/" + format(Math.min(1e300, platUpgradeBaseCosts[index].offerings * priceMultiplier)) + " Offerings"
     DOMCacheGetOrSet('platonicObtainiumCost').textContent = format(player.researchPoints) + "/" + format(Math.min(1e300, platUpgradeBaseCosts[index].obtainium * priceMultiplier)) + " Obtainium"
-    DOMCacheGetOrSet('platonicCubeCost').textContent = format(player.wowCubes) + "/" + format(platUpgradeBaseCosts[index].cubes * priceMultiplier) + " Wow! Cubes"
-    DOMCacheGetOrSet('platonicTesseractCost').textContent = format(player.wowTesseracts) + "/" + format(platUpgradeBaseCosts[index].tesseracts * priceMultiplier) + " Wow! Tesseracts"
-    DOMCacheGetOrSet('platonicHypercubeCost').textContent = format(player.wowHypercubes) + "/" + format(platUpgradeBaseCosts[index].hypercubes * priceMultiplier) + " Wow! Hypercubes"
-    DOMCacheGetOrSet('platonicPlatonicCost').textContent = format(player.wowPlatonicCubes) + "/" + format(platUpgradeBaseCosts[index].platonics * priceMultiplier) + " Platonic! Cubes"
-    DOMCacheGetOrSet('platonicHepteractCost').textContent = format(player.hepteractCrafts.abyss.BAL) + "/" + format(Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier), 0, true) + " Hepteracts of the Abyss"
+    DOMCacheGetOrSet('platonicCubeCost').textContent = format(player.wowCubes) + "/" + format(Math.min(1e300, platUpgradeBaseCosts[index].cubes * priceMultiplier)) + " Wow! Cubes"
+    DOMCacheGetOrSet('platonicTesseractCost').textContent = format(player.wowTesseracts) + "/" + format(Math.min(1e300, platUpgradeBaseCosts[index].tesseracts * priceMultiplier)) + " Wow! Tesseracts"
+    DOMCacheGetOrSet('platonicHypercubeCost').textContent = format(player.wowHypercubes) + "/" + format(Math.min(1e300, platUpgradeBaseCosts[index].hypercubes * priceMultiplier)) + " Wow! Hypercubes"
+    DOMCacheGetOrSet('platonicPlatonicCost').textContent = format(player.wowPlatonicCubes) + "/" + format(Math.min(1e300, platUpgradeBaseCosts[index].platonics * priceMultiplier)) + " Platonic! Cubes"
+    DOMCacheGetOrSet('platonicHepteractCost').textContent = format(player.hepteractCrafts.abyss.BAL) + "/" + format(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier)), 0, true) + " Hepteracts of the Abyss"
 
     resourceCheck.offerings ?
         DOMCacheGetOrSet('platonicOfferingCost').style.color = "lime" :
@@ -432,11 +432,11 @@ export const buyPlatonicUpgrades = (index: number) => {
         player.platonicUpgrades[index] += 1
         player.researchPoints -= Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].obtainium * priceMultiplier))
         player.runeshards -= Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].offerings * priceMultiplier))
-        player.wowCubes.sub(Math.floor(platUpgradeBaseCosts[index].cubes * priceMultiplier)); 
-        player.wowTesseracts.sub(Math.floor(platUpgradeBaseCosts[index].tesseracts * priceMultiplier));
-        player.wowHypercubes.sub(Math.floor(platUpgradeBaseCosts[index].hypercubes * priceMultiplier));
-        player.wowPlatonicCubes.sub(Math.floor(platUpgradeBaseCosts[index].platonics * priceMultiplier));
-        player.hepteractCrafts.abyss.spend(Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier));
+        player.wowCubes.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].cubes * priceMultiplier))); 
+        player.wowTesseracts.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].tesseracts * priceMultiplier)));
+        player.wowHypercubes.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].hypercubes * priceMultiplier)));
+        player.wowPlatonicCubes.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].platonics * priceMultiplier)));
+        player.hepteractCrafts.abyss.spend(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier)));
 
         Synergism.emit('boughtPlatonicUpgrade', platUpgradeBaseCosts[index]);
     }

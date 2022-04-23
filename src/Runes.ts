@@ -80,6 +80,11 @@ export const redeemShards = (runeIndexPlusOne: number, auto = false, cubeUpgrade
     // runeIndex, the rune being added to
     const runeIndex = runeIndexPlusOne - 1;
 
+    const maxLevel = calculateMaxRunes(runeIndex + 1)
+    if (player.runelevels[runeIndex] >= maxLevel) {
+        return;
+    }
+
     // Whether or not a rune is unlocked array
     const unlockedRune = [
         true,
@@ -101,7 +106,6 @@ export const redeemShards = (runeIndexPlusOne: number, auto = false, cubeUpgrade
     let levelsAdded = 0
     if (player.runeshards > 0 && player.runelevels[runeIndex] < calculateMaxRunes(runeIndex + 1) && unlockedRune[runeIndex]) {
         let all = 0
-        const maxLevel = calculateMaxRunes(runeIndex + 1)
         const amountArr = calculateOfferingsToLevelXTimes(runeIndex, player.runelevels[runeIndex], levelsToAdd)
         let toSpendTotal = Math.min(player.runeshards, amountArr.reduce((x, y) => x + y, 0))
         if (cubeUpgraded > 0) {
