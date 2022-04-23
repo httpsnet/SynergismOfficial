@@ -359,11 +359,14 @@ export interface Player {
     autoSacrifice: number
     sacrificeTimer: number
     quarkstimer: number
+    goldenQuarksTimer: number
 
     shopConfirmation: boolean,
     shopBuyMax: boolean,
     buyMaxCubeUpgrades: boolean,
     buyAutoCubeUpgrades: boolean,
+    autoOpenCubes: boolean,
+    tesseractAutoBuyer: boolean,
 
     antPoints: Decimal,
     antUpgrades: (null | number)[]
@@ -455,6 +458,7 @@ export interface Player {
     autoAscend: boolean,
     autoAscendMode: string
     autoAscendThreshold: number
+    ascensionamount: number
     roombaResearchIndex: number
     ascStatToggles: Record<number, boolean>
 
@@ -526,6 +530,7 @@ export interface Player {
     quarksThisSingularity: number
     shopExpandCount: number
     singsing: number
+    theme: number
 
     singularityUpgrades: {
         goldenQuarks1: SingularityUpgrade
@@ -569,8 +574,8 @@ export interface Player {
         singScoreExponent: SingularityUpgrade
         singAscendScoreExponent: SingularityUpgrade
         singConstantExponent: SingularityUpgrade
-        singCubeExponent: SingularityUpgrade
         singAscendTimeExponent: SingularityUpgrade
+        singExponent: SingularityUpgrade
         singWormhole: SingularityUpgrade
         singMaxLevelUp: SingularityUpgrade
         singularityOfSingularity: SingularityUpgrade
@@ -910,7 +915,7 @@ export interface GlobalVariables {
         prestige: number
         transcension: number
         reincarnation: number
-        ascension: 0
+        ascension: number
     },
 
     timeMultiplier: number
