@@ -41,7 +41,7 @@
         </div>
     </div>
     <div id="preloadContainer">
-        <img src="Pictures/Splash/base.png" id="preload" alt="" style="width: 100%;">
+        <img src="Pictures/Splash/base.png" id="preload" alt="" style="width: 100%; display: none;"">
     </div>
     <div id="offlineContainer">
         <p id="offlineTimer" class="offlineText" style="color: plum"></p>
@@ -1218,7 +1218,7 @@
                 <div id="runeDetails">
                     <div id="rune1area" class="runeType">
                         <p id="speedrune" class="runeTypeElement" style="color:orange">Speed Rune</p>
-                        <img id="rune1" class="runeTypeElement" src="Pictures/Transparent Pics/SpeedRune.png" alt="" loading="lazy">
+                        <img id="rune1" class="runeTypeElement runeTypeImage" src="Pictures/Transparent Pics/SpeedRune.png" alt="" loading="lazy">
                         <p id="rune1level" class="runeTypeElement">Level: 166/500</p>
                         <p id="bonusrune1" class="runeTypeElement" style="color: orange"></p>
                         <p id="rune1exp" class="runeTypeElement">Exp: 0/40</p>
@@ -1227,7 +1227,7 @@
 
                     <div id="rune2area" class="runeType">
                         <p id="duplicationrune" class="runeTypeElement" style="color: plum">Duplication Rune</p>
-                        <img id="rune2" class="runeTypeElement" src="Pictures/duplicate_rune_quality.gif" alt="" loading="lazy">
+                        <img id="rune2" class="runeTypeElement runeTypeImage" src="Pictures/duplicate_rune_quality.gif" alt="" loading="lazy">
                         <p id="rune2level" class="runeTypeElement">Level: 1/500</p>
                         <p id="bonusrune2" class="runeTypeElement" style="color: orange"></p>
                         <p id="rune2exp" class="runeTypeElement">Exp: 0/40</p>
@@ -1236,7 +1236,7 @@
 
                     <div id="rune3area" class="runeType">
                         <p id="prismrune" class="runeTypeElement" style="color: lightblue">Prism Rune</p>
-                        <img id="rune3" class="runeTypeElement" src="Pictures/Transparent Pics/PrismRune.png" alt="" loading="lazy">
+                        <img id="rune3" class="runeTypeElement runeTypeImage" src="Pictures/Transparent Pics/PrismRune.png" alt="" loading="lazy">
                         <p id="rune3level" class="runeTypeElement">Level: 1/500</p>
                         <p id="bonusrune3" class="runeTypeElement" style="color: orange"></p>
                         <p id="rune3exp" class="runeTypeElement">Exp: 0/40</p>
@@ -1245,7 +1245,7 @@
 
                     <div id="rune4area" class="runeType">
                         <p id="thriftrune" class="runeTypeElement" style="color: lightgreen">Thrift Rune</p>
-                        <img id="rune4" class="runeTypeElement" src="Pictures/Transparent Pics/ThriftRune.png" alt="" loading="lazy">
+                        <img id="rune4" class="runeTypeElement runeTypeImage" src="Pictures/Transparent Pics/ThriftRune.png" alt="" loading="lazy">
                         <p id="rune4level" class="runeTypeElement">Level: 1/500</p>
                         <p id="bonusrune4" class="runeTypeElement" style="color: orange"></p>
                         <p id="rune4exp" class="runeTypeElement">TNL: 0</p>
@@ -1254,7 +1254,7 @@
 
                     <div id="rune5area" class="runeType">
                         <p id="intellectrune" class="runeTypeElement" style="color: tomato">Superior Intellect</p>
-                        <img id="rune5" class="runeTypeElement" src="Pictures/Transparent Pics/Rune of Superior Intellect.png" alt="" loading="lazy">
+                        <img id="rune5" class="runeTypeElement runeTypeImage" src="Pictures/Transparent Pics/Rune of Superior Intellect.png" alt="" loading="lazy">
                         <p id="rune5level" class="runeTypeElement">Level: 1/500</p>
                         <p id="bonusrune5" class="runeTypeElement" style="color: orange"></p>
                         <p id="rune5exp" class="runeTypeElement">TNL: 0</p>
@@ -1263,7 +1263,7 @@
 
                     <div id="rune6area" class="runeType">
                         <p id="infiniteAscentRune" class="runeTypeElement" style="color: lightgoldenrodyellow">Infinite Ascent</p>
-                        <img id="rune6" class="runeTypeElement" src="Pictures/Etherian Staircase.png" alt="" loading="lazy">
+                        <img id="rune6" class="runeTypeElement runeTypeImage" src="Pictures/Etherian Staircase.png" alt="" loading="lazy">
                         <p id="rune6level" class="runeTypeElement">Level: 1/999,999</p>
                         <p id="bonusrune6" class="runeTypeElement" style="color: orange">[Bonus: +0]</p>
                         <p id="rune6exp" class="runeTypeElement">+1 in 1.00e77</p>
@@ -1272,7 +1272,7 @@
 
                     <div id="rune7area" class="runeType">
                         <p id="grandiloquence" class="runeTypeElement" style="color: orchid">Antiquities of Ant God</p>
-                        <img id="rune7" class="runeTypeElement" src="Pictures/Transparent Pics/Grandiloquence.png" alt="" loading="lazy">
+                        <img id="rune7" class="runeTypeElement runeTypeImage" src="Pictures/Transparent Pics/Grandiloquence.png" alt="" loading="lazy">
                         <p id="rune7level" class="runeTypeElement">Level: 1/2</p>
                         <p id="bonusrune7" class="runeTypeElement" style="color: orange">[Ultimate Level]</p>
                         <p id="rune7exp" class="runeTypeElement">+1 in 1.00e120</p>
@@ -1997,6 +1997,9 @@
                     <p id="platonicCubeQuarksToday" class="chal14">Quarks gained from Platonics: <span id="platonicCubeQuarksTodayValue" style="color: cyan">0</span></p>
                     <p id="platonicCubeQuarksOpenRequirement" class="chal14">Open <span id="platonicCubeQuarksOpenRequirementValue" style="color: yellow">1</span> platonic cubes for next quark.</p>
                     <p id="platonicCubeQuarksOpenToday" class="chal14">Platonic Cubes opened today: <span id="platonicCubeQuarksOpenTodayValue" style="color: orchid">0</span></p>
+                    <br>
+                    <div><button id="toggleAutoOpenCubes" style="border: 2px solid red;display: none">Auto Open Cubes: Off</button></div>
+                    <div><button id="toggleTesseractBAB" style="border: 2px solid red;display: none">Tesseract Buildings Auto Buy: Off</button></div>
                 </div>
                 <div id="cubeTab1" class="cubeTab" style="display: flex">
                     <span id="cubeWelcome" class="cubePlacement1" style="color: orange">You feel a sense of Pride and Accomplishment... and a hunger for power.</span>
@@ -2423,7 +2426,7 @@
                         <p id="cubeUpgradeDescription" style="text-align: center; color: lightblue"></p>
                         <p id="cubeUpgradeCost" style="text-align:center; color:pink"></p>
                         <p id="cubeUpgradeLevel" style="text-align: center; color: crimson"></p>
-                        <div><button id="toggleCubeBuy">Upgrade: 1 Level wow</button> <button id="toggleCubeAutoBuy">Automatic: OFF</button></div>
+                        <div><button id="toggleCubeBuy" style="border: 2px solid pink;">Upgrade: 1 Level wow</button> <button id="toggleCubeAutoBuy" style="border: 2px solid red;display: none">Automatic: OFF</button></div>
                     </div>
                 </div>
                 <div id="cubeTab6" class="cubeTab" style="display: none">
@@ -2500,11 +2503,11 @@
                                     <td style="font-size: 0;"><img id="platUpg20" src="Pictures/Transparent%20Pics/PlatonicUpgrade20.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-size: 0;"><img id="platUpg21" src="Pictures/Transparent%20Pics/PlatonicUpgrade21.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td style="font-size: 0;"><img id="platUpg22" src="Pictures/Transparent%20Pics/PlatonicUpgrade22.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td style="font-size: 0;"><img id="platUpg23" src="Pictures/Transparent%20Pics/PlatonicUpgrade23.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td style="font-size: 0;"><img id="platUpg24" src="Pictures/Transparent%20Pics/PlatonicUpgrade24.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td style="font-size: 0;"><img id="platUpg25" src="Pictures/Transparent%20Pics/PlatonicUpgrade25.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                    <td style="font-size: 0;"><img id="platUpg21" src="Pictures/Transparent%20Pics/PlatonicUpgrade21.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
+                                    <td style="font-size: 0;"><img id="platUpg22" src="Pictures/Transparent%20Pics/PlatonicUpgrade22.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
+                                    <td style="font-size: 0;"><img id="platUpg23" src="Pictures/Transparent%20Pics/PlatonicUpgrade23.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
+                                    <td style="font-size: 0;"><img id="platUpg24" src="Pictures/Transparent%20Pics/PlatonicUpgrade24.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
+                                    <td style="font-size: 0;"><img id="platUpg25" src="Pictures/Transparent%20Pics/PlatonicUpgrade25.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
                                 </tr>
                             </table>
                         </div>
@@ -2757,12 +2760,12 @@
                 <table id="ascensionAutomation" class="cubeUpgrade10">
                     <tr>
                         <th>
-                            <input id="ascensionAmount" class="hCenter tight" type="number" min="1" max="999999999" defaultValue="1"> <button id="ascensionAutoEnable" class="hCenter tight" style="border: 2px solid green">Auto Ascend [ON]</button> <button id="ascensionAutoToggle" class="hCenter tight" style="border:2px solid orchid;">Mode: C10 Completions</button>
+                            <input id="ascensionAmount" class="hCenter tight" type="number" min="1" max="999999999" defaultValue="1"> <input id="ascensionamount" class="hCenter tight" type="number" min="1" max="999999999" defaultValue="1"> <button id="ascensionAutoEnable" class="hCenter tight" style="border: 2px solid green">Auto Ascend [ON]</button> <button id="ascensionAutoToggle" class="hCenter tight" style="border:2px solid orchid;">Mode: C10 Completions</button>
                         </th>
                     </tr>
                     <tr>
                         <th>
-                            <div id="autoAscend" class="tightText">Ascend when you've completed Sadistic Challenge I a total of <span id="autoAscendMetric" style="color: gold">1</span> times.</div>
+                            <div id="autoAscend" class="tightText">Ascend when you've completed Sadistic Challenge I a total of <span id="autoAscendMetric" style="color: red">1</span> times and <span id="autoAscendSeconds" style="color: gold">1</span> real-life seconds.</div>
                         </th>
                     </tr>
                     <tr>
@@ -3447,10 +3450,10 @@
                     <input type="image" id="singConstantExponent" src="Pictures/Singularity Constant Exponent.png">
                 </div>
                 <div>
-                    <input type="image" id="singCubeExponent" src="Pictures/Singularity CubesExponent.png">
+                    <input type="image" id="singAscendTimeExponent" src="Pictures/Singularity AscendTimeExponent.png">
                 </div>
                 <div>
-                    <input type="image" id="singAscendTimeExponent" src="Pictures/Singularity AscendTimeExponent.png">
+                    <input type="image" id="singExponent" src="Pictures/Singularity SingularityExponent.png">
                 </div>
                 <div>
                     <input type="image" id="singWormhole" src="Pictures/Singularity Wormhole.png">

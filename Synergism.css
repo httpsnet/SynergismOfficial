@@ -27,13 +27,26 @@ body.loading {
     overflow-y: hidden;
 }
 
+body {
+    transition-duration: 1.0s;
+    transition-property: background-color;
+}
+
 body,
 body.dark {
     background-color: #111;
 }
 
+body.gray {
+    background-color: #444;
+}
+
 body.light {
     background-color: gray;
+}
+
+body.black {
+    background-color: black;
 }
 
 a {
@@ -241,6 +254,7 @@ button:focus {
 #confirm {
     height: 100%;
     display: grid;
+    outline: none;
     grid-template-columns: 25% 25% 25% 25%;
     grid-template-rows: 75% 25%;
     grid-template-areas:
@@ -251,6 +265,7 @@ button:focus {
 #alert {
     height: 100%;
     display: grid;
+    outline: none;
     grid-template-columns: 33.3333% 33.3333% 33.3333%;
     grid-template-rows: 75% 25%;
     grid-template-areas:
@@ -261,6 +276,7 @@ button:focus {
 #prompt {
     height: 100%;
     display: grid;
+    outline: none;
     grid-template-columns: 25% 25% 25% 25%;
     grid-template-rows: 5% 55% 10% 5% 25%;
     grid-template-areas:
@@ -282,7 +298,6 @@ button:focus {
     top: 0;
     left: 0;
     z-index: 2;
-    height: 200%;
     min-height: 100vh;
     width: 100%;
     display: flex;
@@ -487,7 +502,7 @@ nav li:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .subTabWrapper > button {
@@ -1081,6 +1096,11 @@ nav li:hover {
     text-align: center;
     align-items: center;
     align-content: center;
+}
+
+.runeTypeImage {
+    background-color: #171717;
+    transition-duration: 0.15s;
 }
 
 .runeType > .runeButtonAvailable {
@@ -1918,7 +1938,6 @@ nav li:hover {
 #wowCubeSidebar {
     display: flex;
     flex-direction: column;
-    margin-right: 10px;
     text-align: center;
 }
 
@@ -1926,7 +1945,7 @@ nav li:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .cubeSwitchTabBtn {
@@ -2042,11 +2061,7 @@ p[id$="BlessingsTotal"] {
     flex-direction: column;
     align-items: center;
     width: 700px;
-    margin-left: 20px;
-}
-
-#cubeTab7 {
-    margin-left: 60px;
+    margin-left: 30px;
 }
 
 #cubeTab5Wrapper {
@@ -2088,12 +2103,16 @@ p[id$="BlessingsTotal"] {
 #cubeTab5Wrapper button {
     text-align: center;
     color: white;
-    border: 2px solid pink;
     height: 30px;
 }
 
-#toggleCubeBuy {
-    width: 200px;
+#toggleAutoOpenCubes,
+#toggleTesseractBAB {
+    width: 250px;
+    text-align: center;
+    color: white;
+    height: 30px;
+    margin: 3px;
 }
 
 #toggleCubeAutoBuy {
@@ -2393,6 +2412,10 @@ p[id$="BlessingsTotal"] {
 }
 .historySubTab tbody .history-gain:last-child { margin-right: 0; }
 
+.historySubTab tbody tr:nth-child(even) {
+    background: #111;
+}
+
 .historySubTab tbody tr:nth-child(odd) {
     background: #262626;
 }
@@ -2483,7 +2506,7 @@ p[id$="BlessingsTotal"] {
 }
 
 .runeTexts {
-    width: 175px;
+    width: 185px;
 }
 
 .runeButtons {
@@ -2507,7 +2530,7 @@ p[id$="BlessingsTotal"] {
 
 #buyRuneBlessingInput {
     width: 100px;
-    border: 2px solid crimson;
+    border: 2px solid white;
     margin-right: 20px;
     background-color: #171717;
     text-align: center;
@@ -2517,7 +2540,7 @@ p[id$="BlessingsTotal"] {
 
 #buyRuneSpiritInput {
     width: 100px;
-    border: 2px solid orange;
+    border: 2px solid orchid;
     margin-right: 20px;
     background-color: #171717;
     text-align: center;
@@ -2593,7 +2616,15 @@ p[id$="BlessingsTotal"] {
 }
 
 #ascensionAmount {
-    width: 150px;
+    width: 100px;
+    border: 1px solid red;
+    color: white;
+    background-color: #171717;
+    text-align: center;
+}
+
+#ascensionamount {
+    width: 100px;
     border: 1px solid orange;
     color: white;
     background-color: #171717;
@@ -2978,7 +3009,6 @@ header #obtainiumDisplay {
     display: grid;
     grid-template-columns: repeat(4, 180px);
     margin-top: 10px;
-    margin-left: 100px;
     padding: 8px;
     width: calc(180px * 4 + 45px);
     border: 3px solid plum;
@@ -2986,6 +3016,7 @@ header #obtainiumDisplay {
     grid-row: 1;
     grid-column-gap: 15px;
     grid-row-gap: 15px;
+    align-self: flex-start;
 }
 
 .hepteractGrid > div {
@@ -3083,6 +3114,7 @@ header #obtainiumDisplay {
     justify-content: center;
     text-align: center;
     margin-bottom: auto;
+    align-self: flex-start;
 }
 
 #hepteractCraftTexts > p {
