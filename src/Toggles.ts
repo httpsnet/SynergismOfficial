@@ -8,7 +8,7 @@ import { reset, resetrepeat } from './Reset';
 import { achievementaward } from './Achievements';
 import { getChallengeConditions } from './Challenges';
 import { loadStatisticsCubeMultipliers, loadStatisticsOfferingMultipliers, loadStatisticsAccelerator, loadStatisticsMultiplier, loadPowderMultiplier, c15RewardUpdate } from './Statistics';
-import { corruptionDisplay, corruptionLoadoutTableUpdate, maxCorruptionLevel } from './Corruptions';
+import { corruptionDisplay, corruptionLoadoutTableUpdate, maxCorruptionLevel, corruptionStatsUpdate } from './Corruptions';
 import type { BuildingSubtab, Player } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 
@@ -73,7 +73,7 @@ export const toggleTabs = (name: keyof typeof tabNumberConst) => {
             }
         }
     }
-    if (subTabList[player.subtabNumber].buttonID === "switchCubeSubTab6") {
+    if (subTabList[player.subtabNumber] && subTabList[player.subtabNumber].buttonID === "switchCubeSubTab6") {
         // Call the function when the tab is opened. Used for HTML updates
         void c15RewardUpdate();
     }
@@ -132,6 +132,10 @@ export const toggleChallenges = (i: number, auto = false) => {
 
     if (!auto && player.autoChallengeRunning) {
         toggleAutoChallengeRun();
+    }
+
+    if (!auto) {
+        corruptionStatsUpdate();
     }
 
     if (player.currentChallenge.transcension !== 0 && player.currentChallenge.reincarnation !== 0 && player.currentChallenge.ascension !== 0 && player.achievements[238] < 1) {
@@ -368,7 +372,7 @@ export const toggleautoreset = (i: number) => {
             DOMCacheGetOrSet("reincarnateautotoggle").textContent = "Mode: AMOUNT"
         }
     } else if (i === 4) {
-        // To be ascend toggle
+        player.autoAscendMode = "c10Completions";
     }
 }
 
@@ -716,19 +720,29 @@ export const toggleAntAutoSacrifice = (mode = 0) => {
 }
 
 export const toggleMaxBuyCube = () => {
-    const el = DOMCacheGetOrSet("toggleCubeBuy")
-    if (player.buyMaxCubeUpgrades) {
-        player.buyMaxCubeUpgrades = false;
-        el.textContent = "Upgrade: 1 Level wow"
-    } else {
-        player.buyMaxCubeUpgrades = true;
-        el.textContent = "Upgrade: MAX [if possible wow]"
-    }
+    player.buyMaxCubeUpgrades = !player.buyMaxCubeUpgrades;
+    DOMCacheGetOrSet("toggleCubeBuy").textContent ? "Upgrade: MAX [if possible wow]" : "Upgrade: 1 Level wow";
 }
 
 export const toggleAutoBuyCube = () => {
+    const el = DOMCacheGetOrSet("toggleCubeAutoBuy");
     player.buyAutoCubeUpgrades = !player.buyAutoCubeUpgrades;
-    DOMCacheGetOrSet("toggleCubeAutoBuy").textContent = player.buyAutoCubeUpgrades ? "Automatic: ON" : "Automatic: OFF";
+    el.textContent = player.buyAutoCubeUpgrades ? "Automatic: ON" : "Automatic: OFF";
+    el.style.border = player.buyAutoCubeUpgrades ? "2px solid green" : "2px solid red";
+}
+
+export const toggleAutoOpenCubes = () => {
+    const el = DOMCacheGetOrSet("toggleAutoOpenCubes");
+    player.autoOpenCubes = !player.autoOpenCubes;
+    el.textContent = player.autoOpenCubes ? "Auto Open Cubes: ON" : "Auto Open Cubes: Off";
+    el.style.border = player.autoOpenCubes ? "2px solid green" : "2px solid red";
+}
+
+export const toggleTesseractBAB = () => {
+    const el = DOMCacheGetOrSet("toggleTesseractBAB");
+    player.tesseractAutoBuyer = !player.tesseractAutoBuyer;
+    el.textContent = player.tesseractAutoBuyer ? "Tesseract Buildings Auto Buy: ON" : "Tesseract Buildings Auto Buy: Off";
+    el.style.border = player.tesseractAutoBuyer ? "2px solid green" : "2px solid red";
 }
 
 export const toggleCubeSubTab = (i: number) => {

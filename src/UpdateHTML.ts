@@ -376,6 +376,8 @@ export const revealStuff = () => {
     DOMCacheGetOrSet("ascHepteractStats").style.display = player.achievements[255] > 0 ? "" : "none";
 
     DOMCacheGetOrSet("toggleCubeAutoBuy").style.display = player.singularityCount > 0 ? "" : "none";
+    DOMCacheGetOrSet("toggleAutoOpenCubes").style.display = player.achievements[218] > 0 && player.singularityCount > 0 ? "" : "none";
+    DOMCacheGetOrSet("toggleTesseractBAB").style.display = player.achievements[218] > 0 && player.singularityCount > 0 ? "" : "none";
 
     //I'll clean this up later. Note to 2019 Platonic: Fuck you
     // note to 2019 and 2020 Platonic, you're welcome

@@ -21,7 +21,7 @@ export const getMaxChallenges = (i: number) => {
         }
         //Singularity Challenge
         if (player.runelevels[6] > 0 && player.singularityCount > 0) {
-            maxChallenge += player.singularityUpgrades.singChallenge.level * 150;
+            maxChallenge += player.singularityUpgrades.singChallenge.level * 300;
         }
         return maxChallenge
     }
@@ -47,7 +47,7 @@ export const getMaxChallenges = (i: number) => {
         }
         //Singularity Challenge
         if (player.runelevels[6] > 0 && player.singularityCount > 0) {
-            maxChallenge += player.singularityUpgrades.singChallenge.level * 2;
+            maxChallenge += player.singularityUpgrades.singChallenge.level * 4;
         }
         return maxChallenge
     }
@@ -73,7 +73,7 @@ export const getMaxChallenges = (i: number) => {
         }
         //Singularity Challenge
         if (player.runelevels[6] > 0 && player.singularityCount > 0) {
-            maxChallenge += player.singularityUpgrades.singChallenge.level;
+            maxChallenge += player.singularityUpgrades.singChallenge.level * 2;
         }
         return maxChallenge
     }
@@ -469,11 +469,17 @@ export const calculateChallengeRequirementMultiplier = (
             }
             return (requirementMultiplier)
         case "reincarnation":
-            if (completions >= 120) {
-                requirementMultiplier *= Math.pow(1.05, completions - 120)
+            if (completions >= 120 && (special === 6 || special === 7 || special === 8)) {
+                requirementMultiplier *= Math.pow(1000, (completions - 120) * Math.max(0.5, 1 - 0.01 * player.shopUpgrades.challengeTome - 0.01 * player.shopUpgrades.challengeTome2) / 20)
+                if (special === 6)
+                    requirementMultiplier *= 0.96
+                else if (special == 7)
+                    requirementMultiplier *= 2.4
+                else
+                    requirementMultiplier *= 20
             }
             if (completions >= 100 && (special === 9 || special === 10)) {
-                requirementMultiplier *= Math.pow(1.05, (completions - 100) * (1 + (completions - 100) / 20))
+                requirementMultiplier *= Math.pow(1.05, completions - 100)
             }
             if (completions >= 90) {
                 if (special === 6)
@@ -507,7 +513,7 @@ export const calculateChallengeRequirementMultiplier = (
             }
             if (completions >= 60){
                 if (special === 9 || special === 10)
-                    requirementMultiplier *= Math.pow(1000, (completions - 60) * (1 - 0.01 * player.shopUpgrades.challengeTome - 0.01 * player.shopUpgrades.challengeTome2) / 10)
+                    requirementMultiplier *= Math.pow(1000, (completions - 60) * Math.max(0.5, 1 - 0.01 * player.shopUpgrades.challengeTome - 0.01 * player.shopUpgrades.challengeTome2) / 10)
             }
             if (completions >= 25){
                 requirementMultiplier *= Math.pow(1 + completions, 5) / 625
@@ -562,11 +568,11 @@ export const challengeRequirement = (challenge: number, completion: number, spec
         if (challenge === 10) {
             c10Reduction = (1e8 * (player.researches[140] + player.researches[155] + player.researches[170] + player.researches[185]) + 2e7 * (player.shopUpgrades.challengeTome + player.shopUpgrades.challengeTome2))
         }
-        return Decimal.pow(10, (base - c10Reduction) * calculateChallengeRequirementMultiplier('reincarnation', completion, special))
+        return Decimal.pow(10, (base - Math.min(base / 4, c10Reduction)) * calculateChallengeRequirementMultiplier('reincarnation', completion, special))
     } else if (challenge <= 14) {
         return calculateChallengeRequirementMultiplier("ascension", completion, special)
     } else if (challenge === 15) {
-        return Decimal.pow(10, 1 * 1e160 * calculateChallengeRequirementMultiplier("ascension", completion, special))
+        return Decimal.pow(10, 1 * Math.pow(10, 24) * calculateChallengeRequirementMultiplier("ascension", completion, special))
     }
     else {
         return 0

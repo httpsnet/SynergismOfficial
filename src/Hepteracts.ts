@@ -115,6 +115,13 @@ export class HepteractCraft {
         // Get the smallest of the array we created
         const smallestItemLimit = Math.min(...itemLimits)
 
+        if (Number.isNaN(player.wowAbyssals) || !Number.isFinite(player.wowAbyssals))
+            player.wowAbyssals = 0;
+
+        // Return if the material is not a calculable number
+        if (Number.isNaN(smallestItemLimit) || !Number.isFinite(smallestItemLimit))
+            return Alert('Sorry, Execution failed because the material could not be calculated.');
+
         // Get the smallest of hepteract limit, limit found above and specified input
         const amountToCraft = Math.min(smallestItemLimit, hepteractLimit, craftAmount, this.CAP - this.BAL)
         if (max) {
@@ -174,6 +181,10 @@ export class HepteractCraft {
         // Empties inventory in exchange for doubling maximum capacity.
         this.BAL = 0
         this.CAP *= Math.min(1048576, Math.pow(2, 1 + player.singularityUpgrades.singCraftExpand.level));
+
+        if (this.CAP > 1e300)
+            this.CAP = 1e300;
+
         return Alert('Successfully expanded your inventory. You can now fit ' + format(this.CAP, 0, true) + '.');
     }
 
@@ -361,7 +372,7 @@ export const tradeHepteractToOverfluxOrb = async () => {
     
     const buyAmount = Math.min(maxBuy, toUse)
     const beforeEffect = calculateCubeQuarkMultiplier();
-    player.overfluxOrbs += buyAmount
+    player.overfluxOrbs = Math.min(1e300, player.overfluxOrbs + buyAmount)
     player.wowAbyssals -= 250000 * buyAmount
     const afterEffect = calculateCubeQuarkMultiplier();
 
@@ -379,7 +390,7 @@ export const overfluxPowderDescription = () => {
     DOMCacheGetOrSet('hepteractUnlockedText').style.display = 'none'
     DOMCacheGetOrSet('hepteractCurrentEffectText').textContent = "Powder effect: " + powderEffectText
     DOMCacheGetOrSet('hepteractBalanceText').textContent = 'You have ' + format(player.overfluxPowder, 2, true) + ' lumps of Overflux Powder.'
-    DOMCacheGetOrSet('hepteractEffectText').textContent = `Expired Overflux Orbs become powder at a rate of ${format(1 / calculatePowderConversion().mult, 1, true)} Orbs per powder lump!`
+    DOMCacheGetOrSet('hepteractEffectText').textContent = 1 / calculatePowderConversion().mult > 1 ? `Expired Overflux Orbs become powder at a rate of ${format(1 / calculatePowderConversion().mult, 2, true)} Orbs per powder lump!` : `Expired Overflux Orbs become powder at a rate of ${format(calculatePowderConversion().mult, 2, true)} powder lump per Orbs!`
     DOMCacheGetOrSet('hepteractCostText').style.display = 'none'
 
     DOMCacheGetOrSet('powderDayWarpText').style.display = 'block'

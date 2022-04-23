@@ -116,30 +116,32 @@ export const buyTalismanResources = (type: keyof typeof talismanResourceCosts, p
     const talismanResourcesData = getTalismanResourceInfo(type, percentage)
 
     if (talismanResourcesData.canBuy) {
-        if (type === 'shard') {
-            player.talismanShards += talismanResourcesData.buyAmount
-        } else {
-            player[`${type}s` as const] += talismanResourcesData.buyAmount
-        }
-        if (type === 'mythicalFragment' && player.mythicalFragments >= 1e25 && player.achievements[239] < 1) {
-            achievementaward(239)
-        }
+        if ((player.talismanShards + talismanResourcesData.buyAmount).toString() !== player.talismanShards.toString()) {
+            if (type === 'shard') {
+                player.talismanShards += talismanResourcesData.buyAmount
+            } else {
+                player[`${type}s` as const] += talismanResourcesData.buyAmount
+            }
+            if (type === 'mythicalFragment' && player.mythicalFragments >= 1e25 && player.achievements[239] < 1) {
+                achievementaward(239)
+            }
 
-        player.researchPoints -= talismanResourcesData.obtainiumCost;
-        player.runeshards -= talismanResourcesData.offeringCost;
+            player.researchPoints -= talismanResourcesData.obtainiumCost;
+            player.runeshards -= talismanResourcesData.offeringCost;
 
-        // When dealing with high values, calculations can be very slightly off due to floating point precision
-        // and result in buying slightly (usually 1) more than the player can actually afford.
-        // This results in negative obtainium or offerings with further calcs somehow resulting in NaN/undefined.
-        // Instead of trying to work around floating point limits, just make sure nothing breaks as a result.
-        // The calculation being done overall is similar to the following calculation:
-        // 2.9992198253874083e47 - (Math.floor(2.9992198253874083e47 / 1e20) * 1e20)
-        // which, for most values, returns 0, but values like this example will return a negative number instead.
-        if (player.researchPoints < 0) {
-            player.researchPoints = 0;
-        }
-        if (player.runeshards < 0) {
-            player.runeshards = 0;
+            // When dealing with high values, calculations can be very slightly off due to floating point precision
+            // and result in buying slightly (usually 1) more than the player can actually afford.
+            // This results in negative obtainium or offerings with further calcs somehow resulting in NaN/undefined.
+            // Instead of trying to work around floating point limits, just make sure nothing breaks as a result.
+            // The calculation being done overall is similar to the following calculation:
+            // 2.9992198253874083e47 - (Math.floor(2.9992198253874083e47 / 1e20) * 1e20)
+            // which, for most values, returns 0, but values like this example will return a negative number instead.
+            if (player.researchPoints < 0) {
+                player.researchPoints = 0;
+            }
+            if (player.runeshards < 0) {
+                player.runeshards = 0;
+            }
         }
     }
     updateTalismanCostDisplay(type, percentage)
@@ -429,6 +431,9 @@ export const updateTalismanAppearance = (i: number) => {
 // Attempt to buy a fixed number of levels (number varies based on
 // ascension). Returns true if any levels were bought, false otherwise.
 export const buyTalismanLevels = (i: number, auto = false): boolean => {
+    if (player.talismanLevels[i] >= calculateMaxTalismanLevel(i)) {
+        return false;
+    }
     let max = 1;
     if (player.ascensionCount > 0) {
         max = 30

@@ -1,4 +1,4 @@
-import { toggleAscStatPerSecond, toggleTabs, toggleSubTab, toggleBuyAmount, toggleAutoTesseracts, toggleSettings, toggleautoreset, toggleautobuytesseract, toggleShops, toggleAutoSacrifice, toggleautoenhance, toggleautofortify, updateRuneBlessingBuyAmount, toggleChallenges, toggleAutoChallengesIgnore, toggleAutoChallengeRun, updateAutoChallenge, toggleResearchBuy, toggleAutoResearch, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleMaxBuyCube, toggleAutoBuyCube, toggleCorruptionLevel, toggleAutoAscend, toggleShopConfirmation, toggleAutoResearchMode, toggleBuyMaxShop } from "./Toggles"
+import { toggleAscStatPerSecond, toggleTabs, toggleSubTab, toggleBuyAmount, toggleAutoTesseracts, toggleSettings, toggleautoreset, toggleautobuytesseract, toggleShops, toggleAutoSacrifice, toggleautoenhance, toggleautofortify, updateRuneBlessingBuyAmount, toggleChallenges, toggleAutoChallengesIgnore, toggleAutoChallengeRun, updateAutoChallenge, toggleResearchBuy, toggleAutoResearch, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleMaxBuyCube, toggleAutoBuyCube, toggleAutoOpenCubes, toggleTesseractBAB, toggleCorruptionLevel, toggleAutoAscend, toggleShopConfirmation, toggleAutoResearchMode, toggleBuyMaxShop } from "./Toggles"
 import { resetrepeat, updateAutoReset, updateTesseractAutoBuyAmount } from "./Reset"
 import { player, resetCheck, saveSynergy } from "./Synergism"
 import { boostAccelerator, buyAccelerator, buyMultiplier, buyProducer, buyCrystalUpgrades, buyParticleBuilding, buyTesseractBuilding, buyUpgrades, buyRuneBonusLevels, buyAllBlessings } from "./Buy"
@@ -209,6 +209,7 @@ export const generateEventHandlers = () => {
     DOMCacheGetOrSet("reincarnationamount").addEventListener('blur', () => updateAutoReset(3))
     DOMCacheGetOrSet("ascensionAmount").addEventListener('blur', () => updateAutoReset(4))
     DOMCacheGetOrSet("autoAntSacrificeAmount").addEventListener('blur', () => updateAutoReset(5))
+    DOMCacheGetOrSet("ascensionamount").addEventListener('blur', () => updateAutoReset(6))
     // Tesseract-specific of the above. I don't know why I didn't standardize names here.
     DOMCacheGetOrSet("tesseractautobuytoggle").addEventListener('click', () => toggleautobuytesseract())
     DOMCacheGetOrSet("tesseractAmount").addEventListener('blur', () => updateTesseractAutoBuyAmount())
@@ -432,9 +433,11 @@ for (let index = 1; index <= 12; index++) {
         DOMCacheGetOrSet(`cubeUpg${index+1}`).addEventListener('click', () => buyCubeUpgrades(index+1))
     }
 
-    // Toggle
+// v3.0.0 Toggles
     DOMCacheGetOrSet('toggleCubeBuy').addEventListener('click', () => toggleMaxBuyCube())
     DOMCacheGetOrSet('toggleCubeAutoBuy').addEventListener('click', () => toggleAutoBuyCube())
+    DOMCacheGetOrSet('toggleAutoOpenCubes').addEventListener('click', () => toggleAutoOpenCubes())
+    DOMCacheGetOrSet('toggleTesseractBAB').addEventListener('click', () => toggleTesseractBAB())
 
 //Part 2: Cube Opening Buttons
     //Wow Cubes
