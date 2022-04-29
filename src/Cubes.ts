@@ -85,12 +85,12 @@ const cubeUpgradeName = [
     "Wow! A box of Perfect Cookies."
 ]
 
-const cubeAutomationIndices = [4, 5, 6, 7, 8, 9, 10, // row 1 
+export const cubeAutomationIndices = [4, 5, 6, 7, 8, 9, 10, // row 1 
                            20,                   // row 2
                            26, 27,               // row 3
                            48, 49]               // row 5
 
-const researchAutomationIndices = [41, 42, 43, 44, 45, 46, 47, 48, 49, 50, // row 2
+export const researchAutomationIndices = [41, 42, 43, 44, 45, 46, 47, 48, 49, 50, // row 2
                                    61, 71, 72, 73, 74, 75, // row 3
                                    124,                    // row 5
                                    130, 135, 145, 150,     // row 6
@@ -215,7 +215,7 @@ const getCubeCost = (i: number): IMultiBuy => {
     return metaData
 }
 
-const getCubeMax = (i: number) => {
+export const getCubeMax = (i: number) => {
     let baseValue = cubeMaxLevel[i-1];
 
     if (player.cubeUpgrades[57] > 0 && i < 50 && i % 10 === 1) {
@@ -272,8 +272,8 @@ export const updateCubeUpgradeBG = (i: number) => {
 
 }
 
-function awardAutosCookieUpgrade() {
-    for (const i of cubeAutomationIndices) {
+export const awardAutosCookieUpgrade = () => {
+    for (const i of cubeAutomationIndices.values()) {
         const maxLevel = getCubeMax(i)
         player.cubeUpgrades[i] = maxLevel;
         updateCubeUpgradeBG(i);
@@ -281,7 +281,7 @@ function awardAutosCookieUpgrade() {
 
     calculateCubeBlessings();
 
-    for (const i of researchAutomationIndices) {
+    for (const i of researchAutomationIndices.values()) {
         player.researches[i] = G['researchMaxLevels'][i];
         updateResearchBG(i);
     }
@@ -321,7 +321,7 @@ export const buyCubeUpgrades = (i: number) => {
 }
 
 export const autoBuyCubeUpgrades = () => {
-    if(player.buyAutoCubeUpgrades && player.singularityCount > 0) {
+    if(player.buyAutoCubeUpgrades && player.achievements[218] > 0 && player.singularityCount > 0) {
         const cheapet = [];
 
         const buyMaxCubeUpgrades = player.buyMaxCubeUpgrades;

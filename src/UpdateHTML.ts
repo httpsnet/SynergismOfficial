@@ -192,12 +192,22 @@ export const revealStuff = () => {
         ex.style.display = player.challenge15Exponent >= 1e15 ? "block" : "none";
     }
 
+    const example33 = document.getElementsByClassName("chal9x1ants") as HTMLCollectionOf<HTMLElement>;
+    for (let i = 0; i < example33.length; i++) {
+        player.highestchallengecompletions[9] > 0 ? example33[i].style.display = "inline" : example33[i].style.display = "none"
+    }
+
     const singularityHTMLs = document.getElementsByClassName("singularity") as HTMLCollectionOf<HTMLElement>;
     for (const HTML of Array.from(singularityHTMLs)) { // Ability to view singularity features.
         HTML.style.display = player.singularityCount > 0 ? "block" : "none";
     }
     const hepts = DOMCacheGetOrSet("corruptionHepteracts");
     hepts.style.display = (player.achievements[255] > 0) ? "block" : "none";
+
+    const hepteractCrafts = Object.keys(player.hepteractCrafts) as (keyof Player['hepteractCrafts'])[];
+    for (const key of hepteractCrafts) {
+        DOMCacheGetOrSet(`${key}HepteractImage`).style.backgroundColor = player.hepteractCrafts[key].UNLOCKED ? "black" : "maroon";
+    }
 
     const singularityUpgrades = Object.keys(player.singularityUpgrades) as (keyof Player['singularityUpgrades'])[];
     for (const key of singularityUpgrades) {
@@ -375,7 +385,7 @@ export const revealStuff = () => {
     DOMCacheGetOrSet("ascPlatonicStats").style.display = player.challengecompletions[14] > 0 ? "" : "none";
     DOMCacheGetOrSet("ascHepteractStats").style.display = player.achievements[255] > 0 ? "" : "none";
 
-    DOMCacheGetOrSet("toggleCubeAutoBuy").style.display = player.singularityCount > 0 ? "" : "none";
+    DOMCacheGetOrSet("toggleCubeAutoBuy").style.display = player.achievements[197] > 0 && player.singularityCount > 0 ? "" : "none";
     DOMCacheGetOrSet("toggleAutoOpenCubes").style.display = player.achievements[218] > 0 && player.singularityCount > 0 ? "" : "none";
     DOMCacheGetOrSet("toggleTesseractBAB").style.display = player.achievements[218] > 0 && player.singularityCount > 0 ? "" : "none";
 
@@ -489,7 +499,7 @@ export const hideStuff = () => {
         DOMCacheGetOrSet("statistics").style.display = "block"
         DOMCacheGetOrSet("achievementstab").style.backgroundColor = "white"
         DOMCacheGetOrSet("achievementstab").style.color = "black"
-        DOMCacheGetOrSet("achievementprogress").textContent = "Achievement Points: " + player.achievementPoints + "/" + totalachievementpoints + " [" + (100 * player.achievementPoints / totalachievementpoints).toPrecision(4) + "%]"
+        DOMCacheGetOrSet("achievementprogress").textContent = "Achievement Points: " + format(player.achievementPoints, 0, true) + "/" + format(totalachievementpoints, 0, true) + " [" + (100 * player.achievementPoints / totalachievementpoints).toPrecision(4) + "%]"
     }
     if (G['currentTab'] === "runes") {
         DOMCacheGetOrSet("runes").style.display = "block"
@@ -898,14 +908,13 @@ export const changeTabColor = () => {
 
 const ConfirmCB = (text: string, cb: (value: boolean) => void) => {
     const conf = DOMCacheGetOrSet('confirmationBox');
-    const confWrap = DOMCacheGetOrSet('confirmWrapper');
     const popup = document.querySelector<HTMLElement>('#confirm')!;
     const overlay = document.querySelector<HTMLElement>('#transparentBG')!;
     const ok = popup.querySelector<HTMLElement>('#ok_confirm')!;
     const cancel = popup.querySelector<HTMLElement>('#cancel_confirm')!;
     
-    conf.style.display = 'block';
-    confWrap.style.display = 'block';
+    conf.style.display = 'flex';
+    popup.style.display = 'flex';
     overlay.style.display = 'block';
     popup.querySelector('p')!.textContent = text;
     popup.focus();
@@ -918,7 +927,7 @@ const ConfirmCB = (text: string, cb: (value: boolean) => void) => {
         popup.removeEventListener('keyup', kbListener);
 
         conf.style.display = 'none';
-        confWrap.style.display = 'none';
+        popup.style.display = 'none';
         overlay.style.display = 'none';
 
         if (targetEl === ok) cb(true);
@@ -942,13 +951,12 @@ const ConfirmCB = (text: string, cb: (value: boolean) => void) => {
 
 const AlertCB = (text: string, cb: (value: undefined) => void) => {
     const conf = DOMCacheGetOrSet('confirmationBox');
-    const alertWrap = DOMCacheGetOrSet('alertWrapper');
     const overlay = document.querySelector<HTMLElement>('#transparentBG')!;
     const popup = document.querySelector<HTMLElement>('#alert')!;
     const ok = popup.querySelector<HTMLElement>('#ok_alert')!;
     
-    conf.style.display = 'block';
-    alertWrap.style.display = 'block';
+    conf.style.display = 'flex';
+    popup.style.display = 'flex';
     overlay.style.display = 'block';
     popup.querySelector('p')!.textContent = text;
     popup.focus();
@@ -958,7 +966,7 @@ const AlertCB = (text: string, cb: (value: undefined) => void) => {
         popup.removeEventListener('keyup', kbListener);
         
         conf.style.display = 'none';
-        alertWrap.style.display = 'none';
+        popup.style.display = 'none';
         overlay.style.display = 'none';
         cb(undefined);
     }
@@ -969,37 +977,37 @@ const AlertCB = (text: string, cb: (value: undefined) => void) => {
     popup.addEventListener('keyup', kbListener);
 } 
 
-export const PromptCB = (text: string, cb: (value: string | null) => void) => {
+export const PromptCB = (text: string, value2: string, cb: (value: string | null) => void) => {
     const conf = DOMCacheGetOrSet('confirmationBox');
-    const confWrap = DOMCacheGetOrSet('promptWrapper');
     const overlay = document.querySelector<HTMLElement>('#transparentBG')!;
     const popup = document.querySelector<HTMLElement>('#prompt')!;
     const ok = popup.querySelector<HTMLElement>('#ok_prompt')!;
     const cancel = popup.querySelector<HTMLElement>('#cancel_prompt')!;
-    
-    conf.style.display = 'block';
-    confWrap.style.display = 'block';
+    const input = popup.querySelector<HTMLElement>('input')!;
+
+    conf.style.display = 'flex';
+    popup.style.display = 'flex';
     overlay.style.display = 'block';
-    popup.querySelector('label')!.textContent = text;
-    popup.querySelector('input')!.focus();
+    popup.querySelector('p')!.textContent = text;
+    input.focus();
+    input.value = input.textContent = value2;
+    setTimeout(() => input.value = input.textContent = value2, 10); // Delete hotkey input
 
     // kinda disgusting types but whatever
     const listener = ({ target }: MouseEvent | { target: HTMLElement }) => {
         const targetEl = target as HTMLButtonElement;
-        const el = targetEl.parentNode!.querySelector('input')!;
 
         ok.removeEventListener('click', listener);
         cancel.removeEventListener('click', listener);
         popup.querySelector('input')!.removeEventListener('keyup', kbListener);
 
         conf.style.display = 'none';
-        confWrap.style.display = 'none';
+        popup.style.display = 'none';
         overlay.style.display = 'none';
         
-        if (targetEl.id === ok.id) cb(el.value);
+        if (targetEl.id === ok.id) cb(input.value);
         else cb(null); // canceled 
-
-        el.value = el.textContent = '';
+        input.value = input.textContent = '';
     }
 
     const kbListener = (e: KeyboardEvent) => {
@@ -1028,7 +1036,6 @@ const NotificationCB = (text: string, time = 30000, cb: () => void) => {
     notification.classList.add('slide-in');
 
     const close = () => {
-        setTimeout(() => textNode.textContent = '', 1000);
         notification.classList.add('slide-out');
         notification.classList.remove('slide-in');
 
@@ -1046,7 +1053,7 @@ const NotificationCB = (text: string, time = 30000, cb: () => void) => {
 export const Alert = (text: string): Promise<undefined> => new Promise(res => AlertCB(text, res));
 /*** Promisified version of the PromptCB function. */
 // eslint-disable-next-line no-promise-executor-return
-export const Prompt = (text: string): Promise<string | null> => new Promise(res => PromptCB(text, res));
+export const Prompt = (text: string, value = ''): Promise<string | null> => new Promise(res => PromptCB(text, value, res));
 /*** Promisified version of the ConfirmCB function */
 // eslint-disable-next-line no-promise-executor-return
 export const Confirm = (text: string): Promise<boolean> => new Promise(res => ConfirmCB(text, res));

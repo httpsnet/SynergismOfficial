@@ -8,7 +8,7 @@ import { CalcECC, getChallengeConditions, challengeDisplay, highestChallengeRewa
 import type { OneToFive, Player, resetNames, ZeroToFour } from './types/Synergism';
 import { upgradeupdate, getConstUpgradeMetadata, buyConstantUpgrades, ascendBuildingDR } from './Upgrades';
 import { updateResearchBG, maxRoombaResearchIndex, buyResearch } from './Research';
-import { updateChallengeDisplay, revealStuff, showCorruptionStatsLoadouts, CSSAscend, updateAchievementBG, updateChallengeLevel, buttoncolorchange, htmlInserts, hideStuff, changeTabColor, Confirm, Alert, Prompt } from './UpdateHTML';
+import { updateChallengeDisplay, revealStuff, showCorruptionStatsLoadouts, CSSAscend, updateAchievementBG, updateChallengeLevel, buttoncolorchange, htmlInserts, hideStuff, changeTabColor, Confirm, Alert, Prompt, Notification } from './UpdateHTML';
 import { calculateHypercubeBlessings } from './Hypercubes';
 import { calculateTesseractBlessings } from './Tesseracts';
 import { calculateCubeBlessings, calculateObtainium, calculateAnts, calculateRuneLevels, calculateOffline, calculateSigmoidExponential, calculateCorruptionPoints, calculateTotalCoinOwned, calculateTotalAcceleratorBoost, dailyResetCheck, calculateOfferings, calculateAcceleratorMultiplier, calculateTimeAcceleration, eventCheck, exitOffline, calculateOfflineTimer } from './Calculate';
@@ -25,7 +25,7 @@ import { buyMax, buyAccelerator, buyMultiplier, boostAccelerator, buyCrystalUpgr
 import { autoUpgrades } from './Automation';
 import { redeemShards } from './Runes';
 import { updateCubeUpgradeBG } from './Cubes';
-import { corruptionLoadoutTableUpdate, corruptionButtonsAdd, corruptionLoadoutTableCreate, corruptionStatsUpdate, updateCorruptionLoadoutNames } from './Corruptions';
+import { corruptionLoadoutTableUpdate, corruptionButtonsAdd, corruptionLoadoutTableCreate, corruptionStatsUpdate, updateCorruptionLoadoutNames, corruptionLoadoutSaveLoad } from './Corruptions';
 import { generateEventHandlers } from './EventListeners';
 import { addTimers, automaticTools } from './Helper';
 //import { LegacyShopUpgrades } from './types/LegacySynergism';
@@ -34,8 +34,7 @@ import { checkVariablesOnLoad } from './CheckVariables';
 import { AbyssHepteract, AcceleratorBoostHepteract, AcceleratorHepteract, ChallengeHepteract, ChronosHepteract, hepteractEffective, HyperrealismHepteract, MultiplierHepteract, QuarkHepteract } from './Hepteracts';
 import { QuarkHandler } from './Quark';
 import { WowCubes, WowHypercubes, WowPlatonicCubes, WowTesseracts } from './CubeExperimental';
-import './Hotkeys';
-import { startHotkeys } from './Hotkeys';
+import { changeHotkeys } from './Hotkeys';
 import { updatePlatonicUpgradeBG } from './Platonic';
 import { testing, version, lastUpdated } from './Config';
 import { DOMCacheGetOrSet } from './Cache/DOM';
@@ -675,6 +674,8 @@ export const player: Player = {
     shopExpandCount: 0,
     singsing: 0,
     theme: 0,
+    lastCode: '',
+    hotkeys: {},
 
     singularityUpgrades: {
         goldenQuarks1: new SingularityUpgrade(singularityData['goldenQuarks1']),
@@ -1106,8 +1107,10 @@ const loadSynergy = async () => {
         }
 
         checkVariablesOnLoad(data)
-        if (data.ascensionCount === undefined || player.ascensionCount === 0) {
-            player.ascensionCount = 0;
+        if (data.ascensionCount === undefined || player.ascensionCount === 0 || player.ascensionCounter === -1) {
+            if (data.ascensionCount === undefined) {
+                player.ascensionCount = 0;
+            }
             if (player.ascensionCounter === 0 && player.prestigeCount > 0) {
                 player.ascensionCounter = 86400 * 90;
             }
@@ -1123,6 +1126,7 @@ const loadSynergy = async () => {
             player.wowCubes = new WowCubes(0);
             player.wowTesseracts = new WowTesseracts(0);
             player.wowHypercubes = new WowHypercubes(0);
+            player.wowPlatonicCubes = new WowPlatonicCubes(0);
             player.cubeBlessings = {
                 accelerator: 0,
                 multiplier: 0,
@@ -1267,8 +1271,8 @@ const loadSynergy = async () => {
         for (let j = 1; j < player.cubeUpgrades.length; j++) {
             updateCubeUpgradeBG(j);
         }
-        const platUpg = document.querySelectorAll('img[id^="platUpg"]');
-        for (let j = 1; j <= platUpg.length; j++) {
+        const platonicUpgrades = document.getElementsByClassName('platonicUpgradeImage');
+        for (let j = 1; j <= platonicUpgrades.length; j++) {
             updatePlatonicUpgradeBG(j);
         }
 
@@ -1337,6 +1341,16 @@ const loadSynergy = async () => {
         updateChallengeDisplay();
         revealStuff();
         toggleauto();
+
+        if (player.currentChallenge.transcension > 0) {
+            challengeDisplay(player.currentChallenge.transcension);
+        } else if (player.currentChallenge.reincarnation > 0) {
+            challengeDisplay(player.currentChallenge.reincarnation);
+        } else if (player.currentChallenge.ascension > 0) {
+            challengeDisplay(player.currentChallenge.ascension);
+        } else {
+            challengeDisplay(1);
+        }
 
         DOMCacheGetOrSet("startTimerValue").textContent = format(player.autoChallengeTimer.start, 2, true) + "s"
         getElementById<HTMLInputElement>("startAutoChallengeTimerInput").value = player.autoChallengeTimer.start + '';
@@ -2038,7 +2052,7 @@ export const multipliers = (): void => {
 
     G['buildingPower'] = Math.pow(G['buildingPower'], 1 + player.cubeUpgrades[12] * 0.09)
     G['buildingPower'] = Math.pow(G['buildingPower'], 1 + player.cubeUpgrades[36] * 0.05)
-    G['buildingPower'] *= 1 + player.singularityUpgrades.singMaterialsExponent.level / 10
+    G['buildingPower'] *= 1 + Math.pow(player.singularityUpgrades.singMaterialsExponent.level / 100, 3)
 
     G['reincarnationMultiplier'] = Decimal.pow(G['buildingPower'], G['totalCoinOwned']);
 
@@ -2639,13 +2653,20 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             const reqCheck = (comp: number) => player.coinsThisTranscension.gte(challengeRequirement(q, comp, q));
 
             if (reqCheck(player.challengecompletions[q]) && player.challengecompletions[q] < maxCompletions) {
-                const maxInc = player.shopUpgrades.instantChallenge > 0 && player.currentChallenge.ascension !== 13 ? 1000 : 1; // TODO: Implement the shop upgrade levels here
+                let maxInc = 1;
+                if (player.shopUpgrades.instantChallenge > 0 && player.currentChallenge.ascension !== 13) {
+                    maxInc *= 10;
+                    if (player.achievements[141] > 0) {
+                        maxInc *= 10;
+                        if (player.singularityUpgrades.singChallenge.level > 0) {
+                            maxInc *= 10;
+                        }
+                    }
+                }
                 let counter = 0;
                 let comp = player.challengecompletions[q];
-                while (counter < maxInc) {
-                    if (reqCheck(comp) && comp < maxCompletions) {
-                        comp++;
-                    }
+                while (counter < maxInc && reqCheck(comp) && comp < maxCompletions) {
+                    comp++;
                     counter++;
                 }
                 player.challengecompletions[q] = comp;
@@ -2698,13 +2719,17 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             }
         }
         if (reqCheck(player.challengecompletions[q]) && player.challengecompletions[q] < maxCompletions) {
-            const maxInc = player.shopUpgrades.instantChallenge > 0 && player.currentChallenge.ascension !== 13 ? 10 : 1; // TODO: Implement the shop upgrade levels here
+            let maxInc = 1;
+            if (player.shopUpgrades.instantChallenge > 0 && player.currentChallenge.ascension !== 13) {
+                maxInc *= 10;
+                if (player.singularityUpgrades.singChallenge.level > 0) {
+                    maxInc *= 10;
+                }
+            }
             let counter = 0;
             let comp = player.challengecompletions[q];
-            while (counter < maxInc) {
-                if (reqCheck(comp) && comp < maxCompletions) {
-                    comp++;
-                }
+            while (counter < maxInc && reqCheck(comp) && comp < maxCompletions) {
+                comp++;
                 counter++;
             }
             player.challengecompletions[q] = comp;
@@ -2807,13 +2832,17 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
     }
 
     if (i === 'singularity') {
-        if (player.runelevels[6] === 0) {
+        let sings = player.runelevels[6];
+        if (player.runelevels[6] <= 0) {
             return Alert("Hmph. Please return with an Antiquity. Thank you. -Ant God")
+        }
+        if (player.singularityUpgrades.singWormhole.level <= 0) {
+            sings = 1;
         }
         await Alert("You have reached the end of the game, on singularity #" +format(player.singularityCount)+". Platonic and the Ant God are proud of you.")
         await Alert("You may choose to sit on your laurels, and consider the game 'beaten', or you may do something more interesting.")
         await Alert("You're too powerful for this current universe. The multiverse of Synergism is truly endless, but out there are even more challenging universes parallel to your very own.")
-        await Alert(`Start anew, and enter singularity #${format(player.singularityCount + 1)}. Your next universe is harder than your current one, but unlock a permanent +10% Quark Bonus, +10% Ascension Count Bonus, and Gain ${format(calculateGoldenQuarkGain(), 2, true)} golden quarks, which can purchase game-changing endgame upgrades [Boosted by ${format(player.worlds.BONUS)}% due to patreon bonus!].`)
+        await Alert(`Start anew, and enter singularity #${format(player.singularityCount + sings)}. Your next universe is harder than your current one, but unlock a permanent +10% Quark Bonus, +10% Ascension Count Bonus, and Gain ${format(calculateGoldenQuarkGain(), 2, true)} golden quarks, which can purchase game-changing endgame upgrades [Boosted by ${format(player.worlds.BONUS)}% due to patreon bonus!].`)
         await Alert("However, all your past accomplishments are gone! ALL Challenges, Refundable Shop upgrades, Upgrade Tab, Runes, All Cube upgrades, All Cube Openings, Hepteracts (Except for your Quark Hepteracts), Achievements will be wiped clean.")
         let c1 = false
         let c2 = false
@@ -2822,15 +2851,15 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
         if (c1)
         c2 = await Confirm("Are you sure you wish to enter the Singularity?")
         let gotoSings = 0;
-        if (c2 && player.singularityUpgrades.singWormhole.level > 0){
-            const maxJumps = player.singularityUpgrades.singWormhole.level + 1;
+        if (c2 && sings > 1 && player.singularityUpgrades.singWormhole.level > 0){
+            const maxJumps = sings;
             const amount = await Prompt("Well you can Singularity up to "+format(maxJumps)+" at a time, but that makes the game more difficult!");
             if (!amount)
                 return Alert('Yeah, you finished it');
             gotoSings = Number(amount);
             if (Number.isNaN(gotoSings) || !Number.isFinite(gotoSings))
                 return Alert('Value must be a finite number!');
-            else if (maxJumps < gotoSings)
+            else if (maxJumps < Math.abs(gotoSings))
                 return Alert('You can\'t exceed the maximum input!');
             else if (player.singularityCount + gotoSings < 0)
                 return Alert('Singularity cannot be negative number!');
@@ -2843,10 +2872,10 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             c3 = await Confirm("Are you REALLY SURE? You cannot go back from this (without an older savefile)! Confirm one last time to finalize your decision.")
         if (c3) {
             if (gotoSings !== 0){
-                player.singularityCount += gotoSings;
-                player.singularityCount -= 1; // Disable the addition in singularity()
+                void singularity(gotoSings);
+            } else {
+                void singularity(sings);
             }
-            void singularity();
             return Alert("Welcome to Singularity #" + format(player.singularityCount) + ". You're back to familiar territory, but something doesn't seem right.")
         }
         if (!c1 || !c2)
@@ -3423,86 +3452,97 @@ document.addEventListener('keydown', (event) => {
     const type = types[G['buildingSubTab']];
 
     const key = event.code.replace(/^(Digit|Numpad)/, '').toUpperCase();
-    switch (key) {
-        case "1":
-        case "2":
-        case "3":
-        case "4":
-        case "5": {
-            const num = Number(key) as OneToFive;
-
-            if (G['currentTab'] === "buildings") {
-                if (type === 'Particles') {
-                    buyParticleBuilding(num);
-                } else if (type === 'Tesseracts') {
-                    buyTesseractBuilding(num);
-                } else {
-                    buyMax(num, type);
-                }
-            }
-            if (G['currentTab'] === "runes") {
-                if (G['runescreen'] === "runes") {
-                    redeemShards(num)
-                }
-                if (G['runescreen'] === "blessings") {
-                    buyRuneBonusLevels('Blessings', num)
-                }
-                if (G['runescreen'] === "spirits") {
-                    buyRuneBonusLevels('Spirits', num)
-                }
-            }
-            if (G['currentTab'] === "challenges") {
-                toggleChallenges(num)
-                challengeDisplay(num);
-            }
-            break;
+    if (event.shiftKey) {
+        let num = Number(key) - 1;
+        if (num < 0) {
+            num += 10;
         }
+        if (player.challengecompletions[11] > 0 && !isNaN(num)) {
+            void Notification(`${player.corruptionLoadoutNames[num]} (${num + 1}) used activation.\nIt will be enabled at the next ascension.`, 5000);
+            corruptionLoadoutSaveLoad(false, num);
+        }
+    } else {
+    switch (key) {
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5": {
+                const num = Number(key) as OneToFive;
 
-        case "6":
-            if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
-                buyCrystalUpgrades(1)
+                if (G['currentTab'] === "buildings") {
+                    if (type === 'Particles') {
+                        buyParticleBuilding(num);
+                    } else if (type === 'Tesseracts') {
+                        buyTesseractBuilding(num);
+                    } else {
+                        buyMax(num, type);
+                    }
+                }
+                if (G['currentTab'] === "runes") {
+                    if (G['runescreen'] === "runes") {
+                        redeemShards(num)
+                    }
+                    if (G['runescreen'] === "blessings") {
+                        buyRuneBonusLevels('Blessings', num)
+                    }
+                    if (G['runescreen'] === "spirits") {
+                        buyRuneBonusLevels('Spirits', num)
+                    }
+                }
+                if (G['currentTab'] === "challenges") {
+                    toggleChallenges(num)
+                    challengeDisplay(num);
+                }
+                break;
             }
-            if (G['currentTab'] === "challenges" && player.reincarnationCount > 0) {
-                toggleChallenges(6)
-                challengeDisplay(6);
-            }
-            break;
-        case "7":
-            if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
-                buyCrystalUpgrades(2)
-            }
-            if (G['currentTab'] === "challenges" && player.achievements[113] === 1) {
-                toggleChallenges(7)
-                challengeDisplay(7);
-            }
-            break;
-        case "8":
-            if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
-                buyCrystalUpgrades(3)
-            }
-            if (G['currentTab'] === "challenges" && player.achievements[120] === 1) {
-                toggleChallenges(8)
-                challengeDisplay(8);
-            }
-            break;
-        case "9":
-            if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
-                buyCrystalUpgrades(4)
-            }
-            if (G['currentTab'] === "challenges" && player.achievements[127] === 1) {
-                toggleChallenges(9)
-                challengeDisplay(9);
-            }
-            break;
-        case "0":
-            if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
-                buyCrystalUpgrades(5)
-            }
-            if (G['currentTab'] === "challenges" && player.achievements[134] === 1) {
-                toggleChallenges(10)
-                challengeDisplay(10);
-            }
-            break;
+
+            case "6":
+                if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
+                    buyCrystalUpgrades(1)
+                }
+                if (G['currentTab'] === "challenges" && player.reincarnationCount > 0) {
+                    toggleChallenges(6)
+                    challengeDisplay(6);
+                }
+                break;
+            case "7":
+                if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
+                    buyCrystalUpgrades(2)
+                }
+                if (G['currentTab'] === "challenges" && player.achievements[113] === 1) {
+                    toggleChallenges(7)
+                    challengeDisplay(7);
+                }
+                break;
+            case "8":
+                if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
+                    buyCrystalUpgrades(3)
+                }
+                if (G['currentTab'] === "challenges" && player.achievements[120] === 1) {
+                    toggleChallenges(8)
+                    challengeDisplay(8);
+                }
+                break;
+            case "9":
+                if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
+                    buyCrystalUpgrades(4)
+                }
+                if (G['currentTab'] === "challenges" && player.achievements[127] === 1) {
+                    toggleChallenges(9)
+                    challengeDisplay(9);
+                }
+                break;
+            case "0":
+                if (G['currentTab'] === "buildings" && G['buildingSubTab'] === "diamond") {
+                    buyCrystalUpgrades(5)
+                }
+                if (G['currentTab'] === "challenges" && player.achievements[134] === 1) {
+                    toggleChallenges(10)
+                    challengeDisplay(10);
+                }
+                break;
+        }
     }
 
 });
@@ -3559,11 +3599,16 @@ export const reloadShit = async (reset = false) => {
 
     constantIntervals();
     changeTabColor();
-    startHotkeys();
+    changeHotkeys();
 
     eventCheck();
     interval(() => eventCheck(), 15000);
-    DOMCacheGetOrSet('exitOffline').classList.remove('subtabContent')
+
+    themeUpdate();
+    document.body.classList.remove('nofading');
+    const el = <HTMLButtonElement>DOMCacheGetOrSet("exitOffline")
+    el.classList.remove('subtabContent')
+    el.focus();
 
     if (localStorage.getItem('pleaseStar') === null) {
         void Alert(`Please show your appreciation by giving the GitHub repo a star. ❤️ https://github.com/pseudo-corp/SynergismOfficial`);
