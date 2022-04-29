@@ -180,12 +180,6 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         }
     }
 
-    for (let i = 0; i <= 4; i++) {
-        if (player.runelevels[i] > calculateMaxRunes(i + 1)) {
-            player.runelevels[i] = 0
-        }
-    }
-
     if (data.shopUpgrades.challengeExtension === undefined) {
         player.shopUpgrades.challengeExtension = 0;
         player.shopUpgrades.challengeTome = 0;
@@ -204,10 +198,11 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
     // will overwrite player.toggles keys that exist on both objects,
     // but new keys will default to the values on the player object
     Object.assign(player.toggles, data.toggles);
-    
-    if (data.ascensionCount === 0) {
-        player.toggles[31] = true;
-        player.toggles[32] = true;
+
+    for (const key in blankSave.toggles) {
+        if (player.toggles[key] === undefined) {
+            player.toggles[key] = blankSave.toggles[key];
+        }
     }
 
     if (data.dayCheck === undefined) {
@@ -499,6 +494,11 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         player.ascensionamount = 0
         player.autoOpenCubes = false
         player.tesseractAutoBuyer = false
+        player.lastCode = ''
+    }
+
+    if (data.hotkeys === undefined) {
+        player.hotkeys = {}
     }
 
     // Update (read: check) for undefined shop upgrades. Also checks above max level.
@@ -582,6 +582,13 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                 }
                 player.singularityUpgrades[k] = new SingularityUpgrade(updatedData);
             }
+        }
+    }
+
+    // Beware of errors due to the absence of player.singularityUpgrades.singWormhole by calling data in v2.9.0
+    for (let i = 0; i <= 6; i++) {
+        if (player.runelevels[i] > calculateMaxRunes(i + 1)) {
+            player.runelevels[i] = 0
         }
     }
 

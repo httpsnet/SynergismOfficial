@@ -43,11 +43,11 @@ export const achievementpointvalues = [0,
     20, 40, 40, 60, 60, 100, 100,
     40, 60, 100, 60, 100, 100, 40,
     40, 40, 40, 40, 40, 40, 40,
-    40, 40, 40, 40, 100, 100, 0,
+    40, 40, 40, 40, 100, 100, 125,
     50, 75, 75, 75, 100, 100, 150,
     50, 75, 75, 75, 100, 100, 150,
     50, 75, 75, 75, 100, 100, 150,
-    50, 50, 50, 75, 75, 75, 250
+    0, 0, 0, 0, 0, 0, 0
 ];
 
 export const totalachievementpoints = achievementpointvalues.reduce((a, b) => a + b, 0);
@@ -666,7 +666,8 @@ const challengeCompletionsBar: [number, number, number][] = [
     [7, 0.5, 120], [7, 1.5, 121], [7, 2.5, 122], [7, 4.5, 123], [7, 9.5, 124], [7, 14.5, 125], [7, 24.5, 126],
     [8, 0.5, 127], [8, 1.5, 128], [8, 2.5, 129], [8, 4.5, 130], [8, 9.5, 131], [8, 19.5, 132], [8, 24.5, 133],
     [9, 0.5, 134], [9, 1.5, 135], [9, 2.5, 136], [9, 4.5, 137], [9, 9.5, 138], [9, 19.5, 139], [9, 24.5, 140],
-    [10, 0.5, 141], [10, 1.5, 142], [10, 2.5, 143], [10, 4.5, 144], [10, 9.5, 145], [10, 19.5, 146], [10, 24.5, 147]
+    [10, 0.5, 141], [10, 1.5, 142], [10, 2.5, 143], [10, 4.5, 144], [10, 9.5, 145], [10, 19.5, 146], [10, 24.5, 147], 
+    [15, 0.5, 252]
 ];
 
 const challengeCompletionsNotAuto: Record<number, [string, number]> = {
@@ -816,7 +817,7 @@ export const achievementdescriptions = (i: number) => {
         multiplier = 40
 
     DOMCacheGetOrSet("achievementdescription").textContent = y + z
-    DOMCacheGetOrSet("achievementreward").textContent = "Reward: " + achievementpointvalues[i] + " AP. " + format(achievementpointvalues[i] * multiplier) + " Quarks! " + k
+    DOMCacheGetOrSet("achievementreward").textContent = "Reward: " + format(achievementpointvalues[i], 0, true) + " AP. " + format(achievementpointvalues[i] * multiplier, 0, true) + " Quarks! " + k
     if (player.achievements[i] > 0.5) {
         DOMCacheGetOrSet("achievementdescription").style.color = "gold"
     } else {
@@ -836,7 +837,7 @@ export const achievementaward = (num: number) => {
         if (num >= 253)
             multiplier = 40
         player.worlds.add(achievementpointvalues[num] * multiplier);
-        DOMCacheGetOrSet("achievementprogress").textContent = "Achievement Points: " + player.achievementPoints + "/" + totalachievementpoints + " [" + (100 * player.achievementPoints / totalachievementpoints).toPrecision(4) + "%]"
+        DOMCacheGetOrSet("achievementprogress").textContent = "Achievement Points: " + format(player.achievementPoints, 0, true) + "/" + format(totalachievementpoints, 0, true) + " [" + (100 * player.achievementPoints / totalachievementpoints).toPrecision(4) + "%]"
         player.achievements[num] = 1;
         revealStuff()
 

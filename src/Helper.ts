@@ -119,7 +119,7 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
 
                 if(kind > 0){
                     // Automatic purchase of Talisman Fragments
-                    if(player.challengecompletions[13] >= 60){
+                    if(player.achievements[215] > 0){
                         const notMaxed = 7;
                         const talismanItemNames = ['shard','commonFragment','uncommonFragment','rareFragment','epicFragment','legendaryFragment','mythicalFragment'] as const;
                         for (let i = 0; i < notMaxed; i++) {
@@ -128,7 +128,7 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
                     }
 
                     // Automatic purchase of Blessings
-                    if(player.challengecompletions[15] > 0){
+                    if(player.achievements[222] > 0){
                         buyAllBlessings('Blessings', 50 / kind);
                         buyAllBlessings('Spirits', 50 / kind);
                     }

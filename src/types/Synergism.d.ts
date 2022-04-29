@@ -531,6 +531,8 @@ export interface Player {
     shopExpandCount: number
     singsing: number
     theme: number
+    lastCode: string
+    hotkeys: Record<number, string[]>
 
     singularityUpgrades: {
         goldenQuarks1: SingularityUpgrade

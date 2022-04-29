@@ -82,21 +82,6 @@ export class HepteractCraft {
         let craftAmount = null;
         if (this.CAP - this.BAL <= 0)
             return Alert('It is purchased up to the upper limit of the craft. It does not work until expand.');
-        //Prompt used here. Thank you Khafra for the already made code! -Platonic
-        if (!max) {
-            const craftingPrompt = await Prompt('How many would you like to craft?');
-            if (craftingPrompt === null) // Number(null) is 0. Yeah..
-                return Alert('Okay, maybe next time.');
-            craftAmount = Number(craftingPrompt)
-        } else {
-            craftAmount = this.CAP
-        }
-
-        //Check these lol
-        if (Number.isNaN(craftAmount) || !Number.isFinite(craftAmount)) // nan + Infinity checks
-            return Alert('Value must be a finite number!');
-        else if (craftAmount <= 0) // 0 or less selected
-            return Alert('You can\'t craft a nonpositive amount of these, you monster!');
 
         // If craft is unlocked, we return object
         if (!this.UNLOCKED) 
@@ -118,14 +103,33 @@ export class HepteractCraft {
         if (Number.isNaN(player.wowAbyssals) || !Number.isFinite(player.wowAbyssals))
             player.wowAbyssals = 0;
 
+        let amountToCraft = Math.min(smallestItemLimit, hepteractLimit, this.CAP, this.CAP - this.BAL)
+
+        //Prompt used here. Thank you Khafra for the already made code! -Platonic
+        if (!max) {
+            const craftingPrompt = await Prompt(`How many would you like to craft? \nYou can buy up to ${format(amountToCraft, 0, true)} (${(Math.floor(amountToCraft / this.CAP * 10000) / 100)}%) amount for an expectation.`);
+            if (craftingPrompt === null) // Number(null) is 0. Yeah..
+                return Alert('Okay, maybe next time.');
+            craftAmount = Number(craftingPrompt)
+        } else {
+            craftAmount = this.CAP
+        }
+
+        //Check these lol
+        if (Number.isNaN(craftAmount) || !Number.isFinite(craftAmount)) // nan + Infinity checks
+            return Alert('Value must be a finite number!');
+        else if (craftAmount <= 0) // 0 or less selected
+            return Alert('You can\'t craft a nonpositive amount of these, you monster!');
+        craftAmount = Math.min(craftAmount, this.CAP)
+
         // Return if the material is not a calculable number
         if (Number.isNaN(smallestItemLimit) || !Number.isFinite(smallestItemLimit))
             return Alert('Sorry, Execution failed because the material could not be calculated.');
 
         // Get the smallest of hepteract limit, limit found above and specified input
-        const amountToCraft = Math.min(smallestItemLimit, hepteractLimit, craftAmount, this.CAP - this.BAL)
+        amountToCraft = Math.min(smallestItemLimit, hepteractLimit, craftAmount, this.CAP - this.BAL)
         if (max) {
-            const craftYesPlz = await Confirm('This will attempt to buy as many as possible. You can buy up to ' + format(amountToCraft, 0, true) + ' (' + (Math.floor(amountToCraft / this.CAP * 1000) / 10) + '%) amount for an expectation. Are you sure?')
+            const craftYesPlz = await Confirm(`This will attempt to buy as many as possible. \nYou can buy up to ${format(amountToCraft, 0, true)} (${(Math.floor(amountToCraft / this.CAP * 10000) / 100)}%) amount for an expectation. Are you sure?`)
             if (!craftYesPlz) 
                 return Alert('Okay, maybe next time.');
         }
@@ -167,7 +171,8 @@ export class HepteractCraft {
      * Expansion can only happen if your current balance is full.
      */
     expand = async(): Promise<HepteractCraft | void> => {
-        const expandPrompt = await Confirm('This will empty your balance, but double your capacity. Agree to the terms and conditions and stuff?')
+        const expandMultiplier = Math.min(1048576, Math.pow(2, 1 + player.singularityUpgrades.singCraftExpand.level));
+        const expandPrompt = await Confirm(`This will empty your balance, but ${format(this.CAP)} to from ${format(this.CAP * expandMultiplier)} (x${format(expandMultiplier, 0, true)}) your capacity. Agree to the terms and conditions and stuff?`)
         if (!expandPrompt) {
             return this;
         }
@@ -180,7 +185,7 @@ export class HepteractCraft {
         
         // Empties inventory in exchange for doubling maximum capacity.
         this.BAL = 0
-        this.CAP *= Math.min(1048576, Math.pow(2, 1 + player.singularityUpgrades.singCraftExpand.level));
+        this.CAP *= expandMultiplier;
 
         if (this.CAP > 1e300)
             this.CAP = 1e300;

@@ -344,12 +344,12 @@ export const c15RewardUpdate = (update = true) => {
     if(exp.gte(exponentRequirements[11])){
         //Chal 1-5 Scaling [100000]
         score = exp.times(Math.pow(G['talisman3Effect'][2] + 1, rune));
-        G['challenge15Rewards'][keys[11]] = Math.pow(0.98, score.dividedBy(2.5e4).log2())
+        G['challenge15Rewards'][keys[11]] = Math.max(0.01, Math.pow(0.98, score.dividedBy(2.5e4).log2()))
     }
     if(exp.gte(exponentRequirements[12])){
         //Chal 6-10 Scaling [100000]
         score = exp.times(Math.pow(G['talisman3Effect'][3] + 1, rune));
-        G['challenge15Rewards'][keys[12]] = Math.pow(0.98, score.dividedBy(2.5e4).log2())
+        G['challenge15Rewards'][keys[12]] = Math.max(0.01, Math.pow(0.98, score.dividedBy(2.5e4).log2()))
     }
     if(exp.gte(exponentRequirements[13])){
         //Ant Speed [200k]

@@ -2,9 +2,10 @@ import { sacrificeAnts } from './Ants';
 import { buyAccelerator, boostAccelerator, buyMultiplier } from './Buy';
 import { player, resetCheck } from './Synergism';
 import { keyboardTabChange, toggleAutoChallengeRun } from './Toggles';
-import { Alert, Prompt } from './UpdateHTML';
+import { Alert, Confirm, Prompt } from './UpdateHTML';
+import { promocodes, exportSynergism, resetGame } from './ImportExport';
 
-export const hotkeys = new Map<string, [string, () => unknown]>([
+export const defaultHotkeys = new Map<string, [string, () => unknown]>([
     ['A', ['Buy Accelerators', () => buyAccelerator()]],
     ['B', ['Boost Accelerator', () => boostAccelerator()]],
     ['C', ['Auto Challenge', () => {
@@ -38,7 +39,12 @@ export const hotkeys = new Map<string, [string, () => unknown]>([
     ['ARROWUP', ['Back a subtab', () => keyboardTabChange(-1, false)]],
     ['ARROWDOWN', ['Next subtab', () => keyboardTabChange(1, false)]],
     ['SHIFT+A', ['Reset Ascend', () => resetCheck('ascension')]],
+    ['SHIFT+P', ['Promotion code', () => promocodes()]],
+    ['SHIFT+E', ['Export', () => exportSynergism()]],
+    ['ALT+D', ['Delete savefile', () => resetGame()]],
 ]);
+
+export let hotkeys = new Map<string, [string, () => unknown]>(defaultHotkeys);
 
 document.addEventListener('keydown', event => {
     if (document.activeElement?.localName === 'input') {
@@ -80,14 +86,10 @@ const makeSlot = (key: string, descr: string) => {
             target.nextSibling?.textContent;
 
         // new value to set key as, unformatted
-        const newKey = await Prompt(`
-        Enter the new key you want to activate ${name} with.
-
+        const newKey = await Prompt(`Enter the new key you want to activate ${name} with.
         MDN has a list of values for "special keys" if you would like to use one:
         https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
-
-        You can also prefix your hotkey with [Ctrl,Shift,Alt]+<key>
-        `);
+        You can also prefix your hotkey with [Ctrl,Shift,Alt]+<key>`, oldKey);
 
         if (typeof newKey !== 'string') return;
 
@@ -96,7 +98,10 @@ const makeSlot = (key: string, descr: string) => {
         if (newKey.length === 0)
             return void Alert(`You didn't enter anything, canceled!`);
 
-        if (hotkeys.has(toSet)) {
+        if (!isNaN(Number(newKey)))
+            return void Alert(`Number keys are currently unavailable!`);
+
+        if (hotkeys.has(toSet) || oldKey === toSet) {
             return void Alert(`That key is already binded to an action, use another key instead!`);
         } else if (hotkeys.has(oldKey)) {
             const old = hotkeys.get(oldKey)!;
@@ -104,7 +109,12 @@ const makeSlot = (key: string, descr: string) => {
             hotkeys.set(toSet, old);
             hotkeys.delete(oldKey);
 
+            const keys = Object.keys(player.hotkeys);
+            player.hotkeys[keys.length] = [oldKey, toSet];
+
             target.textContent = toSet;
+
+            startHotkeys();
         } else {
             return void Alert(`No hotkey is triggered by ${oldKey}!`);
         }
@@ -118,6 +128,34 @@ const makeSlot = (key: string, descr: string) => {
     div.appendChild(p);
 
     return div;
+}
+
+export const changeHotkeys = () => {
+    hotkeys = new Map(defaultHotkeys);
+
+    for (const key in player.hotkeys) {
+        const oldKey = player.hotkeys[key][0]
+        const toSet = player.hotkeys[key][1]
+        if (hotkeys.has(oldKey)) {
+            const old = hotkeys.get(oldKey)!;
+            hotkeys.set(toSet, old);
+            hotkeys.delete(oldKey);
+        } else {
+            delete player.hotkeys[key];
+        }
+    }
+
+    startHotkeys();
+}
+
+export const resetHotkeys = async () =>  {
+    const keys = Object.keys(player.hotkeys);
+    const confirmed = await Confirm(`Do you want to reset the changed hotkeys in ${keys.length} ?\nThis decision is irrevocable!`);
+    if (confirmed) {
+        hotkeys = new Map(defaultHotkeys);
+        player.hotkeys = {};
+        startHotkeys();
+    }
 }
 
 export const startHotkeys = () => {
