@@ -192,11 +192,6 @@ export const revealStuff = () => {
         ex.style.display = player.challenge15Exponent >= 1e15 ? "block" : "none";
     }
 
-    const example33 = document.getElementsByClassName("chal9x1ants") as HTMLCollectionOf<HTMLElement>;
-    for (let i = 0; i < example33.length; i++) {
-        player.highestchallengecompletions[9] > 0 ? example33[i].style.display = "inline" : example33[i].style.display = "none"
-    }
-
     const singularityHTMLs = document.getElementsByClassName("singularity") as HTMLCollectionOf<HTMLElement>;
     for (const HTML of Array.from(singularityHTMLs)) { // Ability to view singularity features.
         HTML.style.display = player.singularityCount > 0 ? "block" : "none";
