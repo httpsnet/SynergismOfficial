@@ -27,6 +27,8 @@ import { testing } from './Config';
 import { DOMCacheGetOrSet } from "./Cache/DOM"
 import { toggleTheme } from "./Themes"
 import { buyGoldenQuarks } from "./singularity"
+import { resetHotkeys } from "./Hotkeys"
+
 
 /* STYLE GUIDE */
 /* 
@@ -102,14 +104,14 @@ export const generateEventHandlers = () => {
     }
 
 //Onclick Events (this is particularly bad)
-    DOMCacheGetOrSet('prestigebtn').addEventListener('click', () => resetCheck('prestige'))
-    DOMCacheGetOrSet('transcendbtn').addEventListener('click', () => resetCheck('transcension'))
-    DOMCacheGetOrSet('reincarnatebtn').addEventListener('click', () => resetCheck('reincarnation'))
+    DOMCacheGetOrSet('prestigebtn').addEventListener('click', () => resetCheck('prestige', !player.toggles[28]))
+    DOMCacheGetOrSet('transcendbtn').addEventListener('click', () => resetCheck('transcension', !player.toggles[29]))
+    DOMCacheGetOrSet('reincarnatebtn').addEventListener('click', () => resetCheck('reincarnation', !player.toggles[30]))
     DOMCacheGetOrSet('acceleratorboostbtn').addEventListener('click', () => boostAccelerator())
     DOMCacheGetOrSet('challengebtn').addEventListener('click', () => resetCheck('transcensionChallenge',undefined,true))
     DOMCacheGetOrSet('reincarnatechallengebtn').addEventListener('click', () => resetCheck('reincarnationChallenge',undefined,true))
     DOMCacheGetOrSet('ascendChallengeBtn').addEventListener('click', () => resetCheck('ascensionChallenge')) 
-    DOMCacheGetOrSet('ascendbtn').addEventListener('click', () => resetCheck('ascension'))
+    DOMCacheGetOrSet('ascendbtn').addEventListener('click', () => resetCheck('ascension', !player.toggles[31]))
     DOMCacheGetOrSet('singularitybtn').addEventListener('click', () => resetCheck('singularity'))
 //Part 2: Tabs (sucks)
 //Onmouseover Events
@@ -559,8 +561,10 @@ DOMCacheGetOrSet('saveStringInput').addEventListener('blur', e => updateSaveStri
 /*Save Game Button*/ DOMCacheGetOrSet('savegame').addEventListener('click', () => saveSynergy(true))
 /*Delete Save Button*/ DOMCacheGetOrSet('deleteGame').addEventListener('click', () => resetGame())
 /*Submit Stats [Note: will eventually become obsolete if kong closes]*/ // DOMCacheGetOrSet('submitstats').addEventListener('click', () => submitStats()) 
-/*Promotion Codes*/ DOMCacheGetOrSet('promocodes').addEventListener('click', () => promocodes())
+/*Promotion Codes*/ DOMCacheGetOrSet('promocodes').addEventListener('click', () => promocodes(true))
 /*Toggle Ascension Per-Second Setting*/ DOMCacheGetOrSet('historyTogglePerSecondButton').addEventListener('click', () => resetHistoryTogglePerSecond())
+
+/*ResetHotkeys Button*/ DOMCacheGetOrSet('resetHotkeys').addEventListener('click', () => resetHotkeys())
 
 // SHOP TAB
 

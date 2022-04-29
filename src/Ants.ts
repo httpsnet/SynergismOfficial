@@ -320,7 +320,7 @@ export const showSacrifice = () => {
     DOMCacheGetOrSet("antSacrificeOffering").textContent = "+" + format(sacRewards.offerings)
     DOMCacheGetOrSet("antSacrificeObtainium").textContent = "+" + format(sacRewards.obtainium)
     if (player.challengecompletions[9] > 0) {
-        const textELO = G['antELO'] > 1e6
+        const textELO = player.highestchallengecompletions[14] > 0 || G['antELO'] > 1e6
         DOMCacheGetOrSet("antSacrificeTalismanShard").textContent = "+" + format(sacRewards.talismanShards) + (textELO ? '' : ' [>500 ELO]')
         DOMCacheGetOrSet("antSacrificeCommonFragment").textContent = "+" + format(sacRewards.commonFragments) + (textELO ? '' : ' [>750 ELO]')
         DOMCacheGetOrSet("antSacrificeUncommonFragment").textContent = "+" + format(sacRewards.uncommonFragments) + (textELO ? '' : ' [>1,000 ELO]')

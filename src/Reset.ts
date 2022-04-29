@@ -546,7 +546,9 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
             player.wowHypercubes.add(metaData[6]);
             player.wowPlatonicCubes.add(metaData[7]);
             player.wowAbyssals += metaData[8];
-            if (Number.isNaN(player.wowAbyssals) || !Number.isFinite(player.wowAbyssals) || player.wowAbyssals > 1e300) {
+            if (isNaN(player.wowAbyssals)) {
+                player.wowAbyssals = 0;
+            } else if (!isFinite(player.wowAbyssals) || player.wowAbyssals > 1e300) {
                 player.wowAbyssals = 1e300;
             }
         }
@@ -717,9 +719,12 @@ export const calculateGoldenQuarkGain = ():number => {
     return (base + gainFromQuarks) * c15Multiplier * patreonMultiplier * singularityUpgrades * cookieUpgradeMultiplier;
 }
 
-export const singularity = async () => {
+export const singularity = async (count = 1) => {
+
     player.goldenQuarks += calculateGoldenQuarkGain();
-    player.singularityCount += 1;
+    player.singularityCount += count;
+    if (player.singularityCount < 0)
+        player.singularityCount = 0;
     if (player.singularityUpgrades.singSafeShop.level < 1)
         void resetShopUpgrades(true);
     const hold = Object.assign({}, blankSave, {

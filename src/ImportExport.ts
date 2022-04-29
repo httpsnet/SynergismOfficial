@@ -168,12 +168,14 @@ export const importSynergism = async (input: string, reset = false) => {
     }
 }
 
-export const promocodes = async () => {
-    const input = await Prompt('Got a code? Great! Enter it in (CaSe SeNsItIvE). \n [Note to viewer: this is for events and certain always-active codes. \n May I suggest you type in "synergism2021" or "add" or "daily" perchance?]');
+export const promocodes = async (lastCode = false) => {
+    const input = await Prompt('Got a code? Great! Enter it in (CaSe SeNsItIvE). \n [Note to viewer: this is for events and certain always-active codes. \n May I suggest you type in "synergism2021" or "add" or "daily" perchance?]', lastCode ? player.lastCode : '');
     const el = DOMCacheGetOrSet("promocodeinfo");
 
     if (input === null) {
         return Alert('Alright, come back soon!')
+    } else {
+        player.lastCode = input
     }
     if (input === "quack" && !player.codes.get(37)) {
         player.codes.set(37, true);
@@ -181,8 +183,7 @@ export const promocodes = async () => {
         player.goldenQuarksTimer = 90000;
         addTimers("ascension", 18000)
         return Alert("Quacks like a dog. Your quark timer(s) have been replenished and you have been given 5 real life hours of ascension progress!")
-    }
-    if (input === "synergism2021" && !player.codes.get(1)) {
+    } else if (input === "synergism2021" && !player.codes.get(1)) {
         player.codes.set(1, true);
         player.runeshards += 25;
         player.worlds.add(50);
@@ -354,6 +355,7 @@ export const promocodes = async () => {
         }
     } else {
         el.textContent = "Your code is either invalid or already used. Try again!"
+        player.lastCode = '';
     }
 
     await saveSynergy(); // should fix refresh bug where you can continuously enter promocodes

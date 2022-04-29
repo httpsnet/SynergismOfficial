@@ -1,5 +1,5 @@
 import { player, interval, clearInt, saveSynergy, format, resourceGain, updateAll } from './Synergism';
-import { sumContents, productContents, getElementById } from './Utility';
+import { sumContents, productContents } from './Utility';
 import { Globals as G } from './Variables';
 import { CalcECC, getMaxChallenges } from './Challenges';
 import Decimal from 'break_infinity.js';
@@ -224,15 +224,13 @@ export const calculateRuneExpToLevel = (runeIndex: number, runeLevel = player.ru
         multiplier = Math.pow(100, runeLevel)
     }
     if (runeIndex === 6) {
-        multiplier = Math.pow(1e25, runeLevel) * (player.singularityCount + 1)
+        multiplier = (runeLevel + 1) * (player.singularityCount + 1)
     }
     return multiplier * G['runeexpbase'][runeIndex];
 }
 
 export const calculateMaxRunes = (i: number) => {
-    let max = 1000;
-
-    const increaseAll = 20 * (player.cubeUpgrades[16] + player.cubeUpgrades[37])
+    const increaseAll = 1000 + 20 * (player.cubeUpgrades[16] + player.cubeUpgrades[37])
         + 3 * player.constantUpgrades[7] + 80 * CalcECC('ascension', player.challengecompletions[11])
         + 200 * CalcECC('ascension', player.challengecompletions[14])
         + Math.floor(0.04 * player.researches[200] + 0.04 * player.cubeUpgrades[50])
@@ -243,11 +241,11 @@ export const calculateMaxRunes = (i: number) => {
         10 * (player.researches[79] + player.researches[113]) + increaseAll,
         10 * (player.researches[77] + player.researches[114]) + increaseAll,
         10 * player.researches[115] + increaseAll,
-        -901,
-        -999
+        100 + Math.min(900, player.singularityCount),
+        1 + player.singularityUpgrades.singWormhole.level
     ]
 
-    max = (increaseMaxLevel[i]! > G['runeMaxLvl'] ? G['runeMaxLvl'] : max + increaseMaxLevel[i]!)
+    const max = (increaseMaxLevel[i]! > G['runeMaxLvl'] ? G['runeMaxLvl'] : increaseMaxLevel[i]!)
     return max
 }
 
@@ -711,6 +709,7 @@ export const calculateAntSacrificeELO = () => {
         G['antELO'] += 100 * CalcECC('reincarnation', player.challengecompletions[10])
         G['antELO'] += 100 * player.upgrades[80]
         G['antELO'] = 1 / 10 * Math.floor(10 * G['antELO'])
+        G['antELO'] += player.singularityUpgrades.singMaterialsExponent.level * 10
 
         G['effectiveELO'] += 0.5 * Math.min(3500, G['antELO'])
         G['effectiveELO'] += 0.1 * Math.min(4000, G['antELO'])
@@ -720,6 +719,7 @@ export const calculateAntSacrificeELO = () => {
         G['effectiveELO'] += (G['cubeBonusMultiplier'][8] - 1)
         G['effectiveELO'] += 1 * player.cubeUpgrades[50]
         G['effectiveELO'] *= (1 + 0.03 * player.upgrades[124])
+        G['effectiveELO'] *= (1 + player.singularityUpgrades.singMaterialsExponent.level / 10)
 
         if (G['extinctionMultiplier'][player.usedCorruptions[7]] < 0)
             G['antELO'] = Math.pow(G['antELO'], G['extinctionMultiplier'][player.usedCorruptions[7]] / 2 + 1)
@@ -821,8 +821,6 @@ export const timeWarp = async () => {
         )
             return Alert(`Hey! That's not a valid time!`);
     
-    DOMCacheGetOrSet('offlineContainer').style.display = 'flex'
-    DOMCacheGetOrSet('preloadContainer').style.display = 'flex'
     await calculateOffline(timeUse)
 }
 
@@ -849,10 +847,6 @@ export const calculateOffline = async (forceTime = 0) => {
     updateTalismanInventory();
 
     player.offlinetick = (player.offlinetick < 1.5e12) ? (Date.now()) : player.offlinetick;    
-
-    //Set the preload as a blank black background for now (to allow aesthetic offline counter things)
-    const preloadImage = getElementById<HTMLImageElement>("preload"); 
-    preloadImage.style.display = 'none';
 
     G['timeMultiplier'] = calculateTimeAcceleration();
     calculateObtainium();
@@ -922,8 +916,10 @@ export const calculateOffline = async (forceTime = 0) => {
         }
     }, 0);
 
-    DOMCacheGetOrSet('offlineContainer').style.display = 'flex';
+    DOMCacheGetOrSet('offlineContainer').style.display = 'block';
     document.body.classList.add('loading');
+    DOMCacheGetOrSet('offlineContainer').classList.remove('unload');
+    DOMCacheGetOrSet('offlineContainerBox').style.display = 'flex';
     themeUpdate();
 
     DOMCacheGetOrSet('offlinePrestigeCountNumber').textContent = format(resetAdd.prestige, 0, true)
@@ -964,8 +960,6 @@ export const calculateOffline = async (forceTime = 0) => {
 export const exitOffline = () => {
     document.body.classList.remove('loading');
     DOMCacheGetOrSet("offlineContainer").style.display = "none";
-    DOMCacheGetOrSet("preloadContainer").style.display = "none";
-    themeUpdate();
 }
 
 export const calculateSigmoid = (constant: number, factor: number, divisor: number) => {
@@ -1027,13 +1021,13 @@ export const calculateAllCubeMultiplier = () => {
         // BUY THIS! Golden Quark Upgrade
         1 + 4 * player.singularityUpgrades.starterPack.level,
         // Cube Flame [GQ]
-        1 + 0.02 * player.singularityUpgrades.singCubes1.level,
+        1 + Math.min(player.ascensionCount, 0.02 * player.singularityUpgrades.singCubes1.level),
         // Cube Blaze [GQ]
-        1 + 0.08 * player.singularityUpgrades.singCubes2.level,
+        1 + Math.min(player.ascensionCount / 10, 0.08 * player.singularityUpgrades.singCubes2.level),
         // Cube Inferno [GQ]
-        1 + 0.04 * player.singularityUpgrades.singCubes3.level,
+        1 + Math.min(player.ascensionCount / 100, 0.04 * player.singularityUpgrades.singCubes3.level),
         // Wow Pass Z
-        1 + player.shopUpgrades.seasonPassZ * player.singularityCount / 100,
+        1 + (player.ascensionCount > 0 ? player.shopUpgrades.seasonPassZ * player.singularityCount / 100 : 0),
         // Cookie Upgrade 16
         1 + 1 * player.cubeUpgrades[66] * (1 - player.platonicUpgrades[15]),
         // Cookie Upgrade 20 (now actually works)

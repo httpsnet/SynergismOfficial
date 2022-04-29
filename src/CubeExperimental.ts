@@ -19,7 +19,6 @@ import { format, player } from './Synergism';
 import { calculateTesseractBlessings } from './Tesseracts';
 import { Player } from './types/Synergism';
 import { Prompt, Alert } from './UpdateHTML';
-// import { Prompt, Alert } from './UpdateHTML';
 
 /* Constants */
 
@@ -142,7 +141,9 @@ export abstract class Cube {
 
     add(amount: number): Cube {
         this.value += amount;
-        if (Number.isNaN(this.value) || !Number.isFinite(this.value) || this.value > 1e300) {
+        if (isNaN(this.value)) {
+            this.value = 0;
+        } else if (!isFinite(this.value) || this.value > 1e300) {
             this.value = 1e300;
         }
         return this;

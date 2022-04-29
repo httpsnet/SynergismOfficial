@@ -519,8 +519,10 @@ export const visualUpdateShop = () => {
                     DOMCacheGetOrSet(`${key}Level`).textContent = "Not Bought!"
             }
             // Case: max level greater than 1, treat it as a fraction out of max level
-            else
+            else if (maxLevel < 1000)
                 DOMCacheGetOrSet(`${key}Level`).textContent = "Level " + format(player.shopUpgrades[key]) + "/" + format(maxLevel);
+            else
+                DOMCacheGetOrSet(`${key}Level`).textContent = format(player.shopUpgrades[key]) + "/" + format(maxLevel);
             // Handles Button - max level needs no price indicator, otherwise it's necessary
 
             const price = shopData[key].price * Math.pow(2, player.shopExpandCount);

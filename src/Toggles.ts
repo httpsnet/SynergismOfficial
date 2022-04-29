@@ -7,7 +7,7 @@ import { calculateRuneLevels } from './Calculate';
 import { reset, resetrepeat } from './Reset';
 import { achievementaward } from './Achievements';
 import { getChallengeConditions } from './Challenges';
-import { loadStatisticsCubeMultipliers, loadStatisticsOfferingMultipliers, loadStatisticsAccelerator, loadStatisticsMultiplier, loadPowderMultiplier, c15RewardUpdate } from './Statistics';
+import { loadStatisticsCubeMultipliers, loadStatisticsOfferingMultipliers, loadStatisticsAccelerator, loadStatisticsMultiplier, loadPowderMultiplier } from './Statistics';
 import { corruptionDisplay, corruptionLoadoutTableUpdate, maxCorruptionLevel, corruptionStatsUpdate } from './Corruptions';
 import type { BuildingSubtab, Player } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
@@ -45,7 +45,10 @@ export const toggleTabs = (name: keyof typeof tabNumberConst) => {
 
     revealStuff();
     hideStuff();
-    
+
+    const el = document.activeElement as HTMLElement;
+    el.blur();
+
     const subTabList = subTabsInMainTab(player.tabnumber).subTabList
     if (player.tabnumber !== -1) {
         for (let i = 0; i < subTabList.length; i++) {
@@ -72,10 +75,6 @@ export const toggleTabs = (name: keyof typeof tabNumberConst) => {
                 break;
             }
         }
-    }
-    if (subTabList[player.subtabNumber] && subTabList[player.subtabNumber].buttonID === "switchCubeSubTab6") {
-        // Call the function when the tab is opened. Used for HTML updates
-        void c15RewardUpdate();
     }
 }
 
@@ -111,7 +110,10 @@ export const toggleChallenges = (i: number, auto = false) => {
         }
     }
     if (player.challengecompletions[10] > 0) {
-        if ((player.currentChallenge.transcension === 0 && player.currentChallenge.reincarnation === 0 && player.currentChallenge.ascension === 0) && (i >= 11)) {
+        if (((player.currentChallenge.transcension === 0 && player.currentChallenge.reincarnation === 0 && player.currentChallenge.ascension === 0) || player.singularityCount > 0) && (i >= 11)) {
+            player.currentChallenge.transcension = 0;
+            player.currentChallenge.reincarnation = 0;
+
             reset("ascensionChallenge", false, "enterChallenge");
             player.currentChallenge.ascension = i;
 
@@ -328,6 +330,10 @@ export const keyboardTabChange = (dir = 1, main = true) => {
 export const toggleSubTab = (mainTab = 1, subTab = 0) => {
     const subTabs = subTabsInMainTab(mainTab)
     if (tabs(mainTab).unlocked && subTabs.subTabList.length > 0) {
+
+        const el = document.activeElement as HTMLElement;
+        el.blur();
+
         const subTabList = subTabs.subTabList[subTab];
         if (mainTab === -1) {
             // The first getElementById makes sure that it still works if other tabs start using the subtabSwitcher class
@@ -336,10 +342,6 @@ export const toggleSubTab = (mainTab = 1, subTab = 0) => {
                 subTabs.tabSwitcher?.(subTabList.subTabID, btn)
         } else {
             if (subTabList.unlocked) {
-                if (subTabList.buttonID === "switchCubeSubTab6") {
-                    // Call the function when the tab is opened. Used for HTML updates
-                    void c15RewardUpdate();
-                }
                 subTabs.tabSwitcher?.(subTabList.subTabID)
             }
         }
