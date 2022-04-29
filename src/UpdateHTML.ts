@@ -983,15 +983,15 @@ export const PromptCB = (text: string, value2: string, cb: (value: string | null
     const popup = document.querySelector<HTMLElement>('#prompt')!;
     const ok = popup.querySelector<HTMLElement>('#ok_prompt')!;
     const cancel = popup.querySelector<HTMLElement>('#cancel_prompt')!;
-    const input = popup.querySelector<HTMLElement>('input')!;
+    const input = popup.querySelector<HTMLElement>('input')! as HTMLInputElement;
 
     conf.style.display = 'flex';
     popup.style.display = 'flex';
     overlay.style.display = 'block';
     popup.querySelector('p')!.textContent = text;
     input.focus();
-    input.value = input.textContent = value2;
-    setTimeout(() => input.value = input.textContent = value2, 10); // Delete hotkey input
+    input.value =  value2;
+    setTimeout(() => input.value = value2, 10); // Delete hotkey input
 
     // kinda disgusting types but whatever
     const listener = ({ target }: MouseEvent | { target: HTMLElement }) => {
@@ -999,7 +999,7 @@ export const PromptCB = (text: string, value2: string, cb: (value: string | null
 
         ok.removeEventListener('click', listener);
         cancel.removeEventListener('click', listener);
-        popup.querySelector('input')!.removeEventListener('keyup', kbListener);
+        input.removeEventListener('keyup', kbListener);
 
         conf.style.display = 'none';
         popup.style.display = 'none';
@@ -1007,7 +1007,7 @@ export const PromptCB = (text: string, value2: string, cb: (value: string | null
         
         if (targetEl.id === ok.id) cb(input.value);
         else cb(null); // canceled 
-        input.value = input.textContent = '';
+        input.value = '';
     }
 
     const kbListener = (e: KeyboardEvent) => {
