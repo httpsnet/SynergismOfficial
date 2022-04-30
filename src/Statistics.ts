@@ -262,7 +262,8 @@ export const loadPowderMultiplier = () => {
         4: {acc: 2, desc: "Achievement 256:"},
         5: {acc: 2, desc: "Achievement 257:"},
         6: {acc: 2, desc: "Platonic Upgrade 16 [4x1]"},
-        7: {acc: 2, desc: "Event [Most Recent: June 20 - June 27]:"},
+        7: {acc: 2, desc: "Platonic Upgrade 23 [5x3]"},
+        8: {acc: 2, desc: "Event [Most Recent: June 20 - June 27]:"},
     }
     for (let i = 0; i < arr0.length; i++) {
         const statGCMi = DOMCacheGetOrSet(`statPoM${i + 1}`);
