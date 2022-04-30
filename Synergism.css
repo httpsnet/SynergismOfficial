@@ -76,6 +76,7 @@ textarea {
     margin: 0;
     box-sizing: border-box;
     border: 0 solid #ccc;
+    overflow: visible;
 }
 
 input:disabled {
@@ -107,6 +108,13 @@ button:active {
 button:focus {
     background-color: #333;
     border-color: #333;
+}
+
+/* https://github.com/Pseudo-Corp/SynergismOfficial/issues/161 */
+img,
+input[type="image"] {
+    image-rendering: optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .flex {
@@ -311,7 +319,7 @@ button:focus {
     align-items: center;
     z-index: 6971;
     position: absolute;
-    bottom: max(0px, calc(50% - 225px));
+    bottom: max(0px, calc(50% - 270px));
     left: 50%;
     min-width: 350px;
     min-height: 550px;
@@ -320,14 +328,13 @@ button:focus {
     border: 1px solid gold;
     box-sizing: border-box;
     padding: 15px;
+    white-space: nowrap;
     transform: translate(-50%, 0%);
 }
 
 .offlineStats {
     display: flex;
     flex-direction: column;
-    z-index: 3;
-    margin-bottom: 2px;
 }
 
 .offlineStat {
@@ -335,7 +342,6 @@ button:focus {
     flex-direction: row;
     align-items: center;
     height: 32px;
-    z-index: 3;
     margin-bottom: 2px;
 }
 
@@ -345,28 +351,22 @@ button:focus {
 }
 
 .offlineText {
-    display: flex;
-    z-index: 5;
-}
-
-#offlineTimer {
-    display: flex;
-    z-index: 5;
-}
-
-#progressbardescription {
-    display: flex;
-    z-index: 5;
+    margin: 10px 0;
 }
 
 #exitOffline {
     height: 30px;
-    z-index: 3;
     width: auto;
     margin-top: 20px;
     border: 2px solid ivory;
     background-color: purple;
     color: white;
+    visibility: visible;
+}
+
+#exitOffline.subtabContent {
+    visibility: hidden;
+    display: block;
 }
 
 #exitOffline:hover,
@@ -529,8 +529,8 @@ nav li:hover {
 #buyamountparticle,
 #buyAmountTesseract {
     position: absolute;
-    top: 0;
-    left: calc(50% + 415px);
+    top: 5px;
+    left: calc(50% + 400px);
 }
 
 #togglecoinbuy {
@@ -565,15 +565,16 @@ nav li:hover {
 #upgradesFlex {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
     width: 95%;
     margin: 0 auto;
-    margin-top: 4%;
+    margin-top: 50px;
 }
 
 #upgradesFlex > div {
     display: flex;
     flex-direction: column;
-    width: calc(100% / 6);
+    min-width: 200px;
     align-items: center;
 }
 
@@ -673,8 +674,8 @@ nav li:hover {
 #exportButtons {
     display: flex;
     flex-direction: column;
-    margin: 0.8em 0 0.8em 50px;
-    min-width: 300px;
+    margin: 0.8em 0;
+    min-width: 400px;
 }
 
 #exportButtons > * {
@@ -837,6 +838,7 @@ nav li:hover {
     color: gray;
     text-align: center;
     margin: 0 auto;
+    width: 1000px;
 }
 
 .tightText {
@@ -858,10 +860,13 @@ nav li:hover {
     margin: auto;
 }
 
+#achievementstable tbody td {
+    padding: 0;
+}
+
 #achievementinfo {
     display: flex;
     flex-direction: column;
-    border-top: 2px solid plum;
     text-align: center;
     width: 50%;
     margin: 0 auto;
@@ -1074,7 +1079,8 @@ nav li:hover {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-width: 140px;
+    white-space: nowrap;
+    min-width: 150px;
 }
 
 .runeType > button {
@@ -1188,7 +1194,6 @@ nav li:hover {
 
 .talismanContainer {
     flex-direction: column;
-    width: 11%;
     min-width: 102px;
     align-items: center;
     white-space: nowrap;
@@ -1365,11 +1370,15 @@ nav li:hover {
     font-size: 0;
     align-self: center;
     margin-top: 10px;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
 }
 
-#challengeIcons .challengeLevels {
+.challengeLevels {
     font-size: 12px;
     text-align: center;
+    margin: 2px;
 }
 
 #challengeDetails {
@@ -1758,6 +1767,8 @@ nav li:hover {
     padding: 0;
     text-align: center;
     margin: 0 auto;
+    min-width: 1250px;
+    max-width: 1600px;
 }
 
 #antsWrapper {
@@ -1785,7 +1796,7 @@ nav li:hover {
 }
 
 #antrow2 {
-    margin-top: 5px;
+    margin-top: 10px;
     height: 150px;
 }
 
@@ -1883,18 +1894,19 @@ nav li:hover {
     width: 300px;
     top: 25px;
     text-align: left;
-    left: 75%;
+    left: 73%;
 }
 
 #antSacrificeSummary > p {
-    margin: 0.2em auto;
+    margin: 0.1em auto;
 }
 
 #antSacrificeTable {
-    margin: 30px 0 0 70px;
+    margin: 40px 0 0 70px;
     padding: 0;
     border-collapse: collapse;
     table-layout: fixed;
+    font-variant-numeric: tabular-nums;
 }
 
 #antSacrificeTable img {
@@ -1917,7 +1929,7 @@ nav li:hover {
 
 #cubes {
     padding: 0;
-    max-width: 1150px;
+    max-width: 1600px;
     margin: 0 auto;
 }
 
@@ -1944,14 +1956,16 @@ nav li:hover {
 #wowCubeSidebar > p {
     margin: 0 auto;
     line-height: 1.1em;
+    font-size: 0.9em;
 }
 
-#wowCubeSidebar > br {
-    margin: 0.3em auto;
+#wowCubeSidebar br {
+    margin: 0.2em auto;
 }
 
-#cubeToQuarkTimer {
-    font-size: 1.2em;
+p#cubeToQuarkTimer,
+p#cubeToQuarkTimerValue {
+    font-size: 1.1em;
 }
 
 .cubePlacement1 {
@@ -2147,6 +2161,10 @@ p[id$="BlessingsTotal"] {
 }
 
 /* Credits */
+
+.credit > img {
+    image-rendering: auto;
+}
 
 #creditssubtab {
     margin-top: 4.5%;
@@ -2345,6 +2363,7 @@ p[id$="BlessingsTotal"] {
 
 .historySubTab {
     color: white;
+    margin-top: 10px;
 }
 
 .historySubTab p {
@@ -2365,6 +2384,7 @@ p[id$="BlessingsTotal"] {
     vertical-align: middle;
     height: 20px;
     margin-right: 3px;
+    image-rendering: auto;
 }
 
 .historySubTab tbody td {
@@ -2429,17 +2449,12 @@ p[id$="BlessingsTotal"] {
 }
 
 #historyAscendTable {
-    min-width: 1180px;
     white-space: nowrap;
 }
 
 .historyTableWrap {
     max-height: 650px;
     overflow-y: auto;
-}
-
-#historyAscend .historyTableWrap {
-    min-width: 1212px;
 }
 
 .runeBlessingPurchaseSettings {
@@ -2482,7 +2497,7 @@ p[id$="BlessingsTotal"] {
 }
 
 #buyRuneBlessingInput {
-    width: 100px;
+    width: 150px;
     border: 2px solid white;
     margin-right: 20px;
     background-color: #171717;
@@ -2492,7 +2507,7 @@ p[id$="BlessingsTotal"] {
 }
 
 #buyRuneSpiritInput {
-    width: 100px;
+    width: 150px;
     border: 2px solid orchid;
     margin-right: 20px;
     background-color: #171717;
@@ -2504,14 +2519,16 @@ p[id$="BlessingsTotal"] {
 #traits {
     justify-content: center;
     width: 100%;
-    min-width: 1150px;
-    min-height: 550px;
+    min-height: 600px;
     margin-top: 10px;
 }
 
 #corruptionMain {
-    width: 700px;
+    display: flex;
+    justify-content: start;
+    flex-flow: column;
     min-width: 700px;
+    width: 700px;
     margin: 10px;
     padding: 10px;
 }
@@ -2558,28 +2575,33 @@ p[id$="BlessingsTotal"] {
 }
 
 .corruptionWoWs {
-    margin-left: 15%;
+    margin-left: 5%;
+    text-align: left;
 }
 
 #corruptionCubes {
     margin-top: 10px;
 }
 
-#ascensionAutomation {
-    margin-top: 25px;
+#corruptionDisplays {
+    margin-top: 0;
+    margin-right: auto;
+    margin-bottom: 10px;
+    margin-left: auto;
 }
 
-#ascensionAmount {
-    width: 100px;
-    border: 1px solid red;
-    color: white;
-    background-color: #171717;
+#ascensionBox {
+    margin: 10px auto;
+}
+
+#ascensionAutomation {
+    margin: 0 30px;
     text-align: center;
 }
 
+#ascensionAmount,
 #ascensionamount {
     width: 100px;
-    border: 1px solid orange;
     color: white;
     background-color: #171717;
     text-align: center;
@@ -2587,6 +2609,7 @@ p[id$="BlessingsTotal"] {
 
 #autoAscend {
     color: white;
+    width: 420px;
 }
 
 #ascensionAutoEnable,
@@ -2598,11 +2621,15 @@ p[id$="BlessingsTotal"] {
     display: none;
 }
 
-#corruptionStatsLoadouts {
-    margin: 10px;
+#corruptionStatsAscension {
     min-width: 450px;
+    margin: 10px;
+}
+
+#corruptionStatsLoadouts {
+    width: 100%;
     border: 1px solid orange;
-    align-items: center;
+    align-items: stretch;
 }
 
 #corrButtonRow {
@@ -2622,12 +2649,13 @@ p[id$="BlessingsTotal"] {
     flex-flow: row;
     height: 40px;
     margin: 5px 0;
-    padding-left: 10px;
+    padding: 0 15px;
 }
 
 .corruptionImg {
     height: 100%;
     object-fit: contain;
+    image-rendering: auto;
 }
 
 .corrDesc {
@@ -2673,9 +2701,21 @@ p[id$="BlessingsTotal"] {
 
 #corruptionLoadouts,
 #corruptionStats {
-    height: 400px;
-    padding-top: 15px;
+    min-height: 370px;
     box-sizing: border-box;
+    white-space: nowrap;
+    width: 100%;
+}
+
+#corruptionLoadoutTable {
+    border-spacing: 0 4px;
+    width: 100%;
+    padding: 5px;
+}
+
+#corruptionLoadoutTable tbody th {
+    padding: 0;
+    font-size: 0;
 }
 
 #corrPicRow {
@@ -2710,7 +2750,7 @@ img.small {
 #corruptionCleanseConfirm {
     height: 30px;
     width: 100px;
-    margin: auto;
+    margin: auto 0;
     border: 2px solid green;
     visibility: hidden;
 }
@@ -2741,6 +2781,7 @@ header .img {
     align-items: flex-start;
     min-width: 550px;
     max-width: 550px;
+    font-variant-numeric: tabular-nums;
 }
 
 .resetInformationContainer {
@@ -2806,6 +2847,7 @@ header #obtainiumDisplay {
     line-height: 20px;
     width: 60%;
     justify-content: space-evenly;
+    font-variant-numeric: tabular-nums;
 }
 
 #ascensionStats > span {
@@ -2818,6 +2860,7 @@ header #obtainiumDisplay {
     position: relative;
     height: 20px;
     margin-right: 4px;
+    image-rendering: auto;
 }
 
 #ascLen {
@@ -2849,7 +2892,7 @@ header #obtainiumDisplay {
 }
 
 #ascTimeTakenStats {
-    min-width: 125px; /* prevent bouncing around */
+    min-width: 140px; /* prevent bouncing around */
 }
 
 #ascTimeAccel {
@@ -3086,7 +3129,7 @@ header #obtainiumDisplay {
 }
 
 #saveString {
-    max-width: 50vh;
+    max-width: 500px;
     word-wrap: break-word;
 }
 
