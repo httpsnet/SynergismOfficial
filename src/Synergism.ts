@@ -3457,9 +3457,17 @@ document.addEventListener('keydown', (event) => {
         if (num < 0) {
             num += 10;
         }
+        if (key ==='BACKQUOTE') {
+            num = -1;
+        }
         if (player.challengecompletions[11] > 0 && !isNaN(num)) {
-            void Notification(`${player.corruptionLoadoutNames[num]} (${num + 1}) used activation.\nIt will be enabled at the next ascension.`, 5000);
-            corruptionLoadoutSaveLoad(false, num);
+            if (num >= 0 && num < player.corruptionLoadoutNames.length) {
+                void Notification(`${player.corruptionLoadoutNames[num]} (${num + 1}) used activation. \nIt will be enabled at the next ascension.`, 5000);
+                corruptionLoadoutSaveLoad(false, num + 1);
+            } else {
+                void Notification(`All next Corruption Stats are now 0. \nThis will take effect on the next Ascension.`, 5000);
+                corruptionLoadoutSaveLoad(false, 0);
+            }
         }
     } else {
     switch (key) {
