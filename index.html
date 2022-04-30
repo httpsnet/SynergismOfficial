@@ -1981,7 +1981,9 @@
                         <button id="switchCubeSubTab6" class="cubeSwitchTabBtn chal14" style="border: 2px solid orchid;">Challenge 15/Platonic Upgrades</button>
                         <button id="switchCubeSubTab7" class="cubeSwitchTabBtn hepteracts" style="border: 2px solid pink">Hepteract Forge</button>
                     </div>
-                    <p id="cubeToQuarkTimer">-=- Time Until Daily Refill -=- <br><span id="cubeToQuarkTimerValue" style="color: cyan">11 hours 10 mins 5 seconds</span></p>
+                    <p id="cubeToQuarkTimer">-=- Time Until Daily Refill -=-</p>
+                    <p id="cubeToQuarkTimerValue" style="color: cyan">11 hours 10 mins 5 seconds</p>
+                    <br>
                     <p id="cubeQuarksToday">Quarks gained from Cubes: <span id="cubeQuarksTodayValue" style="color: cyan">0/25</span></p>
                     <p id="cubeQuarksOpenRequirement">Open <span id="cubeQuarksOpenRequirementValue" style="color: yellow">1</span> cubes for next quark.</p>
                     <p id="cubeQuarksOpenToday">Cubes opened today: <span id="cubeQuarksOpenTodayValue" style="color: orchid">0</span></p>
@@ -2657,85 +2659,95 @@
                         <p id="hepteractCostText" style="color: white"></p>
                         <p id="powderDayWarpText" style="color: orange;"></p>
                     </div>
-
                 </div>
             </div>
         </div>
 
         <div id="traits" style="display: none;">
-            <div id="corruptionStatsLoadouts" class="vAlign">
-                <span id="corrButtonRow" class="flex row center">
-                    <button id="corrStatsBtn" class="hCenter tight">Corruption Stats</button>
-                    <button id="corrLoadoutsBtn" class="hCenter tight">Corruption Loadouts</button>
-                </span>
-                <div id="corruptionStats" class="corruptionContainer center">
-                    <span class="corruptionStatRow chal11Corruption">
-                        <img src="Pictures/Maladaption Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
+            <div id="corruptionStatsAscension" class="vAlign">
+                <div id="corruptionStatsLoadouts" class="vAlign">
+                    <span id="corrButtonRow" class="flex row center">
+                        <button id="corrStatsBtn" class="hCenter tight">Corruption Stats</button>
+                        <button id="corrLoadoutsBtn" class="hCenter tight">Corruption Loadouts</button>
                     </span>
-                    <span class="corruptionStatRow chal14Corruption">
-                        <img src="Pictures/Laziness Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
-                    </span>
-                    <span class="corruptionStatRow chal14Corruption">
-                        <img src="Pictures/Hyperchallenged Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
-                    </span>
-                    <span class="corruptionStatRow chal13Corruption">
-                        <img src="Pictures/Scientific Illiteracy Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
-                    </span>
-                    <span class="corruptionStatRow chal12Corruption">
-                        <img src="Pictures/Deflation Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
-                    </span>
-                    <span class="corruptionStatRow chal12Corruption">
-                        <img src="Pictures/Extinction Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
-                    </span>
-                    <span class="corruptionStatRow chal11Corruption">
-                        <img src="Pictures/Drought Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
-                    </span>
-                    <span class="corruptionStatRow chal13Corruption">
-                        <img src="Pictures/Financial Collapse Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
-                    </span>
-                    <!-- TODO: <script>corruptionButtonsAdd()</script> -->
+                    <div id="corruptionStats" class="corruptionContainer center">
+                        <span class="corruptionStatRow chal11Corruption">
+                            <img src="Pictures/Maladaption Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
+                        </span>
+                        <span class="corruptionStatRow chal14Corruption">
+                            <img src="Pictures/Laziness Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
+                        </span>
+                        <span class="corruptionStatRow chal14Corruption">
+                            <img src="Pictures/Hyperchallenged Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
+                        </span>
+                        <span class="corruptionStatRow chal13Corruption">
+                            <img src="Pictures/Scientific Illiteracy Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
+                        </span>
+                        <span class="corruptionStatRow chal12Corruption">
+                            <img src="Pictures/Deflation Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
+                        </span>
+                        <span class="corruptionStatRow chal12Corruption">
+                            <img src="Pictures/Extinction Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
+                        </span>
+                        <span class="corruptionStatRow chal11Corruption">
+                            <img src="Pictures/Drought Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
+                        </span>
+                        <span class="corruptionStatRow chal13Corruption">
+                            <img src="Pictures/Financial Collapse Lvl 7.png" class="corruptionImg" alt="" loading="lazy">
+                        </span>
+                        <!-- TODO: <script>corruptionButtonsAdd()</script> -->
+                    </div>
+                    <div id="corruptionLoadouts" style="display: none">
+                        <table id="corruptionLoadoutTable" class="center" style="border-spacing: 0px 4px">
+                            <tr>
+                                <th class="corrLoadoutNameCol"></th>
+                                <th>
+                                    <img src="Pictures/Maladaption Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
+                                </th>
+                                <th>
+                                    <img src="Pictures/Laziness Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
+                                </th>
+                                <th>
+                                    <img src="Pictures/Hyperchallenged Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
+                                </th>
+                                <th>
+                                    <img src="Pictures/Scientific Illiteracy Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
+                                </th>
+                                <th>
+                                    <img src="Pictures/Deflation Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
+                                </th>
+                                <th>
+                                    <img src="Pictures/Extinction Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
+                                </th>
+                                <th>
+                                    <img src="Pictures/Drought Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
+                                </th>
+                                <th>
+                                    <img src="Pictures/Financial Collapse Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
+                                </th>
+                            </tr>
+                        </table>
+                        <!-- TODO: <script>corruptionLoadoutTableCreate()</script> -->
+                    </div>
+                    <div id="corruptionDisplays" class="flex row">
+                        <img src="Pictures/ExitCorruption.png" class="corruptionImg" alt="" loading="lazy">
+                        <button id="corruptionCleanse">Cleanse</button>
+                        <button id="corruptionCleanseConfirm">Confirm</button>
+                    </div>
                 </div>
-                <div id="corruptionLoadouts" style="display: none">
-                    <table id="corruptionLoadoutTable" class="center" style="border-spacing: 0px 4px">
-                        <tr>
-                            <th class="corrLoadoutNameCol"></th>
-                            <th>
-                                <img src="Pictures/Maladaption Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
-                            </th>
-                            <th>
-                                <img src="Pictures/Laziness Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
-                            </th>
-                            <th>
-                                <img src="Pictures/Hyperchallenged Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
-                            </th>
-                            <th>
-                                <img src="Pictures/Scientific Illiteracy Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
-                            </th>
-                            <th>
-                                <img src="Pictures/Deflation Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
-                            </th>
-                            <th>
-                                <img src="Pictures/Extinction Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
-                            </th>
-                            <th>
-                                <img src="Pictures/Drought Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
-                            </th>
-                            <th>
-                                <img src="Pictures/Financial Collapse Lvl 7.png" class="corruptionImg small" alt="" loading="lazy">
-                            </th>
-                        </tr>
-                    </table>
-                    <!-- TODO: <script>corruptionLoadoutTableCreate()</script> -->
-                </div>
-                <div id="corruptionDisplays" class="flex row center">
-                    <img src="Pictures/ExitCorruption.png" class="corruptionImg" alt="" loading="lazy">
-                    <button id="corruptionCleanse">Cleanse</button>
-                    <button id="corruptionCleanseConfirm">Confirm</button>
+                <div id="ascensionBox" class="cubeUpgrade10">
+                    <div id="ascensionAutomation" class="flex row">
+                        <input id="ascensionAmount" class="hCenter tight" type="number" min="1" max="999999999" defaultValue="1" style="border: 1px solid red">
+                        <input id="ascensionamount" class="hCenter tight" type="number" min="1" max="999999999" defaultValue="1" style="border: 1px solid orange">
+                        <button id="ascensionAutoEnable" class="hCenter tight" style="border: 2px solid green">Auto Ascend [ON]</button>
+                        <button id="ascensionAutoToggle" class="hCenter tight" style="border:2px solid orchid">Mode: C10 Completions</button>
+                    </div>
+                    <p id="autoAscend" class="tightText">Ascend when you've completed Sadistic Challenge I a total of <span id="autoAscendMetric" style="color: red">1</span> times and <span id="autoAscendSeconds" style="color: gold">1</span> real-life seconds.</p>
                 </div>
             </div>
-            <div id="corruptionMain" class="vAlign">
-                <div id="corruptionIntroduction" class="tightText">The most rewarding ventures are those few would dare to embark.</div>
-                <div id="corruptionInfo1" class="tightText">Select the trait levels you wish to run with. Choose wisely! <span style="color: red">Don't bite off more than you can chew...</span></div>
+            <div id="corruptionMain">
+                <p id="corruptionIntroduction" class="tightText">The most rewarding ventures are those few would dare to embark.</p>
+                <p id="corruptionInfo1" class="tightText">Select the trait levels you wish to run with. Choose wisely! <span style="color: red">Don't bite off more than you can chew...</span></p>
                 <div id="corruptionSelected" class="hCenter">
                     <img id="corruptionSelectedPic" class="corruptionImg" src="Pictures/ExitCorruption.png" style="visibility: hidden" alt="" loading="lazy">
                 </div>
@@ -2750,29 +2762,14 @@
                 <p id="corruptionAntExponent" class="tightText" style="color: crimson">This Ascension's climate raises ant production to the power of <span id="corruptionAntExponentValue" style="color: darkorchid;">1.000</span>.</p>
                 <p id="corruptionSpiritBonus" class="chal12 tightText" style="color: gold">However, it also multiplies Rune Spirit Effects by <span id="corruptionSpiritBonusValue" style="color: wheat;">1.000</span> !</p>
                 <p id="corruptionBank" class="tightText">You have <span id="corruptionBankValue" style="color: crimson">1</span> Wow! Cubes in the Ascension bank. Gain more by finishing challenges!</p>
-                <p id="corruptionScore" class="tightText">Your Ascension Score is <span id="corruptionScoreValue" style="color: goldenrod">1</span> (base) * <span id="corruptionMultiplierValue" style="color: crimson">4</span> (Corruption mult) * <span id="corruptionBonusMultiplierValue" style="color: orchid">1</span> (Bonus mult) = <span id="corruptionTotalScore" style="color: darkorchid">4</span></p>
+                <p id="corruptionScore" class="tightText">Your Ascension Score is <span id="corruptionScoreValue" style="color: goldenrod">1</span> (base) * <span id="corruptionMultiplierValue" style="color: crimson">4</span></p>
+                <p id="corruptionScore2" class="tightText">(Corruption mult) * <span id="corruptionBonusMultiplierValue" style="color: orchid">1</span> (Bonus mult) = <span id="corruptionTotalScore" style="color: darkorchid">4</span></p>
                 <p id="corruptionAscensionCount" class="tightText">If you ascend now, <span id="corruptionAscensionCountValue" style="color: darkorange">0</span> will be added to your ascension count.</p>
                 <p id="corruptionCubes" class="tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionCubesValue" style="color: yellow; font-size: 1.2em">32</span> Wow! Cubes.</p>
                 <p id="corruptionTesseracts" class="tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionTesseractsValue" style="color: darkviolet; font-size: 1.2em">32</span> Wow! Tesseracts. [<span style="color: orchid; font-size: 0.8em">Get more if Score >100,000</span>]</p>
                 <p id="corruptionHypercubes" class="chal13 tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionHypercubesValue" style="color: crimson; font-size: 1.2em">32</span> Wow! Hypercubes. [<span style="color: red; font-size: 0.8em">Req Score: >1,000,000,000</span>]</p>
                 <p id="corruptionPlatonicCubes" class="chal14 tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionPlatonicCubesValue" style="color: lightgoldenrodyellow; font-size: 1.2em">32</span> PLATONIC CUBES. [<span style="color: lightgoldenrodyellow; font-size: 0.8em">Req Score: >2,666,000,000,000</span>]</p>
                 <p id="corruptionHepteracts" class="chal15 tightText corruptionWoWs">If you ascend now, you will gain <span id="corruptionHepteractsValue" style="color: pink; font-size: 1.2em">0</span> HEPTERACTS. [<span style="color: pink; font-size: 0.8em">Req Score: >1.666e17</span>]</p>
-                <table id="ascensionAutomation" class="cubeUpgrade10">
-                    <tr>
-                        <th>
-                            <input id="ascensionAmount" class="hCenter tight" type="number" min="1" max="999999999" defaultValue="1"> <input id="ascensionamount" class="hCenter tight" type="number" min="1" max="999999999" defaultValue="1"> <button id="ascensionAutoEnable" class="hCenter tight" style="border: 2px solid green">Auto Ascend [ON]</button> <button id="ascensionAutoToggle" class="hCenter tight" style="border:2px solid orchid;">Mode: C10 Completions</button>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                            <div id="autoAscend" class="tightText">Ascend when you've completed Sadistic Challenge I a total of <span id="autoAscendMetric" style="color: red">1</span> times and <span id="autoAscendSeconds" style="color: gold">1</span> real-life seconds.</div>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                        </th>
-                    </tr>
-                </table>
             </div>
         </div>
 <div id="settings" style="display: none;">
@@ -2970,7 +2967,7 @@
             <p id="globalCubeStatTitle" class="statPortion" style="color: lightgoldenrodyellow; font-size: 1.2em">Global Cube Multipliers</p>
             <p id="statGCM1" class="statPortion">Ascend Time Multi:<span id="sGCM1" class="statNumber">0</span></p>
             <p id="statGCM2" class="statPortion">Season pass:<span id="sGCM2" class="statNumber">0</span></p>
-            <p id="statGCM3" class="statPortion ">Research 5x19:<span id="sGCM3" class="statNumber">0</span></p>
+            <p id="statGCM3" class="statPortion">Research 5x19:<span id="sGCM3" class="statNumber">0</span></p>
             <p id="statGCM4" class="statPortion">Research 5x20:<span id="sGCM4" class="statNumber">0</span></p>
             <p id="statGCM5" class="statPortion">Cube upgrade 1x1:<span id="sGCM5" class="statNumber">0</span></p>
             <p id="statGCM6" class="statPortion">Cube upgrade 1x1:<span id="sGCM6" class="statNumber">0</span></p>
@@ -2994,7 +2991,7 @@
             <p id="cubeStatTitle" class="statPortion" style="color: lightgoldenrodyellow; font-size: 1.2em">Cube Multipliers</p>
             <p id="statCM1" class="statPortion">Ascend Time Multi:<span id="sCM1" class="statNumber">0</span></p>
             <p id="statCM2" class="statPortion">Season pass:<span id="sCM2" class="statNumber">0</span></p>
-            <p id="statCM3" class="statPortion ">Research 5x19:<span id="sCM3" class="statNumber">0</span></p>
+            <p id="statCM3" class="statPortion">Research 5x19:<span id="sCM3" class="statNumber">0</span></p>
             <p id="statCM4" class="statPortion">Research 5x20:<span id="sCM4" class="statNumber">0</span></p>
             <p id="statCM5" class="statPortion">Cube upgrade 1x1:<span id="sCM5" class="statNumber">0</span></p>
             <p id="statCM6" class="statPortion">Cube upgrade 2x1: <span id="sCM6" class="statNumber">0</span></p>
@@ -3016,7 +3013,7 @@
             <p id="tesseractStatTitle" class="statPortion" style="color: lightgoldenrodyellow; font-size: 1.2em">Tesseract Multipliers</p>
             <p id="statTeM1" class="statPortion">Ascend Time Multi:<span id="sTeM1" class="statNumber">0</span></p>
             <p id="statTeM2" class="statPortion">Season pass:<span id="sTeM2" class="statNumber">0</span></p>
-            <p id="statTeM3" class="statPortion ">Research 5x19:<span id="sTeM3" class="statNumber">0</span></p>
+            <p id="statTeM3" class="statPortion">Research 5x19:<span id="sTeM3" class="statNumber">0</span></p>
             <p id="statTeM4" class="statPortion">Research 5x20:<span id="sTeM4" class="statNumber">0</span></p>
             <p id="statTeM5" class="statPortion">Cube upgrade 1x1:<span id="sTeM5" class="statNumber">0</span></p>
             <p id="statTeM6" class="statPortion">Cube upgrade 2x1: <span id="sTeM6" class="statNumber">0</span></p>
@@ -3034,7 +3031,7 @@
             <p id="hypercubeStatTitle" class="statPortion" style="color: lightgoldenrodyellow; font-size: 1.2em">Hypercube Multipliers</p>
             <p id="statHyM1" class="statPortion">Ascend Time Multi:<span id="sHyM1" class="statNumber">0</span></p>
             <p id="statHyM2" class="statPortion">Season pass:<span id="sHyM2" class="statNumber">0</span></p>
-            <p id="statHyM3" class="statPortion ">Research 5x19:<span id="sHyM3" class="statNumber">0</span></p>
+            <p id="statHyM3" class="statPortion">Research 5x19:<span id="sHyM3" class="statNumber">0</span></p>
             <p id="statHyM4" class="statPortion">Research 5x20:<span id="sHyM4" class="statNumber">0</span></p>
             <p id="statHyM5" class="statPortion">Cube upgrade 1x1:<span id="sHyM5" class="statNumber">0</span></p>
             <p id="statHyM6" class="statPortion">Cube upgrade 2x1: <span id="sHyM6" class="statNumber">0</span></p>
@@ -3052,7 +3049,7 @@
             <p id="platonicStatTitle" class="statPortion" style="color: lightgoldenrodyellow; font-size: 1.2em">Platonic Multipliers</p>
             <p id="statPlM1" class="statPortion">Ascend Time Multi:<span id="sPlM1" class="statNumber">0</span></p>
             <p id="statPlM2" class="statPortion">Season pass:<span id="sPlM2" class="statNumber">0</span></p>
-            <p id="statPlM3" class="statPortion ">Research 5x19:<span id="sPlM3" class="statNumber">0</span></p>
+            <p id="statPlM3" class="statPortion">Research 5x19:<span id="sPlM3" class="statNumber">0</span></p>
             <p id="statPlM4" class="statPortion">Research 5x20:<span id="sPlM4" class="statNumber">0</span></p>
             <p id="statPlM5" class="statPortion">Cube upgrade 1x1:<span id="sPlM5" class="statNumber">0</span></p>
             <p id="statPlM6" class="statPortion">Cube upgrade 2x1: <span id="sPlM6" class="statNumber">0</span></p>
@@ -3068,7 +3065,7 @@
             <p id="hepteractStatTitle" class="statPortion" style="color: lightgoldenrodyellow; font-size: 1.2em">Hepteract Multipliers</p>
             <p id="statHeM1" class="statPortion">Ascend Time Multi:<span id="sHeM1" class="statNumber">0</span></p>
             <p id="statHeM2" class="statPortion">Season pass:<span id="sHeM2" class="statNumber">0</span></p>
-            <p id="statHeM3" class="statPortion ">Research 5x19:<span id="sHeM3" class="statNumber">0</span></p>
+            <p id="statHeM3" class="statPortion">Research 5x19:<span id="sHeM3" class="statNumber">0</span></p>
             <p id="statHeM4" class="statPortion">Research 5x20:<span id="sHeM4" class="statNumber">0</span></p>
             <p id="statHeM5" class="statPortion">Cube upgrade 1x1:<span id="sHeM5" class="statNumber">0</span></p>
             <p id="statHeM6" class="statPortion">Cube upgrade 2x1: <span id="sHeM6" class="statNumber">0</span></p>
@@ -3082,11 +3079,12 @@
             <p id="powderStatTitle" class="statPortion" style="color: magenta; font-size: 1.2em;">Orb to Powder Multipliers</p>
             <p id="statPoM1" class="statPortion">Ascend Time Multi:<span id="sPoM1" class="statNumber">0</span></p>
             <p id="statPoM2" class="statPortion">Season pass:<span id="sPoM2" class="statNumber">0</span></p>
-            <p id="statPoM3" class="statPortion ">Research 5x19:<span id="sPoM3" class="statNumber">0</span></p>
+            <p id="statPoM3" class="statPortion">Research 5x19:<span id="sPoM3" class="statNumber">0</span></p>
             <p id="statPoM4" class="statPortion">Research 5x20:<span id="sPoM4" class="statNumber">0</span></p>
             <p id="statPoM5" class="statPortion">Cube upgrade 1x1:<span id="sPoM5" class="statNumber">0</span></p>
             <p id="statPoM6" class="statPortion">Cube upgrade 2x1: <span id="sPoM6" class="statNumber">0</span></p>
             <p id="statPoM7" class="statPortion">Cube upgrade 2x1: <span id="sPoM7" class="statNumber">0</span></p>
+            <p id="statPoM8" class="statPortion">Platonic Upgrade 23: <span id="sPoM8" class="statNumber">0</span></p>
             <p id="statPoMT" class="statPortion statTotal" style="color: orchid">FINAL COEFFICIENT: <span
                     id="sPoMT" class="statNumber statTotal">0</span></p>
         </div>
