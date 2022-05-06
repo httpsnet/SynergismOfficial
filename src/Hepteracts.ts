@@ -170,8 +170,11 @@ export class HepteractCraft {
     /**
      * Expansion can only happen if your current balance is full.
      */
-    expand = async(): Promise<HepteractCraft | void> => {
-        const expandMultiplier = Math.min(1048576, Math.pow(2, 1 + player.singularityUpgrades.singCraftExpand.level));
+    expand = async(data: hepteractTypes): Promise<HepteractCraft | void> => {
+        let expandMultiplier = Math.min(Math.pow(2, 21), Math.pow(2, 1 + player.singularityUpgrades.singCraftExpand.level));
+        if (data === 'quark')
+            expandMultiplier = 2;
+
         const expandPrompt = await Confirm(`This will empty your balance, but ${format(this.CAP)} to from ${format(this.CAP * expandMultiplier)} (x${format(expandMultiplier, 0, true)}) your capacity. Agree to the terms and conditions and stuff?`)
         if (!expandPrompt) {
             return this;
@@ -378,6 +381,13 @@ export const tradeHepteractToOverfluxOrb = async () => {
     const buyAmount = Math.min(maxBuy, toUse)
     const beforeEffect = calculateCubeQuarkMultiplier();
     player.overfluxOrbs = Math.min(1e300, player.overfluxOrbs + buyAmount)
+
+    if (player.singularityUpgrades.singOverfluxPowder.level > 0) {
+        const convert = Math.pow(buyAmount * calculatePowderConversion().mult, player.singularityUpgrades.singOverfluxPowder.level / 20);
+        player.overfluxPowder = Math.min(1e300, player.overfluxPowder + convert);
+        player.overfluxOrbs = Math.max(0, player.overfluxOrbs - convert * calculatePowderConversion().mult)
+    }
+
     player.wowAbyssals -= 250000 * buyAmount
     const afterEffect = calculateCubeQuarkMultiplier();
 
@@ -391,7 +401,7 @@ export const tradeHepteractToOverfluxOrb = async () => {
 export const overfluxPowderDescription = () => {
     let powderEffectText = "ALL Cube Gain +" + format(100 * (calculateCubeMultFromPowder() - 1), 2, true) + "% [Multiplicative], +" + format(100 * (calculateQuarkMultFromPowder() - 1), 3, true) + "% Quarks [Multiplicative]"
     if (player.platonicUpgrades[16] > 0)
-        powderEffectText += ", Ascension Count +" + format(2 * player.platonicUpgrades[16] * Math.min(1, player.overfluxPowder / 1e5), 2, true) + "%, " + "Tesseract Building Production x" + format(Decimal.pow(player.overfluxPowder + 1, 10 * player.platonicUpgrades[16])) + " [From Platonic Upgrade 4x1]" 
+        powderEffectText += ", Ascension Count +" + format(2 * player.platonicUpgrades[16] * Math.min(1, player.overfluxPowder / 1e5) + Math.max(0, Math.log10(player.overfluxPowder) - 10) * 10, 2, true) + "%, " + "Tesseract Building Production x" + format(Decimal.pow(player.overfluxPowder + 1, 10 * player.platonicUpgrades[16])) + " [From Platonic Upgrade 4x1]" 
     DOMCacheGetOrSet('hepteractUnlockedText').style.display = 'none'
     DOMCacheGetOrSet('hepteractCurrentEffectText').textContent = "Powder effect: " + powderEffectText
     DOMCacheGetOrSet('hepteractBalanceText').textContent = 'You have ' + format(player.overfluxPowder, 2, true) + ' lumps of Overflux Powder.'

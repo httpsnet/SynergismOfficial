@@ -12,7 +12,7 @@ import { upgradeupdate } from './Upgrades';
 import { Globals as G } from './Variables';
 import Decimal from 'break_infinity.js';
 import { getElementById } from './Utility';
-import { ascensionAchievementCheck } from './Achievements';
+import { achievementaward, ascensionAchievementCheck } from './Achievements';
 import { buyResearch } from './Research';
 import { calculateHypercubeBlessings } from './Hypercubes';
 import { singularityOverride, getGoldenQuarkCost } from './singularity';
@@ -34,8 +34,9 @@ import { toggleAutoChallengeModeText, toggleSubTab, toggleTabs } from './Toggles
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { WowCubes } from './CubeExperimental';
 import { importSynergism } from './ImportExport';
-import { resetShopUpgrades } from './Shop';
+import { resetShopUpgrades, shopData } from './Shop';
 import { QuarkHandler } from './Quark';
+import { calculateSingularityDebuff } from './singularity';
 
 let repeatreset: ReturnType<typeof setTimeout>;
 
@@ -639,9 +640,16 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
            }
         }
 
+        if (player.currentChallenge.ascension > 10 && player.challengecompletions[player.currentChallenge.ascension] > player.highestchallengecompletions[player.currentChallenge.ascension]) {
+            player.autoChallengeIndex = 10;
+        }
+
         autoUseCubes();
 
+        updateChallengeDisplay();
+
         corruptionStatsUpdate();
+//        updateSingularityMilestoneAwards(false);
     }
 
     //Always unlocks
@@ -712,11 +720,140 @@ export const calculateGoldenQuarkGain = ():number => {
 
     const singularityUpgrades = (1 + player.singularityUpgrades.goldenQuarks1.level / 20) *
                                 (1 + player.singularityUpgrades.goldenQuarks2.level / 50) *
-                                (1 + player.singularityUpgrades.singGolden.level * player.singularityCount / 100)
+                                (1 + player.singularityUpgrades.singGolden.level * player.singularityCount / 1000)
 
     const cookieUpgradeMultiplier = 1 + 0.12 * player.cubeUpgrades[69];
 
     return (base + gainFromQuarks) * c15Multiplier * patreonMultiplier * singularityUpgrades * cookieUpgradeMultiplier;
+}
+
+/**
+ * 
+ * Computes which achievements in 274-280 are achievable given current singularity number
+ */
+export const updateSingularityAchievements = (): void => {
+    if (player.singularityCount >= 1) {
+        achievementaward(274)
+    }
+    if (player.singularityCount >= 2) {
+        achievementaward(275)
+    }
+    if (player.singularityCount >= 3) {
+        achievementaward(276)
+    }
+    if (player.singularityCount >= 4) {
+        achievementaward(277)
+    }
+    if (player.singularityCount >= 5) {
+        achievementaward(278)
+    }
+    if (player.singularityCount >= 7) {
+        achievementaward(279)
+    }
+    if (player.singularityCount >= 10) {
+        achievementaward(280)
+    }
+}
+
+export const updateSingularityMilestoneAwards = (singularityReset = true): void => {
+    // 1 transcension, 1001 mythos
+    if (player.achievements[275] > 0) {
+        player.prestigeCount = 1;
+        player.transcendCount = 1;
+        player.transcendPoints = new Decimal("1001");
+
+        player.unlocks.coinone = true;
+        player.unlocks.cointwo = true;
+        player.unlocks.cointhree = true;
+        player.unlocks.coinfour = true;
+        player.unlocks.prestige = true;
+        player.unlocks.generation = true;
+        player.unlocks.transcend = true;
+        for (let i = 0; i < 5; i++){
+            achievementaward(4 + 7 * i)
+        }
+        achievementaward(36); // 1 prestige
+        achievementaward(43); // 1 transcension
+    }
+    if (player.achievements[276] > 0) {
+        player.reincarnationCount = 1;
+        player.reincarnationPoints = new Decimal("10");
+        player.unlocks.reincarnate = true;
+        player.unlocks.rrow1 = true;
+        player.researches[47] = 1;
+
+        for (let i = 0; i < 2; i++) {
+            for (let j = 0; j < 5; j++) {
+                achievementaward(78 + i + 7 * j)
+            }
+        }
+
+        for (let i = 0; i < 7; i++) {
+            achievementaward(57 + i);
+            achievementaward(64 + i);
+            achievementaward(71 + i);
+        }
+
+        achievementaward(37)
+        achievementaward(38)
+        achievementaward(44)
+        achievementaward(50)
+        achievementaward(80)
+        achievementaward(87)
+
+    }
+    if (player.achievements[277] > 0) {
+        player.researchPoints = Math.floor(500 * calculateSingularityDebuff("Offering") * calculateSingularityDebuff("Researches"))
+        player.reincarnationPoints = new Decimal("1e16")
+        player.challengecompletions[6] = 1;
+        player.highestchallengecompletions[6] = 1;
+        achievementaward(113);
+    }
+    if (player.achievements[278] > 0 && singularityReset) {
+        player.shopUpgrades.offeringAuto = 10
+        player.shopUpgrades.offeringEX = 10
+        player.shopUpgrades.obtainiumAuto = 10
+        player.shopUpgrades.obtainiumEX = 10
+        player.shopUpgrades.antSpeed = 10
+        player.shopUpgrades.cashGrab = 10
+    }
+    if (player.achievements[279] > 0) {
+        player.challengecompletions[7] = 1;
+        player.highestchallengecompletions[7] = 1;
+        achievementaward(120);
+        player.reincarnationPoints = new Decimal("1e100");
+    }
+    if (player.achievements[280] > 0) {
+        achievementaward(127);
+        player.challengecompletions[8] = 1;
+        player.highestchallengecompletions[8] = 1;
+        player.firstOwnedAnts = 1;
+        for (let i = 0; i < 7; i++) {
+            achievementaward(176 + i)
+        }
+    }
+    if (player.singularityCount >= 15) {
+        player.challengecompletions[8] = 5;
+        player.highestchallengecompletions[8] = 5;
+        player.reincarnationPoints = new Decimal("2.22e2222")
+        player.fifthOwnedAnts = 1;
+    }
+    if (player.singularityCount >= 20) {
+        player.challengecompletions[9] = 1;
+        player.highestchallengecompletions[9] = 1;
+        achievementaward(134);
+        player.shopUpgrades.offeringAuto = shopData.offeringAuto.maxLevel
+        player.shopUpgrades.offeringEX = shopData.offeringEX.maxLevel
+        player.shopUpgrades.obtainiumAuto = shopData.obtainiumAuto.maxLevel
+        player.shopUpgrades.obtainiumEX = shopData.obtainiumEX.maxLevel
+        player.shopUpgrades.antSpeed = shopData.antSpeed.maxLevel
+        player.shopUpgrades.cashGrab = shopData.cashGrab.maxLevel
+    }
+    if (player.singularityCount >= 25) {
+        player.antPoints = new Decimal("1e100")
+        player.antUpgrades[11] = 1;
+    }
+    revealStuff();
 }
 
 export const singularity = async (count = 1) => {
@@ -757,15 +894,19 @@ export const singularity = async (count = 1) => {
     
     //Import Game
     await importSynergism(btoa(JSON.stringify(hold)), true);
+
+    player.codes.set(39, true);
+//    updateSingularityMilestoneAwards();
 }
 
 export const singsing = async () => { // Almost delete savefile
     if (player.singularityCount < 100)
         return await Alert(`sorry. You need to arrive at #100 !`);
+    const skips = Math.floor(player.singularityCount / 100 / (1 + player.singularityUpgrades.singsingWormhole.level));
     await Alert(`Congratulations! You won all singuality!`);
     await Alert(`You are currently in front of the Eternal Synergism entrance.`);
     await Alert(`Synergism trades to you. Synergism will give you Quarks +100%. And you sacrifice further time. The answer is... Almost Delete SaveFile.`);
-    const p = await Confirm(`Finally you have reached ##${player.singsing}. Are you ready to fly to Synergism in multidimensional universe?`);
+    const p = await Confirm(`Finally you have reached ##${format(player.singsing + skips, 0, true)}(+${format(skips, 0, true)}). Are you ready to fly to Synergism in multidimensional universe?`);
     if (!p)
         return;
     const a = window.crypto.getRandomValues(new Uint16Array(1))[0] % 999;
@@ -784,7 +925,7 @@ export const singsing = async () => { // Almost delete savefile
     toggleTabs("buildings");
     toggleSubTab(1, 0);
 
-    hold.singsing += 1 + player.singularityUpgrades.singsingWormhole.level;
+    hold.singsing += skips;
     hold.singularityUpgrades.singsingWormhole.level = player.singularityUpgrades.singsingWormhole.level;
 
     //Import Game

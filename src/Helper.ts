@@ -63,8 +63,17 @@ export const addTimers = (input: TimerInput, time = 0) => {
  */
 export const checkMaxRunes = () => {
     let maxed = 0;
-    for (let i = 1; i <= 5; i++) {
-        if (player.runelevels[i - 1] >= calculateMaxRunes(i))
+    const unlockedRune = [
+        true,
+        player.achievements[38] > 0.5,
+        player.achievements[44] > 0.5,
+        player.achievements[102] > 0.5,
+        player.researches[82] > 0.5,
+        player.shopUpgrades.infiniteAscent,
+        player.platonicUpgrades[20] > 0,
+    ];
+    for (let i = 1; i <= 7; i++) {
+        if (!unlockedRune[i] || player.runelevels[i - 1] >= calculateMaxRunes(i))
             maxed++;
     }
     return maxed
@@ -82,6 +91,9 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
 
     switch(input){
         case "addObtainium": {
+            // If in challenge 14, abort and do not award obtainium
+            if (player.currentChallenge.ascension === 14)
+                break;
             //Update Obtainium Multipliers + Amount to gain
             calculateObtainium();
             const obtainiumGain = calculateAutomaticObtainium();
@@ -120,10 +132,9 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
                 if(kind > 0){
                     // Automatic purchase of Talisman Fragments
                     if(player.achievements[215] > 0){
-                        const notMaxed = 7;
                         const talismanItemNames = ['shard','commonFragment','uncommonFragment','rareFragment','epicFragment','legendaryFragment','mythicalFragment'] as const;
-                        for (let i = 0; i < notMaxed; i++) {
-                            buyTalismanResources(talismanItemNames[i], 100 / kind / notMaxed);
+                        for (let i = 0; i < talismanItemNames.length; i++) {
+                            buyTalismanResources(talismanItemNames[i], 100 / talismanItemNames.length / kind);
                         }
                     }
 
@@ -135,22 +146,27 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
 
                     // If you bought cube upgrade 2x10 then it sacrifices to all runes equally
                     if(player.cubeUpgrades[20] === 1){
-                        if(kind === 2) {
-                            kind = 1;
+                        let buys = 5;
+                        if(player.singularityUpgrades.singAutomation.level >= 1000) {
+                            buys = 7;
+                        } else if(player.singularityUpgrades.singAutomation.level >= 100) {
+                            buys = 6;
                         }
-                        const notMaxed = (5 - checkMaxRunes());
+                        const notMaxed = (buys - checkMaxRunes());
                         if(notMaxed > 0){
-                            const baseAmount = Math.floor(player.runeshards / kind / notMaxed);
-                            for (let i = 0; i < 5; i++) {
-                                redeemShards(i+1, true, baseAmount);
+                            const baseAmount = Math.floor(player.runeshards / notMaxed / kind);
+                            for (let i = 0; i < buys; i++) {
+                                redeemShards(i + 1, true, baseAmount);
                             }
                         }
-                    }
-                    // If you did not buy cube upgrade 2x10 it sacrifices to selected rune.
-                    else{
+                    } else {
                         const rune = player.autoSacrifice;
                         redeemShards(rune, true, 0);
                     }
+                } else {
+                    // If you did not buy cube upgrade 2x10 it sacrifices to selected rune.
+                    const rune = player.autoSacrifice;
+                    redeemShards(rune, true, 0);
                 }
                 //Modulo used in event of a large delta time (this could happen for a number of reasons)
                 player.sacrificeTimer %= 1

@@ -51,7 +51,7 @@ export const displayRuneInformation = (i: number, updatelevelup = true) => {
 
     if (i === 7) {
         if (updatelevelup) {
-            DOMCacheGetOrSet("runeshowlevelup").textContent = "I wonder what happens if you feed it " + format(1e256 * (1 + player.singularityCount)) + " Rune EXP."
+            DOMCacheGetOrSet("runeshowlevelup").textContent = "I wonder what happens if you feed it " + format(G['runeexpbase'][6] * (1 + player.singularityCount)) + " Rune EXP."
         }
         DOMCacheGetOrSet("runeshowpower7").textContent = "You cannot grasp the true form of Ant God's treasure."
     }
@@ -81,9 +81,6 @@ export const redeemShards = (runeIndexPlusOne: number, auto = false, cubeUpgrade
     const runeIndex = runeIndexPlusOne - 1;
 
     const maxLevel = calculateMaxRunes(runeIndex + 1)
-    if (player.runelevels[runeIndex] >= maxLevel) {
-        return;
-    }
 
     // Whether or not a rune is unlocked array
     const unlockedRune = [
@@ -96,15 +93,15 @@ export const redeemShards = (runeIndexPlusOne: number, auto = false, cubeUpgrade
         player.platonicUpgrades[20] > 0,
     ];
 
-    let levelsToAdd = player.offeringbuyamount
-    if (auto) {
-        levelsToAdd = Math.pow(2, player.shopUpgrades.offeringAuto);
-    }
-    if (auto && cubeUpgraded > 0) {
-        levelsToAdd = Math.min(1e4, calculateMaxRunes(runeIndex + 1)) // limit to max 10k levels per call so the execution doesn't take too long if things get stuck
-    }
-    let levelsAdded = 0
     if (player.runeshards > 0 && player.runelevels[runeIndex] < calculateMaxRunes(runeIndex + 1) && unlockedRune[runeIndex]) {
+        let levelsToAdd = player.offeringbuyamount
+        if (auto) {
+            levelsToAdd = Math.pow(2, player.shopUpgrades.offeringAuto);
+        }
+        if (auto && cubeUpgraded > 0) {
+            levelsToAdd = Math.min(1e4, calculateMaxRunes(runeIndex + 1)) // limit to max 10k levels per call so the execution doesn't take too long if things get stuck
+        }
+        let levelsAdded = 0
         let all = 0
         const amountArr = calculateOfferingsToLevelXTimes(runeIndex, player.runelevels[runeIndex], levelsToAdd)
         let toSpendTotal = Math.min(player.runeshards, amountArr.reduce((x, y) => x + y, 0))

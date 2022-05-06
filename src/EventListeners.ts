@@ -1,4 +1,4 @@
-import { toggleAscStatPerSecond, toggleTabs, toggleSubTab, toggleBuyAmount, toggleAutoTesseracts, toggleSettings, toggleautoreset, toggleautobuytesseract, toggleShops, toggleAutoSacrifice, toggleautoenhance, toggleautofortify, updateRuneBlessingBuyAmount, toggleChallenges, toggleAutoChallengesIgnore, toggleAutoChallengeRun, updateAutoChallenge, toggleResearchBuy, toggleAutoResearch, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleMaxBuyCube, toggleAutoBuyCube, toggleAutoOpenCubes, toggleTesseractBAB, toggleCorruptionLevel, toggleAutoAscend, toggleShopConfirmation, toggleAutoResearchMode, toggleBuyMaxShop } from "./Toggles"
+import { toggleAscStatPerSecond, toggleTabs, toggleSubTab, toggleBuyAmount, toggleAutoTesseracts, toggleSettings, toggleautoreset, toggleautobuytesseract, toggleShops, toggleAutoSacrifice, toggleautoenhance, toggleautofortify, updateRuneBlessingBuyAmount, toggleChallenges, toggleAutoChallengesIgnore, toggleAutoChallengeRun, updateAutoChallenge, toggleResearchBuy, toggleAutoResearch, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleMaxBuyCube, toggleAutoBuyCube, toggleAutoOpenCubes, toggleTesseractBAB, toggleCorruptionLevel, toggleAutoAscend, toggleShopConfirmation, toggleAutoResearchMode, toggleBuyMaxShop, toggleAutoBuyPlatonic } from "./Toggles"
 import { resetrepeat, updateAutoReset, updateTesseractAutoBuyAmount } from "./Reset"
 import { player, resetCheck, saveSynergy } from "./Synergism"
 import { boostAccelerator, buyAccelerator, buyMultiplier, buyProducer, buyCrystalUpgrades, buyParticleBuilding, buyTesseractBuilding, buyUpgrades, buyRuneBonusLevels, buyAllBlessings } from "./Buy"
@@ -16,7 +16,7 @@ import { buyPlatonicUpgrades, createPlatonicDescription } from "./Platonic"
 import { corruptionCleanseConfirm, corruptionDisplay } from "./Corruptions"
 import { exportSynergism, updateSaveString, promocodes, importSynergism, resetGame } from "./ImportExport"
 import { resetHistoryTogglePerSecond } from "./History"
-import { resetShopUpgrades, shopDescriptions, buyShopUpgrades, useConsumable, shopData, shopUpgradeTypes, resetShopExpand } from "./Shop"
+import { resetShopUpgrades, shopDescriptions, buyShopUpgrades, useConsumable, resetShopExpand } from "./Shop"
 import { Globals as G, Upgrade } from './Variables';
 import { changeTabColor } from "./UpdateHTML"
 import { hepteractDescriptions, hepteractToOverfluxOrbDescription, tradeHepteractToOverfluxOrb, overfluxPowderDescription, overfluxPowderWarp } from "./Hepteracts"
@@ -136,7 +136,7 @@ export const generateEventHandlers = () => {
     
     }
 //Part 2: Building Amount Toggles
-    const buildingTypesAlternate = ['coin','crystal','mythos','particle','tesseract','offering'] as const;
+    const buildingTypesAlternate = ['coin', 'crystal', 'mythos', 'particle', 'tesseract', 'offering', 'singupgrade'] as const;
     const buildingOrds = ['one','ten','hundred','thousand','million']
     const buildingOrdsToNum = [1, 10, 100, 1000, 1000000] as const;
     for (let index = 0; index < buildingOrds.length; index++) {
@@ -440,6 +440,7 @@ for (let index = 1; index <= 12; index++) {
     DOMCacheGetOrSet('toggleCubeAutoBuy').addEventListener('click', () => toggleAutoBuyCube())
     DOMCacheGetOrSet('toggleAutoOpenCubes').addEventListener('click', () => toggleAutoOpenCubes())
     DOMCacheGetOrSet('toggleTesseractBAB').addEventListener('click', () => toggleTesseractBAB())
+    DOMCacheGetOrSet('togglePlatonicAutoBuy').addEventListener('click', () => toggleAutoBuyPlatonic())
 
 //Part 2: Cube Opening Buttons
     //Wow Cubes
@@ -515,14 +516,14 @@ DOMCacheGetOrSet('acceleratorHepteractCraftMax').addEventListener('click', () =>
 DOMCacheGetOrSet('acceleratorBoostHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.acceleratorBoost.craft(true))
 DOMCacheGetOrSet('multiplierHepteractCraftMax').addEventListener('click', () => player.hepteractCrafts.multiplier.craft(true))
 
-DOMCacheGetOrSet('chronosHepteractCap').addEventListener('click', () => player.hepteractCrafts.chronos.expand())
-DOMCacheGetOrSet('hyperrealismHepteractCap').addEventListener('click', () => player.hepteractCrafts.hyperrealism.expand())
-DOMCacheGetOrSet('quarkHepteractCap').addEventListener('click', () => player.hepteractCrafts.quark.expand())
-DOMCacheGetOrSet('challengeHepteractCap').addEventListener('click', () => player.hepteractCrafts.challenge.expand())
-DOMCacheGetOrSet('abyssHepteractCap').addEventListener('click', () => player.hepteractCrafts.abyss.expand())
-DOMCacheGetOrSet('acceleratorHepteractCap').addEventListener('click', () => player.hepteractCrafts.accelerator.expand())
-DOMCacheGetOrSet('acceleratorBoostHepteractCap').addEventListener('click', () => player.hepteractCrafts.acceleratorBoost.expand())
-DOMCacheGetOrSet('multiplierHepteractCap').addEventListener('click', () => player.hepteractCrafts.multiplier.expand())
+DOMCacheGetOrSet('chronosHepteractCap').addEventListener('click', () => player.hepteractCrafts.chronos.expand('chronos'))
+DOMCacheGetOrSet('hyperrealismHepteractCap').addEventListener('click', () => player.hepteractCrafts.hyperrealism.expand('hyperrealism'))
+DOMCacheGetOrSet('quarkHepteractCap').addEventListener('click', () => player.hepteractCrafts.quark.expand('quark'))
+DOMCacheGetOrSet('challengeHepteractCap').addEventListener('click', () => player.hepteractCrafts.challenge.expand('challenge'))
+DOMCacheGetOrSet('abyssHepteractCap').addEventListener('click', () => player.hepteractCrafts.abyss.expand('abyss'))
+DOMCacheGetOrSet('acceleratorHepteractCap').addEventListener('click', () => player.hepteractCrafts.accelerator.expand('accelerator'))
+DOMCacheGetOrSet('acceleratorBoostHepteractCap').addEventListener('click', () => player.hepteractCrafts.acceleratorBoost.expand('acceleratorBoost'))
+DOMCacheGetOrSet('multiplierHepteractCap').addEventListener('click', () => player.hepteractCrafts.multiplier.expand('multiplier'))
 
 DOMCacheGetOrSet('hepteractToQuark').addEventListener('mouseover', () => hepteractToOverfluxOrbDescription())
 DOMCacheGetOrSet('hepteractToQuarkTrade').addEventListener('click', () => tradeHepteractToOverfluxOrb())
@@ -583,32 +584,19 @@ TODO: Fix this entire tab it's utter shit
 
 // Part 2: Potions
 /*Offering Potion*/
-    DOMCacheGetOrSet('offeringPotions').addEventListener('mouseover', () => shopDescriptions("offeringPotion"))
-    DOMCacheGetOrSet('offeringpotionowned').addEventListener('mouseover', () => shopDescriptions("offeringPotion"))
-    DOMCacheGetOrSet('buyofferingpotion').addEventListener('mouseover', () => shopDescriptions("offeringPotion"))
     DOMCacheGetOrSet('useofferingpotion').addEventListener('mouseover', () => shopDescriptions("offeringPotion"))
-    DOMCacheGetOrSet('buyofferingpotion').addEventListener('click', () => buyShopUpgrades("offeringPotion"))
-    //DOMCacheGetOrSet('offeringPotions').addEventListener('click', () => buyShopUpgrades("offeringPotion"))  //Allow clicking of image to buy also
     DOMCacheGetOrSet('useofferingpotion').addEventListener('click', () => useConsumable("offeringPotion"))
 /*Obtainium Potion*/
-    DOMCacheGetOrSet('obtainiumPotions').addEventListener('mouseover', () => shopDescriptions("obtainiumPotion"))
-    DOMCacheGetOrSet('obtainiumpotionowned').addEventListener('mouseover', () => shopDescriptions("obtainiumPotion"))
-    DOMCacheGetOrSet('buyobtainiumpotion').addEventListener('mouseover', () => shopDescriptions("obtainiumPotion"))
     DOMCacheGetOrSet('useobtainiumpotion').addEventListener('mouseover', () => shopDescriptions("obtainiumPotion"))
-    DOMCacheGetOrSet('buyobtainiumpotion').addEventListener('click', () => buyShopUpgrades("obtainiumPotion"))
-    //DOMCacheGetOrSet('obtainiumPotions').addEventListener('click', () => buyShopUpgrades("obtainiumPotion"))  //Allow clicking of image to buy also
     DOMCacheGetOrSet('useobtainiumpotion').addEventListener('click', () => useConsumable("obtainiumPotion"))
 /* Permanent Upgrade Images */
     const shopKeys = Object.keys(player.shopUpgrades) as (keyof Player['shopUpgrades'])[]
     for (const key of shopKeys) {
-        const shopItem = shopData[key]
-        if (shopItem.type === shopUpgradeTypes.UPGRADE) {
-            DOMCacheGetOrSet(`${key}`).addEventListener('mouseover', () => shopDescriptions(key))
-            DOMCacheGetOrSet(`${key}Level`).addEventListener('mouseover', () => shopDescriptions(key))
-            DOMCacheGetOrSet(`${key}Button`).addEventListener('mouseover', () => shopDescriptions(key))
-            //DOMCacheGetOrSet(`${key}`).addEventListener('click', () => buyShopUpgrades(key))  //Allow clicking of image to buy also
-            DOMCacheGetOrSet(`${key}Button`).addEventListener('click', () => buyShopUpgrades(key))
-        }
+        DOMCacheGetOrSet(`${key}`).addEventListener('mouseover', () => shopDescriptions(key))
+        DOMCacheGetOrSet(`${key}Level`).addEventListener('mouseover', () => shopDescriptions(key))
+        DOMCacheGetOrSet(`${key}Button`).addEventListener('mouseover', () => shopDescriptions(key))
+        //DOMCacheGetOrSet(`${key}`).addEventListener('click', () => buyShopUpgrades(key))  //Allow clicking of image to buy also
+        DOMCacheGetOrSet(`${key}Button`).addEventListener('click', () => buyShopUpgrades(key))
     }
     DOMCacheGetOrSet('buySingularityQuarksButton').addEventListener('click', () => buyGoldenQuarks());
 // SINGULARITY TAB

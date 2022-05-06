@@ -20,7 +20,7 @@ import { calculatePlatonicBlessings } from './PlatonicCubes';
 import { antSacrificePointsToMultiplier, autoBuyAnts, calculateCrumbToCoinExp } from './Ants';
 import { calculatetax } from './Tax';
 import { ascensionAchievementCheck, challengeachievementcheck, achievementaward, resetachievementcheck, buildingAchievementCheck } from './Achievements';
-import { calculateGoldenQuarkGain, reset, resetrepeat, singularity } from './Reset';
+import { calculateGoldenQuarkGain, reset, resetrepeat, singularity, updateSingularityAchievements } from './Reset';
 import { buyMax, buyAccelerator, buyMultiplier, boostAccelerator, buyCrystalUpgrades, buyParticleBuilding, getReductionValue, getCost, buyRuneBonusLevels, buyTesseractBuilding, TesseractBuildings, calculateTessBuildingsInBudget } from './Buy';
 import { autoUpgrades } from './Automation';
 import { redeemShards } from './Runes';
@@ -35,7 +35,7 @@ import { AbyssHepteract, AcceleratorBoostHepteract, AcceleratorHepteract, Challe
 import { QuarkHandler } from './Quark';
 import { WowCubes, WowHypercubes, WowPlatonicCubes, WowTesseracts } from './CubeExperimental';
 import { changeHotkeys } from './Hotkeys';
-import { updatePlatonicUpgradeBG } from './Platonic';
+import { updatePlatonicUpgradeBG, autoBuyPlatonicUpgrades } from './Platonic';
 import { testing, version, lastUpdated } from './Config';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import localforage from 'localforage';
@@ -401,7 +401,7 @@ export const player: Player = {
     particlebuyamount: 1,
     offeringbuyamount: 1,
     tesseractbuyamount: 1,
-
+    singupgradebuyamount: 1,
 
     shoptoggles: {
         coin: true,
@@ -415,7 +415,7 @@ export const player: Player = {
 
     // create a Map with keys defaulting to false
     codes: new Map(
-        Array.from({ length: 36 }, (_, i) => [i + 1, false])
+        Array.from({ length: 39 }, (_, i) => [i + 1, false])
     ),
 
     loaded1009: true,
@@ -474,6 +474,7 @@ export const player: Player = {
     buyAutoCubeUpgrades: false,
     autoOpenCubes: false,
     tesseractAutoBuyer: false,
+    autoBuyPlatonic: false,
 
     antPoints: new Decimal("1"),
     antUpgrades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -675,6 +676,8 @@ export const player: Player = {
     singsing: 0,
     theme: 0,
     lastCode: '',
+    singularityMaxCount: 0,
+    autoHepteractUpgrades: false,
     hotkeys: {},
 
     singularityUpgrades: {
@@ -699,6 +702,8 @@ export const player: Player = {
         singCubes1: new SingularityUpgrade(singularityData['singCubes1']),
         singCubes2: new SingularityUpgrade(singularityData['singCubes2']),
         singCubes3: new SingularityUpgrade(singularityData['singCubes3']),
+        octeractUnlock: new SingularityUpgrade(singularityData['octeractUnlock']),
+        offeringAutomatic: new SingularityUpgrade(singularityData['offeringAutomatic']),
         singOfferingsA1: new SingularityUpgrade(singularityData['singOfferingsA1']),
         singObtainiumA1: new SingularityUpgrade(singularityData['singObtainiumA1']),
         singCubesA1: new SingularityUpgrade(singularityData['singCubesA1']),
@@ -720,6 +725,7 @@ export const player: Player = {
         singAscendScoreExponent: new SingularityUpgrade(singularityData['singAscendScoreExponent']),
         singConstantExponent: new SingularityUpgrade(singularityData['singConstantExponent']),
         singAscendTimeExponent: new SingularityUpgrade(singularityData['singAscendTimeExponent']),
+        singBuildingExponent: new SingularityUpgrade(singularityData['singBuildingExponent']),
         singExponent: new SingularityUpgrade(singularityData['singExponent']),
         singWormhole: new SingularityUpgrade(singularityData['singWormhole']),
         singMaxLevelUp: new SingularityUpgrade(singularityData['singMaxLevelUp']),
@@ -730,7 +736,7 @@ export const player: Player = {
 }
 
 export const blankSave = Object.assign({}, player, {
-    codes: new Map(Array.from({ length: 37 }, (_, i) => [i + 1, false]))
+    codes: new Map(Array.from({ length: 39 }, (_, i) => [i + 1, false]))
 });
 
 export const saveSynergy = async (button?: boolean) => {
@@ -1259,6 +1265,18 @@ const loadSynergy = async () => {
             el.style.color = "orange";
         }
 
+        // Show your cheat behavior.
+        const el2 = DOMCacheGetOrSet("cheatingMessage");
+        let cheatingText = '';
+        if (player.timerCheating === true)
+            cheatingText += 'Timer Cheating. ';
+        if (player.dailyCheating === true)
+            cheatingText += 'Daily Cheating. ';
+        if (cheatingText.length > 0)
+            cheatingText += 'The cheating you used. ';
+        el2.textContent = cheatingText;
+        el2.style.display = cheatingText.length > 0 ? 'block' : 'none';
+
         player.wowCubes = new WowCubes(Number(player.wowCubes) || 0);
 
         for (let j = 1; j < 126; j++) {
@@ -1276,54 +1294,28 @@ const loadSynergy = async () => {
             updatePlatonicUpgradeBG(j);
         }
 
-        const q = ['coin', 'crystal', 'mythos', 'particle', 'offering', 'tesseract'] as const;
-        for (let j = 0; j <= 5; j++) {
+        const buildingOrdsToNum = [1, 10, 100, 1000, 1000000] as const;
+        const buildingOrdsToStr = ['one', 'ten', 'hundred', 'thousand', 'million'] as const;
+        const q = ['coin', 'crystal', 'mythos', 'particle', 'tesseract', 'offering', 'singupgrade'] as const;
+        for (let j = 0; j < q.length; j++) {
             const curBuyAmount = player[`${q[j]}buyamount` as const];
-            if (curBuyAmount !== 1 && curBuyAmount !== 10 && curBuyAmount !== 100 && curBuyAmount !== 1000 && curBuyAmount !== 1000000) {
+            if (!buildingOrdsToNum.includes(curBuyAmount)) {
                 player[`${q[j]}buyamount` as const] = 1;
             }
         }
-        for (let j = 0; j <= 5; j++) {
-            for (let k = 0; k < 5; k++) {
-                let d;
-                if (k === 0) {
-                    d = 'one';
-                }
-                if (k === 1) {
-                    d = 'ten'
-                }
-                if (k === 2) {
-                    d = 'hundred'
-                }
-                if (k === 3) {
-                    d = 'thousand'
-                }
-                if (k === 4) {
-                    d = 'million'
-                }
-                const e = q[j] + d;
-                DOMCacheGetOrSet(e).style.backgroundColor = ""
-            }
+        for (let j = 0; j < q.length; j++) {
             let c;
             const curBuyAmount = player[`${q[j]}buyamount` as const];
-            if (curBuyAmount === 1) {
-                c = 'one'
+            for (let k = 0; k < buildingOrdsToNum.length; k++) {
+                const e = q[j] + buildingOrdsToStr[k];
+                DOMCacheGetOrSet(e).style.backgroundColor = ""
+                if (curBuyAmount === buildingOrdsToNum[k]) {
+                    c = buildingOrdsToStr[k]
+                }
             }
-            if (curBuyAmount === 10) {
-                c = 'ten'
+            if (c) {
+                DOMCacheGetOrSet(q[j] + c).style.backgroundColor = "green"
             }
-            if (curBuyAmount === 100) {
-                c = 'hundred'
-            }
-            if (curBuyAmount === 1000) {
-                c = 'thousand'
-            }
-            if (curBuyAmount === 1000000) {
-                c = 'million'
-            }
-
-            const b = q[j] + c;
-            DOMCacheGetOrSet(b).style.backgroundColor = "green"
         }
 
         const testArray = []
@@ -1447,6 +1439,9 @@ const loadSynergy = async () => {
         DOMCacheGetOrSet("toggleTesseractBAB").textContent = player.tesseractAutoBuyer ? "Tesseract Buildings Auto Buy: ON" : "Tesseract Buildings Auto Buy: Off";
         DOMCacheGetOrSet("toggleTesseractBAB").style.border = player.tesseractAutoBuyer ? "2px solid green" : "2px solid red";
 
+        DOMCacheGetOrSet("togglePlatonicAutoBuy").textContent = player.autoBuyPlatonic ? "Automatic: ON" : "Automatic: OFF";
+        DOMCacheGetOrSet("togglePlatonicAutoBuy").style.border = player.autoBuyPlatonic ? "2px solid green" : "2px solid red";
+
         DOMCacheGetOrSet("toggleCubeBuy").textContent = player.buyMaxCubeUpgrades ? "Upgrade: MAX [if possible wow]" : "Upgrade: 1 Level wow";
         DOMCacheGetOrSet("toggleConfirmShop").textContent = player.shopConfirmation ? "Shop Confirmations: ON" : "Shop Confirmations: OFF";
         DOMCacheGetOrSet("toggleBuyMaxShop").textContent = player.shopBuyMax ? "Buy Max: ON" : "Buy Max: OFF";
@@ -1529,6 +1524,7 @@ const loadSynergy = async () => {
         calculateRuneLevels();
         resetHistoryRenderAllTables();
         c15RewardUpdate();
+        updateSingularityAchievements();
     }
     CSSAscend();
     updateAchievementBG();
@@ -2053,6 +2049,7 @@ export const multipliers = (): void => {
     G['buildingPower'] = Math.pow(G['buildingPower'], 1 + player.cubeUpgrades[12] * 0.09)
     G['buildingPower'] = Math.pow(G['buildingPower'], 1 + player.cubeUpgrades[36] * 0.05)
     G['buildingPower'] *= 1 + Math.pow(player.singularityUpgrades.singMaterialsExponent.level / 100, 3)
+    G['buildingPower'] *= Math.pow(player.prestigeCount * player.transcendCount * player.reincarnationCount * player.singularityCount, player.platonicUpgrades[25] / 200);
 
     G['reincarnationMultiplier'] = Decimal.pow(G['buildingPower'], G['totalCoinOwned']);
 
@@ -2483,7 +2480,7 @@ export const resourceGain = (dt: number): void => {
         }
     }
     if (ascendchal !== 0 && ascendchal < 15) {
-        if (player.challengecompletions[10] >= challengeRequirement(ascendchal, player.challengecompletions[ascendchal], ascendchal)) {
+        if (player.challengecompletions[ascendchal] < getMaxChallenges(ascendchal) && player.challengecompletions[10] >= challengeRequirement(ascendchal, player.challengecompletions[ascendchal], ascendchal)) {
             void resetCheck('ascensionChallenge', false)
             challengeachievementcheck(ascendchal, true)
         }
@@ -2498,6 +2495,8 @@ export const resourceGain = (dt: number): void => {
 export const updateAntMultipliers = (): void => {
     //Update 2.5.0: Updated to have a base of 10 instead of 1x
     G['globalAntMult'] = new Decimal(10);
+    //Update 2.9.0: Updated to give a 5x multiplier no matter what
+    G['globalAntMult'] = G['globalAntMult'].times(5);
     G['globalAntMult'] = G['globalAntMult'].times(1 + 1 / 2500 * Math.pow(G['rune5level'] * G['effectiveLevelMult'] * (1 + player.researches[84] / 200 * (1 + 1 * G['effectiveRuneSpiritPower'][5] * calculateCorruptionPoints() / 400)), 2))
     if (player.upgrades[76] === 1) {
         G['globalAntMult'] = G['globalAntMult'].times(5)
@@ -2557,8 +2556,15 @@ export const updateAntMultipliers = (): void => {
     if (player.currentChallenge.ascension === 15 && player.platonicUpgrades[10] > 0) {
         G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 1.25)
     }
-    if (G['extinctionMultiplier'][player.usedCorruptions[7]] < 0)
+    if (player.achievements[274] > 0) {
+        G['globalAntMult'] = G['globalAntMult'].times(4.44)
+    }
+    if (player.usedCorruptions[7] === 14) {
+        G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 0.02)
+    }
+    if (G['extinctionMultiplier'][player.usedCorruptions[7]] < 0) {
         G['globalAntMult'] = Decimal.pow(G['globalAntMult'], G['extinctionMultiplier'][player.usedCorruptions[7]] + 1)
+    }
 }
 
 export const createAnts = (dt: number): void => {
@@ -2816,7 +2822,11 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
         }
         challengeDisplay(a, true)
         if (a !== 15 || manual) {
-            reset("ascensionChallenge")
+            reset("ascensionChallenge", manual)
+        }
+
+        if (!player.retrychallenges || manual || (player.challengecompletions[a] > player.highestchallengecompletions[a] && player.challengecompletions[a] >= maxCompletions)) {
+            player.currentChallenge.ascension = 0;
         }
 
         if (player.challengecompletions[a] > player.highestchallengecompletions[a]) {
@@ -2824,9 +2834,6 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             player.wowHypercubes.add(1);
         }
 
-        if (!player.retrychallenges || manual || (player.autoChallengeRunning && player.challengecompletions[a] >= maxCompletions)) {
-            player.currentChallenge.ascension = 0;
-        }
         updateChallengeDisplay();
         challengeachievementcheck(a, true)
     }
@@ -2839,10 +2846,10 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
         if (player.singularityUpgrades.singWormhole.level <= 0) {
             sings = 1;
         }
-        await Alert("You have reached the end of the game, on singularity #" +format(player.singularityCount)+". Platonic and the Ant God are proud of you.")
+        await Alert(`You have reached the end of the game, on singularity #${format(player.singularityCount, 0, true)}. Platonic and the Ant God are proud of you.`)
         await Alert("You may choose to sit on your laurels, and consider the game 'beaten', or you may do something more interesting.")
         await Alert("You're too powerful for this current universe. The multiverse of Synergism is truly endless, but out there are even more challenging universes parallel to your very own.")
-        await Alert(`Start anew, and enter singularity #${format(player.singularityCount + sings)}. Your next universe is harder than your current one, but unlock a permanent +10% Quark Bonus, +10% Ascension Count Bonus, and Gain ${format(calculateGoldenQuarkGain(), 2, true)} golden quarks, which can purchase game-changing endgame upgrades [Boosted by ${format(player.worlds.BONUS)}% due to patreon bonus!].`)
+        await Alert(`Start anew, and enter singularity #${format(player.singularityCount + sings, 0, true)}. Your next universe is harder than your current one, but unlock a permanent +10% Quark Bonus, +10% Ascension Count Bonus, and Gain ${format(calculateGoldenQuarkGain(), 2, true)} golden quarks, which can purchase game-changing endgame upgrades [Boosted by ${format(player.worlds.BONUS)}% due to patreon bonus!].`)
         await Alert("However, all your past accomplishments are gone! ALL Challenges, Refundable Shop upgrades, Upgrade Tab, Runes, All Cube upgrades, All Cube Openings, Hepteracts (Except for your Quark Hepteracts), Achievements will be wiped clean.")
         let c1 = false
         let c2 = false
@@ -2853,7 +2860,7 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
         let gotoSings = 0;
         if (c2 && sings > 1 && player.singularityUpgrades.singWormhole.level > 0){
             const maxJumps = sings;
-            const amount = await Prompt("Well you can Singularity up to "+format(maxJumps)+" at a time, but that makes the game more difficult!");
+            const amount = await Prompt(`Well you can Singularity up to ${format(maxJumps, 0, true)} at a time, but that makes the game more difficult!`);
             if (!amount)
                 return Alert('Yeah, you finished it');
             gotoSings = Number(amount);
@@ -2865,7 +2872,7 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
                 return Alert('Singularity cannot be negative number!');
             else if (player.singularityCount + gotoSings == 0)
                 await Alert("caution! #0 locks Singularity!");
-            await Alert("The Ant God allows you to go to #"+format(player.singularityCount + gotoSings)+" in Singularity!");
+            await Alert(`The Ant God allows you to go to #${format(player.singularityCount + gotoSings, 0, true)} in Singularity!`);
             c3 = await Confirm("Are you REALLY SURE? You cannot go back from this (without an older savefile)! Confirm one last time to finalize your decision.")
         }
         else if (c2)
@@ -2876,7 +2883,7 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             } else {
                 void singularity(sings);
             }
-            return Alert("Welcome to Singularity #" + format(player.singularityCount) + ". You're back to familiar territory, but something doesn't seem right.")
+            return Alert(`Welcome to Singularity #${format(player.singularityCount, 0, true)}. You're back to familiar territory, but something doesn't seem right.`)
         }
         if (!c1 || !c2)
             return Alert("If you decide to change your mind, let me know. -Ant God")
@@ -3188,6 +3195,8 @@ export const updateAll = (): void => {
     G['optimalObtainiumTimer'] = 3600 + 120 * player.shopUpgrades.obtainiumEX;
     autoBuyAnts()
 
+    autoBuyPlatonicUpgrades()
+
     let metaData = null;
     if (player.researches[175] > 0) {
         for (let i = 1; i <= 10; i++) {
@@ -3364,7 +3373,7 @@ function tack(dt: number) {
                 calculateRuneLevels();
 
                 // Challenge 15 Reward Update
-                if (player.challenge15Exponent > 0 && player.platonicUpgrades[21] > 0) {
+                if (player.singularityUpgrades.singAutomation.level > 200 && player.platonicUpgrades[21] > 0) {
                     c15RewardUpdate();
                 }
             }
@@ -3424,8 +3433,8 @@ function tack(dt: number) {
         if (player.autoAscend) {
             G['autoResetTimers'].ascension += dt;
             const time = Math.max(0.01, player.ascensionamount);
-            if (G['autoResetTimers'].ascension >= time) {
-                if (player.autoAscendMode === "c10Completions" && player.challengecompletions[10] >= Math.max(1, player.autoAscendThreshold)) {
+            if (G['autoResetTimers'].ascension >= time) { 
+                if (player.autoAscendMode === "c10Completions" && (!player.autoChallengeRunning || player.currentChallenge.reincarnation !== 10) && player.challengecompletions[10] >= Math.max(1, player.autoAscendThreshold) && player.currentChallenge.ascension !== 15) {
                     reset("ascension", true)
                 }
             }
@@ -3602,7 +3611,7 @@ export const reloadShit = async (reset = false) => {
     htmlInserts();
     createTimer();
 
-    dailyResetCheck();
+    void dailyResetCheck();
     interval(() => dailyResetCheck(), 30_000);
 
     constantIntervals();

@@ -196,6 +196,11 @@ export const revealStuff = () => {
     for (const HTML of Array.from(singularityHTMLs)) { // Ability to view singularity features.
         HTML.style.display = player.singularityCount > 0 ? "block" : "none";
     }
+
+    const singularityShopItems = document.getElementsByClassName("singularityShopUnlock") as HTMLCollectionOf<HTMLElement>;
+    for (const item of Array.from(singularityShopItems)) { // Ability to buy upgrade tier 1s
+        item.style.display = player.singularityUpgrades.wowPass.level > 0 ? "block" : "none";
+    }
     const hepts = DOMCacheGetOrSet("corruptionHepteracts");
     hepts.style.display = (player.achievements[255] > 0) ? "block" : "none";
 
@@ -375,6 +380,8 @@ export const revealStuff = () => {
         (DOMCacheGetOrSet('singularitybtn').style.display = 'block') :
         (DOMCacheGetOrSet('singularitybtn').style.display = 'none');
 
+
+
     DOMCacheGetOrSet("ascensionStats").style.visibility = (player.achievements[197] > 0 || player.singularityCount > 0) ? "visible" : "hidden";
     DOMCacheGetOrSet("ascHyperStats").style.display = player.challengecompletions[13] > 0 ? "" : "none";
     DOMCacheGetOrSet("ascPlatonicStats").style.display = player.challengecompletions[14] > 0 ? "" : "none";
@@ -383,6 +390,7 @@ export const revealStuff = () => {
     DOMCacheGetOrSet("toggleCubeAutoBuy").style.display = player.achievements[197] > 0 && player.singularityCount > 0 ? "" : "none";
     DOMCacheGetOrSet("toggleAutoOpenCubes").style.display = player.achievements[218] > 0 && player.singularityCount > 0 ? "" : "none";
     DOMCacheGetOrSet("toggleTesseractBAB").style.display = player.achievements[218] > 0 && player.singularityCount > 0 ? "" : "none";
+    DOMCacheGetOrSet("togglePlatonicAutoBuy").style.display = player.singularityUpgrades.singAutomation.level > 200 && player.singularityCount > 0 ? "" : "none";
 
     //I'll clean this up later. Note to 2019 Platonic: Fuck you
     // note to 2019 and 2020 Platonic, you're welcome
@@ -1029,6 +1037,9 @@ const NotificationCB = (text: string, time = 30000, cb: () => void) => {
     notification.style.display = 'block';
     notification.classList.remove('slide-out');
     notification.classList.add('slide-in');
+
+    if (time > 30000)
+        console.log(text);
 
     const close = () => {
         notification.classList.add('slide-out');

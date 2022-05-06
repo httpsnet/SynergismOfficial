@@ -177,17 +177,21 @@ export const promocodes = async (lastCode = false) => {
     } else {
         player.lastCode = input
     }
-    if (input === "quack" && !player.codes.get(37)) {
-        player.codes.set(37, true);
+    if (input === "2e0" && !player.codes.get(39) && G['isEvent']) {
+        player.codes.set(39, true);
         player.quarkstimer = quarkHandler().maxTime;
         player.goldenQuarksTimer = 90000;
-        addTimers("ascension", 18000)
-        return Alert("Quacks like a dog. Your quark timer(s) have been replenished and you have been given 5 real life hours of ascension progress!")
-    } else if (input === "synergism2021" && !player.codes.get(1)) {
+        addTimers("ascension", 24 * 3600);
+        if (player.singularityCount > 0) 
+            player.goldenQuarks += 500
+        return Alert("Happy two year!!!! Your quark timer(s) have been replenished and you have been given 24 real life hours of ascension progress!")
+    } else if (input === "synergism2022" && !player.codes.get(1)) {
         player.codes.set(1, true);
-        player.runeshards += 25;
-        player.worlds.add(50);
-        el.textContent = "Promo Code 'synergism2021' Applied! +25 Offerings, +50 Quarks"
+        player.runeshards += 2022;
+        player.worlds.add(2022);
+        el.textContent = "Promo Code 'synergism2022' Applied! +2022 Offerings, +2022 Quarks"
+    } else if (input === "synergism2021" && !player.codes.get(1)) {
+        el.textContent = "ah? Do you know why it doesn't work?"
     } else if (input === ":unsmith:" && player.achievements[243] < 1) {
         achievementaward(243);
         el.textContent = "It's Spaghetti Time! [Awarded an achievement!!!]";
@@ -348,8 +352,9 @@ export const promocodes = async (lastCode = false) => {
         player.promoCodeTiming.time = Date.now();
 
         if (diff <= (500 + 5 * player.cubeUpgrades[61])) {
-            player.worlds.add(500);
-            return Confirm(`You clicked at the right time! [+500 Quarkies]`);
+            const reward = Math.floor(500 * (1 + 11 * player.cubeUpgrades[61] / 100));
+            player.worlds.add(reward);
+            return Confirm(`You clicked at the right time! [+${format(reward)} Quarkies]`);
         } else {
             return Confirm(`You didn't guess within the correct times, try again soon!`);
         }

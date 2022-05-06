@@ -116,7 +116,8 @@ export const buyTalismanResources = (type: keyof typeof talismanResourceCosts, p
     const talismanResourcesData = getTalismanResourceInfo(type, percentage)
 
     if (talismanResourcesData.canBuy) {
-        if ((player.talismanShards + talismanResourcesData.buyAmount).toString() !== player.talismanShards.toString()) {
+        const fragments = type === 'shard' ? player.talismanShards : player[`${type}s` as const];
+        if (fragments + talismanResourcesData.buyAmount !== fragments) {
             if (type === 'shard') {
                 player.talismanShards += talismanResourcesData.buyAmount
             } else {

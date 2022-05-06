@@ -11,7 +11,7 @@ import { AbyssHepteract, AcceleratorBoostHepteract, AcceleratorHepteract, Challe
 import { WowCubes, WowHypercubes, WowPlatonicCubes, WowTesseracts } from './CubeExperimental';
 import { Alert } from './UpdateHTML';
 import { getQuarkInvestment, getMaxLevel} from './Shop';
-import { ISingularityData, singularityData, SingularityUpgrade } from './singularity';
+import { ISingularityData, singularityData, SingularityUpgrade, checkUpgrades } from './singularity';
 
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
@@ -480,25 +480,48 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         }
     }
 
-    // added 3.0.0 RC1
+    // added v3.0.0 A1
     if (data.singsing === undefined) {
         player.maxbuyresearch = false
-        player.shopConfirmation = false
+        player.shopConfirmation = true
         player.shopBuyMax = false
         player.buyMaxCubeUpgrades = false
         player.buyAutoCubeUpgrades = false
         player.shopExpandCount = 0
         player.singsing = 0
+    }
+
+    if (data.hotkeys === undefined) {
+        player.hotkeys = {}
+    }
+
+    // added v3.0.0 A2
+    if (player.theme === undefined) {
         player.theme = 0
         player.resettoggle3 = 1
         player.ascensionamount = 0
         player.autoOpenCubes = false
         player.tesseractAutoBuyer = false
         player.lastCode = ''
+        player.dayCheck = new Date()
     }
 
-    if (data.hotkeys === undefined) {
-        player.hotkeys = {}
+    // added v3.0.0 A4
+    if (player.singularityMaxCount === undefined) {
+        player.singupgradebuyamount = 1
+        player.singularityMaxCount = 0
+        player.autoBuyPlatonic = false
+        player.autoHepteractUpgrades = false
+    }
+
+    if (player.singularityMaxCount === 0) {
+        player.singularityMaxCount = player.singularityCount
+    }
+
+    // One-time rescue with daily cheats
+    if (player.dailyCheating === false) {
+        player.dayCheck = new Date()
+        player.dailyCheating = true
     }
 
     // Update (read: check) for undefined shop upgrades. Also checks above max level.
@@ -534,6 +557,8 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         singCubes1: new SingularityUpgrade(singularityData['singCubes1']),
         singCubes2: new SingularityUpgrade(singularityData['singCubes2']),
         singCubes3: new SingularityUpgrade(singularityData['singCubes3']),
+        octeractUnlock: new SingularityUpgrade(singularityData['octeractUnlock']),
+        offeringAutomatic: new SingularityUpgrade(singularityData['offeringAutomatic']),
         singOfferingsA1: new SingularityUpgrade(singularityData['singOfferingsA1']),
         singObtainiumA1: new SingularityUpgrade(singularityData['singObtainiumA1']),
         singCubesA1: new SingularityUpgrade(singularityData['singCubesA1']),
@@ -555,6 +580,7 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         singAscendScoreExponent: new SingularityUpgrade(singularityData['singAscendScoreExponent']),
         singConstantExponent: new SingularityUpgrade(singularityData['singConstantExponent']),
         singAscendTimeExponent: new SingularityUpgrade(singularityData['singAscendTimeExponent']),
+        singBuildingExponent: new SingularityUpgrade(singularityData['singBuildingExponent']),
         singExponent: new SingularityUpgrade(singularityData['singExponent']),
         singWormhole: new SingularityUpgrade(singularityData['singWormhole']),
         singMaxLevelUp: new SingularityUpgrade(singularityData['singMaxLevelUp']),
@@ -573,12 +599,12 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                     description: singularityData[k].description,
                     maxLevel: singularityData[k].maxLevel,
                     costPerLevel: singularityData[k].costPerLevel,
-                    unlockCount: singularityData[k].unlockCount,
                     maxCapLevel: singularityData[k].maxCapLevel, 
                     
                     level: data.singularityUpgrades[k].level,
                     goldenQuarksInvested: data.singularityUpgrades[k].goldenQuarksInvested,
-                    toggleBuy: data.singularityUpgrades[k].toggleBuy
+                    toggleBuy: data.singularityUpgrades[k].toggleBuy,
+                    minimumSingularity: singularityData[k].minimumSingularity,
                 }
                 player.singularityUpgrades[k] = new SingularityUpgrade(updatedData);
             }
@@ -608,4 +634,6 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
     if (data.goldenQuarksTimer === undefined || player.goldenQuarksTimer === undefined) {
         player.goldenQuarksTimer = 90000;
     }
+
+    checkUpgrades();
 }

@@ -203,7 +203,7 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         h.textContent = "None"
         k.textContent = "Start [Reduced Diamonds]"
         l.textContent = "Exponent = ^" + format(0.5 + CalcECC('transcend', player.challengecompletions[5]) / 100, 2, true)
-        m.textContent = "Crystal production x" + format(Math.pow(10, CalcECC('transcend', player.challengecompletions[5])))
+        m.textContent = "Crystal production x" + format(Decimal.pow(10, CalcECC('transcend', player.challengecompletions[5])))
         n.textContent = ""
     }
     if (i === 6 && G['challengefocus'] === 6) {
@@ -592,7 +592,7 @@ export const runChallengeSweep = (dt: number) => {
         player.researches[150] === 0 || // Research 6x25 is 0
         !player.autoChallengeRunning // Auto challenge is toggled off
     ) { return }
-    
+
     // Increment auto challenge timer
         G['autoChallengeTimerIncrement'] += dt;
 
@@ -662,12 +662,14 @@ export const runChallengeSweep = (dt: number) => {
            In this case, we do not need this to run and will terminate
            Auto challenge.*/
         if (startChallenge > 10) {
+            toggleAutoChallengeModeText("OFF");
             toggleAutoChallengeRun();
             return
         }
 
         // Set our index to calculated starting challenge and run the challenge
         player.autoChallengeIndex = startChallenge;
+
         toggleChallenges(player.autoChallengeIndex, true);
 
         // Sets Mode to "EXIT" as displayed in the challenge tab
@@ -724,7 +726,7 @@ export const challenge15ScoreMultiplier = () => {
     const arr = [
         1 + 5/10000 * hepteractEffective('challenge'), // Challenge Hepteract
         1 + 0.25 * player.platonicUpgrades[15], // Omega Upgrade
-        Math.pow(player.challenge15Exponent, player.singularityUpgrades.singScoreExponent.level / 10000), // C15 Score Exponent
+        Math.pow(player.challenge15Exponent + 1, player.singularityUpgrades.singScoreExponent.level / 10000), // C15 Score Exponent
     ]
     return productContents(arr)
 }

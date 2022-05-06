@@ -16,7 +16,7 @@ type TabValue = { tabName: keyof typeof tabNumberConst, unlocked: boolean };
 type Tab = Record<number, TabValue>;
 type SubTab = Record<number, { 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    tabSwitcher?: (...args: any[]) => void, 
+    tabSwitcher?: ((...args: any[]) => unknown) | ((...args: any[]) => Promise<unknown>) 
     subTabList: { 
         subTabID: string | number | boolean, 
         unlocked: boolean,
@@ -89,7 +89,7 @@ export const toggleSettings = (i: number) => {
 }
 
 export const toggleChallenges = (i: number, auto = false) => {
-    if ((i <= 5)) {
+    if ((i <= 5) && player.currentChallenge.transcension !== i) {
         if(player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2){
             player.currentChallenge.transcension = i;
             reset("transcensionChallenge", false, "enterChallenge");
@@ -99,7 +99,7 @@ export const toggleChallenges = (i: number, auto = false) => {
             resetrepeat('transcensionChallenge');
         }
     }
-    if ((i >= 6 && i < 11)){
+    if ((i >= 6 && i < 11) && player.currentChallenge.reincarnation !== i){
         if(player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2){
             player.currentChallenge.reincarnation = i;
             reset("reincarnationChallenge", false, "enterChallenge");
@@ -110,7 +110,7 @@ export const toggleChallenges = (i: number, auto = false) => {
         }
     }
     if (player.challengecompletions[10] > 0) {
-        if (((player.currentChallenge.transcension === 0 && player.currentChallenge.reincarnation === 0 && player.currentChallenge.ascension === 0) || player.singularityCount > 0) && (i >= 11)) {
+        if (((player.currentChallenge.transcension === 0 && player.currentChallenge.ascension !== i && player.currentChallenge.reincarnation === 0 && player.currentChallenge.ascension === 0) || player.singularityCount > 0) && (i >= 11)) {
             player.currentChallenge.transcension = 0;
             player.currentChallenge.reincarnation = 0;
 
@@ -145,27 +145,19 @@ export const toggleChallenges = (i: number, auto = false) => {
     }
 }
 
-type ToggleBuy = 'coin' | 'crystal' | 'mythos' | 'particle' | 'offering' | 'tesseract';
+type ToggleBuy = 'coin' | 'crystal' | 'mythos' | 'particle' | 'tesseract' | 'offering' | 'singupgrade';
 
 export const toggleBuyAmount = (quantity: 1 | 10 | 100 | 1000 | 1000000, type: ToggleBuy) => {
     player[`${type}buyamount` as const] = quantity;
-    const a = ['one', 'ten', 'hundred', 'thousand', '', '', 'million'][quantity.toString().length - 1];
+    const buildingOrdsToNum = [1, 10, 100, 1000, 1000000] as const;
+    const buildingOrdsToStr = ['one', 'ten', 'hundred', 'thousand', 'million'] as const;
 
-    DOMCacheGetOrSet(`${type}${a}`).style.backgroundColor = "Green";
-    if (quantity !== 1) {
-        DOMCacheGetOrSet(`${type}one`).style.backgroundColor = ""
-    }
-    if (quantity !== 10) {
-        DOMCacheGetOrSet(`${type}ten`).style.backgroundColor = ""
-    }
-    if (quantity !== 100) {
-        DOMCacheGetOrSet(`${type}hundred`).style.backgroundColor = ""
-    }
-    if (quantity !== 1000) {
-        DOMCacheGetOrSet(`${type}thousand`).style.backgroundColor = ""
-    }
-    if (quantity !== 1000000) {
-        DOMCacheGetOrSet(`${type}million`).style.backgroundColor = ""
+    if (buildingOrdsToNum.includes(quantity))
+        DOMCacheGetOrSet(`${type}${buildingOrdsToStr[buildingOrdsToNum.indexOf(quantity)]}`).style.backgroundColor = "Green";
+    for (let j = 0; j < buildingOrdsToNum.length; j++) {
+        if (quantity !== buildingOrdsToNum[j]) {
+            DOMCacheGetOrSet(`${type}${buildingOrdsToStr[j]}`).style.backgroundColor = ""
+        }
     }
 }
 
@@ -747,6 +739,13 @@ export const toggleTesseractBAB = () => {
     el.style.border = player.tesseractAutoBuyer ? "2px solid green" : "2px solid red";
 }
 
+export const toggleAutoBuyPlatonic = () => {
+    const el = DOMCacheGetOrSet("togglePlatonicAutoBuy");
+    player.autoBuyPlatonic = !player.autoBuyPlatonic;
+    el.textContent = player.autoBuyPlatonic ? "Automatic: ON" : "Automatic: OFF";
+    el.style.border = player.autoBuyPlatonic ? "2px solid green" : "2px solid red";
+}
+
 export const toggleCubeSubTab = (i: number) => {
     const numSubTabs = subTabsInMainTab(8).subTabList.length
     for (let j = 1; j <= numSubTabs; j++) {
@@ -809,6 +808,8 @@ export const toggleAutoChallengeRun = () => {
         G['autoChallengeTimerIncrement'] = 0;
         toggleAutoChallengeModeText("OFF")
     } else {
+        player.autoChallengeIndex = Math.max(1, Math.max(player.currentChallenge.transcension, player.currentChallenge.reincarnation));
+        G['autoChallengeTimerIncrement'] = 0;
         el.style.border = "2px solid gold"
         el.textContent = "Auto Challenge Sweep [ON]"
         toggleAutoChallengeModeText("START")
