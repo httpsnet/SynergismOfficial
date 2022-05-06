@@ -275,26 +275,6 @@ input[type="image"] {
     outline: none;
 }
 
-#resourcesrow {
-    position: relative;
-    font-size: 16px;
-    width: 100%;
-}
-
-#preloadContainer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    min-height: 100%;
-    width: 100%;
-    align-items: center;
-}
-
-#preload {
-    flex: 1;
-}
-
 #offlineContainer {
     position: fixed;
     z-index: 6970;
@@ -427,6 +407,7 @@ input[type="image"] {
     justify-content: center;
     width: 100%;
     max-width: 1300px;
+    height: 25px;
 }
 
 nav li {
@@ -437,8 +418,8 @@ nav li {
     color: white;
     background-color: #171717;
     cursor: pointer;
-    line-height: 21px;
-    height: 21px;
+    line-height: 23px;
+    height: 23px;
     margin-right: 5px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -459,11 +440,6 @@ nav li:hover {
     border-color: orange;
 }
 
-#settingstab {
-    color: white;
-    border-color: white;
-}
-
 #achievementstab {
     border-color: white;
 }
@@ -480,21 +456,6 @@ nav li:hover {
     border-color: green;
 }
 
-#shoptab {
-    border-color: white;
-    background-color: purple;
-}
-
-#singularitytab {
-    border-color: lightgoldenrodyellow;
-    background-color: black;
-    color: red;
-}
-
-#shoptab:hover {
-    background-color: #b300b2;
-}
-
 #anttab {
     border-color: maroon;
 }
@@ -507,6 +468,26 @@ nav li:hover {
 #traitstab {
     border-color: orange;
     color: red;
+}
+
+#singularitytab {
+    border-color: lightgoldenrodyellow;
+    background-color: black;
+    color: red;
+}
+
+#settingstab {
+    color: white;
+    border-color: white;
+}
+
+#shoptab {
+    border-color: white;
+    background-color: purple;
+}
+
+#shoptab:hover {
+    background-color: #b300b2;
 }
 
 .subTabWrapper {
@@ -523,33 +504,80 @@ nav li:hover {
     margin-right: 17px;
 }
 
+.subBuildingsWrapper {
+    display: flex;
+    position: relative;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+}
+
 #buyamountcoin,
 #buyamountcrystal,
 #buyamountmythos,
 #buyamountparticle,
-#buyAmountTesseract {
+#buyAmountTesseract,
+#buyAmountSingUpgrade {
     position: absolute;
     top: 5px;
     left: calc(50% + 400px);
 }
 
-#togglecoinbuy {
-    color: white;
+#togglecoinbuy,
+#togglecrystalbuy,
+#togglemythosbuy,
+#toggleparticlebuy,
+#toggleTesseractBuy {
     font-size: 11px;
     text-align: center;
     margin: 0;
 }
 
-#buildingsTable {
-    position: relative;
-    top: 27%;
-    left: 25%;
+#buildingtext,
+#transcendTexts,
+#reincarnationTexts,
+#prestigeautomation,
+#transcendautomation,
+#reincarnateautomation > div,
+#ascendautomation {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-#buildings2 {
-    position: relative;
-    top: 71%;
-    left: 12.5%;
+#prestigeTexts,
+#tesseractTexts {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#buildingtext > p,
+#prestigeTexts > p,
+#transcendTexts > p,
+#reincarnationTexts > p,
+#tesseractTexts > p,
+#prestigeautomation > p,
+#transcendautomation > p,
+#reincarnateautomation > p,
+#ascendautomation > p {
+    margin: 0.05em auto;
+}
+
+#toggle21,
+#toggle27 {
+    margin-top: 60px;
+}
+
+#toggle27,
+#reincarnationamount,
+#reincarnateautotoggle {
+    width: 150px;
 }
 
 #upgrades {
@@ -590,26 +618,6 @@ nav li:hover {
 #upgradesFlex > div > button {
     width: 80px;
     height: 30px;
-}
-
-#shoptogglecoin {
-    grid-column-start: 1;
-}
-
-#shoptoggleprestige {
-    grid-column-start: 2;
-}
-
-#shoptoggletranscend {
-    grid-column-start: 3;
-}
-
-#shoptogglegenerator {
-    grid-column-start: 4;
-}
-
-#particleAutoUpgrade {
-    grid-column-start: 6;
 }
 
 #upgradesFlex > div > table {
@@ -706,6 +714,21 @@ nav li:hover {
     width: 150px;
     height: 40px;
     margin: 5px auto;
+}
+
+#saveStringLabel {
+    width: 180px;
+    margin: 2px auto;
+    font-size: 1em;
+}
+
+#saveStringInput {
+    width: 100%;
+    color: black;
+    border: 2px solid gray;
+    text-align: center;
+    font-size: 1em;
+    outline: none;
 }
 
 /* Third party URLs (Discord, Patreon, patch notes) */
@@ -913,7 +936,6 @@ nav li:hover {
 
 #buyamountoffering {
     position: absolute;
-    font-size: 11px;
     width: 250px;
     left: calc(50% + 300px);
     top: 37px;
@@ -943,61 +965,11 @@ nav li:hover {
     background-color: #333;
 }
 
-#togglecrystalbuy {
-    color: white;
-    font-size: 11px;
-    text-align: center;
-    margin: 0;
-}
-
-#toggleofferingbuy {
-    color: white;
-    font-size: 11px;
-    text-align: center;
-    margin: 0;
-}
-
+#toggleofferingbuy,
 #toggletalismanbuy {
     font-size: 11px;
-    margin: -4px 0 5px;
-}
-
-#togglemythosbuy {
-    color: white;
-    font-size: 11px;
     text-align: center;
     margin: 0;
-}
-
-#toggleparticlebuy {
-    color: white;
-    font-size: 11px;
-    text-align: center;
-    margin: 0;
-}
-
-#toggleTesseractBuy {
-    color: white;
-    font-size: 11px;
-    text-align: center;
-    margin: 0;
-}
-
-#coinBuildings {
-    display: flex;
-    position: relative;
-    padding: 0;
-    flex-direction: column;
-    align-items: center;
-}
-
-#prestige {
-    display: flex;
-    position: relative;
-    padding: 0;
-    color: cyan;
-    flex-direction: column;
-    align-items: center;
 }
 
 #crystalupgradestable {
@@ -1273,18 +1245,6 @@ nav li:hover {
     left: 300px;
 }
 
-#transcension {
-    display: flex;
-    position: relative;
-    padding: 0;
-    flex-direction: column;
-    align-items: center;
-}
-
-#transcension > .buttonRow {
-    color: pink;
-}
-
 #transcendshardinfo {
     margin: 2px;
 }
@@ -1493,64 +1453,6 @@ nav li:hover {
 
 .challengeActive:hover {
     background-color: #ebc7eb;
-}
-
-#reincarnation {
-    display: flex;
-    position: relative;
-    padding: 0;
-    color: limegreen;
-    flex-direction: column;
-    align-items: center;
-    max-width: 1600px;
-    margin: 0 auto;
-}
-
-#buildingtext,
-#transcendTexts,
-#reincarnationTexts,
-#prestigeautomation,
-#transcendautomation,
-#reincarnateautomation > div,
-#ascendautomation {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-#prestigeTexts,
-#tesseractTexts {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-#buildingtext > p,
-#prestigeTexts > p,
-#transcendTexts > p,
-#reincarnationTexts > p,
-#tesseractTexts > p,
-#prestigeautomation > p,
-#transcendautomation > p,
-#reincarnateautomation > p,
-#ascendautomation > p {
-    margin: 0.05em auto;
-}
-
-#toggle21,
-#toggle27 {
-    margin-top: 60px;
-}
-
-#toggle27,
-#reincarnationamount,
-#reincarnateautotoggle {
-    width: 150px;
 }
 
 #reincarnationamount {
@@ -1764,17 +1666,17 @@ nav li:hover {
 
 #ants {
     position: relative;
-    padding: 0;
-    text-align: center;
-    margin: 0 auto;
     min-width: 1250px;
     max-width: 1600px;
+    padding: 0;
+    margin: 0 auto;
 }
 
 #antsWrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    text-align: center;
     flex-shrink: 0;
     margin-left: -100px;
 }
@@ -1928,8 +1830,9 @@ nav li:hover {
 }
 
 #cubes {
-    padding: 0;
+    position: relative;
     max-width: 1600px;
+    padding: 0;
     margin: 0 auto;
 }
 
@@ -2180,15 +2083,6 @@ p[id$="BlessingsTotal"] {
 
 #versionnumber {
     color: fuchsia;
-}
-
-#ascension {
-    display: flex;
-    position: relative;
-    padding: 0;
-    color: orange;
-    flex-direction: column;
-    align-items: center;
 }
 
 #ascendConstantUpgrades {
@@ -2517,10 +2411,12 @@ p[id$="BlessingsTotal"] {
 }
 
 #traits {
+    position: relative;
     justify-content: center;
     width: 100%;
     min-height: 600px;
     margin-top: 10px;
+    padding: 0;
 }
 
 #corruptionMain {
@@ -2905,8 +2801,7 @@ header #obtainiumDisplay {
 
 #tabBorder {
     height: 2px;
-    position: relative;
-    z-index: 0;
+    width: 100%;
 }
 
 .challengeContainer {
@@ -2944,12 +2839,28 @@ header #obtainiumDisplay {
 }
 
 #platonicUpgrades {
+    display: flex;
+    flex-direction: row;
     margin-bottom: 30px;
 }
 
 #platonicUpgradePics {
     table-layout: fixed;
     font-size: 0;
+}
+
+#platonicHelper {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    margin-left: 30px;
+}
+
+#platonicHelper > button {
+    height: 30px;
+    width: 100%;
+    margin: 5px 0;
 }
 
 .platonicUpgradeImage {
@@ -3156,9 +3067,9 @@ header #obtainiumDisplay {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    padding-right: 5px;
+    padding: 5px;
     margin-top: 5px;
-    width: calc(32px * 21);
+    width: calc(32px * 23);
     border: 3px solid plum;
 }
 
