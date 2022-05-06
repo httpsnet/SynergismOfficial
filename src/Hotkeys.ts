@@ -5,7 +5,7 @@ import { keyboardTabChange, toggleAutoChallengeRun } from './Toggles';
 import { Alert, Confirm, Prompt } from './UpdateHTML';
 import { promocodes, exportSynergism, resetGame } from './ImportExport';
 
-export const defaultHotkeys = new Map<string, [string, () => unknown]>([
+export const defaultHotkeys = new Map<string, [string,() => unknown]>([
     ['A', ['Buy Accelerators', () => buyAccelerator()]],
     ['B', ['Boost Accelerator', () => boostAccelerator()]],
     ['C', ['Auto Challenge', () => {
@@ -16,7 +16,7 @@ export const defaultHotkeys = new Map<string, [string, () => unknown]>([
                     void resetCheck('reincarnationChallenge', undefined, true)
                 }
                 if (player.currentChallenge.transcension !== 0) {
-                   void resetCheck('transcensionChallenge', undefined, true)
+                    void resetCheck('transcensionChallenge', undefined, true)
                 }
             }
         }
@@ -41,10 +41,10 @@ export const defaultHotkeys = new Map<string, [string, () => unknown]>([
     ['SHIFT+A', ['Reset Ascend', () => resetCheck('ascension')]],
     ['SHIFT+P', ['Promotion code', () => promocodes()]],
     ['SHIFT+E', ['Export', () => exportSynergism()]],
-    ['ALT+D', ['Delete savefile', () => resetGame()]],
+    ['ALT+D', ['Delete savefile', () => resetGame()]]
 ]);
 
-export let hotkeys = new Map<string, [string, () => unknown]>(defaultHotkeys);
+export let hotkeys = new Map<string, [string,() => unknown]>(defaultHotkeys);
 
 document.addEventListener('keydown', event => {
     if (document.activeElement?.localName === 'input') {
@@ -81,8 +81,8 @@ const makeSlot = (key: string, descr: string) => {
     span.addEventListener('click', async (e) => {
         const target = e.target as HTMLElement;
         const oldKey = target.textContent!.toUpperCase();
-        const name = 
-            hotkeys.get(oldKey)?.[0] ?? 
+        const name =
+            hotkeys.get(oldKey)?.[0] ??
             target.nextSibling?.textContent;
 
         // new value to set key as, unformatted
@@ -91,18 +91,22 @@ const makeSlot = (key: string, descr: string) => {
         https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
         You can also prefix your hotkey with [Ctrl,Shift,Alt]+<key>`, oldKey);
 
-        if (typeof newKey !== 'string') return;
+        if (typeof newKey !== 'string') {
+            return;
+        }
 
         const toSet = newKey.toUpperCase();
 
-        if (newKey.length === 0)
-            return void Alert(`You didn't enter anything, canceled!`);
+        if (newKey.length === 0) {
+            return void Alert('You didn\'t enter anything, canceled!');
+        }
 
-        if (!isNaN(Number(newKey)))
-            return void Alert(`Number keys are currently unavailable!`);
+        if (!isNaN(Number(newKey))) {
+            return void Alert('Number keys are currently unavailable!');
+        }
 
         if (hotkeys.has(toSet) || oldKey === toSet) {
-            return void Alert(`That key is already binded to an action, use another key instead!`);
+            return void Alert('That key is already binded to an action, use another key instead!');
         } else if (hotkeys.has(oldKey)) {
             const old = hotkeys.get(oldKey)!;
 
@@ -161,9 +165,10 @@ export const resetHotkeys = async () =>  {
 export const startHotkeys = () => {
     const hotkey = document.querySelector('.hotkeys')!;
 
-    for (const child of Array.from(hotkey.children)) 
+    for (const child of Array.from(hotkey.children)) {
         hotkey.removeChild(child);
-    
+    }
+
     for (const [key, [descr]] of [...hotkeys.entries()]) {
         const div = makeSlot(key, descr);
 
