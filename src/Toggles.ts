@@ -147,7 +147,7 @@ export const toggleChallenges = (i: number, auto = false) => {
 
 type ToggleBuy = 'coin' | 'crystal' | 'mythos' | 'particle' | 'tesseract' | 'offering' | 'singupgrade';
 
-export const toggleBuyAmount = (quantity: 1 | 10 | 100 | 1000 | 1000000, type: ToggleBuy) => {
+export const toggleBuyAmount = (quantity: number, type: ToggleBuy) => {
     player[`${type}buyamount` as const] = quantity;
     const buildingOrdsToNum = [1, 10, 100, 1000, 1000000] as const;
     const buildingOrdsToStr = ['one', 'ten', 'hundred', 'thousand', 'million'] as const;

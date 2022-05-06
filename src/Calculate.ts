@@ -1663,7 +1663,7 @@ export const calculateQuarkMultFromPowder = () => {
 }
 
 export const dailyResetCheck = async () => {
-    if (player.dayCheck === undefined) {
+    if (!player.dayCheck) {
         player.dayCheck = new Date();
     }
     if (typeof player.dayCheck === 'string') {

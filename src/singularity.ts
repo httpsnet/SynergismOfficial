@@ -47,15 +47,15 @@ export interface ISingularityData {
 export class SingularityUpgrade {
 
     // Field Initialization
-    private readonly name: string;
-    private readonly description: string;
+    public readonly name: string;
+    public readonly description: string;
     public level = 0;
     public readonly maxLevel: number; //-1 = infinitely levelable
     public readonly costPerLevel: number;
     public toggleBuy = 1; //-1 = buy MAX (or 1000 in case of infinity levels!)
     public goldenQuarksInvested = 0;
-    private readonly minimumSingularity: number;
-    private readonly maxCapLevel: number;
+    public readonly minimumSingularity: number;
+    public readonly maxCapLevel: number;
 
     public constructor(data: ISingularityData) {
         //        console.log(data.name)
