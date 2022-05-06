@@ -1663,7 +1663,7 @@ export const calculateQuarkMultFromPowder = () => {
 }
 
 export const dailyResetCheck = async () => {
-    if (player.dayCheck === 'undefined') {
+    if (player.dayCheck === undefined) {
         player.dayCheck = new Date();
     }
     if (typeof player.dayCheck === 'string') {
@@ -1700,7 +1700,7 @@ export const dailyResetCheck = async () => {
                 }
                 player.rngCode -= 86400 * 30 * 1000;
                 addTimers('ascension', 86400 * 30);
-                player.codes = Array.from(blankSave.codes);
+                player.codes = new Map<number, boolean>(blankSave.codes);
                 await Alert(`Ten New Year! \nAnt God has congratulates you. \n${bonustext}you have been given 1 real life months of ascension progress!!! \nAnd you will be able to use the code you used again!`);
             } else if (d.getFullYear() !== player.dayCheck.getFullYear()) {
                 if (player.challenge15Exponent >= 1e15) {
@@ -1710,7 +1710,7 @@ export const dailyResetCheck = async () => {
                 }
                 player.rngCode -= 86400 * 1000;
                 addTimers('ascension', 86400 * 3);
-                player.codes = Array.from(blankSave.codes);
+                player.codes = new Map<number, boolean>(blankSave.codes);
                 await Alert(`Happy New Year! \nSomething congratulates you. \n${bonustext}you have been given 3 real life days of ascension progress!! \nAnd you will be able to use the code you used again!`);
             } else if (d.getMonth() !== player.dayCheck.getMonth()) {
                 if (player.challenge15Exponent >= 1e15) {

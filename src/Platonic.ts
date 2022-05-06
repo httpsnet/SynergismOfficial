@@ -452,7 +452,7 @@ export const autoBuyPlatonicUpgrades = () => {
         return;
     }
 
-    const platUpgrade = Object.keys(platUpgradeBaseCosts) as (keyof platUpgradeBaseCosts)[];
+    const platUpgrade = Object.keys(platUpgradeBaseCosts) as (keyof typeof platUpgradeBaseCosts)[];
     for (let i = 0; i < platUpgrade.length; i++) {
         if (player.platonicUpgrades[i + 1] < platUpgradeBaseCosts[i + 1].maxLevel) {
             const level = player.platonicUpgrades[i + 1];

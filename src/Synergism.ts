@@ -1304,7 +1304,7 @@ const loadSynergy = async () => {
         const buildingOrdsToStr = ['one', 'ten', 'hundred', 'thousand', 'million'] as const;
         const q = ['coin', 'crystal', 'mythos', 'particle', 'tesseract', 'offering', 'singupgrade'] as const;
         for (let j = 0; j < q.length; j++) {
-            const curBuyAmount = player[`${q[j]}buyamount` as const];
+            const curBuyAmount = player[`${q[j]}buyamount` as const] as number;
             if (!buildingOrdsToNum.includes(curBuyAmount)) {
                 player[`${q[j]}buyamount` as const] = 1;
             }
