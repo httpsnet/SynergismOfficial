@@ -1,8 +1,8 @@
 import { DOMCacheGetOrSet } from './Cache/DOM';
-import { player } from "./Synergism"
+import { player } from './Synergism'
 
-const themeName = ["Dark", "Gray", "Light", "Black"];
-const themeClass = ["dark", "gray", "light", "black"];
+const themeName = ['Dark', 'Gray', 'Light', 'Black'];
+const themeClass = ['dark', 'gray', 'light', 'black'];
 
 export const toggleTheme = () => {
     player.theme++;
@@ -18,8 +18,8 @@ export const themeUpdate = () => {
     }
 
     const themeButton = DOMCacheGetOrSet('theme');
-    const className = (DOMCacheGetOrSet("offlineContainer")!.style.display === "none" ? "" : "loading ");
+    const className = (DOMCacheGetOrSet('offlineContainer')!.style.display === 'none' ? '' : 'loading ');
 
     document.body.className = className + themeClass[player.theme];
-    themeButton.textContent = "Theme: " + themeName[player.theme];
+    themeButton.textContent = 'Theme: ' + themeName[player.theme];
 }
