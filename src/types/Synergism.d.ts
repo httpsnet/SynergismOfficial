@@ -296,7 +296,7 @@ export interface Player {
     particlebuyamount: number
     offeringbuyamount: number
     tesseractbuyamount: number
-
+    singupgradebuyamount: number
 
     shoptoggles: {
         coin: boolean,
@@ -367,6 +367,7 @@ export interface Player {
     buyAutoCubeUpgrades: boolean,
     autoOpenCubes: boolean,
     tesseractAutoBuyer: boolean,
+    autoBuyPlatonic: boolean,
 
     antPoints: Decimal,
     antUpgrades: (null | number)[]
@@ -532,7 +533,12 @@ export interface Player {
     singsing: number
     theme: number
     lastCode: string
+    singularityMaxCount: number
+    autoHepteractUpgrades: boolean
     hotkeys: Record<number, string[]>
+    dailyCheating?: boolean
+    timerCheating?: boolean
+    
 
     singularityUpgrades: {
         goldenQuarks1: SingularityUpgrade
@@ -556,6 +562,8 @@ export interface Player {
         singCubes1: SingularityUpgrade
         singCubes2: SingularityUpgrade
         singCubes3: SingularityUpgrade
+        octeractUnlock: SingularityUpgrade
+        offeringAutomatic: SingularityUpgrade
         singOfferingsA1: SingularityUpgrade
         singObtainiumA1: SingularityUpgrade
         singCubesA1: SingularityUpgrade
@@ -577,6 +585,7 @@ export interface Player {
         singAscendScoreExponent: SingularityUpgrade
         singConstantExponent: SingularityUpgrade
         singAscendTimeExponent: SingularityUpgrade
+        singBuildingExponent: SingularityUpgrade
         singExponent: SingularityUpgrade
         singWormhole: SingularityUpgrade
         singMaxLevelUp: SingularityUpgrade
