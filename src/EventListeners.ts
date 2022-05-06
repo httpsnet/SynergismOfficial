@@ -138,7 +138,7 @@ export const generateEventHandlers = () => {
     //Part 2: Building Amount Toggles
     const buildingTypesAlternate = ['coin', 'crystal', 'mythos', 'particle', 'tesseract', 'offering', 'singupgrade'] as const;
     const buildingOrds = ['one','ten','hundred','thousand','million']
-    const buildingOrdsToNum = [1, 10, 100, 1000, 1000000] as const;
+    const buildingOrdsToNum = [1, 10, 100, 1000, 1000000];
     for (let index = 0; index < buildingOrds.length; index++) {
         for (let index2 = 0; index2 < buildingTypesAlternate.length; index2++) {
             DOMCacheGetOrSet(buildingTypesAlternate[index2]+buildingOrds[index]).addEventListener('click', () =>

@@ -149,7 +149,7 @@ type ToggleBuy = 'coin' | 'crystal' | 'mythos' | 'particle' | 'tesseract' | 'off
 
 export const toggleBuyAmount = (quantity: number, type: ToggleBuy) => {
     player[`${type}buyamount` as const] = quantity;
-    const buildingOrdsToNum = [1, 10, 100, 1000, 1000000] as const;
+    const buildingOrdsToNum = [1, 10, 100, 1000, 1000000];
     const buildingOrdsToStr = ['one', 'ten', 'hundred', 'thousand', 'million'] as const;
 
     if (buildingOrdsToNum.includes(quantity)) {

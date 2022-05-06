@@ -1300,7 +1300,7 @@ const loadSynergy = async () => {
             updatePlatonicUpgradeBG(j);
         }
 
-        const buildingOrdsToNum = [1, 10, 100, 1000, 1000000] as const;
+        const buildingOrdsToNum = [1, 10, 100, 1000, 1000000];
         const buildingOrdsToStr = ['one', 'ten', 'hundred', 'thousand', 'million'] as const;
         const q = ['coin', 'crystal', 'mythos', 'particle', 'tesseract', 'offering', 'singupgrade'] as const;
         for (let j = 0; j < q.length; j++) {
