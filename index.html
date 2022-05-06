@@ -223,7 +223,7 @@
             </ul>
         </nav>
     </header>
-    <div id="tabBorder"></div>
+    <div id="tabBorder" style="background-color: yellow"></div>
     <div id="buildings" style="display: none;">
         <div class="subTabWrapper"> 
             <button id="switchToCoinBuilding" style="border: 2px solid yellow; background-color: crimson;">Coin Buildings</button>
@@ -232,7 +232,7 @@
             <button class="reincarnationunlock" id="switchToParticleBuilding" style="border: 2px solid greenyellow">Particle Buildings</button>
             <button class="ascendunlock" id="switchToTesseractBuilding" style="border: 2px solid orange">Tesseract Buildings</button>
         </div>
-        <div id="coinBuildings">
+        <div id="coinBuildings" class="subBuildingsWrapper" style="color: gold;">
         <div id="buyamountcoin">
             <table class="coinunlock3" id="coinbuyamount">
                 <tr>
@@ -254,38 +254,38 @@
         <div class="buttonRow">
             <div>
                 <img class="image" id="coin1" src="Pictures/Tier1.png" alt="" loading="lazy">
-                <span class="desc" id="buildtext1" style="color: gold">Workers: 321495 [+1.49e+391945]</span>
+                <span class="desc" id="buildtext1">Workers: 321495 [+1.49e+391945]</span>
                 <button class="buildingPurchaseBtn" id="buycoin1">Cost: 100 Coins.</button>
                 <button class="auto autobuyerToggleButton" id="toggle1" toggleid="1">Auto: On</button>
-                <span class="stats" id="buildtext2" style="color: gold">100 Coins/second [100%]</span>
+                <span class="stats" id="buildtext2">100 Coins/second [100%]</span>
             </div>
             <div>
                 <img class="coinunlock1 image" id="coin2" src="Pictures/Tier2.png" alt="" loading="lazy">
-                <span class="coinunlock1 desc" id="buildtext3" style="color: gold">Investments: 0 [+0]</span>
+                <span class="coinunlock1 desc" id="buildtext3">Investments: 0 [+0]</span>
                 <button class="coinunlock1 buildingPurchaseBtn" id="buycoin2">Cost: 2e3 Coins.</button>
                 <button class="auto autobuyerToggleButton" id="toggle2" toggleid="2">Auto: On</button>
-                <span class="coinunlock1 stats" id="buildtext4" style="color: gold">0 Coins/second [0%]</span>
+                <span class="coinunlock1 stats" id="buildtext4">0 Coins/second [0%]</span>
             </div>
             <div>
                 <img class="coinunlock2 image" id="coin3" src="Pictures/Tier3.png" alt="" loading="lazy">
-                <span class="coinunlock2 desc" id="buildtext5" style="color: gold">Printers: 0 [+0]</span>
+                <span class="coinunlock2 desc" id="buildtext5">Printers: 0 [+0]</span>
                 <button class="coinunlock2 buildingPurchaseBtn" id="buycoin3">Cost: 4e4 Coins.</button>
                 <button class="auto autobuyerToggleButton" id="toggle3" toggleid="3">Auto: On</button>
-                <span class="coinunlock2 stats" id="buildtext6" style="color: gold">0 Coins/second [0%]</span>
+                <span class="coinunlock2 stats" id="buildtext6">0 Coins/second [0%]</span>
             </div>
             <div>
                 <img class="coinunlock3 image" id="coin4" src="Pictures/Tier4.png" alt="" loading="lazy">
-                <span class="coinunlock3 desc" id="buildtext7" style="color: gold">Coin Mints: 0 [+0]</span>
+                <span class="coinunlock3 desc" id="buildtext7">Coin Mints: 0 [+0]</span>
                 <button class="coinunlock3 buildingPurchaseBtn" id="buycoin4">Cost: 8e5 Coins.</button>
                 <button class="auto autobuyerToggleButton" id="toggle4" toggleid="4">Auto: On</button>
-                <span class="coinunlock3 stats" id="buildtext8" style="color: gold">0 Coins/second [0%]</span>
+                <span class="coinunlock3 stats" id="buildtext8" >0 Coins/second [0%]</span>
             </div>
             <div>
                 <img class="coinunlock4 image" id="coin5" src="Pictures/Tier5.png" alt="" loading="lazy">
-                <span class="coinunlock4 desc" id="buildtext9" style="color: gold">Alchemies: 0 [+0]</span>
+                <span class="coinunlock4 desc" id="buildtext9">Alchemies: 0 [+0]</span>
                 <button class="coinunlock4 buildingPurchaseBtn" id="buycoin5">Cost: 1.6e7 Coins.</button>
                 <button class="auto autobuyerToggleButton" id="toggle5" toggleid="5">Auto: On</button>
-                <span class="coinunlock4 stats" id="buildtext10" style="color: gold">0 Coins/second [0%]</span>
+                <span class="coinunlock4 stats" id="buildtext10">0 Coins/second [0%]</span>
             </div>
         </div>
 
@@ -318,7 +318,7 @@
             <p class="prestigeunlock" id="buildinghotkeys">Press [1], [2], [3], [4], or [5] to buy the corresponding tier starting from the top. Press [A] to buy Accelerator, [M] to buy Multiplier, or [B] to buy Accelerator Boost. Press [left arrow] or [right arrow] to switch tabs. Enjoy!</p>
         </div>
     </div>
-    <div id="prestige" style="display: none;">
+    <div id="prestige" class="subBuildingsWrapper" style="display: none;color: cyan;">
         <div id="buyamountcrystal">
             <table id="crystalbuyamount">
                 <tr>
@@ -397,7 +397,7 @@
         </div>
         <p id="prestigehotkeys">Press [1], [2], [3], [4], or [5] to buy the respective tiered producer. Press [6], [7], [8], [9] or [0] to buy the corresponding Crystal upgrade starting on the left.</p>
     </div>
-    <div id="transcension" style="display: none;">
+    <div id="transcension" class="subBuildingsWrapper" style="display: none;color: pink;">
         <div id="buyamountmythos">
             <table id="mythosbuyamount">
                 <tr>
@@ -463,7 +463,7 @@
 
         <p id="transcendhotkeys">Press [1], [2], [3], [4], or [5] to buy the respective tiered producer.</p>
     </div>
-    <div id="reincarnation" style="display: none;">
+    <div id="reincarnation" class="subBuildingsWrapper" style="display: none;color: limegreen;">
         <div id="buyamountparticle">
             <table id="particlebuyamount">
                 <tr>
@@ -531,7 +531,7 @@
         </div>
         <p id="reincarnatehotkeys">Press [1], [2], [3], [4], or [5] to buy the respective tiered producer.</p>
     </div>
-    <div id="ascension" style="display: none">
+    <div id="ascension" class="subBuildingsWrapper" style="display: none;color: orange;">
         <div id="buyAmountTesseract">
             <table id="buyTesseractToggles">
                 <tr>
@@ -672,7 +672,7 @@
                         <td><img class="transcendunlock" src="Pictures/Transparent Pics/Coin20.png" id="upg20" alt="" loading="lazy"></td>
                     </tr>
                     <tr>
-                        <td><img class="cubeUpgrade19" src="Pictures/Transparent Pics/Coin21.png" id="upg121" alt="" loading="lazy"></td>
+                        <td style="height: 32px"><img class="cubeUpgrade19" src="Pictures/Transparent Pics/Coin21.png" id="upg121" alt="" loading="lazy"></td>
                         <td><img class="cubeUpgrade19" src="Pictures/Transparent Pics/Coin22.png" id="upg122" alt="" loading="lazy"></td>
                         <td><img class="cubeUpgrade19" src="Pictures/Transparent Pics/Coin23.png" id="upg123" alt="" loading="lazy"></td>
                         <td><img class="cubeUpgrade19" src="Pictures/Transparent Pics/Coin24.png" id="upg124" alt="" loading="lazy"></td>
@@ -911,7 +911,7 @@
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach386.png" id="ach253" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach393.png" id="ach260" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach400.png" id="ach267" alt="" loading="lazy"></td>
-                        <td><img src="Pictures/Transparent Pics/ach407.png" id="ach274" alt="" loading="lazy" style="display: none;"></td>
+                        <td><img class="singularity" src="Pictures/Transparent Pics/ach407.png" id="ach274" alt="" loading="lazy"></td>
                     </tr>
                     <tr>
                         <td><img src="Pictures/Transparent Pics/ach42.png" id="ach2" alt="" loading="lazy"></td>
@@ -953,7 +953,7 @@
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach387.png" id="ach254" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach394.png" id="ach261" alt="" loading="lazy"></td>
                         <td><img class="chal14" src="Pictures/Transparent Pics/ach401.png" id="ach268" alt="" loading="lazy"></td>
-                        <td><img src="Pictures/Transparent Pics/ach408.png" id="ach275" alt="" loading="lazy" style="display: none;"></td>
+                        <td><img class="singularity" src="Pictures/Transparent Pics/ach408.png" id="ach275" alt="" loading="lazy"></td>
                     </tr>
                     <tr>
                         <td><img src="Pictures/Transparent Pics/ach83.png" id="ach3" class="purpleach" alt="" loading="lazy"></td>
@@ -995,7 +995,7 @@
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach388.png" id="ach255" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach395.png" id="ach262" alt="" loading="lazy"></td>
                         <td><img class="chal14" src="Pictures/Transparent Pics/ach402.png" id="ach269" alt="" loading="lazy"></td>
-                        <td><img src="Pictures/Transparent Pics/ach409.png" id="ach276" alt="" loading="lazy" style="display: none;"></td>
+                        <td><img class="singularity" src="Pictures/Transparent Pics/ach409.png" id="ach276" alt="" loading="lazy"></td>
                     </tr>
                     <tr>
                         <td><img src="Pictures/Transparent Pics/ach124.png" id="ach4" class="redach"alt="" loading="lazy"></td>
@@ -1037,7 +1037,7 @@
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach389.png" id="ach256" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach396.png" id="ach263" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach403.png" id="ach270" alt="" loading="lazy"></td>
-                        <td><img src="Pictures/Transparent Pics/ach410.png" id="ach277" alt="" loading="lazy" style="display: none;"></td>
+                        <td><img class="singularity" src="Pictures/Transparent Pics/ach410.png" id="ach277" alt="" loading="lazy"></td>
                     </tr>
                     <tr>
                         <td><img class="purpleach" src="Pictures/Transparent Pics/ach165.png" id="ach5" alt="" loading="lazy"></td>
@@ -1079,7 +1079,7 @@
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach390.png" id="ach257" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach397.png" id="ach264" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach404.png" id="ach271" alt="" loading="lazy"></td>
-                        <td><img src="Pictures/Transparent Pics/ach411.png" id="ach278" alt="" loading="lazy" style="display: none;"></td>
+                        <td><img class="singularity" src="Pictures/Transparent Pics/ach411.png" id="ach278" alt="" loading="lazy"></td>
 
                     </tr>
                     <tr>
@@ -1122,7 +1122,7 @@
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach391.png" id="ach258" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach398.png" id="ach265" alt="" loading="lazy"></td>
                         <td><img class="chal14" src="Pictures/Transparent Pics/ach405.png" id="ach272" alt="" loading="lazy"></td>
-                        <td><img src="Pictures/Transparent Pics/ach412.png" id="ach279" alt="" loading="lazy" style="display: none;"></td>
+                        <td><img class="singularity" src="Pictures/Transparent Pics/ach412.png" id="ach279" alt="" loading="lazy"></td>
                     </tr>
                     <tr>
                         <td><img src="Pictures/Transparent Pics/ach247.png" id="ach7" class="purpleach" alt="" loading="lazy"></td>
@@ -1164,7 +1164,7 @@
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach392.png" id="ach259" alt="" loading="lazy"></td>
                         <td><img class="chal14 purpleach" src="Pictures/Transparent Pics/ach399.png" id="ach266" alt="" loading="lazy"></td>
                         <td><img class="chal14" src="Pictures/Transparent Pics/ach406.png" id="ach273" alt="" loading="lazy"></td>
-                        <td><img src="Pictures/Transparent Pics/ach413.png" id="ach280" alt="" loading="lazy" style="display: none;"></td>
+                        <td><img class="singularity" src="Pictures/Transparent Pics/ach413.png" id="ach280" alt="" loading="lazy"></td>
                     </tr>
 
                     </table>
@@ -1404,7 +1404,7 @@
                                 <td><img id="talismanHundred" class="buyAmountBtn" src="Pictures/Transparent Pics/TalismanHundred.png" alt="" loading="lazy"></td>
                             </tr>
                         </table>
-                        <span id="toggletalismanbuy">Toggle percent resources used</span>
+                        <p id="toggletalismanbuy">Toggle percent resources used</p>
                         <button id="toggleautoenhance">Auto Enhance: OFF</button>
                         <button id="toggleautofortify">Auto Enhance: OFF</button>
                     </div>
@@ -2477,41 +2477,44 @@
                         <div id="platonicUpgrades">
                             <table id="platonicUpgradePics" style='border: 3px solid plum'>
                                 <tr>
-                                    <td><input type="image" id="platUpg1" src="Pictures/Transparent%20Pics/PlatonicUpgrade1.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg2" src="Pictures/Transparent%20Pics/PlatonicUpgrade2.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg3" src="Pictures/Transparent%20Pics/PlatonicUpgrade3.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg4" src="Pictures/Transparent%20Pics/PlatonicUpgrade4.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg5" src="Pictures/Transparent%20Pics/PlatonicUpgrade5.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                    <td><input type="image" id="platUpg1" src="Pictures/Transparent%20Pics/PlatonicUpgrade1.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg2" src="Pictures/Transparent%20Pics/PlatonicUpgrade2.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg3" src="Pictures/Transparent%20Pics/PlatonicUpgrade3.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg4" src="Pictures/Transparent%20Pics/PlatonicUpgrade4.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg5" src="Pictures/Transparent%20Pics/PlatonicUpgrade5.png" alt="" class="platonicUpgradeImage"></td>
                                 </tr>
                                 <tr>
-                                    <td><input type="image" id="platUpg6" src="Pictures/Transparent%20Pics/PlatonicUpgrade6.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg7" src="Pictures/Transparent%20Pics/PlatonicUpgrade7.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg8" src="Pictures/Transparent%20Pics/PlatonicUpgrade8.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg9" src="Pictures/Transparent%20Pics/PlatonicUpgrade9.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg10" src="Pictures/Transparent%20Pics/PlatonicUpgrade10.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                    <td><input type="image" id="platUpg6" src="Pictures/Transparent%20Pics/PlatonicUpgrade6.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg7" src="Pictures/Transparent%20Pics/PlatonicUpgrade7.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg8" src="Pictures/Transparent%20Pics/PlatonicUpgrade8.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg9" src="Pictures/Transparent%20Pics/PlatonicUpgrade9.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg10" src="Pictures/Transparent%20Pics/PlatonicUpgrade10.png" alt="" class="platonicUpgradeImage"></td>
                                 </tr>
                                 <tr>
-                                    <td><input type="image" id="platUpg11" src="Pictures/Transparent%20Pics/PlatonicUpgrade11.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg12" src="Pictures/Transparent%20Pics/PlatonicUpgrade12.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg13" src="Pictures/Transparent%20Pics/PlatonicUpgrade13.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg14" src="Pictures/Transparent%20Pics/PlatonicUpgrade14.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg15" src="Pictures/Transparent%20Pics/PlatonicUpgrade15.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                    <td><input type="image" id="platUpg11" src="Pictures/Transparent%20Pics/PlatonicUpgrade11.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg12" src="Pictures/Transparent%20Pics/PlatonicUpgrade12.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg13" src="Pictures/Transparent%20Pics/PlatonicUpgrade13.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg14" src="Pictures/Transparent%20Pics/PlatonicUpgrade14.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg15" src="Pictures/Transparent%20Pics/PlatonicUpgrade15.png" alt="" class="platonicUpgradeImage"></td>
                                 </tr>
                                 <tr>
-                                    <td><input type="image" id="platUpg16" src="Pictures/Transparent%20Pics/PlatonicUpgrade16.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg17" src="Pictures/Transparent%20Pics/PlatonicUpgrade17.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg18" src="Pictures/Transparent%20Pics/PlatonicUpgrade18.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg19" src="Pictures/Transparent%20Pics/PlatonicUpgrade19.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg20" src="Pictures/Transparent%20Pics/PlatonicUpgrade20.png" alt="" class="platonicUpgradeImage" loading="lazy"></td>
+                                    <td><input type="image" id="platUpg16" src="Pictures/Transparent%20Pics/PlatonicUpgrade16.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg17" src="Pictures/Transparent%20Pics/PlatonicUpgrade17.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg18" src="Pictures/Transparent%20Pics/PlatonicUpgrade18.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg19" src="Pictures/Transparent%20Pics/PlatonicUpgrade19.png" alt="" class="platonicUpgradeImage"></td>
+                                    <td><input type="image" id="platUpg20" src="Pictures/Transparent%20Pics/PlatonicUpgrade20.png" alt="" class="platonicUpgradeImage"></td>
                                 </tr>
                                 <tr>
-                                    <td><input type="image" id="platUpg21" src="Pictures/Transparent%20Pics/PlatonicUpgrade21.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg22" src="Pictures/Transparent%20Pics/PlatonicUpgrade22.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg23" src="Pictures/Transparent%20Pics/PlatonicUpgrade23.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg24" src="Pictures/Transparent%20Pics/PlatonicUpgrade24.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
-                                    <td><input type="image" id="platUpg25" src="Pictures/Transparent%20Pics/PlatonicUpgrade25.png" alt="" class="platonicUpgradeImage singularity" loading="lazy"></td>
+                                    <td><input type="image" id="platUpg21" src="Pictures/Transparent%20Pics/PlatonicUpgrade21.png" alt="" class="platonicUpgradeImage singularity"></td>
+                                    <td><input type="image" id="platUpg22" src="Pictures/Transparent%20Pics/PlatonicUpgrade22.png" alt="" class="platonicUpgradeImage singularity"></td>
+                                    <td><input type="image" id="platUpg23" src="Pictures/Transparent%20Pics/PlatonicUpgrade23.png" alt="" class="platonicUpgradeImage singularity"></td>
+                                    <td><input type="image" id="platUpg24" src="Pictures/Transparent%20Pics/PlatonicUpgrade24.png" alt="" class="platonicUpgradeImage singularity"></td>
+                                    <td><input type="image" id="platUpg25" src="Pictures/Transparent%20Pics/PlatonicUpgrade25.png" alt="" class="platonicUpgradeImage singularity"></td>
                                 </tr>
                             </table>
+                            <div id="platonicHelper">
+                                <button id="togglePlatonicAutoBuy" style="border: 2px solid red;display: none">Automatic: OFF</button>
+                            </div>
                         </div>
                         <div id="platonicUpgradeDescriptions" class="platonicContainer" style="border: 3px solid plum">
                             <p id="platonicUpgradeDescriptionDivisor" class="platonicPortion">===Upgrade Description===</p>
@@ -2825,7 +2828,7 @@
                 </div>
                 <button id="exportgame" style="border:2px solid green">Export the game here</button>
                 <p id="exportinfo" class="tightText" style="color: white"></p>
-                <label title="Use $VERSION$ for version, $TIME$ for 24h time, $TIME12$ for 12h, $SING$ for Singularity Count">
+                <label id="saveStringLabel" title="Use $VERSION$ for version, $TIME$ for 24h time, $TIME12$ for 12h, $SING$ for Singularity Count">
                     <input id="saveStringInput">
                 </label>
                 <p id="saveString" class="tightText" title="Use $VERSION$ for version, $TIME$ for 24h time, $TIME12$ for 12h, $SING$ for Singularity Count"></p>
@@ -2861,6 +2864,7 @@
         <div id="event" style="color: orchid">Event Status: <span id="eventCurrent" style="color:orangered"></span></div>
         <div id="eventBuffs" style="color: lime;">Buffs: </div>
         <a href="https://www.youtube.com/watch?v=aAkMkVFwAoo" target="_blank" id="happyHolidays" style="color: greenyellow"></a>
+        <div id="cheatingMessage" style="color: red;"></div>
     </div>
     <div class="subtabContent" id="creditssubtab">
         <h1>Coders</h1>
@@ -3137,15 +3141,15 @@
                     <div id="consumables">Buy Yer' Potions!</div>
                     <div id="actualPotionShop">
                         <div>
-                            <img id="offeringPotions" src="Pictures/offering potion.png" alt="" loading="lazy">
-                            <p id="offeringpotionowned">Own: 2222</p>
-                            <button class="consumablebutton" id="buyofferingpotion" style="border: 2px solid white">Buy 1 for 100 Quarks</button>
+                            <img id="offeringPotion" src="Pictures/offering potion.png" alt="" loading="lazy">
+                            <p id="offeringPotionLevel">Own: 0</p>
+                            <button class="consumablebutton" id="offeringPotionButton" style="border: 2px solid white">Buy 1 for 100 Quarks</button>
                             <button class="consumablebutton" id="useofferingpotion" style="border: 2px solid orange">USE 1 [+2hr]</button>
                         </div>
                         <div>
-                            <img id="obtainiumPotions" src="Pictures/obtainium potion.png" alt="" loading="lazy">
-                            <p id="obtainiumpotionowned">Own: 0</p>
-                            <button class="consumablebutton" id="buyobtainiumpotion" style="border: 2px solid white">Buy 1 for 100 Quarks</button>
+                            <img id="obtainiumPotion" src="Pictures/obtainium potion.png" alt="" loading="lazy">
+                            <p id="obtainiumPotionLevel">Own: 0</p>
+                            <button class="consumablebutton" id="obtainiumPotionButton" style="border: 2px solid white">Buy 1 for 100 Quarks</button>
                             <button class="consumablebutton" id="useobtainiumpotion" style="border: 2px solid blue">USE 1 [+2hr]</button>
                         </div>
                     </div>
@@ -3223,7 +3227,7 @@
                             <p id="seasonPassYLevel"></p>
                             <button class="permshopbutton" id="seasonPassYButton" style="border: 2px solid red"></button>
                         </div>
-                        <div class='singularity'>
+                        <div class='singularityShopUnlock'>
                             <img id="seasonPassZ" src="Pictures/VIP Pass Upgrade Z.png" alt="" loading="lazy">
                             <p id="seasonPassZLevel"></p>
                             <button class="permshopbutton" id="seasonPassZButton" style="border: 2px solid cyan"></button>
@@ -3238,7 +3242,7 @@
                             <p id="challengeTomeLevel">Level: 0/5</p>
                             <button class="permshopbutton" id="challengeTomeButton" style="border: 2px solid gold"></button>
                         </div>
-                        <div class="singularity">
+                        <div class="singularityShopUnlock">
                             <img id="challengeTome2" src="Pictures/Challenge 10 Tome Upgrade 2.png" alt="" loading="lazy">
                             <p id="challengeTome2Level"></p>
                             <button class="permshopbutton" id="challengeTome2Button" style="border: 2px solid red"></button>
@@ -3268,7 +3272,7 @@
                             <p id="chronometer2Level"></p>
                             <button class="permshopbutton" id="chronometer2Button" style="border: 2px solid red"></button>
                         </div>
-                        <div class="singularity">
+                        <div class="singularityShopUnlock">
                             <img id="chronometer3" src="Pictures/Chronometer3.png" alt="" loading="lazy">
                             <p id="chronometer3Level"></p>
                             <button class="permshopbutton" id="chronometer3Button" style="border: 2px solid goldenrod"></button>
@@ -3327,150 +3331,171 @@
         <div id="singularityUpgradeContainer">
             <div id="actualSingularityUpgradeContainer">
                 <div>
-                    <input type="image" id="goldenQuarks1" src="Pictures/SingularityCurrency1.png">
+                    <input type="image" id="goldenQuarks1" src="Pictures/SingularityCurrency1.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="goldenQuarks2" src="Pictures/SingularityCurrency2.png">
+                    <input type="image" id="goldenQuarks2" src="Pictures/SingularityCurrency2.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="goldenQuarks3" src="Pictures/SingularityCurrency3.png">
+                    <input type="image" id="goldenQuarks3" src="Pictures/SingularityCurrency3.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="starterPack" src="Pictures/Singularity Starter Pack.png">
+                    <input type="image" id="starterPack" src="Pictures/Singularity Starter Pack.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="wowPass" src="Pictures/Singularity Wow Pass.png">
+                    <input type="image" id="wowPass" src="Pictures/Singularity Wow Pass.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="cookies" src="Pictures/SingularityCookies.png">
+                    <input type="image" id="cookies" src="Pictures/SingularityCookies.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="cookies2" src="Pictures/SingularityCookies2.png">
+                    <input type="image" id="cookies2" src="Pictures/SingularityCookies2.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="cookies3" src="Pictures/SingularityCookies3.png">
+                    <input type="image" id="cookies3" src="Pictures/SingularityCookies3.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="cookies4" src="Pictures/SingularityCookies4.png">
+                    <input type="image" id="cookies4" src="Pictures/SingularityCookies4.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="ascensions" src="Pictures/Singularity Ascensions.png">
+                    <input type="image" id="ascensions" src="Pictures/Singularity Ascensions.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="corruptionFourteen" src="Pictures/Singularity Corruption 14.png">
+                    <input type="image" id="corruptionFourteen" src="Pictures/Singularity Corruption 14.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="corruptionFifteen" src="Pictures/Singularity Corruption 15.png">
+                    <input type="image" id="corruptionFifteen" src="Pictures/Singularity Corruption 15.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singOfferings1" src="Pictures/Singularity Offerings 1.png">
+                    <input type="image" id="singOfferings1" src="Pictures/Singularity Offerings 1.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singOfferings2" src="Pictures/Singularity Offerings 2.png">
+                    <input type="image" id="singOfferings2" src="Pictures/Singularity Offerings 2.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singOfferings3" src="Pictures/Singularity Offerings 3.png">
+                    <input type="image" id="singOfferings3" src="Pictures/Singularity Offerings 3.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singObtainium1" src="Pictures/Singularity Obtainium 1.png">
+                    <input type="image" id="singObtainium1" src="Pictures/Singularity Obtainium 1.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singObtainium2" src="Pictures/Singularity Obtainium 2.png">
+                    <input type="image" id="singObtainium2" src="Pictures/Singularity Obtainium 2.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singObtainium3" src="Pictures/Singularity Obtainium 3.png">
+                    <input type="image" id="singObtainium3" src="Pictures/Singularity Obtainium 3.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singCubes1" src="Pictures/Singularity Cubes 1.png">
+                    <input type="image" id="singCubes1" src="Pictures/Singularity Cubes 1.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singCubes2" src="Pictures/Singularity Cubes 2.png">
+                    <input type="image" id="singCubes2" src="Pictures/Singularity Cubes 2.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singCubes3" src="Pictures/Singularity Cubes 3.png">
+                    <input type="image" id="singCubes3" src="Pictures/Singularity Cubes 3.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singOfferingsA1" src="Pictures/Singularity OfferingsA1.png">
+                    <input type="image"  id="octeractUnlock" src="Pictures/Singularity Octarets.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singObtainiumA1" src="Pictures/Singularity ObtainiumA1.png">
+                    <input type="image"  id="offeringAutomatic" src="Pictures/Singularity Offering Automatic.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singCubesA1" src="Pictures/Singularity CubesA1.png">
+                    <input type="image" id="singOfferingsA1" src="Pictures/Singularity OfferingsA1.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singTimeAccel" src="Pictures/Singularity TimeAccel.png">
+                    <input type="image" id="singObtainiumA1" src="Pictures/Singularity ObtainiumA1.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singAscendTimeAccel" src="Pictures/Singularity AscendTimeAccel.png">
+                    <input type="image" id="singCubesA1" src="Pictures/Singularity CubesA1.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singQuark" src="Pictures/Singularity Quark.png">
+                    <input type="image" id="singTimeAccel" src="Pictures/Singularity TimeAccel.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singGolden" src="Pictures/Singularity GoldenQuark.png">
+                    <input type="image" id="singAscendTimeAccel" src="Pictures/Singularity AscendTimeAccel.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="bakeCookies1" src="Pictures/Singularity BakeCookies1.png">
+                    <input type="image" id="singQuark" src="Pictures/Singularity Quark.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="bakeCookies2" src="Pictures/Singularity BakeCookies2.png">
+                    <input type="image" id="singGolden" src="Pictures/Singularity GoldenQuark.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singAutomation" src="Pictures/Singularity Automation.png">
+                    <input type="image" id="bakeCookies1" src="Pictures/Singularity BakeCookies1.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singSafeShop" src="Pictures/Singularity SafeShop.png">
+                    <input type="image" id="bakeCookies2" src="Pictures/Singularity BakeCookies2.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singChallenge" src="Pictures/Singularity Challenge.png">
+                    <input type="image" id="singAutomation" src="Pictures/Singularity Automation.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singOverfluxPowder" src="Pictures/Singularity OverfluxPowder.png">
+                    <input type="image" id="singSafeShop" src="Pictures/Singularity SafeShop.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singCraftExpand" src="Pictures/Singularity CraftExpand.png">
+                    <input type="image" id="singChallenge" src="Pictures/Singularity Challenge.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singMagicalTalisman" src="Pictures/Singularity MagicalTalisman.png">
+                    <input type="image" id="singOverfluxPowder" src="Pictures/Singularity OverfluxPowder.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singGQdiscount" src="Pictures/Singularity GoldenQuarksDiscount.png">
+                    <input type="image" id="singCraftExpand" src="Pictures/Singularity CraftExpand.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singMaterialsExponent" src="Pictures/Singularity MaterialsExponent.png">
+                    <input type="image" id="singMagicalTalisman" src="Pictures/Singularity MagicalTalisman.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singScoreExponent" src="Pictures/Singularity C15ScoreExponent.png">
+                    <input type="image" id="singGQdiscount" src="Pictures/Singularity GoldenQuarksDiscount.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singAscendScoreExponent" src="Pictures/Singularity AscendScoreExponent.png">
+                    <input type="image" id="singMaterialsExponent" src="Pictures/Singularity MaterialsExponent.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singConstantExponent" src="Pictures/Singularity Constant Exponent.png">
+                    <input type="image" id="singScoreExponent" src="Pictures/Singularity C15ScoreExponent.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singAscendTimeExponent" src="Pictures/Singularity AscendTimeExponent.png">
+                    <input type="image" id="singAscendScoreExponent" src="Pictures/Singularity AscendScoreExponent.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singExponent" src="Pictures/Singularity SingularityExponent.png">
+                    <input type="image" id="singConstantExponent" src="Pictures/Singularity Constant Exponent.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singWormhole" src="Pictures/Singularity Wormhole.png">
+                    <input type="image" id="singAscendTimeExponent" src="Pictures/Singularity AscendTimeExponent.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singMaxLevelUp" src="Pictures/Singularity MaxLevelUp.png">
+                    <input type="image" id="singBuildingExponent" src="Pictures/Singularity BuildingExponent.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singularityOfSingularity" src="Pictures/Singularity Singularity.png">
+                    <input type="image" id="singExponent" src="Pictures/Singularity SingularityExponent.png" alt="">
                 </div>
                 <div>
-                    <input type="image" id="singsingWormhole" src="Pictures/Singularity SingularityWormhole.png">
+                    <input type="image" id="singWormhole" src="Pictures/Singularity Wormhole.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singMaxLevelUp" src="Pictures/Singularity MaxLevelUp.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singularityOfSingularity" src="Pictures/Singularity Singularity.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singsingWormhole" src="Pictures/Singularity SingularityWormhole.png" alt="">
                 </div>
             </div>
         </div>
         <div id="singularityUpgradeShit">
             <p id="testingMultiline"></p>
+        </div>
+        <div id="buyAmountSingUpgrade">
+            <table id="buyAmountSingUpgradeToggles">
+                <tr>
+                    <td><img id="singupgradeone" class="buyAmountBtn" src="Pictures/Transparent Pics/TesseractOne.png" style="background-color: green;" alt="" loading="lazy"></td>
+                    <td><img id="singupgradeten" class="buyAmountBtn" src="Pictures/Transparent Pics/TesseractTen.png" alt="" loading="lazy"></td>
+                    <td><img id="singupgradehundred" class="buyAmountBtn" src="Pictures/Transparent Pics/TesseractHundred.png" alt="" loading="lazy"></td>
+                    <td><img id="singupgradethousand" class="buyAmountBtn"src="Pictures/Transparent Pics/TesseractThousand.png" alt="" loading="lazy"></td>
+                    <td><img id="singupgrademillion" class="buyAmountBtn"src="Pictures/Transparent Pics/TesseractMillion.png" alt="" loading="lazy"></td>
+                </tr>
+            </table>
+            <p id="toggleTesseractBuy">Toggle amount to buy</p>
         </div>
     </div>
     </body>
