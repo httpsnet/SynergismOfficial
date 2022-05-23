@@ -348,6 +348,13 @@ export interface Player {
         seasonPassY: number,
         seasonPassZ: number,
         challengeTome2: number,
+        cubeToQuarkAll: number,
+        cashGrab2: number,
+        seasonPassLost: number,
+        chronometerZ: number,
+        powderAuto: number,
+        offeringEX2: number,
+        obtainiumEX2: number
     }
     autoSacrificeToggle: boolean,
     autoFortifyToggle: boolean,
@@ -368,6 +375,7 @@ export interface Player {
     autoOpenCubes: boolean,
     tesseractAutoBuyer: boolean,
     autoBuyPlatonic: boolean,
+    autoSingularity: boolean,
 
     antPoints: Decimal,
     antUpgrades: (null | number)[]
@@ -535,6 +543,7 @@ export interface Player {
     lastCode: string
     singularityMaxCount: number
     autoHepteractUpgrades: boolean
+    singsingsing: number
     hotkeys: Record<number, string[]>
     dailyCheating?: boolean
     timerCheating?: boolean
@@ -564,6 +573,12 @@ export interface Player {
         singCubes3: SingularityUpgrade
         octeractUnlock: SingularityUpgrade
         offeringAutomatic: SingularityUpgrade
+        intermediatePack: SingularityUpgrade
+        advancedPack: SingularityUpgrade
+        expertPack: SingularityUpgrade
+        masterPack: SingularityUpgrade
+        divinePack: SingularityUpgrade
+        wowPass2: SingularityUpgrade
         singOfferingsA1: SingularityUpgrade
         singObtainiumA1: SingularityUpgrade
         singCubesA1: SingularityUpgrade
@@ -578,6 +593,7 @@ export interface Player {
         singChallenge: SingularityUpgrade
         singOverfluxPowder: SingularityUpgrade
         singCraftExpand: SingularityUpgrade
+        hepteractsDiscount: SingularityUpgrade
         singMagicalTalisman: SingularityUpgrade
         singGQdiscount: SingularityUpgrade
         singMaterialsExponent: SingularityUpgrade
@@ -591,6 +607,25 @@ export interface Player {
         singMaxLevelUp: SingularityUpgrade
         singularityOfSingularity: SingularityUpgrade
         singsingWormhole: SingularityUpgrade
+        singSingStarterPack: SingularityUpgrade
+        singSingCubes: SingularityUpgrade
+        singSingPatreon: SingularityUpgrade
+        singSafeQuark: SingularityUpgrade
+        singSingLoL: SingularityUpgrade
+        singSafeUpgrades: SingularityUpgrade
+        singSingAutomation: SingularityUpgrade
+        corruptionSixteen: SingularityUpgrade
+        corruptionSeventeen: SingularityUpgrade
+        corruptionEighteen: SingularityUpgrade
+        corruptionNineteen: SingularityUpgrade
+        corruptionTwenty: SingularityUpgrade
+        maxCapLevel1: SingularityUpgrade
+        maxCapLevel2: SingularityUpgrade
+        maxCapLevel3: SingularityUpgrade
+        maxCapLevel4: SingularityUpgrade
+        maxCapLevel5: SingularityUpgrade
+        maxCapLevel0: SingularityUpgrade
+        singSingSSS: SingularityUpgrade
     }
     dailyCodeUsed: boolean
 }
@@ -616,7 +651,7 @@ export interface GlobalVariables {
     totalAccelerator: number
     freeAcceleratorBoost: number
     totalAcceleratorBoost: number
-    acceleratorPower: number
+    acceleratorPower: Decimal
     acceleratorEffect: Decimal
     acceleratorEffectDisplay: Decimal
     generatorPower: Decimal
