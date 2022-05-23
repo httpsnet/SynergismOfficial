@@ -2027,7 +2027,8 @@ p[id$="BlessingsTotal"] {
 }
 
 #toggleAutoOpenCubes,
-#toggleTesseractBAB {
+#toggleTesseractBAB,
+#toggleAutoSingularity {
     width: 250px;
     text-align: center;
     color: white;
@@ -2903,6 +2904,19 @@ header #obtainiumDisplay {
     grid-template-columns: repeat(3, 60px);
     grid-template-rows: repeat(3, 28px);
     align-items: center;
+}
+
+.hepteractGrid > div.hepteractHelper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hepteractHelper > button {
+    width: 100%;
+    text-align: center;
+    height: 30px;
+    margin: 2px auto;
 }
 
 #hepteractToQuark,

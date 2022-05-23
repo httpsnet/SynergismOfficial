@@ -25,17 +25,36 @@ export const maxCorruptionLevel = () => {
     if (player.platonicUpgrades[5] > 0) {
         max += 1
     }
-    if (player.platonicUpgrades[10] > 0) {
+    if (player.singularityUpgrades.corruptionFourteen.getEffect().bonus) {
         max += 1
     }
-    if (player.singularityUpgrades.corruptionFourteen.level > 0) {
-        max = 14
-    }
-    if (player.singularityUpgrades.corruptionFifteen.level > 0) {
-        max = 15
-    }
-    if (player.platonicUpgrades[25] > 0) {
+    if (player.platonicUpgrades[10] > 0 && player.singularityUpgrades.corruptionFourteen.level > 0) {
         max += 1
+    }
+    if (player.platonicUpgrades[15] > 0 && player.singularityUpgrades.corruptionSixteen.level > 0) {
+        max += 1
+    }
+    if (player.platonicUpgrades[20] > 0 && player.singularityUpgrades.corruptionSixteen.level > 1) {
+        max += 1
+    }
+    if (player.platonicUpgrades[21] > 0 && player.singularityUpgrades.corruptionSeventeen.level > 0) {
+        max += 1
+    }
+    if (player.platonicUpgrades[22] > 0 && player.singularityUpgrades.corruptionEighteen.level > 0) {
+        max += 1
+    }
+    if (player.platonicUpgrades[23] > 0 && player.singularityUpgrades.corruptionNineteen.level > 0) {
+        max += 1
+    }
+    if (player.platonicUpgrades[24] > 0 && player.singularityUpgrades.corruptionTwenty.level > 0) {
+        max += 1
+    }
+    if (player.ascensionCount <= 0) {
+        max = 0
+    }
+
+    if (max > 20) {
+        max = 20
     }
 
     return max

@@ -26,10 +26,10 @@ const platonicUpgradeDesc = [
     'The diminishing return power on Chronos Hepteract changes from 0.166 to (0.166 + 0.00133 * level) [Max of 0.2333].',
     'You know, maybe some things should be left unbought.',
     'When you ascend, gain 1 of challenge 9 completion. Boosted to the Challenge 15 reward bonus by the talisman assigned rune. Calculated as "C15 Score * Rune ^ (Level * 0.05 + 1)". The amplified effect can be checked in the Challenge 15 menu. Unlocking has no effect.',
-    'When you ascend, gain 1 of challenge 10 completion. Ascension Score increases 0.01% * levels for each Reincarnation and Ascension Challenges achievement. Cube gain exponent by Ascension Score + level / 2%.',
+    'When you ascend, gain 1 of challenge 10 completion. Ascension Score increases 0.01% * levels for each Reincarnation and Ascension Challenges achievement. Increases cube gain exponent by Ascension Score ^ level * 0.5%.',
     'Corruption Level 14 and above Current Score Multiplier will increase by level. It is multiplied at a higher level. Powder Conversion increases by +x"((1 + Level * 0.001) ^ C14 Completions)".',
     'Blessing Power and Spirit Power Exponent increase by + 0.04 * Level. Raise the base percentage of Constant Upgrade 1 by 1%. Hepteract gain exponent by Ascension Score ^ level / 100.',
-    'Increases the maximum level of Corruption by 1. Building Power by a factor of +x"((Prestige Count * Transcend Count * Reincarnation Count * Singularity Count) ^ Level / 200)". Ascension Speed is increased by +x"((1 + Level / 10000) ^ C15 Completion)". Increase the Ascension Count by a factor of +x"((Quarks * Golden Quarks * C15 Completion) ^ Level / 100)". Increase the Ascension Score by a factor of +x"Ascension Count ^ Level / 500". Quarks increase by a percentage of "Log10(Ascension Score) * Level / 1000". Level % is inherited from Ascension Count by executing Singularity. In addition, something happens at the maximum level. [WIP]'
+    'Building Power by a factor of +x"((Prestige Count * Transcend Count * Reincarnation Count * Singularity Count) ^ Level / 200)". Ascension Speed is increased by +x"((1 + Level / 10000) ^ C15 Completion)". Increase the Ascension Count by a factor of +x"((Quarks * Golden Quarks * C15 Completion) ^ Level / 100)". Increase the Ascension Score by a factor of +x"Ascension Count ^ Level / 500". Quarks increase by a percentage of "Log10(Ascension Score) * Level / 1000". Level % is inherited from Ascension Count by executing Singularity. In addition, something happens at the maximum level. [WIP]'
 ];
 
 export interface IPlatBaseCost {
@@ -263,33 +263,33 @@ export const platUpgradeBaseCosts: Record<number, IPlatBaseCost> = {
     22: {
         obtainium: 1e300,
         offerings: 1e260,
-        cubes: 1e73,
-        tesseracts: 1e41,
-        hypercubes: 1e40,
-        platonics: 1e38,
-        abyssals: Math.pow(2, 58),
-        maxLevel: 30,
+        cubes: 1e76,
+        tesseracts: 1e43,
+        hypercubes: 1e42,
+        platonics: 1e40,
+        abyssals: Math.pow(2, 63),
+        maxLevel: 20,
         priceMult: 1e22
     },
     23: {
         obtainium: 1e300,
         offerings: 1e300,
-        cubes: 1e84,
-        tesseracts: 1e49,
-        hypercubes: 1e50,
-        platonics: 1e47,
-        abyssals: Math.pow(2, 84),
-        maxLevel: 30,
+        cubes: 1e88,
+        tesseracts: 1e52,
+        hypercubes: 1e54,
+        platonics: 1e50,
+        abyssals: Math.pow(2, 93),
+        maxLevel: 20,
         priceMult: 1e23
     },
     24: {
         obtainium: 1e300,
         offerings: 1e300,
-        cubes: 1e105,
-        tesseracts: 1e60,
-        hypercubes: 1e63,
-        platonics: 1e58,
-        abyssals: Math.pow(2, 118),
+        cubes: 1e113,
+        tesseracts: 1e65,
+        hypercubes: 1e69,
+        platonics: 1e63,
+        abyssals: Math.pow(2, 134),
         maxLevel: 20,
         priceMult: 1e30
     },
@@ -297,7 +297,7 @@ export const platUpgradeBaseCosts: Record<number, IPlatBaseCost> = {
         obtainium: 1e300,
         offerings: 1e300,
         cubes: 1e150,
-        tesseracts: 1e83,
+        tesseracts: 1e82,
         hypercubes: 1e93,
         platonics: 1e80,
         abyssals: Math.pow(2, 200),
@@ -421,29 +421,42 @@ export const updatePlatonicUpgradeBG = (i: number) => {
 }
 
 export const buyPlatonicUpgrades = (index: number, auto = false) => {
-    const resourceCheck = checkPlatonicUpgrade(index)
-    let priceMultiplier = 1;
-    if (platUpgradeBaseCosts[index].priceMult) {
-        priceMultiplier = Math.pow(platUpgradeBaseCosts[index].priceMult!, Math.pow(player.platonicUpgrades[index] / (platUpgradeBaseCosts[index].maxLevel - 1), 1.25))
-    }
-    if (resourceCheck.canBuy) {
-        player.platonicUpgrades[index] += 1
-        player.researchPoints -= Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].obtainium * priceMultiplier))
-        player.runeshards -= Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].offerings * priceMultiplier))
-        player.wowCubes.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].cubes * priceMultiplier)));
-        player.wowTesseracts.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].tesseracts * priceMultiplier)));
-        player.wowHypercubes.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].hypercubes * priceMultiplier)));
-        player.wowPlatonicCubes.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].platonics * priceMultiplier)));
-        player.hepteractCrafts.abyss.spend(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier)));
+    let buy = false;
+    while (index > 0) {
+        const resourceCheck = checkPlatonicUpgrade(index)
+        let priceMultiplier = 1;
+        if (platUpgradeBaseCosts[index].priceMult) {
+            priceMultiplier = Math.pow(platUpgradeBaseCosts[index].priceMult!, Math.pow(player.platonicUpgrades[index] / (platUpgradeBaseCosts[index].maxLevel - 1), 1.25))
+        }
 
-        Synergism.emit('boughtPlatonicUpgrade', platUpgradeBaseCosts[index]);
+        if (resourceCheck.canBuy) {
+            buy = true;
+            player.platonicUpgrades[index] += 1
+            player.researchPoints -= Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].obtainium * priceMultiplier))
+            player.runeshards -= Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].offerings * priceMultiplier))
+            player.wowCubes.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].cubes * priceMultiplier)));
+            player.wowTesseracts.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].tesseracts * priceMultiplier)));
+            player.wowHypercubes.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].hypercubes * priceMultiplier)));
+            player.wowPlatonicCubes.sub(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].platonics * priceMultiplier)));
+            player.hepteractCrafts.abyss.spend(Math.min(1e300, Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier)));
+
+            Synergism.emit('boughtPlatonicUpgrade', platUpgradeBaseCosts[index]);
+            if (!auto && index === 20) {
+                return Alert('While I strongly recommended you not to buy this, you did it anyway. For that, you have unlocked the rune of Grandiloquence, for you are a richass.')
+            }
+        } else {
+            break;
+        }
+
+        if (player.platonicUpgrades[index] === platUpgradeBaseCosts[index].maxLevel || player.singularityCount === 0) {
+            break
+        }
     }
-    createPlatonicDescription(index)
-    updatePlatonicUpgradeBG(index)
-    revealStuff();
-    c15RewardUpdate()
-    if (!auto && resourceCheck.canBuy && index === 20) {
-        return Alert('While I strongly recommended you not to buy this, you did it anyway. For that, you have unlocked the rune of Grandiloquence, for you are a richass.')
+    if (buy) {
+        createPlatonicDescription(index);
+        updatePlatonicUpgradeBG(index);
+        revealStuff();
+        c15RewardUpdate();
     }
 }
 
@@ -455,13 +468,11 @@ export const autoBuyPlatonicUpgrades = () => {
     const platUpgrade = Object.keys(platUpgradeBaseCosts);
     for (let i = 0; i < platUpgrade.length; i++) {
         if (player.platonicUpgrades[i + 1] < platUpgradeBaseCosts[i + 1].maxLevel) {
-            const level = player.platonicUpgrades[i + 1];
-            while (checkPlatonicUpgrade(i + 1).canBuy) {
+            const resourceCheck = checkPlatonicUpgrade(i + 1);
+            if (resourceCheck.canBuy) {
                 void buyPlatonicUpgrades(i + 1, true);
             }
-            if (player.platonicUpgrades[i + 1] > level) {
-                return;
-            }
+            break;
         }
     }
 }

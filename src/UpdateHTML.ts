@@ -194,7 +194,7 @@ export const revealStuff = () => {
 
     const example32 = document.getElementsByClassName('hepteracts') as HTMLCollectionOf<HTMLElement>;
     for (const ex of Array.from(example32)) { // Ability to use and gain hepteracts //
-        ex.style.display = player.challenge15Exponent >= 1e15 ? 'block' : 'none';
+        ex.style.display = player.achievements[238] > 0 ? 'block' : 'none';
     }
 
     const singularityHTMLs = document.getElementsByClassName('singularity') as HTMLCollectionOf<HTMLElement>;
@@ -204,8 +204,14 @@ export const revealStuff = () => {
 
     const singularityShopItems = document.getElementsByClassName('singularityShopUnlock') as HTMLCollectionOf<HTMLElement>;
     for (const item of Array.from(singularityShopItems)) { // Ability to buy upgrade tier 1s
-        item.style.display = player.singularityUpgrades.wowPass.level > 0 ? 'block' : 'none';
+        item.style.display = player.singularityUpgrades.wowPass.getEffect().bonus > 0 ? 'block' : 'none';
     }
+
+    const singularityShopItems2 = document.getElementsByClassName('singularityShopUnlock2') as HTMLCollectionOf<HTMLElement>;
+    for (const item of Array.from(singularityShopItems2)) { // Ability to buy upgrade tier 2s
+        item.style.display = player.singularityUpgrades.wowPass2.getEffect().bonus > 0 ? 'block' : 'none';
+    }
+
     const hepts = DOMCacheGetOrSet('corruptionHepteracts');
     hepts.style.display = (player.achievements[255] > 0) ? 'block' : 'none';
 
@@ -216,7 +222,7 @@ export const revealStuff = () => {
 
     const singularityUpgrades = Object.keys(player.singularityUpgrades) as (keyof Player['singularityUpgrades'])[];
     for (const key of singularityUpgrades) {
-        DOMCacheGetOrSet(`${key}`).style.display = player.singularityCount >= player.singularityUpgrades[`${key}`].getUnlockCount() ? 'block' : 'none';
+        DOMCacheGetOrSet(`${key}`).style.display = player.singularityUpgrades[`${key}`].getUnlocked(player.singularityCount * 2 + player.singsing * 100, player.singsing * 2) ? 'block' : 'none';
     }
 
     const cookies1 = document.getElementsByClassName('assortedCookies1') as HTMLCollectionOf<HTMLElement>;
@@ -224,21 +230,21 @@ export const revealStuff = () => {
     const cookies3 = document.getElementsByClassName('assortedCookies3') as HTMLCollectionOf<HTMLElement>;
     const cookies4 = document.getElementsByClassName('assortedCookies4') as HTMLCollectionOf<HTMLElement>;
     for (const HTML of Array.from(cookies1)) {
-        HTML.style.display = player.singularityUpgrades.cookies.level > 0 ? 'block' : 'none';
+        HTML.style.display = player.singularityUpgrades.cookies.getEffect().bonus ? 'block' : 'none';
     }
     for (const HTML of Array.from(cookies2)) {
-        HTML.style.display = player.singularityUpgrades.cookies2.level > 0 ? 'block' : 'none';
+        HTML.style.display = player.singularityUpgrades.cookies2.getEffect().bonus ? 'block' : 'none';
     }
     for (const HTML of Array.from(cookies3)) {
-        HTML.style.display = player.singularityUpgrades.cookies3.level > 0 ? 'block' : 'none';
+        HTML.style.display = player.singularityUpgrades.cookies3.getEffect().bonus ? 'block' : 'none';
     }
     for (const HTML of Array.from(cookies4)) {
-        HTML.style.display = player.singularityUpgrades.cookies4.level > 0 ? 'block' : 'none';
+        HTML.style.display = player.singularityUpgrades.cookies4.getEffect().bonus ? 'block' : 'none';
     }
 
     const goldenQuarks3 = document.getElementsByClassName('goldenQuark3Upg') as HTMLCollectionOf<HTMLElement>;
     for (const HTML of Array.from(goldenQuarks3)) {
-        HTML.style.display = player.singularityUpgrades.goldenQuarks3.level > 0 ? 'block' : 'none';
+        HTML.style.display = player.singularityUpgrades.goldenQuarks3.getEffect().bonus > 0 ? 'block' : 'none';
     }
     if (player.upgrades[89] === 1) {
         DOMCacheGetOrSet('transcendautotoggle').style.display = 'block';
@@ -396,7 +402,12 @@ export const revealStuff = () => {
     DOMCacheGetOrSet('toggleCubeAutoBuy').style.display = player.achievements[197] > 0 && player.singularityCount > 0 ? '' : 'none';
     DOMCacheGetOrSet('toggleAutoOpenCubes').style.display = player.achievements[218] > 0 && player.singularityCount > 0 ? '' : 'none';
     DOMCacheGetOrSet('toggleTesseractBAB').style.display = player.achievements[218] > 0 && player.singularityCount > 0 ? '' : 'none';
-    DOMCacheGetOrSet('togglePlatonicAutoBuy').style.display = player.singularityUpgrades.singAutomation.level > 200 && player.singularityCount > 0 ? '' : 'none';
+    DOMCacheGetOrSet('togglePlatonicAutoBuy').style.display = player.singularityUpgrades.singAutomation.level >= 200 && player.singularityCount > 0 ? '' : 'none';
+    DOMCacheGetOrSet('toggleHepteractAutoBuy').style.display = player.singularityUpgrades.singAutomation.level >= 1000 && player.singularityCount > 0 ? '' : 'none';
+    DOMCacheGetOrSet('toggleAutoSingularity').style.display = player.singularityCount >= 100 || player.singsing > 0 ? '' : 'none';
+
+    DOMCacheGetOrSet('openAllCubes').style.display = player.singularityUpgrades.singAutomation.level >= 2000 && player.singularityCount > 0 ? '' : 'none';
+    DOMCacheGetOrSet('buyTesseractBuildings').style.display = player.singularityUpgrades.singAutomation.level >= 3000 && player.singularityCount > 0 ? '' : 'none';
 
     //I'll clean this up later. Note to 2019 Platonic: Fuck you
     // note to 2019 and 2020 Platonic, you're welcome

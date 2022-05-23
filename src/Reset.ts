@@ -1,4 +1,4 @@
-import { player, clearInt, interval, format, blankSave, autobuyTesseractBuildings } from './Synergism';
+import { player, clearInt, interval, format, blankSave } from './Synergism';
 import {
     calculateOfferings, CalcCorruptionStuff, calculateCubeBlessings, calculateRuneLevels,
     calculateAnts, calculateObtainium, calculateTalismanEffects, calculateAntSacrificeELO,
@@ -15,9 +15,10 @@ import { getElementById } from './Utility';
 import { achievementaward, ascensionAchievementCheck } from './Achievements';
 import { buyResearch } from './Research';
 import { calculateHypercubeBlessings } from './Hypercubes';
-import { singularityOverride, getGoldenQuarkCost } from './singularity';
-import { autoBuyCubeUpgrades } from './Cubes';
-
+import { singularityOverride, singsingOverride, getGoldenQuarkCost } from './singularity';
+import { autoUseCubes } from './Cubes';
+import { autoHepteracts } from './Hepteracts';
+import { autoBuyPlatonicUpgrades } from './Platonic';
 
 import type {
     ResetHistoryEntryPrestige,
@@ -29,13 +30,12 @@ import { challengeRequirement } from './Challenges';
 import { Synergism } from './Events';
 import type { Player, resetNames } from './types/Synergism';
 import { updateClassList } from './Utility';
-import { corruptionStatsUpdate } from './Corruptions';
+import { corruptionStatsUpdate, maxCorruptionLevel } from './Corruptions';
 import { toggleAutoChallengeModeText, toggleSubTab, toggleTabs } from './Toggles';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { WowCubes } from './CubeExperimental';
 import { importSynergism } from './ImportExport';
 import { resetShopUpgrades, shopData } from './Shop';
-import { QuarkHandler } from './Quark';
 import { calculateSingularityDebuff } from './singularity';
 
 let repeatreset: ReturnType<typeof setTimeout>;
@@ -630,7 +630,8 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
                 DOMCacheGetOrSet('upg' + j).style.backgroundColor = 'black'
             }
         }
-        player.usedCorruptions = Array.from(player.prototypeCorruptions)
+        const maxLevel = maxCorruptionLevel();
+        player.usedCorruptions = Array.from(player.prototypeCorruptions, x => Math.min(maxLevel, x))
         player.usedCorruptions[1] = 0;
         player.prototypeCorruptions[1] = 0;
         //fix c15 ascension bug by restoring the corruptions if the player ascended instead of leaving
@@ -646,7 +647,17 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
             player.autoChallengeIndex = 10;
         }
 
+        autoBuyPlatonicUpgrades();
+        autoHepteracts();
         autoUseCubes();
+
+        if (player.autoSingularity) {
+            const sings = player.runelevels[6];
+            if (sings > 0 && player.runelevels[6] > 0) {
+                player.runelevels[6] = 0;
+                setTimeout(singularity, 10);
+            }
+        }
 
         updateChallengeDisplay();
 
@@ -715,18 +726,19 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
  * Calculate the number of Golden Quarks earned in current singularity
  */
 export const calculateGoldenQuarkGain = ():number => {
-    const base = 5 * player.singularityCount;
+    const base = 2 * player.singularityCount + 10
+    const bonus = (player.singularityCount < 10) ? (100 - 10 * player.singularityCount) : 0;
     const gainFromQuarks = player.quarksThisSingularity / 1e5;
     const c15Multiplier = 1 + Math.max(0, Math.log10(player.challenge15Exponent + 1) - 20) / 2
     const patreonMultiplier = 1 + player.worlds.BONUS/100;
 
-    const singularityUpgrades = (1 + player.singularityUpgrades.goldenQuarks1.level / 20) *
-                                (1 + player.singularityUpgrades.goldenQuarks2.level / 50) *
+    const singularityUpgrades = (+player.singularityUpgrades.goldenQuarks1.getEffect().bonus) *
+                                (+player.singularityUpgrades.goldenQuarks2.getEffect().bonus) *
                                 (1 + player.singularityUpgrades.singGolden.level * player.singularityCount / 1000)
 
     const cookieUpgradeMultiplier = 1 + 0.12 * player.cubeUpgrades[69];
 
-    return (base + gainFromQuarks) * c15Multiplier * patreonMultiplier * singularityUpgrades * cookieUpgradeMultiplier;
+    return (base + gainFromQuarks) * c15Multiplier * patreonMultiplier * singularityUpgrades * cookieUpgradeMultiplier + bonus;
 }
 
 /**
@@ -866,7 +878,7 @@ export const singularity = async (count = 1) => {
         player.singularityCount = 0;
     }
     if (player.singularityUpgrades.singSafeShop.level < 1) {
-        void resetShopUpgrades(true);
+        await resetShopUpgrades(true);
     }
     const hold = Object.assign({}, blankSave, {
         codes: Array.from(blankSave.codes)
@@ -886,14 +898,6 @@ export const singularity = async (count = 1) => {
     player.worlds.sub(cost)
     player.goldenQuarks += maxBuy
 
-    hold.singularityCount = player.singularityCount;
-    hold.goldenQuarks = player.goldenQuarks;
-    hold.shopUpgrades = player.shopUpgrades;
-    hold.worlds = new QuarkHandler({ quarks: 0, bonus: 0 })
-    hold.hepteractCrafts.quark = player.hepteractCrafts.quark
-    hold.singularityUpgrades = player.singularityUpgrades
-    hold.exporttest = player.exporttest
-
     singularityOverride(hold);
 
     //Import Game
@@ -907,7 +911,10 @@ export const singsing = async () => { // Almost delete savefile
     if (player.singularityCount < 100) {
         return await Alert('sorry. You need to arrive at #100 !');
     }
-    const skips = Math.floor(player.singularityCount / 100 / (1 + player.singularityUpgrades.singsingWormhole.level));
+    if (player.runelevels[6] <= 0) {
+        return Alert('Hmph. Please return with an Antiquity. Thank you. -Ant God');
+    }
+    const skips = 1 + player.singularityUpgrades.singsingWormhole.level;
     await Alert('Congratulations! You won all singuality!');
     await Alert('You are currently in front of the Eternal Synergism entrance.');
     await Alert('Synergism trades to you. Synergism will give you Quarks +100%. And you sacrifice further time. The answer is... Almost Delete SaveFile.');
@@ -926,6 +933,10 @@ export const singsing = async () => { // Almost delete savefile
     if (!q) {
         return;
     }
+    if (player.runelevels[6] <= 0) {
+        return Alert('Hey, Duplicate Singularity is forbidden.');
+    }
+    player.runelevels[6] = 0;
     const hold = Object.assign({}, blankSave, {
         codes: Array.from(blankSave.codes)
     }) as Player;
@@ -934,7 +945,38 @@ export const singsing = async () => { // Almost delete savefile
     toggleSubTab(1, 0);
 
     hold.singsing += skips;
-    hold.singularityUpgrades.singsingWormhole.level = player.singularityUpgrades.singsingWormhole.level;
+
+    await singsingOverride(hold);
+
+    //Import Game
+    await importSynergism(btoa(JSON.stringify(hold))!, true);
+    await Alert('Goodbye World & Hello World!');
+}
+
+export const singsingsing = async () => { // Almost delete savefile
+    if (player.singsing < 100) {
+        return await Alert('sorry. You need to arrive at ##100 !');
+    }
+    if (player.runelevels[6] <= 0) {
+        return Alert('Hmph. Please return with an Antiquity. Thank you. -Ant God');
+    }
+    const skips = Math.floor(player.singsing / 100);
+    const q = await Confirm(`Sing Sing Sing. This is the eight dimension reset. Yes, I will tell you that there is no point in continuing. I made this code in just 17 minutes. Are you sure you want to keep stealing your time any longer? Finally you have reached ###${format(player.singsingsing + skips, 0, true)} And Quarks give you +1000% * Sing Sing Sing ^ 2! Also, there are no additional upgrades!`);
+    if (!q) {
+        return;
+    }
+    if (player.runelevels[6] <= 0) {
+        return Alert('Hey, Duplicate Singularity is forbidden.');
+    }
+    player.runelevels[6] = 0;
+    const hold = Object.assign({}, blankSave, {
+        codes: Array.from(blankSave.codes)
+    }) as Player;
+    //Reset Displays
+    toggleTabs('buildings');
+    toggleSubTab(1, 0);
+
+    hold.singsingsing += skips;
 
     //Import Game
     await importSynergism(btoa(JSON.stringify(hold))!, true);
@@ -1128,23 +1170,4 @@ const resetTalismans = () => {
     player.epicFragments = 0;
     player.legendaryFragments = 0;
     player.mythicalFragments = 0;
-}
-
-const autoUseCubes = () => {
-    autoBuyCubeUpgrades();
-
-    if (player.achievements[218] > 0 && player.autoOpenCubes) {
-        void player.wowCubes.openPercent(100);
-        if (player.achievements[218] > 0 && player.tesseractAutoBuyer) {
-            void player.wowTesseracts.openPercent(10);
-            autobuyTesseractBuildings();
-        }
-        void player.wowTesseracts.openPercent(100);
-        void player.wowHypercubes.openPercent(100);
-        void player.wowPlatonicCubes.openPercent(100);
-    } else {
-        if (player.achievements[218] > 0 && player.tesseractAutoBuyer) {
-            autobuyTesseractBuildings();
-        }
-    }
 }

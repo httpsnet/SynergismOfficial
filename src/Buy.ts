@@ -81,7 +81,7 @@ export const buyAccelerator = (autobuyer?: boolean) => {
 
     let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), player.acceleratorBought + 1);
     let thisCost = getCostAccelerator(buyFrom);
-    while (buyFrom <= buyTo && player.coins.gte(thisCost)) {
+    while (buyFrom < buyTo && player.coins.gte(thisCost)) {
         player.coins = player.coins.sub(thisCost);
         player.acceleratorBought = buyFrom;
         buyFrom = buyFrom + smallestInc(buyFrom);
@@ -173,7 +173,7 @@ export const buyMultiplier = (autobuyer?: boolean) => {
 
     let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), player.multiplierBought + 1);
     let thisCost = getCostMultiplier(buyFrom);
-    while (buyFrom <= buyTo && player.coins.gte(thisCost)) {
+    while (buyFrom < buyTo && player.coins.gte(thisCost)) {
         player.coins = player.coins.sub(thisCost);
         player.multiplierBought = buyFrom;
         buyFrom = buyFrom + smallestInc(buyFrom);
@@ -401,7 +401,7 @@ export const buyMax = (index: OneToFive, type: keyof typeof buyProducerTypes) =>
     // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
     let buyFrom = Math.max(buyStart + buyInc - 6 - smallestInc(buyInc), player[posOwnedType] + 1);
     let thisCost = getCostInternal(originalCost, buyFrom, type, num, r);
-    while (buyFrom <= buyStart + buyInc && player[tag].gte(thisCost)) {
+    while (buyFrom < buyStart + buyInc && player[tag].gte(thisCost)) {
         player[tag] = player[tag].sub(thisCost);
         player[posOwnedType] = buyFrom;
         buyFrom = buyFrom + smallestInc(buyFrom);
@@ -430,7 +430,7 @@ export const buyProducer = (pos: FirstToFifth, type: keyof typeof buyProducerTyp
     const posOwnedType = `${pos}Owned${type}` as const;
 
 
-    while (player[tag].gte(player[posCostType]) && G['ticker'] < buythisamount) {
+    while (player[tag].gte(player[posCostType]) && G['ticker'] < buythisamount && player[posOwnedType] < Number.MAX_SAFE_INTEGER) {
         player[tag] = player[tag].sub(player[posCostType]);
         player[posOwnedType] += 1;
         player[posCostType] = player[posCostType].times(Decimal.pow(1.25, num));
@@ -569,7 +569,7 @@ export const boostAccelerator = (automated?: boolean) => {
         // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
         let buyFrom = Math.max(buyStart + buyInc - 6 - smallestInc(buyInc), player.acceleratorBoostBought + 1);
         let thisCost = getAcceleratorBoostCost(player.acceleratorBoostBought);
-        while (buyFrom <= buyStart + buyInc && player.prestigePoints.gte(getAcceleratorBoostCost(buyFrom))) {
+        while (buyFrom < buyStart + buyInc && player.prestigePoints.gte(getAcceleratorBoostCost(buyFrom))) {
             player.prestigePoints = player.prestigePoints.sub(thisCost);
             player.acceleratorBoostBought = buyFrom;
             buyFrom = buyFrom + smallestInc(buyFrom);
@@ -670,7 +670,7 @@ export const buyParticleBuilding = (
     // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
     let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), player[key] + 1);
     let thisCost = getParticleCost(originalCost, buyFrom);
-    while (buyFrom <= buyTo && player.reincarnationPoints.gte(thisCost)) {
+    while (buyFrom < buyTo && player.reincarnationPoints.gte(thisCost)) {
         player.reincarnationPoints = player.reincarnationPoints.sub(thisCost);
         player[key] = buyFrom;
         buyFrom = buyFrom + smallestInc(buyFrom);
@@ -849,9 +849,6 @@ export const calculateTessBuildingsInBudget = (ownedBuildings: TesseractBuilding
             // ever happen.
             buildings[minimum.index]!++;
             currentPrices[minimum.index] = tesseractBuildingCosts[minimum.index] * Math.pow(buildings[minimum.index]!+1, 3);
-            if (iteration === 5) {
-                console.warn(`Error in calculateInBudget(${JSON.stringify(ownedBuildings)}, ${JSON.stringify(budget)}). Copy this message and report this to a developer.`);
-            }
         } else {
             // Can't afford cheapest any more - break.
             break;

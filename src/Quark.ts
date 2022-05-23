@@ -2,7 +2,7 @@
 
 import { calculateCubeQuarkMultiplier, calculateEffectiveIALevel, calculateQuarkMultFromPowder} from './Calculate';
 import { hepteractEffective } from './Hepteracts'
-import { player } from './Synergism'
+import { format, player } from './Synergism'
 import { Alert } from './UpdateHTML';
 import { Globals as G } from './Variables'
 import { DOMCacheGetOrSet } from './Cache/DOM';
@@ -68,7 +68,7 @@ export const getQuarkMultiplier = () => {
     if (player.shopUpgrades.infiniteAscent) { // Purchased Infinite Ascent Rune
         multiplier *= (1.1 + 0.15 / 75 * calculateEffectiveIALevel());
     }
-    if (player.challenge15Exponent >= 1e15) { // Challenge 15: Exceed 1e15 exponent reward
+    if (player.achievements[238] > 0) { // Challenge 15: Exceed 1e15 exponent reward
         multiplier *= (1 + 5/10000 * hepteractEffective('quark'));
     }
     if (player.overfluxPowder > 0) { // Overflux Powder [Max: 10% at 10,000]
@@ -83,8 +83,11 @@ export const getQuarkMultiplier = () => {
     if (player.singularityCount > 0) { // Singularity Modifier
         multiplier *= (1 + player.singularityCount / 10 + (player.singularityUpgrades.singQuark.level * player.singularityCount / 100))
     }
-    if (player.singsing > 0) { // Singularity OfSingularity
+    if (player.singsing > 0) { // Singularity Of Singularity
         multiplier *= 1 + player.singsing
+    }
+    if (player.singsingsing > 0) { // Sing Sing Sing
+        multiplier *= 1 + (player.singsingsing * player.singsingsing) * 10
     }
     if (G['isEvent']) {
         multiplier *= 3; // May01-May07
@@ -101,6 +104,11 @@ export const getQuarkMultiplier = () => {
     if (player.singularityCount >= 20) { // Singularity Milestone (20 sing)
         multiplier *= 1.05
     }
+    multiplier *= (1 + 0.02 * player.singularityUpgrades.intermediatePack.level +           // 1.02
+                           0.04 * player.singularityUpgrades.advancedPack.level +               // 1.06
+                           0.06 * player.singularityUpgrades.expertPack.level +                 // 1.12
+                           0.08 * player.singularityUpgrades.masterPack.level +                 // 1.20
+                           0.10 * player.singularityUpgrades.expertPack.level)                  // 1.30
     return multiplier
 }
 
@@ -114,8 +122,8 @@ export const quarkHandler = () => {
     for (const el of quarkResearches) {
         baseQuarkPerHour += player.researches[el]
     }
-    const quarkMultiplier = getQuarkMultiplier();
-    const quarkPerHour = baseQuarkPerHour * quarkMultiplier
+
+    const quarkPerHour = baseQuarkPerHour
 
     //Part 3: Calculates capacity of quarks on export
     const capacity = Math.floor(quarkPerHour * maxTime / 3600)
@@ -158,7 +166,8 @@ export class QuarkHandler {
 
     /*** Calculates the number of quarks to give with the current bonus. */
     applyBonus(amount: number) {
-        return amount * (1 + (this.BONUS / 100));
+        const nonPatreon = getQuarkMultiplier();
+        return amount * (1 + (this.BONUS / 100)) * nonPatreon;
     }
 
     /** Subtracts quarks, as the name suggests. */
@@ -183,12 +192,13 @@ export class QuarkHandler {
         if (localStorage.getItem('quarkBonus') !== null) { // is in cache
             const { bonus, fetched } = JSON.parse(localStorage.getItem('quarkBonus')!) as { bonus: number, fetched: number };
             if (Date.now() - fetched < 60 * 1000 * 15) { // cache is younger than 15 minutes
-                console.log(
-                    `%c Bonus of ${bonus}% quarks has been applied! \t(Cached at ${fetched})`,
-                    'font-weight:bold; font-family:helvetica;'
-                );
-                el.textContent = `Generous patrons give you a bonus of ${bonus}% more quarks!`
-                return this.BONUS = bonus;
+                if (typeof player === 'object') {
+                    this.BONUS = bonus + player.singsing * player.singularityUpgrades.singSingPatreon.level;
+                } else {
+                    this.BONUS = bonus;
+                }
+                el.textContent = `Generous patrons give you a bonus of ${this.BONUS}% more quarks!`
+                return bonus;
             }
         } else if (!navigator.onLine) {
             return el.textContent = 'Current Bonus: N/A% (offline)!';
@@ -208,10 +218,18 @@ export class QuarkHandler {
             return Alert('No bonus could be applied, an error occurred. [Zero] :(');
         }
 
-        console.log(`%c \tBonus of ${b}% quarks has been applied!`, 'font-weight:bold; font-family:helvetica;');
-        el.textContent = `Generous patrons give you a bonus of ${b}% more quarks!`;
+        if (typeof player === 'object') {
+            this.BONUS = b + player.singsing * player.singularityUpgrades.singSingPatreon.level;
+        } else {
+            this.BONUS = b;
+        }
+
+        el.textContent = `Generous patrons give you a bonus of ${this.BONUS}% more quarks!`;
         localStorage.setItem('quarkBonus', JSON.stringify({ bonus: b, fetched: Date.now() }));
-        this.BONUS = b;
+    }
+
+    public toString(val: number): string {
+        return format(Math.floor(this.applyBonus(val)), 0, true)
     }
 
     [Symbol.toPrimitive] = (t: string) => t === 'number' ? this.QUARKS : null;

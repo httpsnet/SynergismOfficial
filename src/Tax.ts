@@ -5,6 +5,7 @@ import { sumContents } from './Utility';
 import Decimal from 'break_infinity.js';
 import { CalcECC } from './Challenges';
 import { achievementaward } from './Achievements';
+import { constantTaxesMultiplier } from './Calculate';
 
 export const calculatetax = () => {
     let exp = 1;
@@ -62,21 +63,21 @@ export const calculatetax = () => {
     exponent = exponent.times(exp);
     exponent = exponent.times(1 - 1 / 20 * player.researches[51] - 1 / 40 * player.researches[52] - 1 / 80 * player.researches[53] - 1 / 160 * player.researches[54] - 1 / 320 * player.researches[55]);
     exponent = exponent.times(1 - 0.05 / 1800 * (player.achievements[45] + player.achievements[46] + 2 * player.achievements[47]) * Math.min(player.prestigecounter, 1800));
-    exponent = exponent.times(Decimal.pow(0.965, CalcECC('reincarnation', player.challengecompletions[6])));
+    exponent = exponent.times(Decimal.pow(0.965, CalcECC('reincarnation', Math.min(player.challengecompletions[6], Math.sqrt(player.challengecompletions[6]) * 11))));
     exponent = exponent.times(0.001 + .999 * (Math.pow(6, -(G['rune2level'] * G['effectiveLevelMult']) / 1000)));
     exponent = exponent.times(0.01 + .99 * (Math.pow(4, Math.min(0, (400 - G['rune4level']) / 1100))));
     exponent = exponent.times(1 - 0.04 * player.achievements[82] - 0.04 * player.achievements[89] - 0.04 * player.achievements[96] - 0.04 * player.achievements[103] - 0.04 * player.achievements[110] - 0.0566 * player.achievements[117] - 0.0566 * player.achievements[124] - 0.0566 * player.achievements[131]);
-    exponent = exponent.times(Decimal.pow(0.9925, player.achievements[118] * (player.challengecompletions[6] + player.challengecompletions[7] + player.challengecompletions[8] + player.challengecompletions[9] + player.challengecompletions[10])));
+    exponent = exponent.times(Decimal.pow(0.9925, Math.min(player.achievements[118] * (player.challengecompletions[6] + player.challengecompletions[7] + player.challengecompletions[8] + player.challengecompletions[9] + player.challengecompletions[10]), Math.sqrt(player.achievements[118] * (player.challengecompletions[6] + player.challengecompletions[7] + player.challengecompletions[8] + player.challengecompletions[9] + player.challengecompletions[10])) * 24.5)));
     exponent = exponent.times(0.005 + 0.995 * Math.pow(0.99, player.antUpgrades[2]! + G['bonusant3']));
-    exponent = exponent.dividedBy(Decimal.pow((1 + Decimal.log10(player.ascendShards.add(1))), 1 + .2 / 60 * player.challengecompletions[10] * player.upgrades[125] + 0.1 * player.platonicUpgrades[5] + 0.2 * player.platonicUpgrades[10] + (G['platonicBonusMultiplier'][5]-1)));
+    exponent = exponent.dividedBy(constantTaxesMultiplier());
     exponent = exponent.times(1 - 0.10 * (player.talismanRarity[1-1] - 1));
     exponent = exponent.times(Decimal.pow(0.98, 3 / 5 * Math.log10(1 + player.rareFragments) * player.researches[159]));
     exponent = exponent.times(Decimal.pow(0.966, CalcECC('ascension', player.challengecompletions[13])));
     exponent = exponent.times(1 - 0.666 * player.researches[200] / 100000);
     exponent = exponent.times(1 - 0.666 * player.cubeUpgrades[50] / 100000);
     exponent = exponent.times(G['challenge15Rewards'].taxes);
-
-    exponent = exponent.times(1 / Math.pow(G['buildingPower'], player.singularityUpgrades.singBuildingExponent.level / 10000));
+    exponent = exponent.times(Decimal.pow(0.99, player.challengecompletions[15]));
+    exponent = exponent.times(1 / Math.pow(G['buildingPower'], player.singularityUpgrades.singBuildingExponent.level / 20000));
 
     if (player.upgrades[121] > 0) {
         exponent = exponent.times(0.5);
@@ -98,11 +99,11 @@ export const calculatetax = () => {
     }
 
     if (a2 >= 1) {
-        compareB = Decimal.pow(a2, 2).div(550);
+        compareB = Decimal.pow(a2, 2).dividedBy(550);
     }
 
-    compareC = Decimal.pow(G['maxexponent'], 2).div(550);
+    compareC = Decimal.pow(G['maxexponent'], 2).dividedBy(550);
 
-    G['taxdivisor'] = Decimal.pow(1.01, Decimal.mul(compareB, tax));
-    G['taxdivisorcheck'] = Decimal.pow(1.01, Decimal.mul(compareC, tax));
+    G['taxdivisor'] = Decimal.pow(1.01, Decimal.times(compareB, tax));
+    G['taxdivisorcheck'] = Decimal.pow(1.01, Decimal.times(compareC, tax));
 }
