@@ -662,7 +662,8 @@ export const runChallengeSweep = (dt: number) => {
         let startChallenge = 1;
         for (const item of player.autoChallengeToggles.slice(1,11)) { //Why does this slice at (1,11)? because Platonic
             //is supremely moronic. -Platonic
-            if (!item || !player.autoChallengeToggles[startChallenge] || player.challengecompletions[startChallenge] >= getMaxChallenges(startChallenge)) {
+            if (!item || !player.autoChallengeToggles[startChallenge] ||
+                player.challengecompletions[startChallenge] >= getMaxChallenges(startChallenge)) {
                 startChallenge++;
             } else {
                 break;
@@ -672,15 +673,18 @@ export const runChallengeSweep = (dt: number) => {
         /* If startChallenge equals 11, every challenge is set to not run
            In this case, we do not need this to run and will terminate
            Auto challenge.*/
-        if (startChallenge > 10) {
-            toggleAutoChallengeModeText('OFF');
-            toggleAutoChallengeRun();
-            return
+        if (startChallenge === 11) {
+            if (player.autoSingularity) {
+                startChallenge = 0
+            } else {
+                toggleAutoChallengeModeText('OFF');
+                toggleAutoChallengeRun();
+                return
+            }
         }
 
         // Set our index to calculated starting challenge and run the challenge
         player.autoChallengeIndex = startChallenge;
-
         toggleChallenges(player.autoChallengeIndex, true);
 
         // Sets Mode to "EXIT" as displayed in the challenge tab
@@ -700,7 +704,7 @@ export const runChallengeSweep = (dt: number) => {
         let startChallenge = player.autoChallengeIndex;
         for (let index = startChallenge; index <= 10; index++) {
             if (!player.autoChallengeToggles[index] ||
-                 player.challengecompletions[index] >= getMaxChallenges(index)) {
+                player.challengecompletions[index] >= getMaxChallenges(index)) {
                 startChallenge += 1;
             } else {
                 break;
@@ -710,20 +714,24 @@ export const runChallengeSweep = (dt: number) => {
         /* If the above algorithm sets the index above 10, the loop is complete
            and thus do not need to enter more challenges. This sets our index to 1
            so in the next iteration it knows we want to start a loop. */
-        if (startChallenge > 10) {
+        if (startChallenge === 11) {
             startChallenge = 1;
             for (let index = startChallenge; index <= 10; index++) {
                 if (!player.autoChallengeToggles[index] ||
-                     player.challengecompletions[index] >= getMaxChallenges(index)) {
+                    player.challengecompletions[index] >= getMaxChallenges(index)) {
                     startChallenge += 1;
                 } else {
                     break;
                 }
             }
-            if (startChallenge > 10) {
-                toggleAutoChallengeModeText('OFF');
-                toggleAutoChallengeRun();
-                return
+            if (startChallenge === 11) {
+                if (player.autoSingularity) {
+                    startChallenge = 0
+                } else {
+                    toggleAutoChallengeModeText('OFF');
+                    toggleAutoChallengeRun();
+                    return
+                }
             }
         }
 

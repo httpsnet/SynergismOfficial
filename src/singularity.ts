@@ -5,9 +5,11 @@ import { Notification, Alert, Prompt } from './UpdateHTML'
 import { toOrdinal } from './Utility'
 import { toggleAutoResearch } from './Toggles'
 import { testing } from './Config';
-import { singsing } from './Reset';
+import { singsing, singsingsing } from './Reset';
 import { Globals as G } from './Variables'
 import { cubeAutomationIndices, researchAutomationIndices, getCubeMax } from './Cubes';
+import { resetShopUpgrades } from './Shop';
+import { QuarkHandler } from './Quark';
 
 /**
  *
@@ -15,7 +17,7 @@ import { cubeAutomationIndices, researchAutomationIndices, getCubeMax } from './
  *
  */
 export const updateSingularityStats = ():void => {
-    const str = `You are in the ${toOrdinal(player.singularityCount)} singularity, and have ${format(player.goldenQuarks,0,true)} golden quarks.
+    let str = `You are in the ${toOrdinal(player.singularityCount)} singularity, and have ${format(player.goldenQuarks,0,true)} golden quarks.
                  Global Speed is divided by ${format(calculateSingularityDebuff('Global Speed'), 2, true)}.
                  Ascension Speed is divided by ${format(calculateSingularityDebuff('Ascension Speed'), 2, true)}
                  Offering Gain is divided by ${format(calculateSingularityDebuff('Offering'), 2, true)}
@@ -24,7 +26,12 @@ export const updateSingularityStats = ():void => {
                  Research Costs are multiplied by ${format(calculateSingularityDebuff('Researches'), 2, true)}.
                  Cube Upgrade Costs (Excluding Cookies) are multiplied by ${format(calculateSingularityDebuff('Cube Upgrades'), 2, true)}.
                  Antiquities of Ant God is ${(player.runelevels[6] > 0) ? '' : 'NOT'} purchased. Penalties are ${(player.runelevels[6] > 0) ? '' : 'NOT'} dispelled!`
-
+    if (player.singsing > 0) {
+        str = `You are in the ${toOrdinal(player.singsing)} sing sing.\n` + str;
+    }
+    if (player.singsingsing > 0) {
+        str = `You are in the ${toOrdinal(player.singsingsing)} sing sing sing.\n` + str;
+    }
     DOMCacheGetOrSet('singularityMultiline').textContent = str;
 }
 
@@ -37,7 +44,10 @@ export interface ISingularityData {
     toggleBuy?: number
     goldenQuarksInvested?: number
     maxCapLevel?: number
+    maxCapUp?: number
     minimumSingularity?: number
+    effect? (n: number): {bonus: number | boolean, desc: string}
+    minimumSingSing?: number
 }
 
 /**
@@ -55,7 +65,10 @@ export class SingularityUpgrade {
     public toggleBuy = 1; //-1 = buy MAX (or 1000 in case of infinity levels!)
     public goldenQuarksInvested = 0;
     public readonly minimumSingularity: number;
+    public readonly minimumSingSing: number;
+    public readonly maxCapUp: number;
     public readonly maxCapLevel: number;
+    private readonly effect: (n: number) => {bonus: number | boolean, desc: string}
 
     public constructor(data: ISingularityData) {
         //        console.log(data.name)
@@ -66,8 +79,13 @@ export class SingularityUpgrade {
         this.costPerLevel = data.costPerLevel;
         this.toggleBuy = data.toggleBuy ?? 1;
         this.goldenQuarksInvested = data.goldenQuarksInvested ?? 0;
-        this.maxCapLevel = data.maxCapLevel ?? 10000;
+        this.maxCapLevel = data.maxCapLevel ?? data.maxLevel;
+        this.maxCapUp = data.maxCapUp ?? 100;
         this.minimumSingularity = data.minimumSingularity ?? 0;
+        this.effect = data.effect ?? function (n:number) {
+            return {bonus: n, desc: 'It is implemented by Mod.'}
+        }
+        this.minimumSingSing = data.minimumSingSing ?? 0;
     }
 
     /**
@@ -88,16 +106,27 @@ export class SingularityUpgrade {
                 ${this.description}
                 ${minimumSingularity}
                 Level ${format(this.level, 0, true)}${maxLevel}
+                Bonus: ${this.getEffect().desc}
                 Cost for next level: ${format(costNextLevel, 0, true)} Golden Quarks.
                 Spent Quarks: ${format(this.goldenQuarksInvested, 0, true)}`
     }
 
-    public getUnlockCount() {
-        return this.minimumSingularity;
+    public getUnlocked(singularity = -1, singsing = -1) {
+        if (singularity < 0) {
+            singularity = player.singularityCount;
+        }
+        if (singsing < 0) {
+            singsing = player.singsing;
+        }
+        return singularity >= this.minimumSingularity && singsing >= this.minimumSingSing;
     }
 
-    private getMaxLevel(min = 1) {
-        const level = this.maxLevel === 1 ? 1 : (Math.min(this.maxCapLevel, this.maxLevel * (1 + player.singularityCount * player.singularityUpgrades.singMaxLevelUp.level / 100)) + (this.maxLevel >= 1 ? Math.floor(player.singsing) : 0));
+    public getCapMaxLevel() {
+        return Math.min(this.maxCapUp * this.maxCapLevel, this.maxCapLevel * Math.pow(2, player.singularityUpgrades.maxCapLevel0.level) * (1 + (player.singularityUpgrades.maxCapLevel1.level + player.singularityUpgrades.maxCapLevel2.level + player.singularityUpgrades.maxCapLevel3.level + player.singularityUpgrades.maxCapLevel4.level + player.singularityUpgrades.maxCapLevel5.level) / 50 + player.singsing / 10));
+    }
+
+    public getMaxLevel(min = 1) {
+        const level = this.maxLevel === 1 ? 1 : Math.floor(Math.min(this.getCapMaxLevel(), this.maxLevel * Math.pow(2, player.singularityUpgrades.maxCapLevel0.level) * (1 + player.singularityCount * player.singularityUpgrades.singMaxLevelUp.level / 100)));
         return level > 1 ? Math.floor(level) : Math.floor(level * min) / min;
     }
 
@@ -110,7 +139,7 @@ export class SingularityUpgrade {
      * @returns A number representing how many Golden Quarks a player must have to upgrade once.
      */
     private getCostTNL() {
-        return (this.maxLevel >= 0 && this.getMaxLevel() <= this.level) ? 0: this.costPerLevel * (1 + this.level);
+        return (this.maxLevel >= 0 && this.getMaxLevel() <= this.level) ? 0: this.costPerLevel * (1 + this.level) * Math.pow(100, player.singularityUpgrades.maxCapLevel0.level);
     }
 
     /**
@@ -120,6 +149,9 @@ export class SingularityUpgrade {
      */
     public async buyLevel() {
         this.toggleBuy = player.singupgradebuyamount;
+        if (this.name === 'Max Cap Level 1337') {
+            this.toggleBuy = 1;
+        }
 
         let purchased = 0;
         let maxPurchasable = (this.maxLevel === -1)
@@ -136,12 +168,33 @@ export class SingularityUpgrade {
             return false
         }
 
-        if (player.singularityCount < this.minimumSingularity) {
-            return Alert('you\'re not powerful enough to purchase this yet.')
+        if (!this.getUnlocked()) {
+            if (player.singularityCount < this.minimumSingularity) {
+                return Alert('you\'re not powerful enough to purchase this yet.')
+            }
+            if (player.singsing < this.minimumSingSing) {
+                return Alert(`???????? ${format(player.singsing, 0, true)} / ${format(this.minimumSingularity, 0, true)} !`)
+            }
+            return false;
         }
 
-        if (this.name === 'Singularity Of Singularity') {
+        if (this.name === 'Sing Sing' && player.goldenQuarks > this.getCostTNL()) {
+            this.level = 0;
             return singsing();
+        } else if (this.name === 'Unsmith') {
+            const cost = this.getCostTNL();
+            const singularityQuarks = player.quarksThisSingularity;
+            purchased = Math.min(purchased * cost, player.goldenQuarks * cost);
+            player.goldenQuarks -= purchased;
+            player.worlds.add(purchased);
+            player.quarksThisSingularity = singularityQuarks;
+            this.level = 0;
+            this.updateUpgradeHTML();
+            updateSingularityStats();
+            return false;
+        } else if (this.name === 'Sing Sing Singularity Specially Service' && player.goldenQuarks > this.getCostTNL()) {
+            this.level = 0;
+            return singsingsing();
         }
 
         while (maxPurchasable > 0) {
@@ -159,6 +212,9 @@ export class SingularityUpgrade {
 
         if (purchased === 0) {
             return Alert('You cannot afford this upgrade. Sorry!')
+        } else if (this.name === 'Max Cap Level 1337') {
+            this.goldenQuarksInvested = ((this.level + 1) * this.level / 2) * this.costPerLevel * Math.pow(100, this.level);
+            checkUpgrades();
         }
 
         this.updateUpgradeHTML();
@@ -172,12 +228,12 @@ export class SingularityUpgrade {
             return false
         }
 
+        if (this.name === 'Max Cap Level 1337') {
+            return false;
+        }
+
         let purchased = 0;
         let maxPurchasable = Math.max(1, Math.min(this.level, this.toggleBuy));
-
-        if (player.singularityCount < this.minimumSingularity) {
-            return Alert(`You cannot purchase because your Singularity Count is less than ${format(this.minimumSingularity, 0, true)}.`)
-        }
 
         if (this.level < 1) {
             return Alert('Not enough levels.')
@@ -246,6 +302,10 @@ export class SingularityUpgrade {
         this.level = 0;
         this.goldenQuarksInvested = 0;
     }
+
+    public getEffect(): {bonus: number | boolean, desc: string} {
+        return this.effect(this.level)
+    }
 }
 
 export const singularityData: Record<keyof Player['singularityUpgrades'], ISingularityData> = {
@@ -254,224 +314,449 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         description: 'In the future, you will gain 5% more Golden Quarks on singularities! This also reduces the cost to buy Golden Quarks in the shop by 500 per level.',
         maxLevel: 10,
         costPerLevel: 12,
-        maxCapLevel: 20
+        maxCapLevel: 20,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.05 * n,
+                desc: `Permanently gain ${format(5 * n, 0, true)}% more Golden Quarks on singularities.`
+            }
+        }
     },
     goldenQuarks2: {
         name: 'Golden Quarks II',
         description: 'If you buy this, you will gain 2% more Golden Quarks on singularities. This also reduces the cost to buy Golden Quarks in the shop by 200 per level. Stacks with the first upgrade.',
         maxLevel: 25,
         costPerLevel: 60,
-        maxCapLevel: 50
+        maxCapLevel: 50,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.02 * n,
+                desc: `Permanently gain ${format(2 * n, 0, true)}% more Golden Quarks on singularities.`
+            }
+        }
     },
     goldenQuarks3: {
         name: 'Golden Quarks III',
         description: 'If you buy this, you will gain 1 Golden Quark per hour from Exports. Also reduces the cost to buy Golden Quarks in the shop by 1,000 per level.',
         maxLevel: 5,
         costPerLevel: 1000,
-        maxCapLevel: 10
+        maxCapLevel: 10,
+        effect: (n: number) => {
+            return {
+                bonus: n,
+                desc: `Every hour, you gain ${format(n)} Golden Quarks from exporting.`
+            }
+        }
     },
     starterPack: {
         name: 'Starter Pack',
         description: 'Buy this! Buy This! Cube gain is permanently multiplied by 5, and gain 6x the Obtainium and Offerings from all sources, post-corruption.',
         maxLevel: 1,
-        costPerLevel: 10
+        costPerLevel: 10,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} unlocked a 5x multiplier to cubes and 6x multiplier to obtainium and offerings.`
+            }
+        }
     },
     wowPass: {
-        name: 'Wow Pass Unlock',
+        name: 'Shop Bonanza',
         description: 'This upgrade will convince the seal merchant to sell you more Wow Passes, which even persist on Singularity!. Shop is always accessible!',
         maxLevel: 1,
-        costPerLevel: 500
+        costPerLevel: 500,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} unlocked the shop bonanza.`
+            }
+        }
     },
     cookies: {
         name: 'Cookie Recipes I',
         description: 'For just a few golden quarks, re-open Wow! Bakery, adding five cookie-related cube upgrades.',
         maxLevel: 1,
-        costPerLevel: 100
+        costPerLevel: 100,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} unlocked volume 1 of the recipe book.`
+            }
+        }
     },
     cookies2: {
         name: 'Cookie Recipes II',
         description: 'Diversify Wow! Bakery into cooking slightly more exotic cookies, adding five more cookie-related cube upgrades..',
         maxLevel: 1,
-        costPerLevel: 500
+        costPerLevel: 500,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} unlocked volume 2 of the recipe book.`
+            }
+        }
     },
     cookies3: {
         name: 'Cookie Recipes III',
         description: 'Your Bakers threaten to quit without a higher pay. If you do pay them, they will bake even more fancy cookies.',
         maxLevel: 1,
-        costPerLevel: 24999
+        costPerLevel: 24999,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} appeased the union of Bakers.`
+            }
+        }
     },
     cookies4: {
         name: 'Cookie Recipes IV',
         description: 'This is a small price to pay for Salvation.',
         maxLevel: 1,
-        costPerLevel: 199999
+        costPerLevel: 199999,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} paid your price for salvation.`
+            }
+        }
     },
     ascensions: {
         name: 'Improved Ascension Gain',
         description: 'Buying this, you will gain +2% Ascension Count forever, per level! Every 20 levels grants an additional, multiplicative +1% Ascension Count.',
         maxLevel: -1,
-        costPerLevel: 5
+        costPerLevel: 5,
+        effect: (n: number) => {
+            return {
+                bonus: (1 + 2 * n / 100) * (1 + Math.floor(n / 10) / 100),
+                desc: `Ascension Count increases ${format((100 + 2 * n) * (1 + Math.floor(n/10) / 100) - 100, 1, true)}% faster.`
+            }
+        }
     },
     corruptionFourteen: {
         name: 'Level Fourteen Corruptions',
         description: 'Buy this to unlock level fourteen corruptions :).',
         maxLevel: 1,
-        costPerLevel: 1000
+        costPerLevel: 1000,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} gained the ability to use level 14 corruptions ${(n > 0)? ':)': ':('}.`
+            }
+        }
     },
     corruptionFifteen: {
         name: 'Level Fifteen Corruptions',
         description: 'This doesn\'t *really* raise the corruption limit. Rather, it adds one FREE level to corruption multipliers, no matter what (can exceed cap). :)',
         maxLevel: 1,
-        costPerLevel: 40000
+        costPerLevel: 40000,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} gained a free corruption level ${(n > 0)? ':)': ':('}.`
+            }
+        }
     },
     singOfferings1: {
         name: 'Offering Charge',
         description: 'Upgrade this to get +2% offerings per level, forever!',
         maxLevel: -1,
-        costPerLevel: 1
+        costPerLevel: 1,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.02 * n,
+                desc: `Permanently gain ${format(2 * n, 0, true)}% more Offerings.`
+            }
+        }
     },
     singOfferings2: {
         name: 'Offering Storm',
         description: 'Apparently, you can use this bar to attract more offerings. +8% per level, to be precise.',
         maxLevel: 25,
         costPerLevel: 25,
-        maxCapLevel: 100
+        maxCapLevel: 100,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.08 * n,
+                desc: `Permanently gain ${format(8 * n, 0, true)}% more Offerings.`
+            }
+        }
     },
     singOfferings3: {
         name: 'Offering Tempest',
         description: 'This bar is so prestine, it\'ll make anyone submit their offerings. +4% per level, to be precise.',
         maxLevel: 40,
         costPerLevel: 500,
-        maxCapLevel: 100
+        maxCapLevel: 100,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.04 * n,
+                desc: `Permanently gain ${format(4 * n, 0, true)}% more Offerings.`
+            }
+        }
     },
     singObtainium1: {
         name: 'Obtainium Wave',
         description: 'Upgrade this to get +2% obtainium per level, forever!',
         maxLevel: -1,
-        costPerLevel: 1
+        costPerLevel: 1,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.02 * n,
+                desc: `Permanently gain ${format(2 * n, 0, true)}% more Obtainium.`
+            }
+        }
     },
     singObtainium2: {
         name: 'Obtainium Flood',
         description: 'Holy crap, water bending! +8% gained obtainium per level.',
         maxLevel: 25,
         costPerLevel: 25,
-        maxCapLevel: 100
+        maxCapLevel: 100,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.08 * n,
+                desc: `Permanently gain ${format(8 * n, 0, true)}% more Obtainium.`
+            }
+        }
     },
     singObtainium3: {
         name: 'Obtainium Tsunami',
         description: 'A rising tide lifts all boats. +4% gained obtainium per level.',
         maxLevel: 40,
         costPerLevel: 500,
-        maxCapLevel: 100
+        maxCapLevel: 100,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.04 * n,
+                desc: `Permanently gain ${format(4 * n, 0, true)}% more Obtainium.`
+            }
+        }
     },
     singCubes1: {
         name: 'Cube Flame',
         description: 'Upgrade this to get +2% Cubes per level, forever!',
         maxLevel: -1,
-        costPerLevel: 1
+        costPerLevel: 1,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.02 * n,
+                desc: `Permanently gain ${format(2 * n, 0, true)}% more Cubes.`
+            }
+        }
     },
     singCubes2: {
         name: 'Cube Blaze',
         description: 'Burn some more Golden Quarks! +8% gained Cubes per level.',
         maxLevel: 25,
         costPerLevel: 25,
-        maxCapLevel: 100
+        maxCapLevel: 100,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.08 * n,
+                desc: `Permanently gain ${format(8 * n, 0, true)}% more Cubes.`
+            }
+        }
     },
     singCubes3: {
         name: 'Cube Inferno',
         description: 'Even Dante is impressed. +4% gained Cubes per level.',
         maxLevel: 40,
         costPerLevel: 500,
-        maxCapLevel: 100
+        maxCapLevel: 100,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.04 * n,
+                desc: `Permanently gain ${format(4 * n, 0, true)}% more Cubes.`
+            }
+        }
     },
     octeractUnlock: {
         name: 'Octeracts ;) (WIP)',
         description: 'Hey!!! What are you trying to do?!?',
         maxLevel: 1,
         costPerLevel: 8888,
-        minimumSingularity: 10
+        minimumSingularity: 10,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} bought into the octeract hype.`
+            }
+        }
     },
     offeringAutomatic: {
         name: 'Offering Lootzifer (WIP)',
         description: 'Black Magic. Don\'t make deals with the devil. Each second, you get +2% of offering gain automatically per level. Also +10% Offerings!',
         maxLevel: 50,
         costPerLevel: 2000,
-        minimumSingularity: 6
+        minimumSingularity: 6,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} made a deal with the devil Lootzifer.`
+            }
+        }
+    },
+    intermediatePack: {
+        name: 'Intermediate Pack',
+        description: 'Double Global Speed, Multiply Ascension speed by 1.5, and gain +2% Quarks forever. Yum... 2% Quark Milk.',
+        maxLevel: 1,
+        costPerLevel: 1,
+        minimumSingularity: 4,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} upgraded your package to intermediate.`
+            }
+        }
+    },
+    advancedPack: {
+        name: 'Advanced Pack',
+        description: 'Now we\'re cooking with kerosene! Gain +4% Quarks stack with intermediate, +0.33 to all corruption score multipliers, regardless of level!',
+        maxLevel: 1,
+        costPerLevel: 200,
+        minimumSingularity: 9,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} bought our advanced package.`
+            }
+        }
+    },
+    expertPack: {
+        name: 'Expert Pack',
+        description: 'That\'s a handful! Gain +6% Quarks stack with advanced, 1.5x Ascension Score, Code \'add\' gives 1.2x Ascension Timer.',
+        maxLevel: 1,
+        costPerLevel: 800,
+        minimumSingularity: 16,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} switched to the expert provider.`
+            }
+        }
+    },
+    masterPack: {
+        name: 'Master Pack',
+        description: 'A tad insane. Gain +8% Quarks stack with expert, for every level 14 corruption, ascension score is multiplied by 1.1.',
+        maxLevel: 1,
+        costPerLevel: 3200,
+        minimumSingularity: 25,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} mastered your inner chakras.`
+            }
+        }
+    },
+    divinePack: {
+        name: 'Divine Pack',
+        description: 'OHHHHH. Gain +10% Quarks stack with master, and multiply Octeract gain by 7.77 if corruptions are all set to 14. Also unlock Platonic Upgrade autobuyers!',
+        maxLevel: 1,
+        costPerLevel: 12800,
+        minimumSingularity: 36,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} found the reason for existence ${(n > 0) ? '' : ' just yet'}.`
+            }
+        }
+    },
+    wowPass2: {
+        name: 'Shop Liquidation Sale',
+        description: 'The Seal Merchant needs to get rid of some exotic goods. Only for a steep price. I do not think that is how sales work.',
+        maxLevel: 1,
+        costPerLevel: 49999,
+        minimumSingularity: 11,
+        effect: (n: number) => {
+            return {
+                bonus: (n > 0),
+                desc: `You ${(n > 0) ? 'have': 'have not'} triggered the liquidation event!`
+            }
+        }
     },
     singOfferingsA1: {
         name: 'Offering Spore',
         description: 'Upgrade this to get +1% offerings per singularity and per level, forever!',
-        maxLevel: 20,
-        costPerLevel: 5000,
+        maxLevel: 1,
+        costPerLevel: 100000,
         minimumSingularity: 3,
-        maxCapLevel: 50
+        maxCapLevel: 10,
+        minimumSingSing: 1
     },
     singObtainiumA1: {
         name: 'Obtainium Seed',
         description: 'Upgrade this to get +1% obtainiums per singularity and per level, forever!',
-        maxLevel: 20,
-        costPerLevel: 5000,
+        maxLevel: 1,
+        costPerLevel: 100000,
         minimumSingularity: 3,
-        maxCapLevel: 50
+        maxCapLevel: 10,
+        minimumSingSing: 1
     },
     singCubesA1: {
         name: 'Cube Colony',
         description: 'Upgrade this to get +1% cubes per singularity and per level, forever!',
-        maxLevel: 20,
-        costPerLevel: 5000,
+        maxLevel: 1,
+        costPerLevel: 100000,
         minimumSingularity: 3,
-        maxCapLevel: 50
+        maxCapLevel: 10,
+        minimumSingSing: 1
     },
     singTimeAccel: {
         name: 'Time Accel',
         description: 'Upgrade this to get +1% Global Speed Multiplier per singularity and per level, forever!',
         maxLevel: 20,
-        costPerLevel: 200,
+        costPerLevel: 100,
         minimumSingularity: 1,
         maxCapLevel: 50
     },
     singAscendTimeAccel: {
         name: 'Ascension Time Accel',
         description: 'Upgrade this to get +1% Ascension Speed Multiplier per singularity and per level, forever!',
-        maxLevel: 20,
-        costPerLevel: 10000,
-        minimumSingularity: 3,
-        maxCapLevel: 50
+        maxLevel: 1,
+        costPerLevel: 100000,
+        minimumSingularity: 5,
+        maxCapLevel: 10,
+        minimumSingSing: 2
     },
     singQuark: {
         name: 'Singularity Quark',
         description: 'Upgrade this to get +1% Quarks per singularity and per level, supreme!',
         maxLevel: 5,
-        costPerLevel: 100000,
+        costPerLevel: 1000000,
         minimumSingularity: 5,
-        maxCapLevel: 10
+        maxCapLevel: 10,
+        maxCapUp: 2
     },
     singGolden: {
         name: 'Singularity Golden Quark',
         description: 'Upgrade this to get +0.1% Golden Quarks per singularity and per level, supreme!',
         maxLevel: 1,
         costPerLevel: 10000000000,
-        minimumSingularity: 20,
-        maxCapLevel: 100
+        minimumSingularity: 50,
+        maxCapLevel: 10,
+        maxCapUp: 2,
+        minimumSingSing: 1
     },
     bakeCookies1: {
         name: 'Peak Offline',
         description: 'Want to bake cookies instead? You can go offline for 4 additional hours per level.',
         maxLevel: 30,
-        costPerLevel: 100,
-        minimumSingularity: 1,
+        costPerLevel: 10000,
+        minimumSingularity: 2,
         maxCapLevel: 60
     },
     bakeCookies2: {
         name: 'Singularity Peak Offline',
         description: 'Do you want to complain? Yes, it\'s an hour for each singularity and each level. It\'s the last.',
         maxLevel: 3,
-        costPerLevel: 10000,
-        minimumSingularity: 4,
-        maxCapLevel: 30
+        costPerLevel: 100000000,
+        minimumSingularity: 20,
+        maxCapLevel: 30,
+        maxCapUp: 1,
+        minimumSingSing: 1
     },
     singAutomation: {
-        name: 'Singularity Automation [WIP]',
+        name: 'Singularity Automation',
         description: 'This unlocks various automations when Singularity! The power of the effect is determined by the Singularity Automation Level * SingularityCount^2.\nThe power required for each automation feature is enhanced by the progress of the game. And automation is ultimately determined by randomness.\nIn addition, some settings will be inherited. This feature is still a test and will be fixed without notice. Good luck!',
         maxLevel: -1,
         costPerLevel: 1,
@@ -487,18 +772,20 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
     singChallenge: {
         name: 'Rise Challenge',
         description: 'Each purchase will increase the transcend challenges cap by +300 and the reincarnation challenges cap by +4 and the ascension challenges cap by +2.\nThis works with the purchase of Antiquities of Ant God! Watch out for Cx20!',
-        maxLevel: 4970,
+        maxLevel: 270,
         costPerLevel: 500,
         minimumSingularity: 4,
-        maxCapLevel: 4970
+        maxCapLevel: 970,
+        maxCapUp: 1
     },
     singOverfluxPowder: {
         name: 'Powder Capacity',
-        description: 'Increases the maximum number of Overflux Powders that can be stacked. If you are offline for 2 days or more, an additional +1 will be added. \nOverflux Powders are instantly converted by Overflux Orbs ^ Level * 0.05 without waiting for daily.',
+        description: 'Increases the maximum number of Overflux Powders that can be stacked. If you are offline for 2 days or more, an additional +1 will be added. \nOverflux Powders are instantly converted by Overflux Orbs ^ min(0.99, Level * 0.05) without waiting for daily.',
         maxLevel: 10,
         costPerLevel: 2000,
         minimumSingularity: 2,
-        maxCapLevel: 20
+        maxCapLevel: 20,
+        maxCapUp: 1
     },
     singCraftExpand: {
         name: 'Craft Expand',
@@ -506,14 +793,24 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         maxLevel: 10,
         costPerLevel: 5000,
         minimumSingularity: 2,
-        maxCapLevel: 20
+        maxCapLevel: 20,
+        maxCapUp: 1
+    },
+    hepteractsDiscount: {
+        name: 'Hepteracts Discount',
+        description: 'Each of Hepteracts crafting costs is discounted by level, the discount does not exceed 100%. \n5% discount on Offering and Obtainium. 2% discount on Cubes and Tesseracts. 1% discount on Hypercubes and Platonic Cubes.',
+        maxLevel: 20,
+        costPerLevel: 50000,
+        minimumSingularity: 8,
+        maxCapLevel: 40,
+        maxCapUp: 2.5
     },
     singMagicalTalisman: {
         name: 'Magical Talisman',
         description: 'Talisman max level increase +5. Increases talisman max level for +1 each enhance.',
         maxLevel: 70,
-        costPerLevel: 500,
-        minimumSingularity: 6
+        costPerLevel: 1000,
+        minimumSingularity: 4
     },
     singGQdiscount: {
         name: 'Golden Quarks Discount',
@@ -526,57 +823,64 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
     singMaterialsExponent: {
         name: 'Materials Multiplier',
         description: 'Is it painful before Ascension? Increases Crystals, Mythos Shard, Particles and Constant by +100%. \nIncreases Ant ELO boosts +10. Increases Ant Sacrifice boosts +10%. Increase Building Power providing by (level / 100) ^ 3.',
-        maxLevel: 1000,
+        maxLevel: 100,
         costPerLevel: 10,
-        minimumSingularity: 4,
-        maxCapLevel: 1000
+        minimumSingularity: 5,
+        maxCapLevel: 1000,
+        maxCapUp: 2
     },
     singScoreExponent: {
         name: 'C15 Score Exponent',
-        description: 'C15 Score Exponent ^ Level * 0.0001',
-        maxLevel: 2500,
+        description: 'C15 Score Exponent ^ Level * 0.001',
+        maxLevel: 500,
         costPerLevel: 100,
-        minimumSingularity: 5,
-        maxCapLevel: 5000
+        minimumSingularity: 6,
+        maxCapLevel: 1000,
+        maxCapUp: 2
     },
     singAscendScoreExponent: {
         name: 'Ascension Score Exponent',
-        description: 'Ascension Score ^ Level * 0.0001',
-        maxLevel: 2000,
+        description: 'Ascension Base Score ^ Level * 0.0001',
+        maxLevel: 500,
         costPerLevel: 1000,
-        minimumSingularity: 6,
-        maxCapLevel: 5000
+        minimumSingularity: 7,
+        maxCapLevel: 1000,
+        maxCapUp: 2
     },
     singConstantExponent: {
-        name: 'Singularity Constant Exponent',
+        name: 'Constant Exponent',
         description: 'Constant ^ Level * 0.0001',
         maxLevel: 500,
         costPerLevel: 10000,
-        minimumSingularity: 7,
-        maxCapLevel: 2000
+        minimumSingularity: 8,
+        maxCapLevel: 1000,
+        maxCapUp: 2
     },
     singAscendTimeExponent: {
         name: 'Ascension Time Exponent',
-        description: 'Ascension Speed Multiplier ^ Level * 0.0001',
-        maxLevel: 1000,
+        description: 'Ascension Speed Multiplier ^ Level * 0.00005',
+        maxLevel: 500,
         costPerLevel: 100000,
-        minimumSingularity: 8,
-        maxCapLevel: 5000
+        minimumSingularity: 9,
+        maxCapLevel: 1000,
+        maxCapUp: 2
     },
     singBuildingExponent: {
         name: 'Building Exponent',
-        description: 'Tax is divided by Building Power ^ Level * 0.0001',
-        maxLevel: 150,
+        description: 'Tax is divided by Building Power ^ Level * 0.00005',
+        maxLevel: 500,
         costPerLevel: 1000000,
-        minimumSingularity: 9,
-        maxCapLevel: 1000
+        minimumSingularity: 10,
+        maxCapLevel: 1000,
+        maxCapUp: 2
     },
     singExponent: {
         name: 'Singularity Exponent',
         description: 'Set the constraint by Singularity to Exponent ^ 1 / (Level * 0.001 + 1) and Divide everything by 1 / (1 + level * 0.01) when you own the Antiquities of Ant God.',
-        maxLevel: 100,
-        costPerLevel: 10000000,
-        minimumSingularity: 10
+        maxLevel: 1.0000000001,
+        costPerLevel: 1e12,
+        minimumSingularity: 100,
+        maxCapLevel: 10000
     },
     singWormhole: {
         name: 'Singularity Wormhole',
@@ -588,9 +892,9 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
     singMaxLevelUp: {
         name: 'Singularity of Ant God',
         description: 'Increases the Singularity Count 1% (There is a maximum level limit for each) to the maximum level of all Singularity levels 2 and above.\nYou can enjoy inflation until you finally break Synergism!',
-        maxLevel: 0.5,
+        maxLevel: 1,
         costPerLevel: 1000000000,
-        minimumSingularity: 10
+        minimumSingularity: 20
     },
     singularityOfSingularity: {
         name: 'Sing Sing',
@@ -598,14 +902,164 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         maxLevel: 0.5,
         costPerLevel: 0,
         maxCapLevel: 1,
+        maxCapUp: 1,
         minimumSingularity: 50
     },
     singsingWormhole: {
         name: 'Sing Sing Wormhole',
         description: 'Unknown effect',
-        maxLevel: 0.01,
-        costPerLevel: 1000000000000000,
-        minimumSingularity: 5000
+        maxLevel: 0.1,
+        costPerLevel: 1e+20,
+        minimumSingularity: 1000,
+        minimumSingSing: 10
+    },
+    singSingStarterPack: {
+        name: 'Sing Sing Starter Pack',
+        description: 'Buy me! It has Cx1 at the beginning of Singularity.',
+        maxLevel: 1,
+        costPerLevel: 1e1,
+        minimumSingSing: 1
+    },
+    singSingCubes: {
+        name: 'Sing Sing Cubes',
+        description: 'Hi. Increase Cubes by + 0.0001% for each Sing Sing!',
+        maxLevel: -1,
+        costPerLevel: 1e+9,
+        minimumSingSing: 1
+    },
+    singSingPatreon: {
+        name: 'Sing Sing Patreon',
+        description: 'Hey you. Is Patreon still declining and worried? Add 1% Patreon bonus for each Sing Sing!',
+        maxLevel: 1,
+        costPerLevel: 1e12,
+        minimumSingSing: 2
+    },
+    singSafeQuark: {
+        name: 'No Reset Quark',
+        description: 'Oh, I met you again. Did you fall in love with Quark? Please, Singularity will not reset Quark!',
+        maxLevel: 1,
+        costPerLevel: 1e13,
+        minimumSingSing: 3
+    },
+    singSingLoL: {
+        name: 'Unsmith',
+        description: 'Hey, have you ever wanted to replace Golden Quarks with Quarks? okey! :D \n:unsmith: emoji can be used on Discord!',
+        maxLevel: 1e100,
+        costPerLevel: 1e14,
+        minimumSingSing: 4
+    },
+    singSafeUpgrades: {
+        name: 'Safe Singularity Upgrades',
+        description: 'Did you continue again? I don\'t think httpsnet is active by the time you get here. I still have a gift. \nAll Singularity Upgrades are partially maintained by Sing Sing. Keep the purchased level so that it does not fall below Sing Sing.',
+        maxLevel: 1,
+        costPerLevel: 1e15,
+        minimumSingSing: 5
+    },
+    singSingAutomation: {
+        name: 'Sing Sing Automation',
+        description: 'believer. This multiplies the power of Singularity Automation by the level. This will probably save you from spending your life on Synergism. \n There are only three Singularity Upgrades still hidden. This is really the end.\n Oh, it\'s important! It doesn\'t make sense to buy more with Safe Singularity Upgrades!',
+        maxLevel: -1,
+        costPerLevel: 1e17,
+        minimumSingSing: 7
+    },
+    corruptionSixteen: {
+        name: 'Level Sixteen Corruptions',
+        description: 'Increases the maximum level of Corruption by 1.',
+        maxLevel: 1.9,
+        costPerLevel: 1e+6,
+        maxCapLevel: 2,
+        minimumSingularity: 10,
+        maxCapUp: 1
+    },
+    corruptionSeventeen: {
+        name: 'Level Seventeen Corruptions',
+        description: 'Increases the maximum level of Corruption by 1.',
+        maxLevel: 1,
+        costPerLevel: 1e+8,
+        minimumSingularity: 50,
+        maxCapUp: 1
+    },
+    corruptionEighteen: {
+        name: 'Level Eighteen Corruptions',
+        description: 'Increases the maximum level of Corruption by 1.',
+        maxLevel: 1,
+        costPerLevel: 1e+10,
+        minimumSingSing: 1
+    },
+    corruptionNineteen: {
+        name: 'Level Nineteen Corruptions',
+        description: 'Increases the maximum level of Corruption by 1.',
+        maxLevel: 1,
+        costPerLevel: 1e+15,
+        minimumSingSing: 3
+    },
+    corruptionTwenty: {
+        name: 'Level Twenty Corruptions',
+        description: 'Increases the maximum level of Corruption by 1.',
+        maxLevel: 1,
+        costPerLevel: 1e+20,
+        minimumSingSing: 5
+    },
+    maxCapLevel1: {
+        name: 'Max Cap Level I',
+        description: 'Increase the maximum cap level of all Singularity upgrades by 2%. magic.',
+        maxLevel: 10,
+        costPerLevel: 1e+10,
+        maxCapLevel: 10,
+        maxCapUp: 1,
+        minimumSingSing: 1
+    },
+    maxCapLevel2: {
+        name: 'Max Cap Level II',
+        description: 'Increase the maximum cap level of all Singularity upgrades by 2%. how?',
+        maxLevel: 10,
+        costPerLevel: 1e+12,
+        maxCapLevel: 10,
+        maxCapUp: 1,
+        minimumSingSing: 2
+    },
+    maxCapLevel3: {
+        name: 'Max Cap Level III',
+        description: 'Increase the maximum cap level of all Singularity upgrades by 2%. Is there still?',
+        maxLevel: 10,
+        costPerLevel: 1e+14,
+        maxCapLevel: 10,
+        maxCapUp: 1,
+        minimumSingSing: 3
+    },
+    maxCapLevel4: {
+        name: 'Max Cap Level IV',
+        description: 'Increase the maximum cap level of all Singularity upgrades by 2%. It\'s the devil\'s work.',
+        maxLevel: 10,
+        costPerLevel: 1e+16,
+        maxCapLevel: 10,
+        maxCapUp: 1,
+        minimumSingSing: 4
+    },
+    maxCapLevel5: {
+        name: 'Max Cap Level V',
+        description: 'Increase the maximum cap level of all Singularity upgrades by 2%. I think it\'s ultimate.',
+        maxLevel: 10,
+        costPerLevel: 1e+18,
+        maxCapLevel: 10,
+        maxCapUp: 1,
+        minimumSingSing: 5
+    },
+    maxCapLevel0: {
+        name: 'Max Cap Level 1337',
+        description: 'Hey!!! What are you trying to do?!?',
+        maxLevel: 10,
+        costPerLevel: 1e+20,
+        maxCapLevel: 10,
+        maxCapUp: 1,
+        minimumSingSing: 10
+    },
+    singSingSSS: {
+        name: 'Sing Sing Singularity Specially Service',
+        description: 'Use and know. Or read the source code.',
+        maxLevel: 1,
+        costPerLevel: 1e25,
+        minimumSingSing: 100
     }
 }
 
@@ -619,7 +1073,8 @@ export const checkUpgrades = () => {
         if (isNaN(obj.goldenQuarksInvested) || obj.goldenQuarksInvested < 0) {
             obj.goldenQuarksInvested = 0;
         }
-        if ((obj.maxLevel !== -1 && obj.level > obj.maxCapLevel) || Math.round(obj.goldenQuarksInvested) !== Math.round(((obj.level + 1) * obj.level / 2) * obj.costPerLevel)) {
+        const allcost = Math.round(((obj.level + 1) * obj.level / 2) * obj.costPerLevel * Math.pow(100, player.singularityUpgrades.maxCapLevel0.level));
+        if ((obj.level > 0 && !obj.getUnlocked()) || (obj.maxLevel !== -1 && obj.level > obj.getCapMaxLevel()) || (Number.MAX_SAFE_INTEGER > allcost && Math.round(obj.goldenQuarksInvested) !== allcost)) {
             obj.refund();
             void Notification(`sorry! ${obj.name} for Singularity Upgrades has been refund as the cost has changed with the update!`, 60000);
         }
@@ -700,25 +1155,22 @@ export const calculateSingularityDebuff = (debuff: SingularityDebuffs) => {
         return 1 / (1 + player.singularityUpgrades.singExponent.level / 100)
     }
 
-    let effectiveSingularities = player.singularityCount;
-    effectiveSingularities *= Math.min(4.75, 0.75 * player.singularityCount / 10 + 1)
-    if (player.singularityCount > 10) {
-        effectiveSingularities *= 1.5
-        effectiveSingularities *= Math.min(4, 1.25 * player.singularityCount / 10 - 0.25)
+    const singularities = player.singularityCount * (1 + player.singsing / 10);
+    let effectiveSingularities = singularities;
+    effectiveSingularities *= Math.min(4.75, 0.75 * singularities / 10 + 1)
+    if (singularities > 10) {
+        effectiveSingularities *= 1.5 * Math.min(4, 1.25 * singularities / 10 - 0.25)
     }
-    if (player.singularityCount > 25) {
-        effectiveSingularities *= 2
-        effectiveSingularities *= Math.min(4, 1.5 * player.singularityCount / 25 - 0.5)
+    if (singularities > 25) {
+        effectiveSingularities *= 2.5
+        effectiveSingularities *= Math.min(6, 1.5 * singularities / 25 - 0.5)
     }
-    if (player.singularityCount > 50) {
-        effectiveSingularities *= 4
-        effectiveSingularities *= Math.min(4, 2 * player.singularityCount / 50 - 1)
+    if (singularities > 50) {
+        effectiveSingularities *= 6
+        effectiveSingularities *= Math.min(8, 2 * singularities / 50 - 1)
     }
-    if (player.singularityCount > 100) {
-        effectiveSingularities *= player.singularityCount / 25
-    }
-    if (player.singularityCount > 250) {
-        effectiveSingularities *= player.singularityCount / 62.5
+    if (singularities > 100) {
+        effectiveSingularities *= Math.pow(1 + 1 / Math.log10(singularities), singularities / 50)
     }
 
     effectiveSingularities = Math.pow(effectiveSingularities, 1 / (1 + player.singularityUpgrades.singExponent.level / 1000))
@@ -744,31 +1196,187 @@ export const calculateSingularityDebuff = (debuff: SingularityDebuffs) => {
     }
 }
 
-export const singularityOverride = (hold: Player) => {
+export const singsingOverride = async (hold: Player) => {
+    checkUpgrades();
 
-    if (player.singularityCount > player.singularityMaxCount) {
-        player.singularityMaxCount = player.singularityCount
+    const singularityUpgrades = Object.keys(player.singularityUpgrades) as (keyof Player['singularityUpgrades'])[];
+    for (const key of singularityUpgrades) {
+        const obj = player.singularityUpgrades[`${key}`];
+        if (obj.minimumSingSing === 0) {
+            if (player.singularityUpgrades.singSafeUpgrades.level > 0) {
+                if (obj.level > hold.singsing) {
+                    obj.level = hold.singsing;
+                }
+            } else {
+                obj.level = 0;
+            }
+        }
     }
 
-    // Necessary for NaN measures and no 90 days
-    hold.ascensionCounter = -1
+    if (player.singularityUpgrades.singSafeShop.level < 1) {
+        await resetShopUpgrades(true);
+    }
 
-    hold.dayCheck = player.dayCheck
+    hold.worlds = new QuarkHandler({ quarks: 0, bonus: 0 });
+    hold.worlds.add(Math.pow(Number(player.worlds), Math.min(1, Math.log10(player.singularityCount + 1) / 10)));
+    hold.goldenQuarks = Math.pow(player.goldenQuarks, Math.min(1, Math.log10(player.singularityCount + 1) / 10));
 
-    hold.singsing = player.singsing
+    singularityOverride(hold, true);
+}
+
+export const singularityOverride = (hold: Player, singsing = false) => {
+    checkUpgrades();
+
+    hold.singsing = player.singsing;
+    hold.singsingsing = player.singsingsing;
+
+    if (!singsing) {
+
+        hold.singularityCount = player.singularityCount;
+        hold.goldenQuarks = player.goldenQuarks;
+
+        hold.shopUpgrades = player.shopUpgrades;
+        hold.shopExpandCount = player.shopExpandCount;
+
+        if (player.singularityUpgrades.singSafeQuark.level > 0) {
+            hold.worlds = player.worlds;
+        } else {
+            hold.worlds = new QuarkHandler({ quarks: 0, bonus: 0 });
+        }
+        if (player.singsing > 0) {
+            hold.worlds.add(Math.pow(Number(player.worlds), Math.min(1, Math.sqrt(Math.log2(player.singsing + 1)) / 5)));
+        }
+
+        hold.hepteractCrafts.quark = player.hepteractCrafts.quark;
+        hold.singularityUpgrades = player.singularityUpgrades;
+
+        if (player.singularityCount > player.singularityMaxCount) {
+            player.singularityMaxCount = player.singularityCount;
+        }
+
+        // Necessary for NaN measures and no 90 days
+        hold.ascensionCounter = -1;
+
+        hold.dayCheck = player.dayCheck
+        hold.rngCode = Date.now() - (2 * 24 * 3600000);
+
+        hold.dailyPowderResetUses = player.dailyPowderResetUses;
+    }
+
+    // other settings
+    hold.historyShowPerSecond = player.historyShowPerSecond
     hold.saveString = player.saveString
-    hold.shopExpandCount = player.shopExpandCount
     hold.theme = player.theme
     hold.lastCode = player.lastCode
     hold.hotkeys = Object.assign(hold.hotkeys, player.hotkeys)
 
+    // Building toggle settings
+    Object.assign(hold.toggles, player.toggles)
+    Object.assign(hold.autoTesseracts, player.autoTesseracts)
+
+    // Toggle amount to buy settings
+    hold.coinbuyamount = player.coinbuyamount
+    hold.crystalbuyamount = player.crystalbuyamount
+    hold.mythosbuyamount = player.mythosbuyamount
+    hold.particlebuyamount = player.particlebuyamount
+    hold.offeringbuyamount = player.offeringbuyamount
+    hold.tesseractbuyamount = player.tesseractbuyamount
+    hold.singupgradebuyamount = player.singupgradebuyamount
+
+    // Blessings and Spirits settings
+    hold.runeBlessingBuyAmount = player.runeBlessingBuyAmount
+    hold.runeSpiritBuyAmount = player.runeSpiritBuyAmount
+
+    // Reset toggle settings
+    hold.resettoggle1 = player.resettoggle1
+    hold.transcendamount = player.prestigeamount
+    hold.resettoggle2 = player.resettoggle2
+    hold.transcendamount = player.transcendamount
+    hold.resettoggle3 = player.resettoggle3
+    hold.reincarnationamount = player.reincarnationamount
+
+    // shop
+    hold.shopBuyMax = player.shopBuyMax
+    hold.shopConfirmation = player.shopConfirmation
+    hold.shoptoggles = player.shoptoggles
+
+    // Ant Buy Max and Auto Runes
+    hold.antMax = player.antMax
+    hold.autoSacrificeToggle = player.autoSacrificeToggle // Auto Runes
+
+    // talismans
+    Object.assign(hold.talismanOne, player.talismanOne)
+    Object.assign(hold.talismanTwo, player.talismanTwo)
+    Object.assign(hold.talismanThree, player.talismanThree)
+    Object.assign(hold.talismanFour, player.talismanFour)
+    Object.assign(hold.talismanFive, player.talismanFive)
+    Object.assign(hold.talismanSix, player.talismanSix)
+    Object.assign(hold.talismanSeven, player.talismanSeven)
+    hold.autoFortifyToggle = player.autoFortifyToggle // Auto Fortify
+    hold.autoEnhanceToggle = player.autoEnhanceToggle // Auto Enhance
+
+    // Corruption Loadouts
+    Object.assign(hold.corruptionLoadouts, player.corruptionLoadouts)
+    Object.assign(hold.corruptionLoadoutNames, player.corruptionLoadoutNames)
+    Object.assign(hold.corruptionShowStats, player.corruptionShowStats)
+
+    // Auto Ant Sacrifice settings
+    hold.autoAntSacrifice = player.autoAntSacrifice
+    hold.autoAntSacrificeMode = player.autoAntSacrificeMode
+    hold.autoAntSacTimer = player.autoAntSacTimer
+
+    // Auto Cubes
+    hold.buyMaxCubeUpgrades = player.buyMaxCubeUpgrades
+    hold.buyAutoCubeUpgrades = player.buyAutoCubeUpgrades
+    hold.autoOpenCubes = player.autoOpenCubes
+    hold.tesseractAutoBuyer = player.tesseractAutoBuyer
+    hold.autoBuyPlatonic = player.autoBuyPlatonic
+    hold.autoHepteractUpgrades = player.autoHepteractUpgrades
+
+    // Auto Ascend
+    hold.autoAscend = player.autoAscend
+    hold.autoAscendMode = player.autoAscendMode
+    hold.ascensionamount = player.ascensionamount
+    hold.autoAscendThreshold = player.autoAscendThreshold
+
+    // Auto challenge settings
+    hold.autoChallengeRunning = player.autoChallengeRunning
+    hold.autoChallengeStartExponent = player.autoChallengeStartExponent
+    hold.retrychallenges = player.retrychallenges
+    Object.assign(hold.autoChallengeToggles, player.autoChallengeToggles);
+    Object.assign(hold.autoChallengeTimer, player.autoChallengeTimer);
+
+    // Auto Research settings
+    hold.autoResearchToggle = player.autoResearchToggle
+    hold.autoResearchMode = player.autoResearchMode
+    hold.maxbuyresearch = player.maxbuyresearch
+    hold.autoResearch = 0
+
+    // Auto Tesseracts
+    hold.tesseractAutoBuyerToggle = player.tesseractAutoBuyerToggle
+    hold.tesseractAutoBuyerAmount = player.tesseractAutoBuyerAmount
+
+    // Auto Singularity
+    hold.autoSingularity = player.autoSingularity
+
+    // Cheating
+    hold.exporttest = player.exporttest
     hold.dailyCheating = player.dailyCheating
     hold.timerCheating = player.timerCheating
 
-    hold.dailyPowderResetUses = Math.max(Math.min(hold.dailyPowderResetUses, player.singularityUpgrades.singOverfluxPowder.level + 1), player.dailyPowderResetUses)
 
-    const power = player.singularityUpgrades.singAutomation.level * Math.pow(player.singularityCount, 2);
-    const cUnlocks = player.singularityUpgrades.corruptionFourteen.level > 0 || player.singularityUpgrades.corruptionFifteen.level > 0;
+    if (player.singularityUpgrades.singSingStarterPack.level > 0) { // Cx1
+        player.cubeUpgrades[51] = 1;
+        hold.cubeUpgrades[51] = 1;
+    }
+
+    // Singularity Automation
+
+    let power = player.singularityUpgrades.singAutomation.level * Math.pow(player.singularityCount, 2) * (1 + player.singularityUpgrades.singSingAutomation.level);
+
+    if (singsing) {
+        power += 10 * player.singularityUpgrades.singAutomation.level * Math.pow(player.singsing, 2) * (1 + player.singularityUpgrades.singSingAutomation.level);
+    }
 
     if (power <= 0 || !isFinite(power)) {
         return;
@@ -793,108 +1401,12 @@ export const singularityOverride = (hold: Player) => {
         hold.ascensionCount = Math.floor(powerUnlock / 100000)
     }
 
+    if (player.ascensionCount >= 1) {// return Corruptions
+        hold.usedCorruptions = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        hold.prototypeCorruptions = player.prototypeCorruptions
+    }
+
     hold.ascensionCount += Math.floor(player.ascensionCount * player.platonicUpgrades[25] / 100)
-
-    if (power > 10) { // other settings
-        hold.historyShowPerSecond = player.historyShowPerSecond
-    }
-
-    if (power > 10) { // Building toggle settings
-        Object.assign(hold.toggles, player.toggles)
-        Object.assign(hold.autoTesseracts, player.autoTesseracts)
-    }
-
-    if (power > 20) { // Toggle amount to buy settings
-        hold.coinbuyamount = player.coinbuyamount
-        hold.crystalbuyamount = player.crystalbuyamount
-        hold.mythosbuyamount = player.mythosbuyamount
-        hold.particlebuyamount = player.particlebuyamount
-        hold.offeringbuyamount = player.offeringbuyamount
-        hold.tesseractbuyamount = player.tesseractbuyamount
-        hold.singupgradebuyamount = player.singupgradebuyamount
-    }
-
-    if (power > 30) { // Blessings and Spirits settings
-        hold.runeBlessingBuyAmount = player.runeBlessingBuyAmount
-        hold.runeSpiritBuyAmount = player.runeSpiritBuyAmount
-    }
-
-    if (power > 50) { // Reset toggle settings
-        hold.resettoggle1 = player.resettoggle1
-        hold.transcendamount = player.prestigeamount
-        hold.resettoggle2 = player.resettoggle2
-        hold.transcendamount = player.transcendamount
-        hold.resettoggle3 = player.resettoggle3
-        hold.reincarnationamount = player.reincarnationamount
-    }
-
-    if (power > 70) { // shop
-        hold.shopBuyMax = player.shopBuyMax
-        hold.shopConfirmation = player.shopConfirmation
-    }
-
-    if (power > 100) { // Ant Buy Max and Auto Runes
-        hold.antMax = player.antMax
-        hold.autoSacrificeToggle = player.autoSacrificeToggle // Auto Runes
-    }
-
-    if (power > 200) { // talismans
-        Object.assign(hold.talismanOne, player.talismanOne)
-        Object.assign(hold.talismanTwo, player.talismanTwo)
-        Object.assign(hold.talismanThree, player.talismanThree)
-        Object.assign(hold.talismanFour, player.talismanFour)
-        Object.assign(hold.talismanFive, player.talismanFive)
-        Object.assign(hold.talismanSix, player.talismanSix)
-        Object.assign(hold.talismanSeven, player.talismanSeven)
-        hold.autoFortifyToggle = player.autoFortifyToggle // Auto Fortify
-        hold.autoEnhanceToggle = player.autoEnhanceToggle // Auto Enhance
-    }
-
-    if (cUnlocks && power > 500) { // Corruption Loadouts
-        Object.assign(hold.corruptionLoadouts, player.corruptionLoadouts)
-        Object.assign(hold.corruptionLoadoutNames, player.corruptionLoadoutNames)
-    }
-
-    if (power > 700) { // Auto Ant Sacrifice settings
-        hold.autoAntSacrifice = player.autoAntSacrifice
-        hold.autoAntSacrificeMode = player.autoAntSacrificeMode
-        hold.autoAntSacTimer = player.autoAntSacTimer
-    }
-
-    if (power > 1000) { // Auto Cubes
-        hold.buyMaxCubeUpgrades = player.buyMaxCubeUpgrades
-        hold.buyAutoCubeUpgrades = player.buyAutoCubeUpgrades
-        hold.autoOpenCubes = player.autoOpenCubes
-        hold.tesseractAutoBuyer = player.tesseractAutoBuyer
-        hold.autoBuyPlatonic = player.autoBuyPlatonic
-    }
-
-    if (power > 1200) { // Auto Ascend
-        hold.autoAscend = player.autoAscend
-        hold.autoAscendMode = player.autoAscendMode
-        hold.ascensionamount = player.ascensionamount
-        hold.autoAscendThreshold = player.autoAscendThreshold
-    }
-
-    if (power > 1500) { // Auto challenge settings
-        hold.autoChallengeRunning = player.autoChallengeRunning
-        hold.autoChallengeStartExponent = player.autoChallengeStartExponent
-        hold.retrychallenges = player.retrychallenges
-        Object.assign(hold.autoChallengeToggles, player.autoChallengeToggles);
-        Object.assign(hold.autoChallengeTimer, player.autoChallengeTimer);
-    }
-
-    if (power > 2000) { // Auto Research settings
-        hold.autoResearchToggle = player.autoResearchToggle
-        hold.autoResearchMode = player.autoResearchMode
-        hold.maxbuyresearch = player.maxbuyresearch
-        hold.autoResearch = 0
-    }
-
-    if (power > 3000) { // Auto Tesseracts
-        hold.tesseractAutoBuyerToggle = player.tesseractAutoBuyerToggle
-        hold.tesseractAutoBuyerAmount = player.tesseractAutoBuyerAmount
-    }
 
     if (power / Math.random() > 30) { // Auto Coin Buildings
         hold.upgrades[101] = player.upgrades[101]
@@ -1263,8 +1775,8 @@ export const singularityOverride = (hold: Player) => {
         }
     }
 
-    if (hold.achievements[141] && power / Math.random() > 1000000) { // Overflux Powder
-        hold.overfluxPowder += Math.floor(powerUnlock / 100000)
+    if (hold.achievements[141] && power / Math.random() > 1000000) { // Hepteracts
+        hold.achievements[238] = player.achievements[238]
     }
 
     if (hold.achievements[141] && power / Math.random() > 1000000) { // Inherit some achievements that are not easy to unlock
@@ -1274,22 +1786,26 @@ export const singularityOverride = (hold: Player) => {
         }
     }
 
-    if (hold.achievements[218] && power > 1000000) { // C15 Exponent
+    if (hold.achievements[238] && power / Math.random() > 1000000) { // Overflux Powder
+        hold.overfluxPowder += Math.floor(powerUnlock / 100000)
+    }
+
+    if (hold.achievements[238] && power > 1000000) { // C15 Exponent
         hold.challenge15Exponent = Math.pow(power / 1000000, 4)
     }
 
-    if (hold.achievements[218] && power / Math.random() > 1500000) { // Platonic Upgrade 5
+    if (hold.achievements[238] && power / Math.random() > 1500000) { // Platonic Upgrade 5
         hold.platonicUpgrades[5] = player.platonicUpgrades[5]
     }
 
-    if (hold.achievements[218] && power > 2000000) { // Hepteract Unlock 1
+    if (hold.achievements[238] && power > 2000000) { // Hepteract Unlock 1
         hold.hepteractCrafts.chronos.UNLOCKED = player.hepteractCrafts.chronos.UNLOCKED
         hold.hepteractCrafts.hyperrealism.UNLOCKED = player.hepteractCrafts.hyperrealism.UNLOCKED
         hold.hepteractCrafts.quark.UNLOCKED = player.hepteractCrafts.quark.UNLOCKED
         hold.hepteractCrafts.challenge.UNLOCKED = player.hepteractCrafts.challenge.UNLOCKED
     }
 
-    if (hold.achievements[218] && power > 3000000) { // Increase the first cap of hepteract
+    if (hold.achievements[238] && power > 3000000) { // Increase the first cap of hepteract
         const hepteractCrafts = Object.keys(player.hepteractCrafts) as (keyof Player['hepteractCrafts'])[];
         for (const key of hepteractCrafts) {
             if (key !=='quark') {
@@ -1302,7 +1818,7 @@ export const singularityOverride = (hold: Player) => {
         hold.platonicUpgrades[10] = player.platonicUpgrades[10]
     }
 
-    if (hold.achievements[218] && power > 5000000) { // Hepteract Unlock 2
+    if (hold.achievements[238] && power > 5000000) { // Hepteract Unlock 2
         hold.hepteractCrafts.abyss.UNLOCKED = player.hepteractCrafts.abyss.UNLOCKED
         hold.hepteractCrafts.accelerator.UNLOCKED = player.hepteractCrafts.accelerator.UNLOCKED
         hold.hepteractCrafts.acceleratorBoost.UNLOCKED = player.hepteractCrafts.acceleratorBoost.UNLOCKED
@@ -1313,7 +1829,7 @@ export const singularityOverride = (hold: Player) => {
         hold.platonicUpgrades[15] = player.platonicUpgrades[15]
     }
 
-    if (hold.achievements[218] && power > 10000000) { // Full achievement inheritance
+    if (hold.achievements[238] && power > 10000000) { // Full achievement inheritance
         for (let j = 0; j < player.achievements.length; j++) {
             const power2 = power / Math.random()
             if (!hold.achievements[j] && power2 > 1000000 * j) {
@@ -1322,7 +1838,7 @@ export const singularityOverride = (hold: Player) => {
         }
     }
 
-    if (hold.achievements[218] && power > 30000000) { // Increase the first craft of hepteract
+    if (hold.achievements[238] && power > 30000000) { // Increase the first craft of hepteract
         const hepteractCrafts = Object.keys(player.hepteractCrafts) as (keyof Player['hepteractCrafts'])[];
         for (const key of hepteractCrafts) {
             if (key !=='quark') {

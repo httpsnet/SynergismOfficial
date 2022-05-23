@@ -1,4 +1,4 @@
-import { player, format } from './Synergism'
+import { player, format, autobuyTesseractBuildings } from './Synergism'
 import { calculateCubeBlessings, calculateCubicSumData, calculateSummationNonLinear } from './Calculate'
 import { upgradeupdate } from './Upgrades'
 import { revealStuff } from './UpdateHTML'
@@ -320,7 +320,7 @@ export const buyCubeUpgrades = (i: number) => {
     calculateCubeBlessings();
 }
 
-export const autoBuyCubeUpgrades = () => {
+const autoBuyCubeUpgrades = () => {
     if (player.buyAutoCubeUpgrades && player.achievements[197] > 0 && player.singularityCount > 0) {
         const cheapet = [];
 
@@ -351,5 +351,34 @@ export const autoBuyCubeUpgrades = () => {
         }
 
         player.buyMaxCubeUpgrades = buyMaxCubeUpgrades;
+    }
+}
+
+export const autoUseCubes = () => {
+    autoBuyCubeUpgrades();
+
+    if (player.achievements[218] > 0 && player.autoOpenCubes) {
+        const buyPercent = player.autoSingularity ? 50 : 100;
+        void player.wowCubes.openPercent(buyPercent);
+        if (player.achievements[218] > 0 && player.tesseractAutoBuyer) {
+            void player.wowTesseracts.openPercent(10);
+            autobuyTesseractBuildings();
+        }
+        void player.wowTesseracts.openPercent(buyPercent);
+        void player.wowHypercubes.openPercent(buyPercent);
+        void player.wowPlatonicCubes.openPercent(buyPercent);
+    } else {
+        if (player.achievements[218] > 0 && player.tesseractAutoBuyer) {
+            autobuyTesseractBuildings();
+        }
+    }
+}
+
+export const openAllCubes = () => {
+    if (player.singularityUpgrades.singAutomation.level >= 2000) {
+        void player.wowCubes.openPercent(10);
+        void player.wowTesseracts.openPercent(10);
+        void player.wowHypercubes.openPercent(10);
+        void player.wowPlatonicCubes.openPercent(10);
     }
 }

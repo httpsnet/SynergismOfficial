@@ -1,4 +1,4 @@
-import { revealStuff, hideStuff, updateChallengeDisplay, showCorruptionStatsLoadouts, changeTabColor } from './UpdateHTML';
+import { revealStuff, hideStuff, updateChallengeDisplay, showCorruptionStatsLoadouts, changeTabColor, Confirm } from './UpdateHTML';
 import { player, interval, clearInt, format, resetCheck } from './Synergism';
 import { Globals as G } from './Variables';
 import Decimal from 'break_infinity.js';
@@ -140,7 +140,7 @@ export const toggleChallenges = (i: number, auto = false) => {
         corruptionStatsUpdate();
     }
 
-    if (player.currentChallenge.transcension !== 0 && player.currentChallenge.reincarnation !== 0 && player.currentChallenge.ascension !== 0 && player.achievements[238] < 1) {
+    if (player.challenge15Exponent >= 1e15 && player.achievements[238] < 1) {
         achievementaward(238)
     }
 }
@@ -264,7 +264,7 @@ export const subTabsInMainTab = (mainTab: number) => {
                 {subTabID: 4, unlocked: player.achievements[218] > 0, buttonID: 'switchCubeSubTab4'},
                 {subTabID: 5, unlocked: player.achievements[141] > 0, buttonID: 'switchCubeSubTab5'},
                 {subTabID: 6, unlocked: player.achievements[218] > 0, buttonID: 'switchCubeSubTab6'},
-                {subTabID: 7, unlocked: player.challenge15Exponent >= 1e15, buttonID: 'switchCubeSubTab7'}]
+                {subTabID: 7, unlocked: player.achievements[238] > 0, buttonID: 'switchCubeSubTab7'}]
         },
         9: {
             tabSwitcher: toggleCorruptionLoadoutsStats,
@@ -411,7 +411,7 @@ export const toggleResearchBuy = () => {
 }
 
 export const toggleAutoResearch = () => {
-    const el = DOMCacheGetOrSet('toggleautoresearch')
+    const el = DOMCacheGetOrSet('toggleautoresearch');
     if (player.autoResearchToggle) {
         player.autoResearchToggle = false;
         el.textContent = 'Automatic: OFF';
@@ -419,7 +419,7 @@ export const toggleAutoResearch = () => {
         player.autoResearch = 0;
     } else {
         player.autoResearchToggle = true;
-        el.textContent = 'Automatic: ON'
+        el.textContent = 'Automatic: ON';
     }
 
     if (player.autoResearchToggle && player.cubeUpgrades[9] === 1 && player.autoResearchMode === 'cheapest') {
@@ -429,7 +429,7 @@ export const toggleAutoResearch = () => {
 }
 
 export const toggleAutoResearchMode = () => {
-    const el = DOMCacheGetOrSet('toggleautoresearchmode')
+    const el = DOMCacheGetOrSet('toggleautoresearchmode');
     if (player.autoResearchMode === 'cheapest') {
         player.autoResearchMode = 'manual';
         el.textContent = 'Automatic mode: Manual';
@@ -440,7 +440,7 @@ export const toggleAutoResearchMode = () => {
     DOMCacheGetOrSet(`res${player.autoResearch || 1}`).classList.remove('researchRoomba');
 
     if (player.autoResearchToggle && player.cubeUpgrades[9] === 1 && player.autoResearchMode === 'cheapest') {
-        player.autoResearch = G['researchOrderByCost'][player.roombaResearchIndex]
+        player.autoResearch = G['researchOrderByCost'][player.roombaResearchIndex];
     }
 }
 
@@ -747,6 +747,28 @@ export const toggleAutoBuyPlatonic = () => {
     player.autoBuyPlatonic = !player.autoBuyPlatonic;
     el.textContent = player.autoBuyPlatonic ? 'Automatic: ON' : 'Automatic: OFF';
     el.style.border = player.autoBuyPlatonic ? '2px solid green' : '2px solid red';
+}
+
+export const toggleAutoBuyHepteract = () => {
+    const el = DOMCacheGetOrSet('toggleHepteractAutoBuy');
+    player.autoHepteractUpgrades = !player.autoHepteractUpgrades;
+    el.textContent = player.autoHepteractUpgrades ? 'Automatic: ON' : 'Automatic: OFF';
+    el.style.border = player.autoHepteractUpgrades ? '2px solid green' : '2px solid red';
+}
+
+export const toggleAutoSingularity = async () => {
+    if (!player.autoSingularity) {
+        const p = await Confirm('Warning!!! \nWith this setting enabled, Singularity will run without your confirmation if Singularity is possible for each ascension!');
+        if (!p) {
+            return;
+        }
+        player.autoSingularity = true;
+    } else {
+        player.autoSingularity = false;
+    }
+    const el = DOMCacheGetOrSet('toggleAutoSingularity');
+    el.textContent = player.autoSingularity ? 'Auto Singularity: ON' : 'Auto Singularity: Off';
+    el.style.border = player.autoSingularity ? '2px solid green' : '2px solid red';
 }
 
 export const toggleCubeSubTab = (i: number) => {

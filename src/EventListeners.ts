@@ -1,6 +1,6 @@
-import { toggleAscStatPerSecond, toggleTabs, toggleSubTab, toggleBuyAmount, toggleAutoTesseracts, toggleSettings, toggleautoreset, toggleautobuytesseract, toggleShops, toggleAutoSacrifice, toggleautoenhance, toggleautofortify, updateRuneBlessingBuyAmount, toggleChallenges, toggleAutoChallengesIgnore, toggleAutoChallengeRun, updateAutoChallenge, toggleResearchBuy, toggleAutoResearch, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleMaxBuyCube, toggleAutoBuyCube, toggleAutoOpenCubes, toggleTesseractBAB, toggleCorruptionLevel, toggleAutoAscend, toggleShopConfirmation, toggleAutoResearchMode, toggleBuyMaxShop, toggleAutoBuyPlatonic } from './Toggles'
+import { toggleAscStatPerSecond, toggleTabs, toggleSubTab, toggleBuyAmount, toggleAutoTesseracts, toggleSettings, toggleautoreset, toggleautobuytesseract, toggleShops, toggleAutoSacrifice, toggleautoenhance, toggleautofortify, updateRuneBlessingBuyAmount, toggleChallenges, toggleAutoChallengesIgnore, toggleAutoChallengeRun, updateAutoChallenge, toggleResearchBuy, toggleAutoResearch, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleMaxBuyCube, toggleAutoBuyCube, toggleAutoOpenCubes, toggleTesseractBAB, toggleCorruptionLevel, toggleAutoAscend, toggleShopConfirmation, toggleAutoResearchMode, toggleBuyMaxShop, toggleAutoBuyPlatonic, toggleAutoBuyHepteract, toggleAutoSingularity } from './Toggles'
 import { resetrepeat, updateAutoReset, updateTesseractAutoBuyAmount } from './Reset'
-import { player, resetCheck, saveSynergy } from './Synergism'
+import { player, resetCheck, saveSynergy, buyTesseractBuildings } from './Synergism'
 import { boostAccelerator, buyAccelerator, buyMultiplier, buyProducer, buyCrystalUpgrades, buyParticleBuilding, buyTesseractBuilding, buyUpgrades, buyRuneBonusLevels, buyAllBlessings } from './Buy'
 import { crystalupgradedescriptions, constantUpgradeDescriptions, buyConstantUpgrades, upgradedescriptions } from './Upgrades'
 import { buyAutobuyers } from './Automation'
@@ -11,7 +11,7 @@ import { toggleTalismanBuy, buyTalismanResources, showTalismanPrices, buyTalisma
 import { challengeDisplay, toggleRetryChallenges } from './Challenges'
 import { buyResearch, researchDescriptions } from './Research'
 import { antRepeat, sacrificeAnts, buyAntProducers, updateAntDescription, antUpgradeDescription, buyAntUpgrade } from './Ants'
-import { buyCubeUpgrades, cubeUpgradeDesc } from './Cubes'
+import { buyCubeUpgrades, cubeUpgradeDesc, openAllCubes } from './Cubes'
 import { buyPlatonicUpgrades, createPlatonicDescription } from './Platonic'
 import { corruptionCleanseConfirm, corruptionDisplay } from './Corruptions'
 import { exportSynergism, updateSaveString, promocodes, importSynergism, resetGame } from './ImportExport'
@@ -19,7 +19,7 @@ import { resetHistoryTogglePerSecond } from './History'
 import { resetShopUpgrades, shopDescriptions, buyShopUpgrades, useConsumable, resetShopExpand } from './Shop'
 import { Globals as G, Upgrade } from './Variables';
 import { changeTabColor } from './UpdateHTML'
-import { hepteractDescriptions, hepteractToOverfluxOrbDescription, tradeHepteractToOverfluxOrb, overfluxPowderDescription, overfluxPowderWarp } from './Hepteracts'
+import { hepteractDescriptions, hepteractToOverfluxOrbDescription, tradeHepteractToOverfluxOrb, overfluxPowderDescription, overfluxPowderWarp, hepteractDescription } from './Hepteracts'
 import { exitOffline, forcedDailyReset, timeWarp } from './Calculate'
 import type { OneToFive, Player } from './types/Synergism'
 import { displayStats, cRewardBonusDescription } from './Statistics'
@@ -441,6 +441,15 @@ export const generateEventHandlers = () => {
     DOMCacheGetOrSet('toggleAutoOpenCubes').addEventListener('click', () => toggleAutoOpenCubes())
     DOMCacheGetOrSet('toggleTesseractBAB').addEventListener('click', () => toggleTesseractBAB())
     DOMCacheGetOrSet('togglePlatonicAutoBuy').addEventListener('click', () => toggleAutoBuyPlatonic())
+    DOMCacheGetOrSet('toggleHepteractAutoBuy').addEventListener('click', () => toggleAutoBuyHepteract())
+    DOMCacheGetOrSet('toggleAutoSingularity').addEventListener('click', () => toggleAutoSingularity())
+
+    // v3.0.0 Buttons
+    DOMCacheGetOrSet('toggleHepteractAutoBuy').addEventListener('mouseover', () => hepteractDescription('hepteract'))
+    DOMCacheGetOrSet('openAllCubes').addEventListener('click', () => openAllCubes())
+    DOMCacheGetOrSet('openAllCubes').addEventListener('mouseover', () => hepteractDescription('cubes'))
+    DOMCacheGetOrSet('buyTesseractBuildings').addEventListener('click', () => buyTesseractBuildings())
+    DOMCacheGetOrSet('buyTesseractBuildings').addEventListener('mouseover', () => hepteractDescription('tesseract'))
 
     //Part 2: Cube Opening Buttons
     //Wow Cubes

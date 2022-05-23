@@ -191,7 +191,7 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
     // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
     let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), player[key] + 1);
     let thisCost = getAntCost(originalCost, buyFrom, index);
-    while (buyFrom <= buyTo && player[tag].gte(thisCost)) {
+    while (buyFrom < buyTo && player[tag].gte(thisCost)) {
         player[tag] = player[tag].sub(thisCost);
         player[key] = buyFrom;
         buyFrom = buyFrom + smallestInc(buyFrom);
@@ -244,7 +244,7 @@ export const buyAntUpgrade = (originalCost: DecimalSource, auto: boolean, index:
         // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
         let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), 1 + player.antUpgrades[index-1]!);
         let thisCost = getAntUpgradeCost(originalCost, buyFrom, index);
-        while (buyFrom <= buyTo && player.antPoints.gte(thisCost)) {
+        while (buyFrom < buyTo && player.antPoints.gte(thisCost)) {
             player.antPoints = player.antPoints.sub(thisCost);
             player.antUpgrades[index-1] = buyFrom;
             buyFrom = buyFrom + smallestInc(buyFrom);

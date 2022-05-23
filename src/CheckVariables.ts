@@ -218,6 +218,86 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         player.tesseractOpenedDaily = 0;
         player.hypercubeOpenedDaily = 0;
     }
+
+    player.singularityUpgrades = {
+        goldenQuarks1: new SingularityUpgrade(singularityData['goldenQuarks1']),
+        goldenQuarks2: new SingularityUpgrade(singularityData['goldenQuarks2']),
+        goldenQuarks3: new SingularityUpgrade(singularityData['goldenQuarks3']),
+        starterPack: new SingularityUpgrade(singularityData['starterPack']),
+        wowPass: new SingularityUpgrade(singularityData['wowPass']),
+        cookies: new SingularityUpgrade(singularityData['cookies']),
+        cookies2: new SingularityUpgrade(singularityData['cookies2']),
+        cookies3: new SingularityUpgrade(singularityData['cookies3']),
+        cookies4: new SingularityUpgrade(singularityData['cookies4']),
+        ascensions: new SingularityUpgrade(singularityData['ascensions']),
+        corruptionFourteen: new SingularityUpgrade(singularityData['corruptionFourteen']),
+        corruptionFifteen: new SingularityUpgrade(singularityData['corruptionFifteen']),
+        singOfferings1: new SingularityUpgrade(singularityData['singOfferings1']),
+        singOfferings2: new SingularityUpgrade(singularityData['singOfferings2']),
+        singOfferings3: new SingularityUpgrade(singularityData['singOfferings3']),
+        singObtainium1: new SingularityUpgrade(singularityData['singObtainium1']),
+        singObtainium2: new SingularityUpgrade(singularityData['singObtainium2']),
+        singObtainium3: new SingularityUpgrade(singularityData['singObtainium3']),
+        singCubes1: new SingularityUpgrade(singularityData['singCubes1']),
+        singCubes2: new SingularityUpgrade(singularityData['singCubes2']),
+        singCubes3: new SingularityUpgrade(singularityData['singCubes3']),
+        octeractUnlock: new SingularityUpgrade(singularityData['octeractUnlock']),
+        offeringAutomatic: new SingularityUpgrade(singularityData['offeringAutomatic']),
+        intermediatePack: new SingularityUpgrade(singularityData['intermediatePack']),
+        advancedPack: new SingularityUpgrade(singularityData['advancedPack']),
+        expertPack: new SingularityUpgrade(singularityData['expertPack']),
+        masterPack: new SingularityUpgrade(singularityData['masterPack']),
+        divinePack: new SingularityUpgrade(singularityData['divinePack']),
+        wowPass2: new SingularityUpgrade(singularityData['wowPass2']),
+        singOfferingsA1: new SingularityUpgrade(singularityData['singOfferingsA1']),
+        singObtainiumA1: new SingularityUpgrade(singularityData['singObtainiumA1']),
+        singCubesA1: new SingularityUpgrade(singularityData['singCubesA1']),
+        singTimeAccel: new SingularityUpgrade(singularityData['singTimeAccel']),
+        singAscendTimeAccel: new SingularityUpgrade(singularityData['singAscendTimeAccel']),
+        singQuark: new SingularityUpgrade(singularityData['singQuark']),
+        singGolden: new SingularityUpgrade(singularityData['singGolden']),
+        bakeCookies1: new SingularityUpgrade(singularityData['bakeCookies1']),
+        bakeCookies2: new SingularityUpgrade(singularityData['bakeCookies2']),
+        singAutomation: new SingularityUpgrade(singularityData['singAutomation']),
+        singSafeShop: new SingularityUpgrade(singularityData['singSafeShop']),
+        singChallenge: new SingularityUpgrade(singularityData['singChallenge']),
+        singOverfluxPowder: new SingularityUpgrade(singularityData['singOverfluxPowder']),
+        singCraftExpand: new SingularityUpgrade(singularityData['singCraftExpand']),
+        hepteractsDiscount: new SingularityUpgrade(singularityData['hepteractsDiscount']),
+        singMagicalTalisman: new SingularityUpgrade(singularityData['singMagicalTalisman']),
+        singGQdiscount: new SingularityUpgrade(singularityData['singGQdiscount']),
+        singMaterialsExponent: new SingularityUpgrade(singularityData['singMaterialsExponent']),
+        singScoreExponent: new SingularityUpgrade(singularityData['singScoreExponent']),
+        singAscendScoreExponent: new SingularityUpgrade(singularityData['singAscendScoreExponent']),
+        singConstantExponent: new SingularityUpgrade(singularityData['singConstantExponent']),
+        singAscendTimeExponent: new SingularityUpgrade(singularityData['singAscendTimeExponent']),
+        singBuildingExponent: new SingularityUpgrade(singularityData['singBuildingExponent']),
+        singExponent: new SingularityUpgrade(singularityData['singExponent']),
+        singWormhole: new SingularityUpgrade(singularityData['singWormhole']),
+        singMaxLevelUp: new SingularityUpgrade(singularityData['singMaxLevelUp']),
+        singularityOfSingularity: new SingularityUpgrade(singularityData['singularityOfSingularity']),
+        singsingWormhole: new SingularityUpgrade(singularityData['singsingWormhole']),
+        singSingStarterPack: new SingularityUpgrade(singularityData['singSingStarterPack']),
+        singSingCubes: new SingularityUpgrade(singularityData['singSingCubes']),
+        singSingPatreon: new SingularityUpgrade(singularityData['singSingPatreon']),
+        singSafeQuark: new SingularityUpgrade(singularityData['singSafeQuark']),
+        singSingLoL: new SingularityUpgrade(singularityData['singSingLoL']),
+        singSafeUpgrades: new SingularityUpgrade(singularityData['singSafeUpgrades']),
+        singSingAutomation: new SingularityUpgrade(singularityData['singSingAutomation']),
+        corruptionSixteen: new SingularityUpgrade(singularityData['corruptionSixteen']),
+        corruptionSeventeen: new SingularityUpgrade(singularityData['corruptionSeventeen']),
+        corruptionEighteen: new SingularityUpgrade(singularityData['corruptionEighteen']),
+        corruptionNineteen: new SingularityUpgrade(singularityData['corruptionNineteen']),
+        corruptionTwenty: new SingularityUpgrade(singularityData['corruptionTwenty']),
+        maxCapLevel1: new SingularityUpgrade(singularityData['maxCapLevel1']),
+        maxCapLevel2: new SingularityUpgrade(singularityData['maxCapLevel2']),
+        maxCapLevel3: new SingularityUpgrade(singularityData['maxCapLevel3']),
+        maxCapLevel4: new SingularityUpgrade(singularityData['maxCapLevel4']),
+        maxCapLevel5: new SingularityUpgrade(singularityData['maxCapLevel5']),
+        maxCapLevel0: new SingularityUpgrade(singularityData['maxCapLevel0']),
+        singSingSSS: new SingularityUpgrade(singularityData['singSingSSS'])
+    }
+
     if (data.loadedOct4Hotfix === undefined || player.loadedOct4Hotfix === false) {
         player.loadedOct4Hotfix = true;
         // Only process refund if the save's researches array is already updated to v2
@@ -346,10 +426,15 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
             chronometer3: 0,
             seasonPassY: 0,
             seasonPassZ: 0,
-            challengeTome2: 0
+            challengeTome2: 0,
+            cashGrab2: 0,
+            cubeToQuarkAll: 0,
+            obtainiumEX2: 0,
+            offeringEX2: 0,
+            powderAuto: 0,
+            chronometerZ: 0,
+            seasonPassLost: 0
         }
-
-        const initialQuarks = Number(player.worlds);
 
         player.worlds.add(150 * shop.offeringTimerLevel + 25/2 * (shop.offeringTimerLevel - 1) * shop.offeringTimerLevel, false);
         player.worlds.add(150 * shop.obtainiumTimerLevel + 25/2 * (shop.obtainiumTimerLevel - 1) * shop.obtainiumTimerLevel, false);
@@ -367,8 +452,6 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                 : 500 * shop.seasonPassLevel + 250/2 * (shop.seasonPassLevel - 1) * shop.seasonPassLevel,
             false
         );
-
-        console.log('Because of the v2.5.0 update, you have been refunded ' + format(+player.worlds - +initialQuarks) + ' Quarks! If this appears wrong let Platonic know :)')
     }
 
     if (player.shopUpgrades.seasonPass2 === undefined) {
@@ -518,6 +601,8 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         player.singularityMaxCount = 0
         player.autoBuyPlatonic = false
         player.autoHepteractUpgrades = false
+        player.singsingsing = 0
+        player.autoSingularity = false
     }
 
     if (player.singularityMaxCount === 0) {
@@ -541,59 +626,6 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         }
     }
 
-    player.singularityUpgrades = {
-        goldenQuarks1: new SingularityUpgrade(singularityData['goldenQuarks1']),
-        goldenQuarks2: new SingularityUpgrade(singularityData['goldenQuarks2']),
-        goldenQuarks3: new SingularityUpgrade(singularityData['goldenQuarks3']),
-        starterPack: new SingularityUpgrade(singularityData['starterPack']),
-        wowPass: new SingularityUpgrade(singularityData['wowPass']),
-        cookies: new SingularityUpgrade(singularityData['cookies']),
-        cookies2: new SingularityUpgrade(singularityData['cookies2']),
-        cookies3: new SingularityUpgrade(singularityData['cookies3']),
-        cookies4: new SingularityUpgrade(singularityData['cookies4']),
-        ascensions: new SingularityUpgrade(singularityData['ascensions']),
-        corruptionFourteen: new SingularityUpgrade(singularityData['corruptionFourteen']),
-        corruptionFifteen: new SingularityUpgrade(singularityData['corruptionFifteen']),
-        singOfferings1: new SingularityUpgrade(singularityData['singOfferings1']),
-        singOfferings2: new SingularityUpgrade(singularityData['singOfferings2']),
-        singOfferings3: new SingularityUpgrade(singularityData['singOfferings3']),
-        singObtainium1: new SingularityUpgrade(singularityData['singObtainium1']),
-        singObtainium2: new SingularityUpgrade(singularityData['singObtainium2']),
-        singObtainium3: new SingularityUpgrade(singularityData['singObtainium3']),
-        singCubes1: new SingularityUpgrade(singularityData['singCubes1']),
-        singCubes2: new SingularityUpgrade(singularityData['singCubes2']),
-        singCubes3: new SingularityUpgrade(singularityData['singCubes3']),
-        octeractUnlock: new SingularityUpgrade(singularityData['octeractUnlock']),
-        offeringAutomatic: new SingularityUpgrade(singularityData['offeringAutomatic']),
-        singOfferingsA1: new SingularityUpgrade(singularityData['singOfferingsA1']),
-        singObtainiumA1: new SingularityUpgrade(singularityData['singObtainiumA1']),
-        singCubesA1: new SingularityUpgrade(singularityData['singCubesA1']),
-        singTimeAccel: new SingularityUpgrade(singularityData['singTimeAccel']),
-        singAscendTimeAccel: new SingularityUpgrade(singularityData['singAscendTimeAccel']),
-        singQuark: new SingularityUpgrade(singularityData['singQuark']),
-        singGolden: new SingularityUpgrade(singularityData['singGolden']),
-        bakeCookies1: new SingularityUpgrade(singularityData['bakeCookies1']),
-        bakeCookies2: new SingularityUpgrade(singularityData['bakeCookies2']),
-        singAutomation: new SingularityUpgrade(singularityData['singAutomation']),
-        singSafeShop: new SingularityUpgrade(singularityData['singSafeShop']),
-        singChallenge: new SingularityUpgrade(singularityData['singChallenge']),
-        singOverfluxPowder: new SingularityUpgrade(singularityData['singOverfluxPowder']),
-        singCraftExpand: new SingularityUpgrade(singularityData['singCraftExpand']),
-        singMagicalTalisman: new SingularityUpgrade(singularityData['singMagicalTalisman']),
-        singGQdiscount: new SingularityUpgrade(singularityData['singGQdiscount']),
-        singMaterialsExponent: new SingularityUpgrade(singularityData['singMaterialsExponent']),
-        singScoreExponent: new SingularityUpgrade(singularityData['singScoreExponent']),
-        singAscendScoreExponent: new SingularityUpgrade(singularityData['singAscendScoreExponent']),
-        singConstantExponent: new SingularityUpgrade(singularityData['singConstantExponent']),
-        singAscendTimeExponent: new SingularityUpgrade(singularityData['singAscendTimeExponent']),
-        singBuildingExponent: new SingularityUpgrade(singularityData['singBuildingExponent']),
-        singExponent: new SingularityUpgrade(singularityData['singExponent']),
-        singWormhole: new SingularityUpgrade(singularityData['singWormhole']),
-        singMaxLevelUp: new SingularityUpgrade(singularityData['singMaxLevelUp']),
-        singularityOfSingularity: new SingularityUpgrade(singularityData['singularityOfSingularity']),
-        singsingWormhole: new SingularityUpgrade(singularityData['singsingWormhole'])
-    }
-
     if (data.singularityUpgrades != null) {
         for (const item in blankSave.singularityUpgrades) {
             const k = item as keyof Player['singularityUpgrades'];
@@ -606,11 +638,14 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                     maxLevel: singularityData[k].maxLevel,
                     costPerLevel: singularityData[k].costPerLevel,
                     maxCapLevel: singularityData[k].maxCapLevel,
+                    maxCapUp: singularityData[k].maxCapUp,
 
                     level: data.singularityUpgrades[k].level,
                     goldenQuarksInvested: data.singularityUpgrades[k].goldenQuarksInvested,
                     toggleBuy: data.singularityUpgrades[k].toggleBuy,
-                    minimumSingularity: singularityData[k].minimumSingularity
+                    minimumSingularity: singularityData[k].minimumSingularity,
+                    minimumSingSing: singularityData[k].minimumSingSing,
+                    effect: singularityData[k].effect
                 }
                 player.singularityUpgrades[k] = new SingularityUpgrade(updatedData);
             }

@@ -3,7 +3,7 @@ import { Globals as G } from './Variables';
 import { player, format, formatTimeShort } from './Synergism';
 import { version } from './Config';
 import { CalcECC } from './Challenges';
-import { calculateSigmoidExponential, calculateMaxRunes, calculateRuneExpToLevel, calculateSummationLinear, calculateRecycleMultiplier, calculateCorruptionPoints, CalcCorruptionStuff, calculateAutomaticObtainium, calculateTimeAcceleration, calcAscensionCount, calculateCubeQuarkMultiplier, calculateSummationNonLinear } from './Calculate';
+import { calculateSigmoidExponential, calculateMaxRunes, calculateRuneExpToLevel, calculateSummationLinear, calculateRecycleMultiplier, calculateCorruptionPoints, CalcCorruptionStuff, calculateAutomaticObtainium, calculateTimeAcceleration, calcAscensionCount, calculateCubeQuarkMultiplier, calculateSummationNonLinear, constantTaxesMultiplier } from './Calculate';
 import { displayRuneInformation } from './Runes';
 import { showSacrifice } from './Ants';
 import { sumContents } from './Utility';
@@ -49,7 +49,7 @@ export const visualUpdateBuildings = () => {
         }
 
         DOMCacheGetOrSet('buildtext11').textContent = 'Accelerators: ' + format(player.acceleratorBought, 0, true) + ' [+' + format(G['freeAccelerator'], 0, true) + ']'
-        DOMCacheGetOrSet('buildtext12').textContent = 'Acceleration Power: ' + ((G['acceleratorPower'] - 1) * (100)).toPrecision(4) + '% || Acceleration Multiplier: ' + format(G['acceleratorEffect'], 2) + 'x'
+        DOMCacheGetOrSet('buildtext12').textContent = 'Acceleration Power: ' + G['acceleratorPower'].toPrecision(4)  + 'x || Acceleration Multiplier: ' + format(G['acceleratorEffect'], 2) + 'x'
         DOMCacheGetOrSet('buildtext13').textContent = 'Multipliers: ' + format(player.multiplierBought, 0, true) + ' [+' + format(G['freeMultiplier'], 0, true) + ']'
         DOMCacheGetOrSet('buildtext14').textContent = 'Multiplier Power: ' + G['multiplierPower'].toPrecision(4) + 'x || Multiplier: ' + format(G['multiplierEffect'], 2) + 'x'
         DOMCacheGetOrSet('buildtext15').textContent = 'Accelerator Boost: ' + format(player.acceleratorBoostBought, 0, true) + ' [+' + format(G['freeAcceleratorBoost'], 0, false) + ']'
@@ -161,7 +161,7 @@ export const visualUpdateBuildings = () => {
         }
 
         DOMCacheGetOrSet('tesseractInfo').textContent = 'You have ' + format(player.wowTesseracts) + ' Wow! Tesseracts. Gain more by beating Challenge 10 on each Ascension.'
-        DOMCacheGetOrSet('ascendShardInfo').textContent = 'You have a mathematical constant of ' + format(player.ascendShards, 2) + '. Taxes are divided by ' + format(Math.pow(Decimal.log(player.ascendShards.add(1), 10) + 1, 1 + .2 / 60 * player.challengecompletions[10] * player.upgrades[125] + 0.1 * player.platonicUpgrades[5] + 0.2 * player.platonicUpgrades[10] + (G['platonicBonusMultiplier'][5] - 1)), 4, true) + '.'
+        DOMCacheGetOrSet('ascendShardInfo').textContent = 'You have a mathematical constant of ' + format(player.ascendShards, 2) + '. Taxes are divided by ' + format(constantTaxesMultiplier(), 4, true) + '.'
         DOMCacheGetOrSet('autotessbuyeramount').textContent = 'Auto buyer will save at least ' + format(player.tesseractAutoBuyerAmount) + ' tesseracts. [Enter number above].'
     }
 }
@@ -503,14 +503,15 @@ export const visualUpdateSettings = () => {
     const quarkData = quarkHandler();
     const onExportQuarks = quarkData.gain
     const maxExportQuarks = quarkData.capacity
-    const patreonLOL = 1 + player.worlds.BONUS/100
-    DOMCacheGetOrSet('quarktimerdisplay').textContent = format(Math.max(0.01, 3600 / (quarkData.perHour) - (player.quarkstimer % (3600.00001 / (quarkData.perHour)))), 2) + 's until +' + format(patreonLOL, 2, true) + ' export Quark'
-    DOMCacheGetOrSet('quarktimeramount').textContent =
-        `Quarks on export: ${format(Math.floor(onExportQuarks * patreonLOL))} [Max ${format(Math.floor(maxExportQuarks * patreonLOL))}]`;
+    const patreonLOL = 1 + player.worlds.BONUS / 100
+    DOMCacheGetOrSet('quarktimerdisplay').textContent = format(3600 / (quarkData.perHour) - (player.quarkstimer % (3600.00001 / (quarkData.perHour))), 2) + 's until +' + player.worlds.toString(1) + ' export Quark'
 
-    DOMCacheGetOrSet('goldenQuarkTimerDisplay').textContent = format(3600 / Math.max(1, player.singularityUpgrades.goldenQuarks3.level) - (player.goldenQuarksTimer % (3600.00001 / Math.max(1,player.singularityUpgrades.goldenQuarks3.level)))) + 's until +' + format(patreonLOL, 2, true) + ' export Golden Quark'
+    DOMCacheGetOrSet('quarktimeramount').textContent =
+        `Quarks on export: ${player.worlds.toString(onExportQuarks)} [Max ${player.worlds.toString(maxExportQuarks)}]`;
+
+    DOMCacheGetOrSet('goldenQuarkTimerDisplay').textContent = format(3600 / Math.max(1, +player.singularityUpgrades.goldenQuarks3.getEffect().bonus) - (player.goldenQuarksTimer % (3600.00001 / Math.max(1,+player.singularityUpgrades.goldenQuarks3.getEffect().bonus)))) + 's until +' + format(patreonLOL, 2, true) + ' export Golden Quark'
     DOMCacheGetOrSet('goldenQuarkTimerAmount').textContent =
-        `Golden Quarks on export: ${format(Math.floor(player.goldenQuarksTimer * player.singularityUpgrades.goldenQuarks3.level/ 3600) * patreonLOL, 2)} [Max ${format(Math.floor(25 * player.singularityUpgrades.goldenQuarks3.level * patreonLOL))}]`
+        `Golden Quarks on export: ${format(Math.floor(player.goldenQuarksTimer * +player.singularityUpgrades.goldenQuarks3.getEffect().bonus/ 3600) * patreonLOL, 2)} [Max ${format(Math.floor(168 * +player.singularityUpgrades.goldenQuarks3.getEffect().bonus * patreonLOL))}]`
 }
 
 export const visualUpdateShop = () => {

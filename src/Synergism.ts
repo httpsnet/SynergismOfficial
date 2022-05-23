@@ -33,7 +33,7 @@ import { addTimers, automaticTools } from './Helper';
 //import { LegacyShopUpgrades } from './types/LegacySynergism';
 
 import { checkVariablesOnLoad } from './CheckVariables';
-import { AbyssHepteract, AcceleratorBoostHepteract, AcceleratorHepteract, ChallengeHepteract, ChronosHepteract, hepteractEffective, HyperrealismHepteract, MultiplierHepteract, QuarkHepteract } from './Hepteracts';
+import { AbyssHepteract, AcceleratorBoostHepteract, AcceleratorHepteract, ChallengeHepteract, ChronosHepteract, hepteractEffective, HyperrealismHepteract, MultiplierHepteract, QuarkHepteract, autoHepteracts, hepteractDescription } from './Hepteracts';
 import { QuarkHandler } from './Quark';
 import { WowCubes, WowHypercubes, WowPlatonicCubes, WowTesseracts } from './CubeExperimental';
 import { changeHotkeys } from './Hotkeys';
@@ -457,7 +457,14 @@ export const player: Player = {
         chronometer3: 0,
         seasonPassY: 0,
         seasonPassZ: 0,
-        challengeTome2: 0
+        challengeTome2: 0,
+        cashGrab2: 0,
+        chronometerZ: 0,
+        cubeToQuarkAll: 0,
+        offeringEX2: 0,
+        obtainiumEX2: 0,
+        seasonPassLost: 0,
+        powderAuto: 0
     },
     autoSacrificeToggle: false,
     autoFortifyToggle: false,
@@ -478,6 +485,7 @@ export const player: Player = {
     autoOpenCubes: false,
     tesseractAutoBuyer: false,
     autoBuyPlatonic: false,
+    autoSingularity: false,
 
     antPoints: new Decimal('1'),
     antUpgrades: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -681,6 +689,7 @@ export const player: Player = {
     lastCode: '',
     singularityMaxCount: 0,
     autoHepteractUpgrades: false,
+    singsingsing: 0,
     hotkeys: {},
 
     singularityUpgrades: {
@@ -707,6 +716,12 @@ export const player: Player = {
         singCubes3: new SingularityUpgrade(singularityData['singCubes3']),
         octeractUnlock: new SingularityUpgrade(singularityData['octeractUnlock']),
         offeringAutomatic: new SingularityUpgrade(singularityData['offeringAutomatic']),
+        intermediatePack: new SingularityUpgrade(singularityData['intermediatePack']),
+        advancedPack: new SingularityUpgrade(singularityData['advancedPack']),
+        expertPack: new SingularityUpgrade(singularityData['expertPack']),
+        masterPack: new SingularityUpgrade(singularityData['masterPack']),
+        divinePack: new SingularityUpgrade(singularityData['divinePack']),
+        wowPass2: new SingularityUpgrade(singularityData['wowPass2']),
         singOfferingsA1: new SingularityUpgrade(singularityData['singOfferingsA1']),
         singObtainiumA1: new SingularityUpgrade(singularityData['singObtainiumA1']),
         singCubesA1: new SingularityUpgrade(singularityData['singCubesA1']),
@@ -721,6 +736,7 @@ export const player: Player = {
         singChallenge: new SingularityUpgrade(singularityData['singChallenge']),
         singOverfluxPowder: new SingularityUpgrade(singularityData['singOverfluxPowder']),
         singCraftExpand: new SingularityUpgrade(singularityData['singCraftExpand']),
+        hepteractsDiscount: new SingularityUpgrade(singularityData['hepteractsDiscount']),
         singMagicalTalisman: new SingularityUpgrade(singularityData['singMagicalTalisman']),
         singGQdiscount: new SingularityUpgrade(singularityData['singGQdiscount']),
         singMaterialsExponent: new SingularityUpgrade(singularityData['singMaterialsExponent']),
@@ -733,7 +749,26 @@ export const player: Player = {
         singWormhole: new SingularityUpgrade(singularityData['singWormhole']),
         singMaxLevelUp: new SingularityUpgrade(singularityData['singMaxLevelUp']),
         singularityOfSingularity: new SingularityUpgrade(singularityData['singularityOfSingularity']),
-        singsingWormhole: new SingularityUpgrade(singularityData['singsingWormhole'])
+        singsingWormhole: new SingularityUpgrade(singularityData['singsingWormhole']),
+        singSingStarterPack: new SingularityUpgrade(singularityData['singSingStarterPack']),
+        singSingCubes: new SingularityUpgrade(singularityData['singSingCubes']),
+        singSingPatreon: new SingularityUpgrade(singularityData['singSingPatreon']),
+        singSafeQuark: new SingularityUpgrade(singularityData['singSafeQuark']),
+        singSingLoL: new SingularityUpgrade(singularityData['singSingLoL']),
+        singSafeUpgrades: new SingularityUpgrade(singularityData['singSafeUpgrades']),
+        singSingAutomation: new SingularityUpgrade(singularityData['singSingAutomation']),
+        corruptionSixteen: new SingularityUpgrade(singularityData['corruptionSixteen']),
+        corruptionSeventeen: new SingularityUpgrade(singularityData['corruptionSeventeen']),
+        corruptionEighteen: new SingularityUpgrade(singularityData['corruptionEighteen']),
+        corruptionNineteen: new SingularityUpgrade(singularityData['corruptionNineteen']),
+        corruptionTwenty: new SingularityUpgrade(singularityData['corruptionTwenty']),
+        maxCapLevel1: new SingularityUpgrade(singularityData['maxCapLevel1']),
+        maxCapLevel2: new SingularityUpgrade(singularityData['maxCapLevel2']),
+        maxCapLevel3: new SingularityUpgrade(singularityData['maxCapLevel3']),
+        maxCapLevel4: new SingularityUpgrade(singularityData['maxCapLevel4']),
+        maxCapLevel5: new SingularityUpgrade(singularityData['maxCapLevel5']),
+        maxCapLevel0: new SingularityUpgrade(singularityData['maxCapLevel0']),
+        singSingSSS: new SingularityUpgrade(singularityData['singSingSSS'])
     },
     dailyCodeUsed: false
 }
@@ -1448,6 +1483,12 @@ const loadSynergy = async () => {
         DOMCacheGetOrSet('togglePlatonicAutoBuy').textContent = player.autoBuyPlatonic ? 'Automatic: ON' : 'Automatic: OFF';
         DOMCacheGetOrSet('togglePlatonicAutoBuy').style.border = player.autoBuyPlatonic ? '2px solid green' : '2px solid red';
 
+        DOMCacheGetOrSet('toggleHepteractAutoBuy').textContent = player.autoHepteractUpgrades ? 'Automatic: ON' : 'Automatic: OFF';
+        DOMCacheGetOrSet('toggleHepteractAutoBuy').style.border = player.autoHepteractUpgrades ? '2px solid green' : '2px solid red';
+
+        DOMCacheGetOrSet('toggleAutoSingularity').textContent = player.autoSingularity ? 'Auto Singularity: ON' : 'Auto Singularity: OFF';
+        DOMCacheGetOrSet('toggleAutoSingularity').style.border = player.autoSingularity ? '2px solid green' : '2px solid red';
+
         DOMCacheGetOrSet('toggleCubeBuy').textContent = player.buyMaxCubeUpgrades ? 'Upgrade: MAX [if possible wow]' : 'Upgrade: 1 Level wow';
         DOMCacheGetOrSet('toggleConfirmShop').textContent = player.shopConfirmation ? 'Shop Confirmations: ON' : 'Shop Confirmations: OFF';
         DOMCacheGetOrSet('toggleBuyMaxShop').textContent = player.shopBuyMax ? 'Buy Max: ON' : 'Buy Max: OFF';
@@ -1815,43 +1856,36 @@ export const updateAllTick = (): void => {
         G['tuSevenMulti'] = 1.05;
     }
 
-    G['acceleratorPower'] = Math.pow(
+    G['acceleratorPower'] = Decimal.pow(
         1.1 + G['tuSevenMulti'] *
         (G['totalAcceleratorBoost'] / 100)
         * (1 + CalcECC('transcend', player.challengecompletions[2]) / 20),
         1 + 0.04 * CalcECC('reincarnation', player.challengecompletions[7])
     );
-    G['acceleratorPower'] += 1 / 200 * Math.floor(CalcECC('transcend', player.challengecompletions[2]) / 2) * 100 / 100
+    G['acceleratorPower'] = G['acceleratorPower'].add(1 / 200 * Math.floor(CalcECC('transcend', player.challengecompletions[2]) / 2) * 100 / 100)
     for (let i = 1; i <= 5; i++) {
         if (player.achievements[7 * i - 4] > 0) {
-            G['acceleratorPower'] += 0.0005 * i
+            G['acceleratorPower'] = G['acceleratorPower'].add(0.0005 * i)
         }
     }
 
     //No MA and Sadistic will always overwrite Transcend challenges starting in v2.0.0
     if (player.currentChallenge.reincarnation !== 7 && player.currentChallenge.reincarnation !== 10) {
         if (player.currentChallenge.transcension === 1) {
-            G['acceleratorPower'] *= 25 / (50 + player.challengecompletions[1]);
-            G['acceleratorPower'] += 0.55
-            G['acceleratorPower'] = Math.max(1, G['acceleratorPower'])
+            G['acceleratorPower'] = Decimal.max(1, G['acceleratorPower'].times(25 / (50 + player.challengecompletions[1])).add(0.55));
         }
         if (player.currentChallenge.transcension === 2) {
-            G['acceleratorPower'] = 1;
+            G['acceleratorPower'] = new Decimal(1);
         }
         if (player.currentChallenge.transcension === 3) {
-            G['acceleratorPower'] =
-                1.05 +
-                2 * G['tuSevenMulti'] *
-                (G['totalAcceleratorBoost'] / 300) *
-                (1 + CalcECC('transcend', player.challengecompletions[2]) / 20
-                );
+            G['acceleratorPower'] = new Decimal(1.05 + 2 * G['tuSevenMulti'] * (G['totalAcceleratorBoost'] / 300) * (1 + CalcECC('transcend', player.challengecompletions[2]) / 20));
         }
     }
     if (player.currentChallenge.reincarnation === 7) {
-        G['acceleratorPower'] = 1;
+        G['acceleratorPower'] = new Decimal(1);
     }
     if (player.currentChallenge.reincarnation === 10) {
-        G['acceleratorPower'] = 1;
+        G['acceleratorPower'] = new Decimal(1);
     }
 
     if (player.currentChallenge.transcension !== 1) {
@@ -1861,7 +1895,7 @@ export const updateAllTick = (): void => {
     if (player.currentChallenge.transcension === 1) {
         G['acceleratorEffect'] = Decimal.pow(G['acceleratorPower'], G['totalAccelerator'] + G['totalMultiplier']);
     }
-    G['acceleratorEffectDisplay'] = new Decimal(G['acceleratorPower'] * 100 - 100);
+    G['acceleratorEffectDisplay'] = new Decimal(G['acceleratorPower'].times(100).sub(100));
     if (player.currentChallenge.reincarnation === 10) {
         G['acceleratorEffect'] = new Decimal(1);
     }
@@ -2018,7 +2052,7 @@ export const updateAllMultiplier = (): void => {
         G['multiplierPower'] = new Decimal(1);
     }
     if (player.currentChallenge.reincarnation === 10) {
-        G['multiplierPower'] = new Decimal(1);
+        G['multiplierPower'] = new Decimal(1.0000000001); // Not 1 because coins could not be produced completely
     }
 
     G['multiplierEffect'] = Decimal.pow(G['multiplierPower'], G['totalMultiplier']);
@@ -2118,6 +2152,7 @@ export const multipliers = (): void => {
         lol = Decimal.pow(lol, 1.1)
     }
     lol = Decimal.pow(lol, G['challenge15Rewards'].coinExponent)
+    lol = Decimal.pow(10, Decimal.times(Decimal.log10(lol), Math.pow(G['buildingPower'], player.singularityUpgrades.singBuildingExponent.level / 20000)));
     G['globalCoinMultiplier'] = lol;
     G['globalCoinMultiplier'] = Decimal.pow(G['globalCoinMultiplier'], G['financialcollapsePower'][player.usedCorruptions[9]])
     G['coinOneMulti'] = new Decimal(1);
@@ -2675,20 +2710,13 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             const reqCheck = (comp: number) => player.coinsThisTranscension.gte(challengeRequirement(q, comp, q));
 
             if (reqCheck(player.challengecompletions[q]) && player.challengecompletions[q] < maxCompletions) {
-                let maxInc = 1;
-                if (player.shopUpgrades.instantChallenge > 0 && player.currentChallenge.ascension !== 13) {
-                    maxInc *= 10;
-                    if (player.achievements[141] > 0) {
-                        maxInc *= 10;
-                        if (player.singularityUpgrades.singChallenge.level > 0) {
-                            maxInc *= 10;
-                        }
-                    }
-                }
+                const maxInc = player.shopUpgrades.instantChallenge > 0 && player.currentChallenge.ascension !== 13 ? (player.singularityCount + 1) * 10 : 1;
                 let counter = 0;
                 let comp = player.challengecompletions[q];
-                while (counter < maxInc && reqCheck(comp) && comp < maxCompletions) {
-                    comp++;
+                while (counter < maxInc) {
+                    if (reqCheck(comp) && comp < maxCompletions) {
+                        comp++;
+                    }
                     counter++;
                 }
                 player.challengecompletions[q] = comp;
@@ -2750,13 +2778,13 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             }
             let counter = 0;
             let comp = player.challengecompletions[q];
-            while (counter < maxInc && reqCheck(comp) && comp < maxCompletions) {
-                comp++;
+            while (counter < maxInc) {
+                if (reqCheck(comp) && comp < maxCompletions) {
+                    comp++;
+                }
                 counter++;
             }
             player.challengecompletions[q] = comp;
-            challengeDisplay(q, true);
-            updateChallengeLevel(q);
         }
         if (player.shopUpgrades.instantChallenge === 0 || leaving) { // TODO: Implement the upgrade levels here
             reset('reincarnationChallenge', false, 'leaveChallenge');
@@ -2768,6 +2796,8 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
                 player.highestchallengecompletions[q] += 1;
                 highestChallengeRewards(q, player.highestchallengecompletions[q])
             }
+            challengeDisplay(q, true);
+            updateChallengeLevel(q);
             calculateHypercubeBlessings();
             calculateTesseractBlessings();
             calculateCubeBlessings();
@@ -2856,8 +2886,8 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
 
     if (i === 'singularity') {
         let sings = player.runelevels[6];
-        if (player.runelevels[6] <= 0) {
-            return Alert('Hmph. Please return with an Antiquity. Thank you. -Ant God')
+        if (sings <= 0) {
+            return Alert('You nearly triggered a double singularity bug! Oh no! Luckily, our staff prevented this from happening.');
         }
         if (player.singularityUpgrades.singWormhole.level <= 0) {
             sings = 1;
@@ -2877,8 +2907,8 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
         let gotoSings = 0;
         if (c2 && sings > 1 && player.singularityUpgrades.singWormhole.level > 0){
             const maxJumps = sings;
-            const amount = await Prompt(`Well you can Singularity up to ${format(maxJumps, 0, true)} at a time, but that makes the game more difficult!`);
-            if (!amount) {
+            const amount = await Prompt(`Well you can Singularity up to ${format(maxJumps, 0, true)} at a time, but that makes the game more difficult!`, maxJumps.toString());
+            if (amount === null) {
                 return Alert('Yeah, you finished it');
             }
             gotoSings = Number(amount);
@@ -2891,16 +2921,17 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             } else if (player.singularityCount + gotoSings == 0) {
                 await Alert('caution! #0 locks Singularity!');
             }
-            await Alert(`The Ant God allows you to go to #${format(player.singularityCount + gotoSings, 0, true)} in Singularity!`);
+            await Alert(`The Ant God allows you to go to #${format(Math.floor(player.singularityCount + gotoSings), 0, true)} in Singularity!`);
             c3 = await Confirm('Are you REALLY SURE? You cannot go back from this (without an older savefile)! Confirm one last time to finalize your decision.')
         } else if (c2) {
             c3 = await Confirm('Are you REALLY SURE? You cannot go back from this (without an older savefile)! Confirm one last time to finalize your decision.')
         }
-        if (c3) {
+        if (c3 && player.runelevels[6] > 0) {
+            player.runelevels[6] = 0;
             if (gotoSings !== 0){
-                void singularity(gotoSings);
+                await singularity(gotoSings);
             } else {
-                void singularity(sings);
+                await singularity(sings);
             }
             return Alert(`Welcome to Singularity #${format(player.singularityCount, 0, true)}. You're back to familiar territory, but something doesn't seem right.`)
         }
@@ -3088,7 +3119,7 @@ export const updateAll = (): void => {
     }
 
     //Autobuy tesseract buildings
-    if ((player.researches[190] > 0) && (player.tesseractAutoBuyerToggle == 1)) {
+    if ((player.researches[190] > 0) && (player.tesseractAutoBuyerToggle === 1)) {
         autobuyTesseractBuildings();
     }
 
@@ -3216,6 +3247,7 @@ export const updateAll = (): void => {
     autoBuyAnts()
 
     autoBuyPlatonicUpgrades()
+    autoHepteracts()
 
     let metaData = null;
     if (player.researches[175] > 0) {
@@ -3489,10 +3521,10 @@ document.addEventListener('keydown', (event) => {
         }
         if (player.challengecompletions[11] > 0 && !isNaN(num)) {
             if (num >= 0 && num < player.corruptionLoadoutNames.length) {
-                void Notification(`${player.corruptionLoadoutNames[num]} (${num + 1}) used activation. \nIt will be enabled at the next ascension.`, 5000);
+                void Notification(`${player.corruptionLoadoutNames[num]} (${num + 1}) used activation. \nThis will take effect on the next ascension.`, 5000);
                 corruptionLoadoutSaveLoad(false, num + 1);
             } else {
-                void Notification('All next Corruption Stats are now 0. \nThis will take effect on the next Ascension.', 5000);
+                void Notification('All next Corruption Stats are now Zero. \nThis will take effect on the next ascension.', 5000);
                 corruptionLoadoutSaveLoad(false, 0);
             }
         }
@@ -3630,8 +3662,8 @@ export const reloadShit = async (reset = false) => {
     htmlInserts();
     createTimer();
 
-    void dailyResetCheck();
-    interval(() => dailyResetCheck(), 30_000);
+    await dailyResetCheck();
+    interval(async () => await dailyResetCheck(), 30_000);
 
     constantIntervals();
     changeTabColor();
@@ -3674,14 +3706,17 @@ export const reloadShit = async (reset = false) => {
 }
 
 //Autobuy tesseract buildings
-export const autobuyTesseractBuildings = () => {
+export const autobuyTesseractBuildings = (budget = -1) => {
+    if (budget === -1) {
+        budget = Number(player.wowTesseracts) - player.tesseractAutoBuyerAmount;
+    }
+
     const ownedBuildings: TesseractBuildings = [null, null, null, null, null];
     for (let i = 1; i <= 5; i++) {
         if (player.autoTesseracts[i]) {
             ownedBuildings[i-1] = player[`ascendBuilding${i as OneToFive}` as const]['owned'];
         }
     }
-    const budget = Number(player.wowTesseracts) - player.tesseractAutoBuyerAmount;
     const buyToBuildings = calculateTessBuildingsInBudget(ownedBuildings, budget);
     // Prioritise buying buildings from highest tier to lowest,
     // in case there are any off-by-ones or floating point errors.
@@ -3691,6 +3726,13 @@ export const autobuyTesseractBuildings = () => {
         if (buyFrom !== null && buyTo !== null && buyTo !== buyFrom) {
             buyTesseractBuilding(i as OneToFive, buyTo - buyFrom);
         }
+    }
+}
+
+export const buyTesseractBuildings = () => {
+    if (player.singularityUpgrades.singAutomation.level >= 3000) {
+        autobuyTesseractBuildings(Number(player.wowTesseracts) / 10);
+        hepteractDescription('tesseract');
     }
 }
 

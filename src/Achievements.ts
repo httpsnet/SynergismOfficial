@@ -290,7 +290,7 @@ const adesc = {
     adesc235: '[235] Spirit I: Level your Speed Spirit to 1 Million.',
     adesc236: '[236] Spirit II: Level your Speed Spirit to 1 Billion.',
     adesc237: '[237] Spirit III: Level your Speed Spirit to 1 Trillion.',
-    adesc238: '[238] Three-folded: [Hint: you may want to look into the inception]',
+    adesc238: '[238] Hepteracts: Best Challenge 15 Exponent with above 1Qa.',
     adesc239: '[239] Seeing red: [Hint: you may need a lot of red items]',
     adesc240: '[240] ASCENDED: [Hint: you may need a LOT of ascensions OR an particularly amazing ascension]',
     adesc241: '[241] Aesop: [Hint: you gotta be pretty dang slow]',
@@ -813,11 +813,7 @@ export const ascensionAchievementCheck = (i: number, score = 0) => {
     }
 }
 
-export const achievementdescriptions = (i: number) => {
-    const y = adesc[`adesc${i}` as keyof typeof adesc];
-    const z = player.achievements[i] > 0.5 ? ' COMPLETED!' : '';
-    const k = areward(i)
-    //const k = areward[`areward${i}` as keyof typeof areward] || '';
+export const getAchievementQuarks = (i: number) => {
     let multiplier = 1
     if (i >= 183) {
         multiplier = 5
@@ -826,8 +822,22 @@ export const achievementdescriptions = (i: number) => {
         multiplier = 40
     }
 
+    const globalQuarkMultiplier = player.worlds.applyBonus(1)
+    let actualMultiplier = multiplier * globalQuarkMultiplier;
+    if (actualMultiplier > 100) {
+        actualMultiplier = Math.pow(100, 0.6) * Math.pow(actualMultiplier, 0.4)
+    }
+
+    return Math.floor(achievementpointvalues[i] * actualMultiplier)
+}
+
+export const achievementdescriptions = (i: number) => {
+    const y = adesc[`adesc${i}` as keyof typeof adesc];
+    const z = player.achievements[i] > 0.5 ? ' COMPLETED!' : '';
+    const k = areward(i)
+
     DOMCacheGetOrSet('achievementdescription').textContent = y + z
-    DOMCacheGetOrSet('achievementreward').textContent = 'Reward: ' + format(achievementpointvalues[i], 0, true) + ' AP. ' + format(achievementpointvalues[i] * multiplier, 0, true) + ' Quarks! ' + k
+    DOMCacheGetOrSet('achievementreward').textContent = 'Reward: ' + achievementpointvalues[i] + ' AP. ' + format(getAchievementQuarks(i), 0, true) + ' Quarks! ' + k
     if (player.achievements[i] > 0.5) {
         DOMCacheGetOrSet('achievementdescription').style.color = 'gold'
     } else {
