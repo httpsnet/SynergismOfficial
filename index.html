@@ -2002,6 +2002,7 @@
                     <br>
                     <div><button id="toggleAutoOpenCubes" style="border: 2px solid red;display: none">Auto Open Cubes: Off</button></div>
                     <div><button id="toggleTesseractBAB" style="border: 2px solid red;display: none">Tesseract Buildings Auto Buy: Off</button></div>
+                    <div><button id="toggleAutoSingularity" style="border: 2px solid red;display: none">Auto Singularity: Off</button></div>
                 </div>
                 <div id="cubeTab1" class="cubeTab" style="display: flex">
                     <span id="cubeWelcome" class="cubePlacement1" style="color: orange">You feel a sense of Pride and Accomplishment... and a hunger for power.</span>
@@ -2625,7 +2626,11 @@
                                 <span style="width: 25%" class="progressBar" id="multiplierProgressBar"></span>
                             </div>
                         </div>
-                        <div><!--Blank Grid Tile--></div>
+                        <div class="hepteractHelper">
+                            <button id="toggleHepteractAutoBuy" style="border: 2px solid red;display: none">Automatic: OFF</button>
+                            <button id="openAllCubes" style="border: 2px solid white;display: none">Open All Type Cubes</button>
+                            <button id="buyTesseractBuildings" style="border: 2px solid orange;display: none">Buy Tesseract Buildings</button>
+                        </div>
                         <div id="hepteractToQuark">
                             <img id="hepteractToQuarkImage" src="Pictures/Overflux.png">
                             <button id="hepteractToQuarkTrade">Craft</button>
@@ -3312,6 +3317,41 @@
                             <p id="buySingularityQuarksAmount"></p>
                             <button class="permshopbutton" id="buySingularityQuarksButton" style="border: 2px solid black;"></button> 
                         </div>
+                        <div class='singularityShopUnlock2'>
+                            <img id="cashGrab2" src="Pictures/cashgrab2.png" loading="lazy">
+                            <p id="cashGrab2Level"></p>
+                            <button class="permshopbutton" id="cashGrab2Button" style="border: 2px solid white"></button>
+                        </div>
+                        <div class='singularityShopUnlock2'>
+                            <img id="cubeToQuarkAll" src="Pictures/Cube Opening Quark Upgrade.png" loading="lazy">
+                            <p id="cubeToQuarkAllLevel"></p>
+                            <button class="permshopbutton" id="cubeToQuarkAllButton" style="border: 2px solid white"></button>
+                        </div>
+                        <div class='singularityShopUnlock2'>
+                            <img id="chronometerZ" src="Pictures/ChronometerZ.png" loading="lazy">
+                            <p id="chronometerZLevel"></p>
+                            <button class="permshopbutton" id="chronometerZButton" style="border: 2px solid white"></button>
+                        </div>
+                        <div class='singularityShopUnlock2'>
+                            <img id="offeringEX2" src="Pictures/Offering Upgrade2.png" loading="lazy">
+                            <p id="offeringEX2Level"></p>
+                            <button class="permshopbutton" id="offeringEX2Button" style="border: 2px solid white"></button>
+                        </div>
+                        <div class='singularityShopUnlock2'>
+                            <img id="obtainiumEX2" src="Pictures/Obtainium Upgrade2.png" loading="lazy">
+                            <p id="obtainiumEX2Level"></p>
+                            <button class="permshopbutton" id="obtainiumEX2Button" style="border: 2px solid white"></button>
+                        </div>
+                        <div class='singularityShopUnlock2'>
+                            <img id="powderAuto" src="Pictures/Powder Gain Upgrade2.png" loading="lazy">
+                            <p id="powderAutoLevel"></p>
+                            <button class="permshopbutton" id="powderAutoButton" style="border: 2px solid white"></button>
+                        </div>
+                        <div class='singularityShopUnlock2'>
+                            <img id="seasonPassLost" src="Pictures/VIP Pass Upgrade Lost.png" loading="lazy">
+                            <p id="seasonPassLostLevel"></p>
+                            <button class="permshopbutton" id="seasonPassLostButton" style="border: 2px solid white"></button>
+                        </div>
                     </div>
                     <div id="shopHovers">
                         <p style="color: white; font-size: 1.2em;">Hover over each portion of the shop to see what each upgrade does!</p>
@@ -3344,6 +3384,9 @@
                 </div>
                 <div>
                     <input type="image" id="wowPass" src="Pictures/Singularity Wow Pass.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="wowPass2" src="Pictures/Singularity Wow Pass 2.png" alt="">
                 </div>
                 <div>
                     <input type="image" id="cookies" src="Pictures/SingularityCookies.png" alt="">
@@ -3400,6 +3443,21 @@
                     <input type="image"  id="offeringAutomatic" src="Pictures/Singularity Offering Automatic.png" alt="">
                 </div>
                 <div>
+                    <input type="image"  id="intermediatePack" src="Pictures/Singularity Intermediate Pack.png" alt="">
+                </div>
+                <div>
+                    <input type="image"  id="advancedPack" src="Pictures/Singularity Advanced Pack.png" alt="">
+                </div>
+                <div>
+                    <input type="image"  id="expertPack" src="Pictures/Singularity Expert Pack.png" alt="">
+                </div>
+                <div>
+                    <input type="image"  id="masterPack" src="Pictures/Singularity Master Pack.png" alt="">
+                </div>
+                <div>
+                    <input type="image"  id="divinePack" src="Pictures/Singularity Divine Pack.png" alt="">
+                </div>
+                <div>
                     <input type="image" id="singOfferingsA1" src="Pictures/Singularity OfferingsA1.png" alt="">
                 </div>
                 <div>
@@ -3442,6 +3500,9 @@
                     <input type="image" id="singCraftExpand" src="Pictures/Singularity CraftExpand.png" alt="">
                 </div>
                 <div>
+                    <input type="image" id="hepteractsDiscount" src="Pictures/Singularity CubesExponent.png" alt="">
+                </div>
+                <div>
                     <input type="image" id="singMagicalTalisman" src="Pictures/Singularity MagicalTalisman.png" alt="">
                 </div>
                 <div>
@@ -3479,6 +3540,63 @@
                 </div>
                 <div>
                     <input type="image" id="singsingWormhole" src="Pictures/Singularity SingularityWormhole.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singSingStarterPack" src="Pictures/Singularity Singularity Starter Pack.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singSingCubes" src="Pictures/Singularity SingularityCubes.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singSingPatreon" src="Pictures/Singularity SingularityPatreon.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singSafeQuark" src="Pictures/Singularity Safe Quark.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singSingLoL" src="Pictures/Singularity Singularity LoL.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singSafeUpgrades" src="Pictures/Singularity SafeUpgrades.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singSingAutomation" src="Pictures/Singularity SingAutomation.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="corruptionSixteen" src="Pictures/Singularity Corruption 16.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="corruptionSeventeen" src="Pictures/Singularity Corruption 17.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="corruptionEighteen" src="Pictures/Singularity Corruption 18.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="corruptionNineteen" src="Pictures/Singularity Corruption 19.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="corruptionTwenty" src="Pictures/Singularity Corruption 20.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="maxCapLevel1" src="Pictures/Singularity.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="maxCapLevel2" src="Pictures/Singularity.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="maxCapLevel3" src="Pictures/Singularity.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="maxCapLevel4" src="Pictures/Singularity.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="maxCapLevel5" src="Pictures/Singularity.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="maxCapLevel0" src="Pictures/Singularity.png" alt="">
+                </div>
+                <div>
+                    <input type="image" id="singSingSSS" src="Pictures/Singularity Singularity2.png" alt="">
                 </div>
             </div>
         </div>
