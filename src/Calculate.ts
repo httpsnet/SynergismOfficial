@@ -357,12 +357,12 @@ export function calculateOfferings(input: resetNames, calcMult = true, statistic
         1 + 2.5 * player.platonicUpgrades[10], // Platonic BETA
         1 + 5 * player.platonicUpgrades[15], // Platonic OMEGA
         G['challenge15Rewards'].offering, // C15 Reward
-        1 + 5 * player.singularityUpgrades.starterPack.level, // Starter Pack Upgrade
-        1 + 0.02 * player.singularityUpgrades.singOfferings1.level, // Offering Charge GQ Upgrade
-        1 + 0.08 * player.singularityUpgrades.singOfferings2.level, // Offering Storm GQ Upgrade
-        1 + 0.04 * player.singularityUpgrades.singOfferings3.level, // Offering Tempest GQ Upgrade
+        1 + 5 * +player.singularityUpgrades.starterPack.getEffect().bonus, // Starter Pack Upgrade
+        +player.singularityUpgrades.singOfferings1.getEffect().bonus, // Offering Charge GQ Upgrade
+        +player.singularityUpgrades.singOfferings2.getEffect().bonus, // Offering Storm GQ Upgrade
+        +player.singularityUpgrades.singOfferings3.getEffect().bonus, // Offering Tempest GQ Upgrade
         1 + player.cubeUpgrades[54] / 100, // Cube upgrade 6x4 (Cx4)
-        1 + player.singularityUpgrades.singOfferingsA1.level * player.singularityCount / 100 // Offering Spore [GQ]
+        +player.singularityUpgrades.singOfferingsA1.getEffect().bonus // Offering Spore [GQ]
     ];
 
     if (calcMult) {
@@ -470,7 +470,7 @@ export const calculateObtainium = () => {
     G['obtainiumGain'] *= +player.singularityUpgrades.singObtainium1.getEffect().bonus
     G['obtainiumGain'] *= +player.singularityUpgrades.singObtainium2.getEffect().bonus
     G['obtainiumGain'] *= +player.singularityUpgrades.singObtainium3.getEffect().bonus
-    G['obtainiumGain'] *= 1 + player.singularityUpgrades.singObtainiumA1.level * player.singularityCount / 100 // Obtainium Seed GQ Upgrade
+    G['obtainiumGain'] *= +player.singularityUpgrades.singObtainiumA1.getEffect().bonus
     G['obtainiumGain'] *= (1 + player.cubeUpgrades[55] / 100) // Cube Upgrade 6x5 (Cx5)
     G['obtainiumGain'] *= (1 + 1/200 * player.shopUpgrades.cashGrab2)
     G['obtainiumGain'] *= (1 + 1/10000 * player.shopUpgrades.obtainiumEX2 * player.singularityCount)
@@ -783,6 +783,7 @@ const calculateAntSacrificeMultipliers = () => {
     if (G['extinctionMultiplier'][player.usedCorruptions[7]] < 0) {
         G['upgradeMultiplier'] = Math.pow(G['upgradeMultiplier'], G['extinctionMultiplier'][player.usedCorruptions[7]] + 1)
     }
+    G['upgradeMultiplier'] = Math.min(1e300, G['upgradeMultiplier']);
 }
 
 interface IAntSacRewards {
@@ -804,12 +805,14 @@ export const calculateAntSacrificeRewards = (): IAntSacRewards => {
 
     const maxCap = 1e300;
     const rewardsMult = G['timeMultiplier'] * G['upgradeMultiplier'];
+    let antSacrificePoint = new Decimal(G['effectiveELO']);
+    antSacrificePoint = antSacrificePoint.dividedBy(85);
+    antSacrificePoint = antSacrificePoint.times(G['timeMultiplier']);
+    antSacrificePoint = antSacrificePoint.times(G['upgradeMultiplier']);
     const rewards: IAntSacRewards = {
-        antSacrificePoints: new Decimal(G['effectiveELO']).times(rewardsMult / 85),
+        antSacrificePoints: antSacrificePoint,
         offerings: Math.min(maxCap, player.offeringpersecond * 0.15 * G['effectiveELO'] * rewardsMult / 180),
         obtainium: Math.min(maxCap, player.maxobtainiumpersecond * 0.24 * G['effectiveELO'] * rewardsMult / 180),
-
-
         talismanShards: (G['antELO'] > 500)
             ? Math.min(maxCap, Math.max(1, Math.floor(rewardsMult / 210 * Math.pow(1 / 4 * (Math.max(0, G['effectiveELO'] - 500)), 2))))
             : 0,
@@ -1066,7 +1069,7 @@ export const calculateAllCubeMultiplier = () => {
         // Cookie Upgrade 20 (now actually works)
         1 + 0.04 * player.cubeUpgrades[70] * Math.floor(player.challengecompletions[10] / Math.min(120, getMaxChallenges(10))),
         // Cube Colony [GQ]
-        (1 + player.singularityUpgrades.singCubesA1.level * player.singularityCount / 100) * (1 + player.singularityUpgrades.singSingCubes.level * player.singsing * (1 + player.singsingsing) / 1000000)
+        (+player.singularityUpgrades.singCubesA1.getEffect().bonus) * (1 + player.singularityUpgrades.singSingCubes.level * player.singsing) * (1 + player.singsingsing * 0.000001)
         // Total Global Cube Multipliers: 19
     ]
     return {
@@ -1303,13 +1306,13 @@ export const calculateTimeAcceleration = () => {
     timeMult *= G['challenge15Rewards'].globalSpeed // Challenge 15 reward
     timeMult *= 1 + 0.01 * player.cubeUpgrades[52] // cube upgrade 6x2 (Cx2)
     timeMult *= G['lazinessMultiplier'][player.usedCorruptions[3]]
+    timeMult *= +player.singularityUpgrades.singTimeAccel.getEffect().bonus // Singularity Time Accel
     if (timeMult > 100) {
         timeMult = 10 * Math.sqrt(timeMult)
     }
     if (timeMult < 1) {
         timeMult = Math.pow(timeMult, 1 - player.platonicUpgrades[7] / 30)
     }
-    timeMult *= (1 + player.singularityUpgrades.singTimeAccel.level * player.singularityCount / 100) // Singularity Time Accel
     timeMult /= calculateSingularityDebuff('Global Speed');
     timeMult *= G['platonicBonusMultiplier'][7]
     timeMult *= (1 + 2 * +G['isEvent'])
@@ -1320,6 +1323,7 @@ export const calculateTimeAcceleration = () => {
     if (timeMult > 3600 && player.achievements[242] < 1) {
         achievementaward(242)
     }
+    timeMult *= Math.min(1e300, timeMult);
     //timeMult *= 25
     return (timeMult)
 }
@@ -1337,7 +1341,7 @@ export const calculateAscensionAcceleration = () => {
         1 + 1/400 * player.cubeUpgrades[59],                                                            // Cookie Upgrade 9
         1 + 0.5 * player.singularityUpgrades.intermediatePack.level,                                    // Intermediate Pack, Sing Shop
         1 + 1/10000 * player.singularityCount * player.shopUpgrades.chronometerZ,                       // Chronometer Z
-        1 + player.singularityUpgrades.singAscendTimeAccel.level * player.singularityCount / 100,       // Singularity Ascend Time Accel
+        +player.singularityUpgrades.singAscendTimeAccel.getEffect().bonus,                              // Singularity Ascend Time Accel
         Math.pow(1 + player.platonicUpgrades[25] / 10000, player.challengecompletions[15])              // Platonic Upgrades 25
     ]
     const caa = productContents(arr);
@@ -1551,7 +1555,6 @@ export const calculateAscensionScore = () => {
     // 0.005 from Platonic BETA (Plat 2x5)
     // Max: 1.0425
     baseScore *= Math.pow(1.03 + 0.005 * player.cubeUpgrades[39] + 0.0025 * (player.platonicUpgrades[5] + player.platonicUpgrades[10]), player.highestchallengecompletions[10]);
-    baseScore *= Math.pow(baseScore, player.singularityUpgrades.singAscendScoreExponent.level / 10000);
     // Corruption Multiplier is the product of all Corruption Score multipliers based on used corruptions
     const bonusVal = player.singularityUpgrades.advancedPack.getEffect().bonus ? 0.33: 0;
     for (let i = 2; i < 10; i++) {
@@ -1562,6 +1565,7 @@ export const calculateAscensionScore = () => {
             corruptionMultiplier *= 1.1
         }
     }
+    corruptionMultiplier *= Math.pow(corruptionMultiplier, player.singularityUpgrades.singAscendScoreExponent.level / 10000);
 
     const bonusMultiplier = computeAscensionScoreBonusMultiplier();
 
@@ -1691,6 +1695,30 @@ export const calculateCubeQuarkMultiplier = () => {
            calculateSigmoid(1.45, +(player.singularityCount >= 20) * Math.pow(player.overfluxOrbs, 0.24), 2e6) +
            calculateSigmoid(1.55, +(player.singularityCount >= 25) * Math.pow(player.overfluxOrbs, 0.21), 1e7) +
            calculateSigmoid(1.85, +(player.singularityCount >= 30) * Math.pow(player.overfluxOrbs, 0.18), 4e7) +
+           calculateSigmoid(2.40, +(player.singularityCount >= 50) * Math.pow(player.overfluxOrbs, 0.15), 6e7) +
+           calculateSigmoid(2.00, +(player.singularityCount >= 100) * Math.pow(player.overfluxOrbs, 0.13), 8e7) +
+           calculateSigmoid(2.00, +(player.singularityCount >= 200) * Math.pow(player.overfluxOrbs, 0.12), 1e8) +
+           calculateSigmoid(2.00, +(player.singularityCount >= 300) * Math.pow(player.overfluxOrbs, 0.11), 2e8) +
+           calculateSigmoid(2.00, +(player.singularityCount >= 500) * Math.pow(player.overfluxOrbs, 0.10), 4e8) +
+           calculateSigmoid(2.00, +(player.singularityCount >= 700) * Math.pow(player.overfluxOrbs, 0.095), 7e8) +
+           calculateSigmoid(2.00, +(player.singularityCount >= 1000) * Math.pow(player.overfluxOrbs, 0.09), 1e9) +
+           calculateSigmoid(2.00, +(player.singularityCount >= 1500) * Math.pow(player.overfluxOrbs, 0.085), 2e9) +
+           calculateSigmoid(2.00, +(player.singularityCount >= 2000) * Math.pow(player.overfluxOrbs, 0.08), 3e9) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 2500) * Math.pow(player.overfluxOrbs, 0.075), 4e9) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 3000) * Math.pow(player.overfluxOrbs, 0.07), 5e9) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 3500) * Math.pow(player.overfluxOrbs, 0.065), 6e9) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 4000) * Math.pow(player.overfluxOrbs, 0.06), 7e9) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 4500) * Math.pow(player.overfluxOrbs, 0.055), 8e9) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 5000) * Math.pow(player.overfluxOrbs, 0.05), 9e9) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 6000) * Math.pow(player.overfluxOrbs, 0.045), 1e10) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 7000) * Math.pow(player.overfluxOrbs, 0.04), 1e10) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 8000) * Math.pow(player.overfluxOrbs, 0.035), 1e10) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 9000) * Math.pow(player.overfluxOrbs, 0.03), 1e10) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 10000) * Math.pow(player.overfluxOrbs, 0.025), 1e10) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 20000) * Math.pow(player.overfluxOrbs, 0.02), 1e10) +
+           calculateSigmoid(3.00, +(player.singularityCount >= 50000) * Math.pow(player.overfluxOrbs, 0.015), 1e10) +
+           calculateSigmoid(10.00, +(player.singularityCount >= 100000) * Math.pow(player.overfluxOrbs, 0.01), 1e10) +
+           calculateSigmoid(25.00, +(player.singularityCount >= 1000000) * Math.pow(player.overfluxOrbs, 0.005), 1e10) +
            calculateSigmoid(3, +(player.singularityCount >= 35) * Math.pow(player.overfluxOrbs, 0.15), 1e8) -
            11) * (1 + 1/500 * player.shopUpgrades.cubeToQuarkAll);
 }

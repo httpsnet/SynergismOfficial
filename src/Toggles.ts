@@ -89,21 +89,24 @@ export const toggleSettings = (i: number) => {
 }
 
 export const toggleChallenges = (i: number, auto = false) => {
+    let change = false;
     if ((i <= 5) && player.currentChallenge.transcension !== i) {
-        if (player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2){
+        if (player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2) {
             player.currentChallenge.transcension = i;
             reset('transcensionChallenge', false, 'enterChallenge');
             player.transcendCount -= 1;
+            change = true;
         }
         if (!player.currentChallenge.reincarnation && !document.querySelector('.resetbtn.hover')) {
             resetrepeat('transcensionChallenge');
         }
     }
     if ((i >= 6 && i < 11) && player.currentChallenge.reincarnation !== i){
-        if (player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2){
+        if (player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2) {
             player.currentChallenge.reincarnation = i;
             reset('reincarnationChallenge', false, 'enterChallenge');
             player.reincarnationCount -= 1;
+            change = true;
         }
         if (!document.querySelector('.resetbtn.hover')) {
             resetrepeat('reincarnationChallenge');
@@ -116,10 +119,16 @@ export const toggleChallenges = (i: number, auto = false) => {
 
             reset('ascensionChallenge', false, 'enterChallenge');
             player.currentChallenge.ascension = i;
+            change = true;
 
             if (player.currentChallenge.ascension === 12) {
                 player.antPoints = new Decimal('8')
             }
+
+            if (player.currentChallenge.ascension === 14) {
+                player.researchPoints = 0;
+            }
+
             if (player.currentChallenge.ascension === 15) {
                 player.usedCorruptions[0] = 0;
                 player.prototypeCorruptions[0] = 0;
@@ -129,19 +138,19 @@ export const toggleChallenges = (i: number, auto = false) => {
             }
         }
     }
-    updateChallengeDisplay();
-    getChallengeConditions(i);
-
-    if (!auto && player.autoChallengeRunning) {
-        toggleAutoChallengeRun();
-    }
-
-    if (!auto) {
+    if (change) {
+        updateChallengeDisplay();
+        getChallengeConditions(i);
         corruptionStatsUpdate();
-    }
 
-    if (player.challenge15Exponent >= 1e15 && player.achievements[238] < 1) {
-        achievementaward(238)
+        if (!auto && player.autoChallengeRunning) {
+            toggleAutoChallengeRun();
+        }
+
+        // v3.0.0 A5
+        if (player.challenge15Exponent >= 1e15 && player.achievements[238] < 1) {
+            achievementaward(238)
+        }
     }
 }
 
@@ -529,12 +538,12 @@ export const toggleautofortify = () => {
     if (player.autoFortifyToggle === false && player.researches[130] == 1) {
         el.textContent = 'Auto Fortify: ON'
         el.style.border = '2px solid green'
+        player.autoFortifyToggle = true;
     } else {
         el.textContent = 'Auto Fortify: OFF'
         el.style.border = '2px solid red'
+        player.autoFortifyToggle = false;
     }
-
-    player.autoFortifyToggle = !player.autoFortifyToggle;
 }
 
 export const toggleautoenhance = () => {
@@ -542,12 +551,12 @@ export const toggleautoenhance = () => {
     if (player.autoEnhanceToggle === false && player.researches[135] == 1) {
         el.textContent = 'Auto Enhance: ON'
         el.style.border = '2px solid green'
+        player.autoEnhanceToggle = true;
     } else {
         el.textContent = 'Auto Enhance: OFF'
         el.style.border = '2px solid red'
+        player.autoEnhanceToggle = true;
     }
-
-    player.autoEnhanceToggle = !player.autoEnhanceToggle;
 }
 
 interface ChadContributor {
@@ -864,14 +873,20 @@ export const toggleAutoAscend = () => {
 export const updateRuneBlessingBuyAmount = (i: number) => {
     switch (i) {
         case 1: {
-            const t = Math.floor(parseFloat((DOMCacheGetOrSet('buyRuneBlessingInput') as HTMLInputElement).value)) || 1;
-            player.runeBlessingBuyAmount = Math.max(t, 1);
+            let t = Number((DOMCacheGetOrSet('buyRuneBlessingInput') as HTMLInputElement).value) || 1;
+            if (isNaN(t) || !isFinite(t)) {
+                t = 1;
+            }
+            player.runeBlessingBuyAmount = Math.floor(Math.max(t, 1));
             DOMCacheGetOrSet('buyRuneBlessingToggleValue').textContent = format(player.runeBlessingBuyAmount, 0, true);
             return;
         }
         case 2: {
-            const u = Math.floor(parseFloat((DOMCacheGetOrSet('buyRuneSpiritInput') as HTMLInputElement).value)) || 1;
-            player.runeSpiritBuyAmount = Math.max(u, 1);
+            let u = Number((DOMCacheGetOrSet('buyRuneSpiritInput') as HTMLInputElement).value) || 1;
+            if (isNaN(u) || !isFinite(u)) {
+                u = 1;
+            }
+            player.runeSpiritBuyAmount = Math.floor(Math.max(u, 1));
             DOMCacheGetOrSet('buyRuneSpiritToggleValue').textContent = format(player.runeSpiritBuyAmount, 0, true);
             return;
         }
@@ -936,4 +951,41 @@ export const toggleAscStatPerSecond = (id: number) => {
 
     el.textContent = player.ascStatToggles[id] ? '/s' : '';
     player.ascStatToggles[id] = !player.ascStatToggles[id];
+}
+
+export const updateToggles = (updates = true) => {
+    if (updates) {
+
+        const el = DOMCacheGetOrSet('toggleAutoSingularity');
+        el.textContent = player.autoSingularity ? 'Auto Singularity: ON' : 'Auto Singularity: Off';
+        el.style.border = player.autoSingularity ? '2px solid green' : '2px solid red';
+
+        toggleauto();
+
+        for (let i = 1; i <= 2; i++) {
+            toggleautoreset(1);
+            toggleautoreset(2);
+            toggleautoreset(3);
+            toggleautobuytesseract();
+            toggleResearchBuy();
+            toggleAutoResearch();
+            toggleAutoResearchMode();
+            toggleAutoSacrifice(0);
+            toggleautofortify();
+            toggleautoenhance();
+            toggleShopConfirmation();
+            toggleBuyMaxShop();
+            toggleAntMaxBuy();
+            toggleAntAutoSacrifice(0);
+            toggleAntAutoSacrifice(1);
+            toggleMaxBuyCube();
+            toggleAutoBuyCube();
+            toggleAutoOpenCubes();
+            toggleTesseractBAB();
+            toggleAutoBuyPlatonic();
+            toggleAutoBuyHepteract();
+            toggleAutoChallengeRun();
+            toggleAutoAscend();
+        }
+    }
 }

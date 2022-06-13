@@ -608,6 +608,7 @@ export interface Player {
         singularityOfSingularity: SingularityUpgrade
         singsingWormhole: SingularityUpgrade
         singSingStarterPack: SingularityUpgrade
+        singExpandShop: SingularityUpgrade
         singSingCubes: SingularityUpgrade
         singSingPatreon: SingularityUpgrade
         singSafeQuark: SingularityUpgrade

@@ -278,6 +278,7 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         singularityOfSingularity: new SingularityUpgrade(singularityData['singularityOfSingularity']),
         singsingWormhole: new SingularityUpgrade(singularityData['singsingWormhole']),
         singSingStarterPack: new SingularityUpgrade(singularityData['singSingStarterPack']),
+        singExpandShop: new SingularityUpgrade(singularityData['singExpandShop']),
         singSingCubes: new SingularityUpgrade(singularityData['singSingCubes']),
         singSingPatreon: new SingularityUpgrade(singularityData['singSingPatreon']),
         singSafeQuark: new SingularityUpgrade(singularityData['singSafeQuark']),
@@ -645,7 +646,8 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                     toggleBuy: data.singularityUpgrades[k].toggleBuy,
                     minimumSingularity: singularityData[k].minimumSingularity,
                     minimumSingSing: singularityData[k].minimumSingSing,
-                    effect: singularityData[k].effect
+                    effect: singularityData[k].effect,
+                    freeLevels: data.singularityUpgrades[k].freeLevels
                 }
                 player.singularityUpgrades[k] = new SingularityUpgrade(updatedData);
             }

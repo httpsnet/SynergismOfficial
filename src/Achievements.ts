@@ -837,7 +837,7 @@ export const achievementdescriptions = (i: number) => {
     const k = areward(i)
 
     DOMCacheGetOrSet('achievementdescription').textContent = y + z
-    DOMCacheGetOrSet('achievementreward').textContent = 'Reward: ' + achievementpointvalues[i] + ' AP. ' + format(getAchievementQuarks(i), 0, true) + ' Quarks! ' + k
+    DOMCacheGetOrSet('achievementreward').textContent = 'Reward: ' + format(achievementpointvalues[i], 0, true) + ' AP. ' + format(getAchievementQuarks(i), 0, true) + ' Quarks! ' + k
     if (player.achievements[i] > 0.5) {
         DOMCacheGetOrSet('achievementdescription').style.color = 'gold'
     } else {

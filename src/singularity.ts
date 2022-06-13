@@ -16,23 +16,24 @@ import { QuarkHandler } from './Quark';
  * Updates all statistics related to Singularities in the Singularity Tab.
  *
  */
-export const updateSingularityStats = ():void => {
-    let str = `You are in the ${toOrdinal(player.singularityCount)} singularity, and have ${format(player.goldenQuarks,0,true)} golden quarks.
-                 Global Speed is divided by ${format(calculateSingularityDebuff('Global Speed'), 2, true)}.
+export const updateSingularityStats = (): void => {
+    const color = player.runelevels[6] > 0 ? 'green' : 'red';
+    let str = `You are in the <span style="color: gold">${toOrdinal(player.singularityCount)} singularity</span>, and have<span style="color: gold"> ${format(player.goldenQuarks,0,true)} golden quarks.</span>
+                 <br>Global Speed is divided by ${format(calculateSingularityDebuff('Global Speed'), 2, true)}
                  Ascension Speed is divided by ${format(calculateSingularityDebuff('Ascension Speed'), 2, true)}
                  Offering Gain is divided by ${format(calculateSingularityDebuff('Offering'), 2, true)}
                  Obtainium Gain is divided by ${format(calculateSingularityDebuff('Obtainium'), 2, true)}
-                 Cube Gain is divided by ${format(calculateSingularityDebuff('Cubes'), 2, true)}.
-                 Research Costs are multiplied by ${format(calculateSingularityDebuff('Researches'), 2, true)}.
-                 Cube Upgrade Costs (Excluding Cookies) are multiplied by ${format(calculateSingularityDebuff('Cube Upgrades'), 2, true)}.
-                 Antiquities of Ant God is ${(player.runelevels[6] > 0) ? '' : 'NOT'} purchased. Penalties are ${(player.runelevels[6] > 0) ? '' : 'NOT'} dispelled!`
+                 Cube Gain is divided by ${format(calculateSingularityDebuff('Cubes'), 2, true)}
+                 Research Costs are multiplied by ${format(calculateSingularityDebuff('Researches'), 2, true)}
+                 Cube Upgrade Costs (Excluding Cookies) are multiplied by ${format(calculateSingularityDebuff('Cube Upgrades'), 2, true)}
+                 <br><span style='color: ${color}'>Antiquities of Ant God is ${(player.runelevels[6] > 0) ? '' : 'NOT'} purchased. Penalties are ${(player.runelevels[6] > 0) ? '' : 'NOT'} dispelled!</span>`
     if (player.singsing > 0) {
         str = `You are in the ${toOrdinal(player.singsing)} sing sing.\n` + str;
     }
     if (player.singsingsing > 0) {
         str = `You are in the ${toOrdinal(player.singsingsing)} sing sing sing.\n` + str;
     }
-    DOMCacheGetOrSet('singularityMultiline').textContent = str;
+    DOMCacheGetOrSet('singularityMultiline').innerHTML = str;
 }
 
 export interface ISingularityData {
@@ -48,6 +49,7 @@ export interface ISingularityData {
     minimumSingularity?: number
     effect? (n: number): {bonus: number | boolean, desc: string}
     minimumSingSing?: number
+    freeLevels?: number
 }
 
 /**
@@ -60,6 +62,7 @@ export class SingularityUpgrade {
     public readonly name: string;
     public readonly description: string;
     public level = 0;
+    public freeLevels = 0;
     public readonly maxLevel: number; //-1 = infinitely levelable
     public readonly costPerLevel: number;
     public toggleBuy = 1; //-1 = buy MAX (or 1000 in case of infinity levels!)
@@ -82,8 +85,9 @@ export class SingularityUpgrade {
         this.maxCapLevel = data.maxCapLevel ?? data.maxLevel;
         this.maxCapUp = data.maxCapUp ?? 100;
         this.minimumSingularity = data.minimumSingularity ?? 0;
+        this.freeLevels = data.freeLevels ?? 0;
         this.effect = data.effect ?? function (n:number) {
-            return {bonus: n, desc: 'It is implemented by Mod.'}
+            return {bonus: n, desc: 'WIP not implemented'}
         }
         this.minimumSingSing = data.minimumSingSing ?? 0;
     }
@@ -97,18 +101,19 @@ export class SingularityUpgrade {
         const maxLevel = this.maxLevel === -1
             ? ''
             : `/${format(this.getMaxLevel(100), this.getMaxLevel() < 1 ? 2 : 0, true)}`;
+        const color = this.maxLevel === this.level ? 'plum' : 'white';
 
         const minimumSingularity = this.minimumSingularity > 0
             ? `Minimum Singularity: ${this.minimumSingularity}`
             : 'No minimal singularity to purchase required'
 
-        return `${this.name}
-                ${this.description}
-                ${minimumSingularity}
-                Level ${format(this.level, 0, true)}${maxLevel}
-                Bonus: ${this.getEffect().desc}
-                Cost for next level: ${format(costNextLevel, 0, true)} Golden Quarks.
-                Spent Quarks: ${format(this.goldenQuarksInvested, 0, true)}`
+        return `<span style="color: gold">${this.name}</span>
+                <span style="color: lightblue">${this.description}</span>
+                <span style="color:crimson;">${minimumSingularity}</span>
+                <span style="color: ${color}"> Level ${format(this.level, 0, true)}${maxLevel} <span style="color: orange"> [+${format(this.freeLevels, this.freeLevels % 1 > 0 ? (this.freeLevels * 10 % 1 > 0 ? 2 : 1) : 0, true)}] </span> </span>
+                <span style="color: gold">${this.getEffect().desc}</span>
+                Cost for next level: ${format(costNextLevel, 0, true)} Golden Quarks
+                <span style="color: silver">Spent Quarks: ${format(this.goldenQuarksInvested, 0, true)}</span>`
     }
 
     public getUnlocked(singularity = -1, singsing = -1) {
@@ -130,8 +135,8 @@ export class SingularityUpgrade {
         return level > 1 ? Math.floor(level) : Math.floor(level * min) / min;
     }
 
-    public updateUpgradeHTML() {
-        DOMCacheGetOrSet('testingMultiline').textContent = this.toString()
+    public updateUpgradeHTML(): void {
+        DOMCacheGetOrSet('testingMultiline').innerHTML = this.toString()
     }
 
     /**
@@ -169,7 +174,7 @@ export class SingularityUpgrade {
         }
 
         if (!this.getUnlocked()) {
-            if (player.singularityCount < this.minimumSingularity) {
+            if (player.singularityCount < 1 || player.singularityCount < this.minimumSingularity) {
                 return Alert('you\'re not powerful enough to purchase this yet.')
             }
             if (player.singsing < this.minimumSingSing) {
@@ -297,14 +302,18 @@ export class SingularityUpgrade {
         return Alert(m);
     }
 
-    public refund() {
+    public refund(): void {
         player.goldenQuarks += this.goldenQuarksInvested;
         this.level = 0;
         this.goldenQuarksInvested = 0;
     }
 
     public getEffect(): {bonus: number | boolean, desc: string} {
-        return this.effect(this.level)
+        return this.effect(this.level + this.freeLevels)
+    }
+
+    public getLevels(): number {
+        return this.level + this.freeLevels
     }
 }
 
@@ -676,30 +685,48 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
     },
     singOfferingsA1: {
         name: 'Offering Spore',
-        description: 'Upgrade this to get +1% offerings per singularity and per level, forever!',
+        description: 'Upgrade this to get +0.01% offerings per singularity and per level, forever!',
         maxLevel: 1,
-        costPerLevel: 100000,
-        minimumSingularity: 3,
-        maxCapLevel: 10,
-        minimumSingSing: 1
+        costPerLevel: 1e12,
+        minimumSingularity: 200,
+        maxCapLevel: 100,
+        minimumSingSing: 1,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.0001 * n * player.singularityCount,
+                desc: `Permanently gain ${format(0.01 * n * player.singularityCount, 0, true)}% more Offerings.`
+            }
+        }
     },
     singObtainiumA1: {
         name: 'Obtainium Seed',
-        description: 'Upgrade this to get +1% obtainiums per singularity and per level, forever!',
+        description: 'Upgrade this to get +0.01% obtainiums per singularity and per level, forever!',
         maxLevel: 1,
-        costPerLevel: 100000,
-        minimumSingularity: 3,
-        maxCapLevel: 10,
-        minimumSingSing: 1
+        costPerLevel: 1e12,
+        minimumSingularity: 200,
+        maxCapLevel: 100,
+        minimumSingSing: 1,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.0001 * n * player.singularityCount,
+                desc: `Permanently gain ${format(0.01 * n * player.singularityCount, 0, true)}% more Obtainiums.`
+            }
+        }
     },
     singCubesA1: {
         name: 'Cube Colony',
-        description: 'Upgrade this to get +1% cubes per singularity and per level, forever!',
+        description: 'Upgrade this to get +0.01% cubes per singularity and per level, forever!',
         maxLevel: 1,
-        costPerLevel: 100000,
-        minimumSingularity: 3,
-        maxCapLevel: 10,
-        minimumSingSing: 1
+        costPerLevel: 1e14,
+        minimumSingularity: 300,
+        maxCapLevel: 100,
+        minimumSingSing: 1,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.0001 * n * player.singularityCount,
+                desc: `Permanently gain ${format(0.01 * n * player.singularityCount, 0, true)}% more Cubes.`
+            }
+        }
     },
     singTimeAccel: {
         name: 'Time Accel',
@@ -707,16 +734,28 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         maxLevel: 20,
         costPerLevel: 100,
         minimumSingularity: 1,
-        maxCapLevel: 50
+        maxCapLevel: 50,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.01 * n * player.singularityCount,
+                desc: `Permanently gain ${format(n * player.singularityCount, 0, true)}% more Global Speed Multiplier.`
+            }
+        }
     },
     singAscendTimeAccel: {
         name: 'Ascension Time Accel',
-        description: 'Upgrade this to get +1% Ascension Speed Multiplier per singularity and per level, forever!',
+        description: 'Upgrade this to get +0.01% Ascension Speed Multiplier per singularity and per level, forever!',
         maxLevel: 1,
-        costPerLevel: 100000,
-        minimumSingularity: 5,
-        maxCapLevel: 10,
-        minimumSingSing: 2
+        costPerLevel: 1e16,
+        minimumSingularity: 500,
+        maxCapLevel: 100,
+        minimumSingSing: 2,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.0001 * n * player.singularityCount,
+                desc: `Permanently gain ${format(0.01 * n * player.singularityCount, 0, true)}% more Ascension Speed Multiplier.`
+            }
+        }
     },
     singQuark: {
         name: 'Singularity Quark',
@@ -840,7 +879,7 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
     },
     singAscendScoreExponent: {
         name: 'Ascension Score Exponent',
-        description: 'Ascension Base Score ^ Level * 0.0001',
+        description: 'Ascension Score Multiplier ^ Level * 0.0001',
         maxLevel: 500,
         costPerLevel: 1000,
         minimumSingularity: 7,
@@ -918,6 +957,13 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         description: 'Buy me! It has Cx1 at the beginning of Singularity.',
         maxLevel: 1,
         costPerLevel: 1e1,
+        minimumSingSing: 1
+    },
+    singExpandShop: {
+        name: 'Expand Shop',
+        description: 'Oops. That a secret.',
+        maxLevel: 1,
+        costPerLevel: 1e6,
         minimumSingSing: 1
     },
     singSingCubes: {
@@ -1081,22 +1127,37 @@ export const checkUpgrades = () => {
     }
 }
 
-export const getGoldenQuarkCost = () => {
+export const getGoldenQuarkCost = (): {
+    cost: number
+    costReduction: number
+} => {
     const baseCost = 100000
 
     let costReduction = 0
     costReduction += 2 * Math.min(player.achievementPoints, 5000)
     costReduction += 1 * Math.max(0, player.achievementPoints - 5000)
     costReduction += player.cubeUpgrades[60]
-    costReduction += 500 * player.singularityUpgrades.goldenQuarks1.level
-    costReduction += 200 * player.singularityUpgrades.goldenQuarks2.level
-    costReduction += 1000 * player.singularityUpgrades.goldenQuarks3.level
+    costReduction += 500 * player.singularityUpgrades.goldenQuarks1.getLevels()
+    costReduction += 200 * player.singularityUpgrades.goldenQuarks2.getLevels()
+    costReduction += 1000 * player.singularityUpgrades.goldenQuarks3.getLevels()
 
     costReduction += 1000 * player.singularityUpgrades.singGQdiscount.level
     costReduction += player.singularityCount * 100
 
-    if (baseCost - costReduction < 1000) {
-        costReduction = baseCost - 1000
+    // no discount beyond the calculateGoldenQuarkGain() or maximum 99%
+    let gqMultiplier = 1 + Math.max(2, Math.log10(player.challenge15Exponent + 1) - 20) / 2
+    gqMultiplier *= 1 + (+player.singularityUpgrades.goldenQuarks1.getEffect().bonus) *
+                                (+player.singularityUpgrades.goldenQuarks2.getEffect().bonus)
+    gqMultiplier *= 1 + 0.12 * player.cubeUpgrades[69]
+    costReduction = Math.min(baseCost * 0.99, costReduction, Math.floor(baseCost - baseCost / gqMultiplier))
+
+    // patreon discount
+    const patreonMultiplier = 1 + player.worlds.BONUS / 100;
+    costReduction = Math.floor(baseCost - baseCost / (baseCost / (baseCost - costReduction) * patreonMultiplier))
+
+    // discounts should not be NaN
+    if (isNaN(costReduction) || costReduction >= baseCost) {
+        costReduction = 0
     }
 
     return {
@@ -1289,7 +1350,7 @@ export const singularityOverride = (hold: Player, singsing = false) => {
 
     // Reset toggle settings
     hold.resettoggle1 = player.resettoggle1
-    hold.transcendamount = player.prestigeamount
+    hold.prestigeamount = player.prestigeamount
     hold.resettoggle2 = player.resettoggle2
     hold.transcendamount = player.transcendamount
     hold.resettoggle3 = player.resettoggle3
