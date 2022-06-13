@@ -3080,16 +3080,15 @@ header #obtainiumDisplay {
 #actualSingularityUpgradeContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
     padding: 5px;
-    margin-top: 5px;
-    width: calc(32px * 23);
+    width: calc(36px * 20);
     border: 3px solid plum;
 }
 
-.singularityUpgradeFiller {
-    display: flex;
-    width: 105px;
+.singularityUpgrade {
+    margin: 2px;
+    font-size: 0;
 }
 
 #singularityMultiline {

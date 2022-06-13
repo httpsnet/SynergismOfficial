@@ -1460,7 +1460,7 @@
             <div id="runeContainer3" style="display: none">
                 <div class="runeBlessingPurchaseSettings">
                     <button id="buyAllBlessings" class="runeButtons runeButtonsAvailable" style="width: 120px;">ALL Increase Level</button>
-                    <input type="number" id="buyRuneBlessingInput" min="1" max="999999999" defaultValue="1">
+                    <input type="text" id="buyRuneBlessingInput" pattern="-?[\d\.]+e[\+-]?\d+|-?[\d\.]+">
                     <span id="buyRuneBlessingToggle" style="color: yellow">Buy up to <span id="buyRuneBlessingToggleValue" style="color: orchid">1</span> Levels per purchase, if affordable. [Input to toggle]</span>
                 </div>
                 <div class="runeBlessingRow">
@@ -1497,7 +1497,7 @@
             <div id="runeContainer4" style="display: none">
                 <div class="runeBlessingPurchaseSettings">
                     <button id="buyAllSpirits" class="runeButtons runeButtonsAvailable" style="width: 120px;">ALL Increase Level</button>
-                    <input type="number" id="buyRuneSpiritInput" min="1" max="999999999" defaultValue="1">
+                    <input type="text" id="buyRuneSpiritInput" pattern="-?[\d\.]+e[\+-]?\d+|-?[\d\.]+">
                     <span id="buyRuneSpiritToggle" style="color: yellow">Buy up to <span id="buyRuneSpiritToggleValue" style="color: orchid">1</span> Levels per purchase, if affordable. [Input to toggle]</span>
                 </div>
                 <div class="runeBlessingRow">
@@ -3370,232 +3370,235 @@
         </div>
         <div id="singularityUpgradeContainer">
             <div id="actualSingularityUpgradeContainer">
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="goldenQuarks1" src="Pictures/SingularityCurrency1.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="goldenQuarks2" src="Pictures/SingularityCurrency2.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="goldenQuarks3" src="Pictures/SingularityCurrency3.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="starterPack" src="Pictures/Singularity Starter Pack.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
+                    <input type="image" id="intermediatePack" src="Pictures/Singularity Intermediate Pack.png" alt="">
+                </div>
+                <div class="singularityUpgrade">
+                    <input type="image" id="advancedPack" src="Pictures/Singularity Advanced Pack.png" alt="">
+                </div>
+                <div class="singularityUpgrade">
+                    <input type="image" id="expertPack" src="Pictures/Singularity Expert Pack.png" alt="">
+                </div>
+                <div class="singularityUpgrade">
+                    <input type="image" id="masterPack" src="Pictures/Singularity Master Pack.png" alt="">
+                </div>
+                <div class="singularityUpgrade">
+                    <input type="image" id="divinePack" src="Pictures/Singularity Divine Pack.png" alt="">
+                </div>
+                <div class="singularityUpgrade">
                     <input type="image" id="wowPass" src="Pictures/Singularity Wow Pass.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="wowPass2" src="Pictures/Singularity Wow Pass 2.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="cookies" src="Pictures/SingularityCookies.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="cookies2" src="Pictures/SingularityCookies2.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="cookies3" src="Pictures/SingularityCookies3.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="cookies4" src="Pictures/SingularityCookies4.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="ascensions" src="Pictures/Singularity Ascensions.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="corruptionFourteen" src="Pictures/Singularity Corruption 14.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="corruptionFifteen" src="Pictures/Singularity Corruption 15.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singOfferings1" src="Pictures/Singularity Offerings 1.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singOfferings2" src="Pictures/Singularity Offerings 2.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singOfferings3" src="Pictures/Singularity Offerings 3.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singObtainium1" src="Pictures/Singularity Obtainium 1.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singObtainium2" src="Pictures/Singularity Obtainium 2.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singObtainium3" src="Pictures/Singularity Obtainium 3.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singCubes1" src="Pictures/Singularity Cubes 1.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singCubes2" src="Pictures/Singularity Cubes 2.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singCubes3" src="Pictures/Singularity Cubes 3.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image"  id="octeractUnlock" src="Pictures/Singularity Octarets.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image"  id="offeringAutomatic" src="Pictures/Singularity Offering Automatic.png" alt="">
                 </div>
-                <div>
-                    <input type="image"  id="intermediatePack" src="Pictures/Singularity Intermediate Pack.png" alt="">
-                </div>
-                <div>
-                    <input type="image"  id="advancedPack" src="Pictures/Singularity Advanced Pack.png" alt="">
-                </div>
-                <div>
-                    <input type="image"  id="expertPack" src="Pictures/Singularity Expert Pack.png" alt="">
-                </div>
-                <div>
-                    <input type="image"  id="masterPack" src="Pictures/Singularity Master Pack.png" alt="">
-                </div>
-                <div>
-                    <input type="image"  id="divinePack" src="Pictures/Singularity Divine Pack.png" alt="">
-                </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singOfferingsA1" src="Pictures/Singularity OfferingsA1.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singObtainiumA1" src="Pictures/Singularity ObtainiumA1.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singCubesA1" src="Pictures/Singularity CubesA1.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singTimeAccel" src="Pictures/Singularity TimeAccel.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singAscendTimeAccel" src="Pictures/Singularity AscendTimeAccel.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singQuark" src="Pictures/Singularity Quark.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singGolden" src="Pictures/Singularity GoldenQuark.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="bakeCookies1" src="Pictures/Singularity BakeCookies1.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="bakeCookies2" src="Pictures/Singularity BakeCookies2.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singAutomation" src="Pictures/Singularity Automation.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singSafeShop" src="Pictures/Singularity SafeShop.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singChallenge" src="Pictures/Singularity Challenge.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singOverfluxPowder" src="Pictures/Singularity OverfluxPowder.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singCraftExpand" src="Pictures/Singularity CraftExpand.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="hepteractsDiscount" src="Pictures/Singularity CubesExponent.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singMagicalTalisman" src="Pictures/Singularity MagicalTalisman.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singGQdiscount" src="Pictures/Singularity GoldenQuarksDiscount.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singMaterialsExponent" src="Pictures/Singularity MaterialsExponent.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singScoreExponent" src="Pictures/Singularity C15ScoreExponent.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singAscendScoreExponent" src="Pictures/Singularity AscendScoreExponent.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singConstantExponent" src="Pictures/Singularity Constant Exponent.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singAscendTimeExponent" src="Pictures/Singularity AscendTimeExponent.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singBuildingExponent" src="Pictures/Singularity BuildingExponent.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singExponent" src="Pictures/Singularity SingularityExponent.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singWormhole" src="Pictures/Singularity Wormhole.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singMaxLevelUp" src="Pictures/Singularity MaxLevelUp.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singularityOfSingularity" src="Pictures/Singularity Singularity.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singsingWormhole" src="Pictures/Singularity SingularityWormhole.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singSingStarterPack" src="Pictures/Singularity Singularity Starter Pack.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
+                    <input type="image" id="singExpandShop" src="Pictures/Singularity ExpandShop.png" alt="">
+                </div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singSingCubes" src="Pictures/Singularity SingularityCubes.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singSingPatreon" src="Pictures/Singularity SingularityPatreon.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singSafeQuark" src="Pictures/Singularity Safe Quark.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singSingLoL" src="Pictures/Singularity Singularity LoL.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singSafeUpgrades" src="Pictures/Singularity SafeUpgrades.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singSingAutomation" src="Pictures/Singularity SingAutomation.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="corruptionSixteen" src="Pictures/Singularity Corruption 16.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="corruptionSeventeen" src="Pictures/Singularity Corruption 17.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="corruptionEighteen" src="Pictures/Singularity Corruption 18.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="corruptionNineteen" src="Pictures/Singularity Corruption 19.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="corruptionTwenty" src="Pictures/Singularity Corruption 20.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="maxCapLevel1" src="Pictures/Singularity.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="maxCapLevel2" src="Pictures/Singularity.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="maxCapLevel3" src="Pictures/Singularity.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="maxCapLevel4" src="Pictures/Singularity.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="maxCapLevel5" src="Pictures/Singularity.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="maxCapLevel0" src="Pictures/Singularity.png" alt="">
                 </div>
-                <div>
+                <div class="singularityUpgrade">
                     <input type="image" id="singSingSSS" src="Pictures/Singularity Singularity2.png" alt="">
                 </div>
             </div>
