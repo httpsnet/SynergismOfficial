@@ -635,6 +635,14 @@ export const buyShopUpgrades = async (input: ShopUpgradeNames) => {
     const maxLevel = player.shopUpgrades[input] === getMaxLevel(input);
     const canAfford = Number(player.worlds) >= getShopCosts(input);
 
+    // Actually lock for HTML exploit
+    if ((shopData[input].tier === 'Ascension' && player.ascensionCount <= 0) ||
+        (shopData[input].tier === 'Singularity' && !player.singularityUpgrades.wowPass.getEffect().bonus) ||
+        (shopData[input].tier === 'SingularityVol2' && !player.singularityUpgrades.wowPass2.getEffect().bonus)) {
+        revealStuff();
+        return Alert('You do not have the right to purchase ' + friendlyShopName(input) + '!');
+    }
+
     if (player.shopConfirmation || (!shopData[input].refundable && player.shopBuyMax)) {
         if (maxLevel) {
             await Alert('You can\'t purchase ' + friendlyShopName(input) + ' because you already have the max level!')
@@ -754,7 +762,7 @@ export const resetShopExpandCheck = (potion = true) => {
             break;
         }
     }
-    return shopMax;
+    return player.singularityUpgrades.singSingCubes.level > 0 && shopMax;
 }
 
 export const getMaxLevel = (key: ShopUpgradeNames) => {
@@ -769,13 +777,20 @@ export const getMaxLevel = (key: ShopUpgradeNames) => {
 
 export const resetShopExpandUpdate = () => {
     DOMCacheGetOrSet('resetShopExpand').style.display = resetShopExpandCheck(false) ? 'block' : 'none';
-    DOMCacheGetOrSet('resetShopExpand').textContent = resetShopExpandCheck() ? 'Reset Shop Expand' : 'If buy all the potions???';
+    DOMCacheGetOrSet('resetShopExpand').textContent = player.shopExpandCount < player.singsing ? (resetShopExpandCheck() ? 'Reset Shop Expand' : 'If buy all the potions???') : 'Something is not enough';
+
 }
 
 export const resetShopExpand = async () => {
     if (!resetShopExpandCheck() || player.shopExpandCount >= 33) {
         return;
     }
+
+    if (player.shopExpandCount >= player.singsing) {
+        await Alert('It\'s bad, but this request requires ##' + format(player.singsing) + '.');
+        return;
+    }
+
     let p = false;
     let q = false;
     p = await Confirm('Hi. Thank you for all the purchases. You can double all the maximum levels in the shop, but at the cost of double the cost. The shop will be completely reset as a sacrifice. Is it OK?');
@@ -792,7 +807,9 @@ export const resetShopExpand = async () => {
     void resetShopUpgrades(true);
     for (const shopItem in shopData){
         const key = shopItem as keyof typeof shopData;
-        player.shopUpgrades[key] = 0;
+        if (shopData[key].tier !== 'SingularityVol2') {
+            player.shopUpgrades[key] = 0;
+        }
     }
     player.shopExpandCount = player.shopExpandCount + 1;
     revealStuff();

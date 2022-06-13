@@ -1,7 +1,6 @@
 import { player, format, autobuyTesseractBuildings } from './Synergism'
 import { calculateCubeBlessings, calculateCubicSumData, calculateSummationNonLinear } from './Calculate'
 import { upgradeupdate } from './Upgrades'
-import { revealStuff } from './UpdateHTML'
 import { Globals as G } from './Variables'
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { updateResearchBG } from './Research'
@@ -187,7 +186,7 @@ const cubeUpgradeDescriptions = [
     '[Cx17] What the hell are in these??? Anyway, Metaphysics Talisman level cap is increased by 1,337.',
     '[Cx18] What the heck! These aren\'t even cookies. +0.02% Quarks per level purchased of this upgrade. +30% more at level 1,000!',
     '[Cx19] Cookies that you\'ll never remember again. +12% Golden Quarks this singularity.',
-    '[Cx20] The pinnacle of baking. Nothing you\'ll eat will taste better than this. Gain +0.01% more Octeracts on ascension if you have challenge 10 completions capped.'
+    '[Cx20] The pinnacle of baking. Nothing you\'ll eat will taste better than this. Gain +0.01% more Octeracts on ascension if every corruption is set to level 14.'
 ]
 
 const getCubeCost = (i: number): IMultiBuy => {
@@ -288,6 +287,14 @@ export const awardAutosCookieUpgrade = () => {
 }
 
 export const buyCubeUpgrades = (i: number) => {
+    // Actually lock for HTML exploit
+    if ((i > 50 && i <= 55 && !player.singularityUpgrades.cookies.getEffect().bonus) ||
+        (i > 55 && i <= 60 && !player.singularityUpgrades.cookies2.getEffect().bonus) ||
+        (i > 60 && i <= 65 && !player.singularityUpgrades.cookies3.getEffect().bonus) ||
+        (i > 65 && i <= 70 && !player.singularityUpgrades.cookies4.getEffect().bonus)) {
+        return;
+    }
+
     const metaData = getCubeCost(i)
     const maxLevel = getCubeMax(i)
     if (Number(player.wowCubes) >= metaData.cost && player.cubeUpgrades[i]! < maxLevel){
@@ -314,9 +321,14 @@ export const buyCubeUpgrades = (i: number) => {
         awardAutosCookieUpgrade();
     }
 
+    if (i === 57 && player.cubeUpgrades[57] > 0) {
+        for (let r = 0; r < cubeMaxLevel.length; r++) {
+            updateCubeUpgradeBG(r + 1);
+        }
+    }
+
     cubeUpgradeDesc(i);
     updateCubeUpgradeBG(i);
-    revealStuff();
     calculateCubeBlessings();
 }
 
@@ -328,10 +340,10 @@ const autoBuyCubeUpgrades = () => {
         player.buyMaxCubeUpgrades = true;
 
         for (let i = 0; i < cubeBaseCost.length; i++) {
-            const maxLevel = getCubeMax(i);
-            if (player.cubeUpgrades[i]! < maxLevel) {
-                const metaData = getCubeCost(i)
-                cheapet.push([Number(i), metaData.cost]);
+            const maxLevel = getCubeMax(i + 1);
+            if (player.cubeUpgrades[i + 1]! < maxLevel) {
+                const metaData = getCubeCost(i + 1)
+                cheapet.push([Number(i + 1), metaData.cost]);
             }
         }
 
@@ -346,8 +358,6 @@ const autoBuyCubeUpgrades = () => {
                     buyCubeUpgrades(value[0]);
                 }
             }
-
-            calculateCubeBlessings();
         }
 
         player.buyMaxCubeUpgrades = buyMaxCubeUpgrades;

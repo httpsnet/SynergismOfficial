@@ -222,7 +222,8 @@ export const revealStuff = () => {
 
     const singularityUpgrades = Object.keys(player.singularityUpgrades) as (keyof Player['singularityUpgrades'])[];
     for (const key of singularityUpgrades) {
-        DOMCacheGetOrSet(`${key}`).style.display = player.singularityUpgrades[`${key}`].getUnlocked(player.singularityCount * 2 + player.singsing * 100, player.singsing * 2) ? 'block' : 'none';
+        const parentNode = DOMCacheGetOrSet(`${key}`).parentNode! as HTMLElement;
+        parentNode.style.display = player.singularityUpgrades[`${key}`].getUnlocked(player.singularityCount * 2 + player.singsing * 100, player.singsing * 2) ? 'block' : 'none';
     }
 
     const cookies1 = document.getElementsByClassName('assortedCookies1') as HTMLCollectionOf<HTMLElement>;

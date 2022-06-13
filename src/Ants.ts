@@ -79,10 +79,10 @@ const antUpgradeTexts = [
     () => 'Global timer is speed up by a factor of x' + format(Math.pow(2, Math.log10(player.antUpgrades[12-1]! + G['bonusant12'] + 10) - 1), 4)
 ]
 
-let repeatAnt: ReturnType<typeof setTimeout> | null = null;
+let repeatAnt: ReturnType<typeof setTimeout>;
 
 export const antRepeat = (i: number) => {
-    clearInt(repeatAnt!);
+    clearInt(repeatAnt);
     repeatAnt = interval(() => updateAntDescription(i), 50);
 }
 
@@ -167,7 +167,8 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
     const tag = index === 1 ? 'reincarnationPoints' : 'antPoints';
     const key = `${pos}OwnedAnts` as const;
 
-    let buyTo = player[key] + 1;
+    const buydefault = player[key] + smallestInc(player[key]);
+    let buyTo = buydefault;
     let cashToBuy = getAntCost(originalCost, buyTo, index);
     while (player[tag].gte(cashToBuy)) {
         // Multiply by 4 until the desired amount. Iterate from there
@@ -175,7 +176,7 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
         cashToBuy = getAntCost(originalCost, buyTo, index);
     }
     let stepdown = Math.floor(buyTo / 8);
-    while (stepdown >= 1) {
+    while (stepdown >= smallestInc(buyTo)) {
         if (getAntCost(originalCost, buyTo - stepdown, index).lte(player[tag])) {
             stepdown = Math.floor(stepdown / 2);
         } else {
@@ -184,14 +185,14 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
     }
 
     if (!player.antMax) {
-        if (1 + player[key] < buyTo) {
-            buyTo = player[key] + 1;
+        if (buydefault < buyTo) {
+            buyTo = buydefault;
         }
     }
     // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
-    let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), player[key] + 1);
+    let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), buydefault);
     let thisCost = getAntCost(originalCost, buyFrom, index);
-    while (buyFrom < buyTo && player[tag].gte(thisCost)) {
+    while (buyFrom <= buyTo && player[tag].gte(thisCost)) {
         player[tag] = player[tag].sub(thisCost);
         player[key] = buyFrom;
         buyFrom = buyFrom + smallestInc(buyFrom);
@@ -206,10 +207,12 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
     }
     calculateAntSacrificeELO();
 
-    const achRequirements = [2, 6, 20, 100, 500, 6666, 77777];
-    for (let j = 0; j < achRequirements.length; j++) {
-        if (player.achievements[176 + j] === 0 && sacrificeMult.gte(achRequirements[j]) && player[`${G['ordinals'][j + 1 as ZeroToSeven]}OwnedAnts` as const] > 0) {
-            achievementaward(176 + j)
+    if (player.achievements[182] === 0) {
+        const achRequirements = [2, 6, 20, 100, 500, 6666, 77777];
+        for (let j = 0; j < achRequirements.length; j++) {
+            if (sacrificeMult.gte(achRequirements[j]) && player[`${G['ordinals'][j + 1 as ZeroToSeven]}OwnedAnts` as const] > 0 && player.achievements[176 + j] === 0) {
+                achievementaward(176 + j)
+            }
         }
     }
 
@@ -221,7 +224,8 @@ export const buyAntProducers = (pos: FirstToEighth, originalCost: DecimalSource,
 export const buyAntUpgrade = (originalCost: DecimalSource, auto: boolean, index: number) => {
     if (player.currentChallenge.ascension !== 11) {
         originalCost = new Decimal(originalCost);
-        let buyTo = 1 + player.antUpgrades[index-1]!;
+        const buydefault = player.antUpgrades[index-1]! + smallestInc(player.antUpgrades[index-1]!);
+        let buyTo = buydefault;
         let cashToBuy = getAntUpgradeCost(originalCost, buyTo, index);
         while (player.antPoints.gte(cashToBuy)) {
             // Multiply by 4 until the desired amount. Iterate from there
@@ -229,7 +233,7 @@ export const buyAntUpgrade = (originalCost: DecimalSource, auto: boolean, index:
             cashToBuy = getAntUpgradeCost(originalCost, buyTo, index);
         }
         let stepdown = Math.floor(buyTo / 8);
-        while (stepdown >= 1) {
+        while (stepdown >= smallestInc(buyTo)) {
             if (getAntUpgradeCost(originalCost, buyTo - stepdown, index).lte(player.antPoints)) {
                 stepdown = Math.floor(stepdown / 2);
             } else {
@@ -237,14 +241,14 @@ export const buyAntUpgrade = (originalCost: DecimalSource, auto: boolean, index:
             }
         }
         if (!player.antMax) {
-            if (player.antUpgrades[index-1]! + 1 < buyTo) {
-                buyTo = 1 + player.antUpgrades[index-1]!
+            if (buydefault < buyTo) {
+                buyTo = buydefault;
             }
         }
         // go down by 7 steps below the last one able to be bought and spend the cost of 25 up to the one that you started with and stop if coin goes below requirement
-        let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), 1 + player.antUpgrades[index-1]!);
+        let buyFrom = Math.max(buyTo - 6 - smallestInc(buyTo), buydefault);
         let thisCost = getAntUpgradeCost(originalCost, buyFrom, index);
-        while (buyFrom < buyTo && player.antPoints.gte(thisCost)) {
+        while (buyFrom <= buyTo && player.antPoints.gte(thisCost)) {
             player.antPoints = player.antPoints.sub(thisCost);
             player.antUpgrades[index-1] = buyFrom;
             buyFrom = buyFrom + smallestInc(buyFrom);
@@ -347,7 +351,9 @@ export const sacrificeAnts = async (auto = false) => {
             const sacRewards = calculateAntSacrificeRewards();
             player.antSacrificePoints = player.antSacrificePoints.add(sacRewards.antSacrificePoints);
             player.runeshards = Math.min(maxCap, player.runeshards + sacRewards.offerings);
-            player.researchPoints = Math.min(maxCap, player.researchPoints + sacRewards.obtainium);
+            if (player.currentChallenge.ascension !== 14) {
+                player.researchPoints = Math.min(maxCap, player.researchPoints + sacRewards.obtainium);
+            }
 
             const historyEntry: ResetHistoryEntryAntSacrifice = {
                 date: Date.now(),

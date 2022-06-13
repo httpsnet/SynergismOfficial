@@ -42,7 +42,7 @@ let repeatreset: ReturnType<typeof setTimeout>;
 
 export const resetrepeat = (input: resetNames) => {
     clearInt(repeatreset);
-    repeatreset = interval(() => resetdetails(input), 50)
+    repeatreset = interval(() => resetdetails(input), 50);
 }
 
 export const resetdetails = (input: resetNames) => {
@@ -150,55 +150,28 @@ export const resetdetails = (input: resetNames) => {
 }
 
 export const updateAutoReset = (i: number) => {
+    let value = null;
     if (i === 1) {
-        const t = +getElementById<HTMLInputElement>('prestigeamount').value;
-        if (t >= 0) {
-            player.prestigeamount = t;
-        } else {
-            player.prestigeamount = 0;
-        }
+        value = parseFloat((DOMCacheGetOrSet('prestigeamount') as HTMLInputElement).value) || 0;
+        player.prestigeamount = Math.max(value, 0);
     } else if (i === 2) {
-        const u = +getElementById<HTMLInputElement>('transcendamount').value;
-        if (u >= 0) {
-            player.transcendamount = u;
-        } else {
-            player.transcendamount = 0;
-        }
+        value = parseFloat((DOMCacheGetOrSet('transcendamount') as HTMLInputElement).value) || 0;
+        player.transcendamount = Math.max(value, 0);
     } else if (i === 3) {
-        const v = +getElementById<HTMLInputElement>('reincarnationamount').value
-        if (v >= 0) {
-            player.reincarnationamount = v;
-        } else {
-            player.reincarnationamount = 0;
-        }
+        value = parseFloat((DOMCacheGetOrSet('reincarnationamount') as HTMLInputElement).value) || 0;
+        player.reincarnationamount = Math.max(value, 0);
     } else if (i === 4) {
-        const v = Math.floor(parseFloat(getElementById<HTMLInputElement>('ascensionAmount').value));
-        if (v >= 1) {
-            player.autoAscendThreshold = v;
-        } else {
-            player.autoAscendThreshold = 1;
-        }
+        value = Math.floor(parseFloat((DOMCacheGetOrSet('ascensionAmount') as HTMLInputElement).value)) || 1;
+        player.autoAscendThreshold = Math.max(value, 1);
     } else if (i === 5) {
-        const v = parseFloat(getElementById<HTMLInputElement>('autoAntSacrificeAmount').value);
-        player.autoAntSacTimer = Math.max(0, v);
-    } else if (i === 6) {
-        const v = parseFloat(getElementById<HTMLInputElement>('ascensionamount').value);
-        if (v >= 0) {
-            player.ascensionamount = v;
-        } else {
-            player.ascensionamount = 1;
-        }
+        value = parseFloat((DOMCacheGetOrSet('autoAntSacrificeAmount') as HTMLInputElement).value) || 0;
+        player.autoAntSacTimer = Math.max(value, 0);
     }
 }
 
 export const updateTesseractAutoBuyAmount = () => {
-    let v = parseFloat(getElementById<HTMLInputElement>('tesseractAmount').value);
-    v = Math.floor(v)
-    if (v >= 0) {
-        player.tesseractAutoBuyerAmount = v
-    } else {
-        player.tesseractAutoBuyerAmount = 0;
-    }
+    const value = Math.floor(parseFloat((DOMCacheGetOrSet('tesseractAmount') as HTMLInputElement).value)) || 0;
+    player.tesseractAutoBuyerAmount = Math.max(value, 0);
 }
 
 const resetAddHistoryEntry = (input: resetNames, from = 'unknown') => {
@@ -817,7 +790,9 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
 
     }
     if (player.achievements[277] > 0) {
-        player.researchPoints = Math.floor(500 * calculateSingularityDebuff('Offering') * calculateSingularityDebuff('Researches'))
+        if (player.currentChallenge.ascension !== 14) {
+            player.researchPoints = Math.floor(500 * calculateSingularityDebuff('Offering') * calculateSingularityDebuff('Researches'))
+        }
         player.reincarnationPoints = new Decimal('1e16')
         player.challengecompletions[6] = 1;
         player.highestchallengecompletions[6] = 1;
@@ -856,6 +831,8 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
         player.challengecompletions[9] = 1;
         player.highestchallengecompletions[9] = 1;
         achievementaward(134);
+        player.antPoints = new Decimal('1e100');
+        player.antUpgrades[11] = 1;
         player.shopUpgrades.offeringAuto = shopData.offeringAuto.maxLevel
         player.shopUpgrades.offeringEX = shopData.offeringEX.maxLevel
         player.shopUpgrades.obtainiumAuto = shopData.obtainiumAuto.maxLevel
@@ -864,8 +841,7 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
         player.shopUpgrades.cashGrab = shopData.cashGrab.maxLevel
     }
     if (player.singularityCount >= 25) {
-        player.antPoints = new Decimal('1e100')
-        player.antUpgrades[11] = 1;
+        player.eighthOwnedAnts = 1;
     }
     revealStuff();
 }
@@ -940,9 +916,6 @@ export const singsing = async () => { // Almost delete savefile
     const hold = Object.assign({}, blankSave, {
         codes: Array.from(blankSave.codes)
     }) as Player;
-    //Reset Displays
-    toggleTabs('buildings');
-    toggleSubTab(1, 0);
 
     hold.singsing += skips;
 
@@ -972,9 +945,6 @@ export const singsingsing = async () => { // Almost delete savefile
     const hold = Object.assign({}, blankSave, {
         codes: Array.from(blankSave.codes)
     }) as Player;
-    //Reset Displays
-    toggleTabs('buildings');
-    toggleSubTab(1, 0);
 
     hold.singsingsing += skips;
 
