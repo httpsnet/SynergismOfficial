@@ -166,6 +166,9 @@ export const updateAutoReset = (i: number) => {
     } else if (i === 5) {
         value = parseFloat((DOMCacheGetOrSet('autoAntSacrificeAmount') as HTMLInputElement).value) || 0;
         player.autoAntSacTimer = Math.max(value, 0);
+    } else if (i === 6) {
+        value = Math.floor(parseFloat((DOMCacheGetOrSet('ascensionamount') as HTMLInputElement).value)) || 1;
+        player.ascensionamount = Math.max(value, 1);
     }
 }
 
