@@ -56,13 +56,9 @@ export const addTimers = (input: TimerInput, time = 0) => {
     }
 }
 
-/**
- * checkMaxRunes returns how many unique runes are at the maximum level.
- * Does not take in params, returns a number equal to number of maxed runes.
- */
-export const checkMaxRunes = () => {
-    let maxed = 0;
+const unlockedRune = (runeIndexPlusOne: number) => {
     const unlockedRune = [
+        false,
         true,
         player.achievements[38] > 0.5,
         player.achievements[44] > 0.5,
@@ -71,8 +67,17 @@ export const checkMaxRunes = () => {
         player.shopUpgrades.infiniteAscent,
         player.platonicUpgrades[20] > 0
     ];
-    for (let i = 1; i <= 7; i++) {
-        if (!unlockedRune[i] || player.runelevels[i - 1] >= calculateMaxRunes(i)) {
+    return unlockedRune[runeIndexPlusOne];
+}
+
+/**
+ * checkMaxRunes returns how many unique runes are at the maximum level.
+ * Does not take in params, returns a number equal to number of maxed runes.
+ */
+const checkMaxRunes = (runeIndex: number) => {
+    let maxed = 0;
+    for (let i = 0; i < runeIndex; i++) {
+        if (!unlockedRune(i + 1) || player.runelevels[i] >= calculateMaxRunes(i + 1)) {
             maxed++;
         }
     }
@@ -141,23 +146,25 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
 
                     // Automatic purchase of Blessings
                     if (player.achievements[222] > 0){
-                        buyAllBlessings('Blessings', 50 / kind);
-                        buyAllBlessings('Spirits', 50 / kind);
+                        buyAllBlessings('Blessings', 50 / kind, true);
+                        buyAllBlessings('Spirits', 50 / kind, true);
                     }
 
                     // If you bought cube upgrade 2x10 then it sacrifices to all runes equally
                     if (player.cubeUpgrades[20] === 1){
-                        let buys = 5;
+                        let maxi = 5;
                         if (player.singularityUpgrades.singAutomation.level >= 1000) {
-                            buys = 7;
+                            maxi = 7;
                         } else if (player.singularityUpgrades.singAutomation.level >= 100) {
-                            buys = 6;
+                            maxi = 6;
                         }
-                        const notMaxed = (buys - checkMaxRunes());
+                        const notMaxed = (maxi - checkMaxRunes(maxi));
                         if (notMaxed > 0){
                             const baseAmount = Math.floor(player.runeshards / notMaxed / kind);
-                            for (let i = 0; i < buys; i++) {
-                                redeemShards(i + 1, true, baseAmount);
+                            for (let i = 0; i < maxi; i++) {
+                                if (!(!unlockedRune(i + 1) || player.runelevels[i] >= calculateMaxRunes(i + 1))) {
+                                    redeemShards(i + 1, true, baseAmount);
+                                }
                             }
                         }
                     } else {

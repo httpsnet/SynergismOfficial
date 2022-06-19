@@ -87,7 +87,7 @@ export class SingularityUpgrade {
         this.minimumSingularity = data.minimumSingularity ?? 0;
         this.freeLevels = data.freeLevels ?? 0;
         this.effect = data.effect ?? function (n:number) {
-            return {bonus: n, desc: 'WIP not implemented'}
+            return {bonus: n, desc: 'It is implemented by Mod.'}
         }
         this.minimumSingSing = data.minimumSingSing ?? 0;
     }

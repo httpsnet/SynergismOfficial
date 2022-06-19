@@ -46,23 +46,26 @@ export const toggleTabs = (name: keyof typeof tabNumberConst) => {
     revealStuff();
     hideStuff();
 
-    const el = document.activeElement as HTMLElement;
-    el.blur();
+    const el = document.activeElement as HTMLElement | null;
+    if (el !== null) {
+        el.blur();
+    }
 
     const subTabList = subTabsInMainTab(player.tabnumber).subTabList
     if (player.tabnumber !== -1) {
         for (let i = 0; i < subTabList.length; i++) {
             const id = subTabList[i].buttonID;
             if (id) {
-                const button = DOMCacheGetOrSet(id)
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                if (button && button.style.backgroundColor === 'crimson') { // handles every tab except settings and corruptions
-                    player.subtabNumber = i
-                    break;
-                }
-                if (player.tabnumber === 9 && button.style.borderColor === 'dodgerblue') { // handle corruption tab
-                    player.subtabNumber = i
-                    break;
+                const button = DOMCacheGetOrSet(id) as HTMLElement | null;
+                if (button !== null) {
+                    if (button.style.backgroundColor === 'crimson') { // handles every tab except settings and corruptions
+                        player.subtabNumber = i
+                        break;
+                    }
+                    if (player.tabnumber === 9 && button.style.borderColor === 'dodgerblue') { // handle corruption tab
+                        player.subtabNumber = i
+                        break;
+                    }
                 }
             }
         }
@@ -333,8 +336,10 @@ export const toggleSubTab = (mainTab = 1, subTab = 0) => {
     const subTabs = subTabsInMainTab(mainTab)
     if (tabs(mainTab).unlocked && subTabs.subTabList.length > 0) {
 
-        const el = document.activeElement as HTMLElement;
-        el.blur();
+        const el = document.activeElement as HTMLElement | null;
+        if (el !== null) {
+            el.blur();
+        }
 
         const subTabList = subTabs.subTabList[subTab];
         if (mainTab === -1) {
@@ -942,9 +947,9 @@ export const toggleCorruptionLoadoutsStats = (stats: boolean) => {
 }
 
 export const toggleAscStatPerSecond = (id: number) => {
-    const el = DOMCacheGetOrSet(`unit${id}`);
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!el) {
+    const el = DOMCacheGetOrSet(`unit${id}`) as HTMLElement | null;
+    if (el === null) {
+        // eslint-disable-next-line no-console
         console.log(id, 'platonic needs to fix');
         return;
     }
