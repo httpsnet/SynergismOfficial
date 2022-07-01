@@ -16,18 +16,11 @@ html {
 }
 
 body {
-    background-color: #111;
     transform-origin: 0 0;
     overflow-x: hidden;
     color: white;
     margin: 0;
     box-sizing: border-box;
-    transition-duration: 1s;
-    transition-property: background-color;
-}
-
-body.nofading {
-    transition-duration: 0s;
 }
 
 body.loading {
@@ -38,16 +31,16 @@ body.dark {
     background-color: #111;
 }
 
-body.gray {
-    background-color: #444;
+body.darker {
+    background-color: #0c0c0f;
+}
+
+body.lightDark {
+    background-color: #1c1b22;
 }
 
 body.light {
-    background-color: gray;
-}
-
-body.black {
-    background-color: black;
+    background-color: #4c495a;
 }
 
 a {
@@ -76,7 +69,6 @@ textarea {
     margin: 0;
     box-sizing: border-box;
     border: 0 solid #ccc;
-    overflow: visible;
 }
 
 input:disabled {
@@ -87,34 +79,21 @@ input[type="range"] {
     height: 0;
 }
 
-input[type="image"] {
-    padding: 0;
-    border: 0;
-    cursor: pointer;
-}
-
 button {
     color: white;
     background-color: #171717;
-    transition-duration: 0.15s;
+    outline: none;
     cursor: pointer;
 }
 
-button:hover,
 button:active {
-    background-color: #333;
+    background-color: #171717;
+    cursor: pointer;
 }
 
 button:focus {
-    background-color: #333;
-    border-color: #333;
-}
-
-/* https://github.com/Pseudo-Corp/SynergismOfficial/issues/161 */
-img,
-input[type="image"] {
-    image-rendering: optimize-contrast;
-    image-rendering: crisp-edges;
+    border-color: #171717;
+    cursor: pointer;
 }
 
 .flex {
@@ -151,28 +130,27 @@ input[type="image"] {
 
 @keyframes slide-in {
     from {
-        transform: translate(-101%, 30%);
+        transform: translate(-100%, 22.5%);
     }
 
     to {
-        transform: translate(5%, 30%);
+        transform: translate(7.5%, 22.5%);
     }
 }
 
 @keyframes slide-out {
     to {
-        transform: translate(-101%, 30%);
+        transform: translate(-100%, 22.5%);
     }
 }
 
 #notification {
     position: fixed;
     display: none;
-    transform: translateY(30%);
+    transform: translateY(22.5%);
     z-index: 6969;
-    width: 250px;
-    max-width: 100%;
-    min-height: 100px;
+    width: 15%;
+    min-height: 150px;
     overflow: hidden;
     border-radius: 5px;
     border: 1px solid gold;
@@ -180,12 +158,12 @@ input[type="image"] {
 }
 
 .slide-in {
-    animation: slide-in 1200ms;
+    animation: slide-in 1000ms;
     animation-fill-mode: forwards;
 }
 
 .slide-out {
-    animation: slide-out 1200ms;
+    animation: slide-out 1000ms;
     animation-fill-mode: forwards;
 }
 
@@ -197,8 +175,6 @@ input[type="image"] {
     transform: translate(-50%, -50%);
     margin: 0;
     text-align: center;
-    overflow-x: auto;
-    white-space: pre-line;
 }
 
 #notifx {
@@ -210,111 +186,128 @@ input[type="image"] {
 #confirmationBox {
     display: none;
     position: fixed;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 6969;
-    width: 350px;
-    min-width: min(400px, 100%);
-    min-height: min(200px, 100%);
-    max-width: 100%;
-    max-height: 100%;
+    width: 30%;
+    height: 30%;
     background-color: rgb(20 20 20);
     border-radius: 5px;
     border: 1px solid gold;
-    box-sizing: border-box;
-    padding: 15px;
-    justify-content: center;
+}
+
+#confirmWrapper,
+#alertWrapper,
+#promptWrapper {
+    height: 100%;
+    display: none;
 }
 
 #confirm > p,
 #alert > p,
-#prompt > p {
-    width: 100%;
-    height: 100%;
+#prompt > label {
+    grid-area: txt;
     text-align: center;
-    white-space: pre-line;
-    margin: 0;
-}
-
-#confirmations {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 /* Elements relating to the browser popup functions (Alert, Confirm, etc) */
 
-#prompt_text {
+#ok_confirm,
+#ok_alert,
+#ok_prompt { grid-area: btn; }
+
+#cancel_confirm,
+#cancel_prompt { grid-area: btn2; }
+#prompt_text { grid-area: lbl; }
+
+#confirm > button,
+#alert > button,
+#prompt > button {
     width: 75%;
-    margin: 10px auto;
-    padding: 3px;
-}
-
-#confirm button,
-#alert button,
-#prompt button {
-    width: 100px;
-    height: 30px;
     border: 1px solid gold;
-    margin: 10px 20px;
-    padding: 3px;
+    margin: 0 auto;
+    height: 50%;
+    transition-duration: 0.15s;
 }
 
-#confirm,
-#alert,
+#confirm > button:hover,
+#alert > button:hover,
+#prompt > button:hover {
+    background-color: #333;
+}
+
+#confirm {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 75% 25%;
+    grid-template-areas:
+        "txt txt txt txt"
+        ". btn btn2 .";
+}
+
+#alert {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 33.3333% 33.3333% 33.3333%;
+    grid-template-rows: 75% 25%;
+    grid-template-areas:
+        "txt txt txt"
+        ". btn .";
+}
+
 #prompt {
-    display: none;
-    min-width: 100%;
-    min-height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    place-self: stretch;
-    flex-wrap: nowrap;
-    outline: none;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 5% 55% 10% 5% 25%;
+    grid-template-areas:
+        ". . . ."
+        "txt txt txt txt"
+        ". lbl lbl ."
+        ". . . ."
+        ". btn btn2 .";
+}
+
+#resourcesrow {
+    position: relative;
+    font-size: 16px;
+    width: 100%;
+}
+
+#preloadContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    height: 200vh;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#preload {
+    flex: 1;
 }
 
 #offlineContainer {
-    position: fixed;
-    z-index: 6970;
-    width: 100%;
-    height: 100vh;
-    background: rgb(0 0 0 / 50%);
-}
-
-#offlineContainer.unload {
-    background-color: rgb(10 10 10);
-    background-size: cover;
-    background-image: url("Pictures/Splash/base.png");
-}
-
-#offlineContainer[class=""] {
-    background-image: none !important;
-}
-
-#offlineContainerBox {
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 6971;
-    position: absolute;
-    bottom: max(0px, calc(50% - 270px));
-    left: 50%;
-    min-width: 350px;
-    min-height: 550px;
-    background-color: rgb(20 20 20);
-    border-radius: 5px;
-    border: 1px solid gold;
-    box-sizing: border-box;
-    padding: 15px;
-    white-space: nowrap;
-    transform: translate(-50%, 0%);
+    z-index: 3;
+    height: 200vh;
+    min-height: 100vh;
 }
 
 .offlineStats {
     display: flex;
     flex-direction: column;
+    z-index: 3;
+    margin-bottom: 2px;
 }
 
 .offlineStat {
@@ -322,6 +315,7 @@ input[type="image"] {
     flex-direction: row;
     align-items: center;
     height: 32px;
+    z-index: 3;
     margin-bottom: 2px;
 }
 
@@ -331,27 +325,35 @@ input[type="image"] {
 }
 
 .offlineText {
-    margin: 10px 0;
+    display: flex;
+    z-index: 5;
+}
+
+#offlineTimer {
+    display: flex;
+    z-index: 5;
+}
+
+#progressbardescription {
+    display: flex;
+    z-index: 5;
 }
 
 #exitOffline {
     height: 30px;
+    z-index: 3;
     width: auto;
     margin-top: 20px;
     border: 2px solid ivory;
     background-color: purple;
     color: white;
-    visibility: visible;
 }
 
-#exitOffline.subtabContent {
-    visibility: hidden;
-    display: block;
-}
-
-#exitOffline:hover,
-#exitOffline:active {
-    background-color: darkviolet;
+.resetInformationContainer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    min-width: 625px;
 }
 
 .resetsContainer {
@@ -378,7 +380,6 @@ input[type="image"] {
     text-align: left; /* Keeps text from bouncing around */
     font-size: 15px;
     font-variant-numeric: tabular-nums;
-    width: 100%;
 }
 
 #resetrewards > div {
@@ -406,8 +407,6 @@ input[type="image"] {
     display: flex;
     justify-content: center;
     width: 100%;
-    max-width: 1300px;
-    height: 25px;
 }
 
 nav li {
@@ -418,8 +417,8 @@ nav li {
     color: white;
     background-color: #171717;
     cursor: pointer;
-    line-height: 23px;
-    height: 23px;
+    line-height: 21px;
+    height: 21px;
     margin-right: 5px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -440,6 +439,11 @@ nav li:hover {
     border-color: orange;
 }
 
+#settingstab {
+    color: white;
+    border-color: white;
+}
+
 #achievementstab {
     border-color: white;
 }
@@ -456,6 +460,21 @@ nav li:hover {
     border-color: green;
 }
 
+#shoptab {
+    border-color: white;
+    background-color: purple;
+}
+
+#singularitytab {
+    border-color: lightgoldenrodyellow;
+    background-color: black;
+    color: red;
+}
+
+#shoptab:hover {
+    background-color: #b300b2;
+}
+
 #anttab {
     border-color: maroon;
 }
@@ -470,31 +489,11 @@ nav li:hover {
     color: red;
 }
 
-#singularitytab {
-    border-color: lightgoldenrodyellow;
-    background-color: black;
-    color: red;
-}
-
-#settingstab {
-    color: white;
-    border-color: white;
-}
-
-#shoptab {
-    border-color: white;
-    background-color: purple;
-}
-
-#shoptab:hover {
-    background-color: #b300b2;
-}
-
 .subTabWrapper {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .subTabWrapper > button {
@@ -502,82 +501,44 @@ nav li:hover {
     width: 150px;
     text-align: center;
     margin-right: 17px;
+    transition-duration: 0.15s;
 }
 
-.subBuildingsWrapper {
-    display: flex;
+.subTabWrapper > button:hover {
+    background-color: #333;
+}
+
+#buyamountcoin {
+    position: absolute;
+    top: 0;
+    left: 80%;
+}
+
+#togglecoinbuy {
+    color: white;
+    position: absolute;
+    font-size: 11px;
+    width: 220px;
+    left: 80%;
+    top: 30px;
+    margin-left: -87px;
+}
+
+#buildingtext {
     position: relative;
     padding: 0;
-    flex-direction: column;
-    align-items: center;
 }
 
-#buyamountcoin,
-#buyamountcrystal,
-#buyamountmythos,
-#buyamountparticle,
-#buyAmountTesseract,
-#buyAmountSingUpgrade {
-    position: absolute;
-    top: 5px;
-    left: calc(50% + 400px);
+#buildingsTable {
+    position: relative;
+    top: 27%;
+    left: 25%;
 }
 
-#togglecoinbuy,
-#togglecrystalbuy,
-#togglemythosbuy,
-#toggleparticlebuy,
-#toggleTesseractBuy {
-    font-size: 11px;
-    text-align: center;
-    margin: 0;
-}
-
-#buildingtext,
-#transcendTexts,
-#reincarnationTexts,
-#prestigeautomation,
-#transcendautomation,
-#reincarnateautomation > div,
-#ascendautomation {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-#prestigeTexts,
-#tesseractTexts {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-#buildingtext > p,
-#prestigeTexts > p,
-#transcendTexts > p,
-#reincarnationTexts > p,
-#tesseractTexts > p,
-#prestigeautomation > p,
-#transcendautomation > p,
-#reincarnateautomation > p,
-#ascendautomation > p {
-    margin: 0.05em auto;
-}
-
-#toggle21,
-#toggle27 {
-    margin-top: 60px;
-}
-
-#toggle27,
-#reincarnationamount,
-#reincarnateautotoggle {
-    width: 150px;
+#buildings2 {
+    position: relative;
+    top: 71%;
+    left: 12.5%;
 }
 
 #upgrades {
@@ -586,23 +547,21 @@ nav li:hover {
     padding: 0;
     color: gold;
     margin: 0 auto;
-    max-width: 1400px;
-    min-width: 1150px;
+    max-width: 1500px;
 }
 
 #upgradesFlex {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    width: 95%;
-    margin: 0 auto;
-    margin-top: 50px;
+    width: 90%;
+    margin-left: 3.5%;
+    margin-top: 4%;
 }
 
 #upgradesFlex > div {
     display: flex;
     flex-direction: column;
-    min-width: 200px;
+    width: calc(100% / 6);
     align-items: center;
 }
 
@@ -612,7 +571,12 @@ nav li:hover {
 }
 
 #upgradesFlex > div > p {
-    margin: 5px auto;
+    margin-top: 5px;
+    margin-bottom: 5%;
+}
+
+#upgradesFlex > div > table {
+    height: 182px;
 }
 
 #upgradesFlex > div > button {
@@ -620,12 +584,11 @@ nav li:hover {
     height: 30px;
 }
 
-#upgradesFlex > div > table {
-    height: 182px;
-    table-layout: fixed;
-    padding: 0;
-    font-size: 0;
-}
+#shoptogglecoin { grid-column-start: 1; }
+#shoptoggleprestige { grid-column-start: 2; }
+#shoptoggletranscend { grid-column-start: 3; }
+#shoptogglegenerator { grid-column-start: 4; }
+#particleAutoUpgrade { grid-column-start: 6; }
 
 #upgradesrow3 {
     text-align: center;
@@ -633,12 +596,11 @@ nav li:hover {
 }
 
 #upgradesrow3 > p {
-    margin: 0.05em auto;
+    padding-top: 0;
+    margin: 0;
 }
 
-#upgradeeffect {
-    color: pink;
-}
+#upgradeeffect { color: pink; }
 
 #toggle9 {
     width: 130px;
@@ -674,21 +636,15 @@ nav li:hover {
     margin: auto;
 }
 
-.confirmationToggles > div > img {
-    background-color: black;
-}
-
 /* Utility functions including import/export, save file name, manual save, and manual reset */
 #exportButtons {
     display: flex;
     flex-direction: column;
-    margin: 0.8em 0;
-    min-width: 400px;
+    margin: 0.8em 0 0.8em 50px;
+    min-width: 300px;
 }
 
-#exportButtons > * {
-    margin: 0.15em 0;
-}
+#exportButtons > * { margin: 0.15em 0; }
 
 #importFileButton {
     border: 2px solid white;
@@ -700,35 +656,30 @@ nav li:hover {
 }
 
 #importFileButton:hover {
-    background-color: #333;
+    background-color: #333 !important;
 }
 
 #savegame,
-#deleteGame,
-#resetHotkeys {
+#deleteGame {
     width: 180px;
     margin: 2px auto;
+    transition-duration: 0.15s;
+}
+
+#savegame:hover,
+#deleteGame:hover {
+    background-color: #333 !important;
 }
 
 #exportgame {
     width: 150px;
     height: 40px;
     margin: 5px auto;
+    transition-duration: 0.15s;
 }
 
-#saveStringLabel {
-    width: 180px;
-    margin: 2px auto;
-    font-size: 1em;
-}
-
-#saveStringInput {
-    width: 100%;
-    color: black;
-    border: 2px solid gray;
-    text-align: center;
-    font-size: 1em;
-    outline: none;
+#exportgame:hover {
+    background-color: #333 !important;
 }
 
 /* Third party URLs (Discord, Patreon, patch notes) */
@@ -754,10 +705,15 @@ nav li:hover {
     margin-right: 5px;
 }
 
-#confirmationToggleBox > button {
+.promocodeButton {
+    transition-duration: 0.15s;
     padding: 5px;
     min-width: 65%;
     margin-bottom: 3px;
+}
+
+.promocodeButton:hover {
+    background-color: #333;
 }
 
 #promocodeinfo {
@@ -777,6 +733,11 @@ nav li:hover {
 .auto.square {
     width: 40px;
     height: 40px;
+    transition-duration: 0.15s;
+}
+
+.auto.square:hover {
+    background-color: #333;
 }
 
 .buttonRow {
@@ -816,6 +777,7 @@ nav li:hover {
     border-radius: 8px;
     border: 1px solid white !important;
     background-color: #171717;
+    transition-duration: 0.15s;
     cursor: default;
 }
 
@@ -839,29 +801,28 @@ nav li:hover {
     transition: background-color 0.15s;
 }
 
+.autobuyerToggleButton:hover {
+    background-color: #333;
+}
+
 .buttonRow > div > .stats {
     width: 400px;
     margin-left: 10px;
 }
 
-#autoprestige,
-#autotranscend,
-#autoreincarnate,
-#autotessbuyeramount {
+#taxinfo {
     text-align: center;
-    color: white;
-    margin: 0 auto;
+    font-size: 1em;
+    margin-top: 30px;
 }
 
-#buildinghotkeys,
-#prestigehotkeys,
-#transcendhotkeys,
-#reincarnatehotkeys,
-#ascendHotKeys {
-    color: gray;
+#buildinghotkeys {
+    padding: 5px;
+    height: 20px;
+    color: lightgray;
     text-align: center;
+    width: 1200px;
     margin: 0 auto;
-    width: 1000px;
 }
 
 .tightText {
@@ -877,68 +838,71 @@ nav li:hover {
 }
 
 #achievementstable {
-    table-layout: fixed;
-    border-collapse: collapse;
-    font-size: 0;
-    margin: auto;
-}
-
-#achievementstable tbody td {
-    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 #achievementinfo {
     display: flex;
     flex-direction: column;
+    border-top: 2px solid plum;
     text-align: center;
     width: 50%;
     margin: 0 auto;
     overflow-wrap: break-word;
 }
 
+.NotificationToggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.achNotification {
+    flex-grow: unset;
+    padding-left: 4px;
+}
+
+.nonSquare {
+    width: 39px;
+    height: 20px;
+    transition-duration: 0.15s;
+    margin-left: 5px;
+}
+
+.nonSquare:hover {
+    background-color: #333;
+}
+
 /* Removes giant space between paragraphs */
-#achievementinfo > p {
-    margin: 0.1em auto;
-}
+#achievementinfo > p { margin: 0; }
 
-#achievementtutorial {
-    color: white;
-}
-
-#achievementdescription {
-    color: gold;
-}
-
-#achievementreward {
-    color: limegreen;
-}
+#achievementtutorial { color: white; }
+#achievementdescription { color: gold; }
+#achievementreward { color: limegreen; }
 
 /* Decrease space between paragraphs */
-#achievementColorInfo > p {
-    margin: 0.1em auto;
-}
+#achievementColorInfo { line-height: 0.5; }
 
-#achievementcolorcode1 {
-    color: limegreen;
-}
+#achievementcolorcode1 { color: limegreen; }
+#achievementcolorcode2 { color: purple; }
+#achievementcolorcode3 { color: crimson; }
+#achievementcolorcode4 { color: gray; }
 
-#achievementcolorcode2 {
-    color: purple;
-}
-
-#achievementcolorcode3 {
-    color: crimson;
-}
-
-#achievementcolorcode4 {
-    color: gray;
+#buyamountcrystal {
+    position: absolute;
+    top: 0;
+    left: 80%;
 }
 
 #buyamountoffering {
     position: absolute;
-    width: 250px;
-    left: calc(50% + 300px);
-    top: 37px;
+    font-size: 11px;
+    width: 220px;
+    left: 86%;
+    top: 32px;
+    margin-left: -173px;
 }
 
 .talismanBuyAmountContainer {
@@ -955,6 +919,24 @@ nav li:hover {
     align-items: center;
 }
 
+#buyamountmythos {
+    position: absolute;
+    top: 0;
+    left: 80%;
+}
+
+#buyamountparticle {
+    position: absolute;
+    top: 0;
+    left: 80%;
+}
+
+#buyAmountTesseract {
+    position: absolute;
+    top: 0;
+    left: 80%;
+}
+
 .buyAmountBtn {
     background-color: black;
     cursor: pointer;
@@ -965,34 +947,120 @@ nav li:hover {
     background-color: #333;
 }
 
-#toggleofferingbuy,
-#toggletalismanbuy {
+#togglecrystalbuy {
+    color: white;
+    position: absolute;
     font-size: 11px;
-    text-align: center;
-    margin: 0;
+    width: 220px;
+    left: 80%;
+    top: 30px;
+    margin-left: -87px;
 }
 
-#crystalupgradestable {
+#toggleofferingbuy {
+    color: white;
+    position: absolute;
+    font-size: 11px;
+    width: 250px;
+    left: 85%;
+    top: 25px;
+    margin-left: -183px;
+}
+
+#toggletalismanbuy {
+    font-size: 11px;
+    margin: -4px 0 5px;
+}
+
+#togglemythosbuy {
+    color: white;
+    position: absolute;
+    font-size: 11px;
+    width: 220px;
+    left: 80%;
+    top: 30px;
+    margin-left: -87px;
+}
+
+#toggleparticlebuy {
+    color: white;
+    position: absolute;
+    font-size: 11px;
+    width: 220px;
+    left: 80%;
+    top: 30px;
+    margin-left: -87px;
+}
+
+#toggleTesseractBuy {
+    color: white;
+    position: absolute;
+    font-size: 11px;
+    width: 220px;
+    left: 80%;
+    top: 30px;
+    margin-left: -87px;
+}
+
+#coinBuildings {
+    display: flex;
+    position: relative;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1600px;
     margin: 0 auto;
 }
 
-#prestigeshardinfo,
-#crystalupgrades > p {
-    margin: 2px;
+#prestige {
+    position: relative;
+    padding: 0;
+    color: cyan;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
 }
+
+#crystalupgradestable { margin: 0 auto; }
+
+#prestigeshardinfo,
+#crystalupgrades > p { margin: 2px; }
 
 #prestigeamount {
     border: 1px solid cyan;
     color: white;
-    background-color: #171717;
-    text-align: center;
+    background-color: black;
+}
+
+#autocrystalbuild {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 35px;
 }
 
 #toggle15,
 #prestigeautotoggle,
-#prestigeamount {
-    width: 150px;
+#prestigeamount { width: 150px; }
+
+#toggle15,
+#prestigeautotoggle {
+    transition-duration: 0.15s;
 }
+
+#toggle15:hover,
+#prestigeautotoggle:hover {
+    background-color: #333;
+}
+
+#prestigehotkeys {
+    width: 1200px;
+    color: gray;
+}
+
+#autocrystalbuild > p { margin: 0; }
+#autoprestige { color: white; }
 
 #runes {
     position: relative;
@@ -1014,7 +1082,7 @@ nav li:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-top: 20px;
+    margin: 10px;
 }
 
 #runesToggle > button {
@@ -1022,6 +1090,11 @@ nav li:hover {
     width: 100px;
     margin: 0 7px;
     text-align: center;
+    transition-duration: 0.15s;
+}
+
+#runesToggle > button:hover {
+    background-color: #333;
 }
 
 #offeringDetails {
@@ -1029,7 +1102,6 @@ nav li:hover {
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    margin-top: 10px;
     margin-bottom: auto;
 }
 
@@ -1044,15 +1116,15 @@ nav li:hover {
     justify-content: center;
     align-items: flex-end;
     height: auto;
-    margin: 10px auto;
+    margin: 10px;
 }
 
 .runeType {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    white-space: nowrap;
-    min-width: 150px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .runeType > button {
@@ -1068,15 +1140,6 @@ nav li:hover {
     text-align: center;
     align-items: center;
     align-content: center;
-}
-
-.runeTypeImage {
-    background-color: #171717;
-    transition-duration: 0.15s;
-}
-
-.runeTypeImage:hover {
-    background-color: #333;
 }
 
 .runeType > .runeButtonAvailable {
@@ -1098,7 +1161,8 @@ nav li:hover {
 }
 
 #runeEffectDisplays > p {
-    margin: 0 auto;
+    height: auto;
+    margin: auto;
 }
 
 #toggleautofortify,
@@ -1107,6 +1171,12 @@ nav li:hover {
     height: 30px;
     color: white;
     border: 2px solid red;
+    transition-duration: 0.15s;
+}
+
+#toggleautofortify:hover,
+#toggleautoenhance:hover {
+    background-color: #333;
 }
 
 #talismanFragmentCost {
@@ -1145,6 +1215,12 @@ nav li:hover {
     width: 80px;
     min-width: 80px;
     color: orange;
+    cursor: pointer;
+    transition-duration: 0.15s;
+}
+
+.talismanBtn:hover {
+    background-color: #333;
 }
 
 .talisminBtnAvailable {
@@ -1166,6 +1242,7 @@ nav li:hover {
 
 .talismanContainer {
     flex-direction: column;
+    width: 11%;
     min-width: 102px;
     align-items: center;
     white-space: nowrap;
@@ -1188,11 +1265,13 @@ nav li:hover {
 }
 
 #respecAllTalismans {
+    position: absolute;
     height: 30px;
     width: 80px;
     color: plum;
     border: 2px solid white;
-    margin: 10px;
+    left: 70px;
+    top: 290px;
 }
 
 #talismanEffect {
@@ -1204,50 +1283,139 @@ nav li:hover {
     text-align: center;
 }
 
-#talismanEffect > p {
-    margin: 3px auto;
+#talismanBonus {
+    position: absolute;
+    top: 20px;
+    left: 145px;
+}
+
+#talismanRune1Effect {
+    position: absolute;
+    top: 40px;
+    left: 145px;
+}
+
+#talismanRune2Effect {
+    position: absolute;
+    top: 60px;
+    left: 145px;
+}
+
+#talismanRune3Effect {
+    position: absolute;
+    top: 80px;
+    left: 145px;
+}
+
+#talismanRune4Effect {
+    position: absolute;
+    top: 100px;
+    left: 145px;
+}
+
+#talismanRune5Effect {
+    position: absolute;
+    top: 120px;
+    left: 145px;
+}
+
+#talismanMythicEffect {
+    position: absolute;
+    top: 140px;
+    left: 145px;
 }
 
 #talismanlevelup {
     position: absolute;
     left: 50%;
     width: 600px;
-    margin-left: -300px;
-    top: 280px;
+    margin-left: -200px;
+    top: 327px;
     text-align: center;
+}
+
+#talismanLevelUpSummary {
+    position: absolute;
+    top: -40px;
+    left: 50px;
 }
 
 #talismanrespec {
     position: absolute;
     left: 50%;
-    width: 350px;
-    margin-left: -180px;
-    top: 280px;
+    width: 600px;
+    margin-left: -300px;
+    top: 290px;
     text-align: center;
 }
 
 .talismanRespecBtn {
     height: 30px;
     width: 200px;
-    margin: 1px;
     text-align: center;
+    transition-duration: 0.15s;
+}
+
+.talismanRespecBtn:hover {
+    background-color: #333;
+}
+
+#talismanRespecButton1 {
+    position: absolute;
+    top: 50px;
+    left: 200px;
+}
+
+#talismanRespecButton2 {
+    position: absolute;
+    top: 81px;
+    left: 200px;
+}
+
+#talismanRespecButton3 {
+    position: absolute;
+    top: 112px;
+    left: 200px;
+}
+
+#talismanRespecButton4 {
+    position: absolute;
+    top: 143px;
+    left: 200px;
+}
+
+#talismanRespecButton5 {
+    position: absolute;
+    top: 174px;
+    left: 200px;
 }
 
 #confirmTalismanRespec {
     position: absolute;
-    top: 110px;
-    left: 300px;
+    top: 112px;
+    left: 430px;
 }
 
 #cancelTalismanRespec {
     position: absolute;
-    top: 142px;
-    left: 300px;
+    top: 143px;
+    left: 430px;
 }
 
-#transcendshardinfo {
-    margin: 2px;
+#transcension {
+    position: relative;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
 }
+
+#transcension > .buttonRow {
+    color: pink;
+}
+
+#transcendshardinfo { margin: 2px; }
 
 #transcendshardbonus {
     margin-bottom: 100px;
@@ -1257,15 +1425,36 @@ nav li:hover {
 #transcendamount {
     border: 1px solid plum;
     color: white;
-    background-color: #171717;
-    text-align: center;
+    background-color: black;
 }
+
+#autotranscend {
+    text-align: center;
+    color: white;
+}
+
+#toggle21 { margin-top: 100px; }
 
 #toggle21,
 #transcendautotoggle,
 #transcendamount {
     width: 150px;
     margin: 0 auto;
+}
+
+#toggle21,
+#transcendautotoggle {
+    transition-duration: 0.15s;
+}
+
+#toggle21:hover,
+#transcendautotoggle:hover {
+    background-color: #333;
+}
+
+#transcendhotkeys {
+    color: gray;
+    text-align: center;
 }
 
 #challenges {
@@ -1283,7 +1472,8 @@ nav li:hover {
     text-align: center;
     color: white;
     font-size: 1.2em;
-    margin: 20px auto 10px;
+    line-height: 0.4;
+    margin-top: 30px;
 }
 
 #challengesAutoToggles {
@@ -1296,11 +1486,14 @@ nav li:hover {
     height: 30px;
     width: 200px;
     margin: 7px;
+    transition-duration: 0.15s;
 }
 
-#toggleAutoChallengeStart {
-    border: 2px solid gold;
+#challengesAutoToggles > button:hover {
+    background-color: #333;
 }
+
+#toggleAutoChallengeStart { border: 2px solid gold; }
 
 #startChallenge {
     border: 2px solid red;
@@ -1309,36 +1502,24 @@ nav li:hover {
     height: 75px;
     background-color: black;
     color: white;
+    transition-duration: 0.15s;
 }
-
-#startChallenge:hover {
-    background-color: #333;
-}
-
-#retryChallenge {
-    border: 2px solid plum;
-}
+#retryChallenge { border: 2px solid plum; }
 
 /* Hide the last 3 buttons until the user clicks on a challenge */
 #toggleAutoChallengeIgnore,
 #startChallenge,
-#retryChallenge {
-    display: none;
-}
+#retryChallenge { display: none; }
 
 #challengeIcons {
     font-size: 0;
     align-self: center;
     margin-top: 10px;
-    border-collapse: collapse;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
 }
 
-.challengeLevels {
+#challengeIcons .challengeLevels {
     font-size: 12px;
     text-align: center;
-    margin: 2px;
 }
 
 #challengeDetails {
@@ -1351,6 +1532,10 @@ nav li:hover {
     margin-right: 20px;
 }
 
+#startChallenge:hover {
+    background-color: #333;
+}
+
 #oneChallengeDetails {
     display: flex;
     flex-direction: column;
@@ -1359,58 +1544,28 @@ nav li:hover {
 }
 
 #oneChallengeDetails > p {
-    margin: 0.05em auto;
+    margin: auto;
     height: auto;
 }
 
-#challengeName {
-    color: white;
-}
-
-#challengeFlavor {
-    color: plum;
-}
-
-#challengeRestrictions {
-    color: crimson;
-}
-
-#challengeGoal {
-    color: gold;
-}
-
-#challengePerCompletionRewards {
-    color: white;
-}
-
-*[id^="challengePer"] {
-    color: pink;
-}
-
-#challengeFirstCompletionRewards {
-    color: white;
-}
-
-#challengeFirst1 {
-    color: orange;
-}
-
-#challengeQuarkBonus {
-    color: cyan;
-}
+#challengeName { color: white; }
+#challengeFlavor { color: plum; }
+#challengeRestrictions { color: crimson; }
+#challengeGoal { color: gold; }
+#challengePerCompletionRewards { color: white; }
+*[id^="challengePer"] { color: pink; }
+#challengeFirstCompletionRewards { color: white; }
+#challengeFirst1 { color: orange; }
+#challengeQuarkBonus { color: cyan; }
 
 #challengeTimersText > p {
-    margin: 0 auto;
+    margin: 0;
     font-size: 1.2em;
 }
 
 #challengeTimersText > input {
     height: 20px;
     font-size: 1.1em;
-    border: 2px solid orchid;
-    color: white;
-    background-color: #171717;
-    text-align: center;
 }
 
 #challengeWorthlessTexts {
@@ -1421,25 +1576,18 @@ nav li:hover {
 }
 
 #challengeWorthlessTexts > p {
-    margin: 5px auto;
+    margin: 0;
+    padding: 0;
+    padding: 5px;
+    height: 20px;
 }
 
-#challengehotkeys {
-    color: gray;
-}
-
-#challengewarning {
-    color: crimson;
-}
-
-#challengewarningreincarnation {
-    color: limegreen;
-}
+#challengehotkeys { color: gray; }
+#challengewarning { color: crimson; }
+#challengewarningreincarnation { color: limegreen; }
 
 .challenge {
-    font-size: 0;
     background-color: #171717;
-    cursor: pointer;
     transition-duration: 0.15s;
 }
 
@@ -1455,15 +1603,66 @@ nav li:hover {
     background-color: #ebc7eb;
 }
 
-#reincarnationamount {
-    border: 1px solid greenyellow;
-    color: white;
-    background-color: #171717;
+#reincarnation {
+    position: relative;
+    padding: 0;
+    color: limegreen;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+#reincarnationTexts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
     text-align: center;
+}
+
+#reincarnationTexts > p { margin: 0; }
+
+#toggle27 { margin-top: 55px; }
+
+#toggle27,
+#reincarnationamount,
+#reincarnateautotoggle { width: 150px; }
+
+#toggle27,
+#reincarnateautotoggle {
+    transition-duration: 0.15s;
+}
+
+#toggle27:hover,
+#reincarnateautotoggle:hover {
+    background-color: #333;
+}
+
+#reincarnateautomation > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#autoreincarnate {
+    color: white;
+}
+
+#reincarnationamount {
+    border: 1px solid green;
+    color: white;
+    background-color: black;
 }
 
 #reincarnationinfo {
     color: lime;
+}
+
+#reincarnatehotkeys {
+    color: gray;
+    text-align: center;
+    margin: 0;
 }
 
 #research {
@@ -1472,10 +1671,14 @@ nav li:hover {
 }
 
 #researchtable {
-    table-layout: fixed;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
     border-collapse: collapse;
     font-size: 0;
-    margin: 0 auto;
+}
+
+#researchtable > tbody {
     margin-top: 15px;
 }
 
@@ -1489,7 +1692,7 @@ nav li:hover {
 
 #researchDetails > p {
     width: 850px;
-    margin: 0.05em auto;
+    margin: auto;
 }
 
 #researchToggles {
@@ -1506,6 +1709,11 @@ nav li:hover {
     height: 30px;
     margin: 0 7px;
     text-align: center;
+    transition-duration: 0.15s;
+}
+
+#researchToggles > button:hover {
+    background-color: #333;
 }
 
 #researchinfo2 {
@@ -1570,25 +1778,21 @@ nav li:hover {
     flex-wrap: wrap;
     justify-content: flex-start;
     padding-right: 5px;
-    padding-bottom: 5px;
     margin-top: 10px;
-    width: calc(115px * 8);
+    width: calc(105px * 8);
     border: 3px solid plum;
 }
 
 #actualShop > div {
     margin-top: 5px;
+    margin-bottom: 5px;
     margin-left: 5px;
-    width: 110px;
+    width: 100px;
 }
 
-#actualPotionShop > div > p {
-    margin: 3px;
-    white-space: nowrap;
-}
-
+#actualPotionShop > div > p,
 #actualShop > div > p {
-    margin: 0;
+    margin: 3px;
     white-space: nowrap;
 }
 
@@ -1603,7 +1807,7 @@ nav li:hover {
     flex-direction: column;
     align-items: center;
     width: calc(130px * 2);
-    margin-right: 2%;
+    margin-right: 3%;
 }
 
 #actualPotionShop {
@@ -1611,10 +1815,11 @@ nav li:hover {
     grid-template-columns: repeat(2, minmax(70px, 130px));
     border: 3px solid yellow;
     margin-top: 10px;
-    padding: 5px 0;
 }
 
-#quarksDisplay {
+#quarksDisplay,
+#goldenQuarksDisplay,
+#octeractsDisplay {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -1626,6 +1831,18 @@ nav li:hover {
     margin-left: 5px;
 }
 
+#goldenQuarkamount {
+    font-size: 1.2em;
+    color: gold;
+    margin-left: 5px;
+}
+
+#octeractAmount {
+    font-size: 1.2em;
+    color: lightseagreen;
+    margin-left: 5px;
+}
+
 #consumables {
     color: orangered;
     font-size: 1.2em;
@@ -1634,41 +1851,54 @@ nav li:hover {
 
 #shopButtons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     float: right;
-    margin: 5px;
+    margin-top: 5px;
 }
 
 #shopButtons > button {
-    width: 250px;
-    height: 30px;
-    margin: 3px;
+    width: 150px;
+    height: 40px;
+    margin-left: 5px;
+    transition-duration: 0.15s;
+}
+
+#shopButtons > button:hover {
+    background-color: #333;
 }
 
 #shopHovers {
     width: 600px;
 }
 
-#shopHovers > p {
-    margin: 0 auto;
-}
+#shopHovers > p { margin: 0; }
 
 .consumablebutton {
-    width: 127px;
+    width: 128px;
     height: 40px;
+    transition-duration: 0.15s;
+}
+
+.consumablebutton:hover {
+    background-color: #333;
 }
 
 .permshopbutton {
-    width: 110px;
+    width: 100px;
     height: 40px;
+    transition-duration: 0.15s;
+}
+
+.permshopbutton:hover {
+    background-color: #333;
 }
 
 #ants {
     position: relative;
-    min-width: 1250px;
-    max-width: 1600px;
     padding: 0;
+    text-align: center;
+    max-width: 1500px;
     margin: 0 auto;
 }
 
@@ -1676,51 +1906,30 @@ nav li:hover {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center;
     flex-shrink: 0;
-    margin-left: -100px;
 }
 
-#antsWelcomeTexts {
-    margin-top: 30px;
-}
+#antsWelcomeTexts { margin-top: 30px; }
+#antsWelcomeTexts > p { margin: 2px; }
+#antwelcome { font-size: 1.3em; }
 
-#antsWelcomeTexts > p {
-    margin: 2px;
-}
-
-#antwelcome {
-    font-size: 1.3em;
-}
-
-#antrow1 {
-    margin-top: 15px;
-}
+#antrow1 { margin-top: 12px; }
 
 #antrow2 {
-    margin-top: 10px;
-    height: 150px;
+    margin-top: 7px;
+    height: 115px;
 }
 
 #antrow3 {
-    height: 100px;
+    margin-top: 30px;
+    height: 115px;
 }
+#antrow4 { margin-top: 10px; }
 
-#antrow4 {
-    margin-top: 10px;
-}
+#antrow2 > p { margin: 0; }
+#crumbcount { font-size: 1.2em; }
 
-#antrow2 > p {
-    margin: 0.1em auto;
-}
-
-#crumbcount {
-    font-size: 1.2em;
-}
-
-#antrow3 > p {
-    margin: 0.1em auto;
-}
+#antrow3 > p { margin: 5px; }
 
 #antToggleFeatures {
     display: flex;
@@ -1739,36 +1948,42 @@ nav li:hover {
 }
 
 #toggleAntMax {
-    height: 37px;
+    height: 35px;
     width: 100px;
     margin-right: 10px;
     border: 1px solid gold;
+    transition-duration: 0.15s;
+}
+
+#toggleAntMax:hover {
+    background-color: #333;
 }
 
 #toggleAutoSacrificeAnt {
-    height: 37px;
+    height: 35px;
     width: 150px;
     margin-right: 10px;
     border: 1px solid crimson;
+    transition-duration: 0.15s;
 }
 
-.antSacrificeSettingsContainer {
-    display: flex;
-    flex-direction: column;
+#toggleAutoSacrificeAnt:hover {
+    background-color: #333;
 }
 
 #autoSacrificeAntMode {
     height: 20px;
     width: 150px;
     border: 1px solid green;
+    transition-duration: 0.15s;
+}
+
+#autoSacrificeAntMode:hover {
+    background-color: #333;
 }
 
 #autoAntSacrificeAmount {
     width: 150px;
-    border: 1px solid green;
-    color: white;
-    background-color: #171717;
-    text-align: center;
 }
 
 #autoAntSacrifice {
@@ -1776,43 +1991,68 @@ nav li:hover {
     width: 100%;
 }
 
-#sacrificeAnts {
+#antSacrificeTimer {
     position: absolute;
     padding: 0;
-    margin: 0;
-    width: 200px;
-    top: 5px;
-    left: -170px;
+    width: 300px;
+    margin-left: -118px;
+    top: 30px;
     text-align: center;
+    left: 70%;
 }
 
-#antSacrificeTimer {
-    margin: 0 10px 5px 0;
+#antSacrifice {
+    position: absolute;
+    padding: 0;
+    top: 70px;
+    text-align: center;
+    left: 70%;
+}
+
+.antSacrificeSettingsContainer {
+    display: flex;
+    flex-direction: column;
 }
 
 #antSacrificeSummary {
     position: absolute;
     padding: 0;
     width: 300px;
-    top: 25px;
-    text-align: left;
-    left: 73%;
+    top: 30px;
+    text-align: center;
+    left: 77%;
 }
 
-#antSacrificeSummary > p {
-    margin: 0.1em auto;
+#antELO {
+    position: absolute;
+}
+
+#antUpgradeMultiplier {
+    position: absolute;
+    top: 20px;
+}
+
+#antTimeMultiplier {
+    position: absolute;
+    top: 40px;
+}
+
+#antSacrificeTitle {
+    position: absolute;
+    top: 60px;
+}
+
+#antSacrificeMultiplier {
+    position: absolute;
+    top: 80px;
 }
 
 #antSacrificeTable {
-    margin: 40px 0 0 70px;
+    position: absolute;
+    top: 122px;
+    left: 100px;
     padding: 0;
-    border-collapse: collapse;
-    table-layout: fixed;
-    font-variant-numeric: tabular-nums;
-}
-
-#antSacrificeTable img {
-    margin-right: 5px;
+    border-spacing: 0;
 }
 
 .antBtn {
@@ -1831,15 +2071,14 @@ nav li:hover {
 
 #cubes {
     position: relative;
-    max-width: 1600px;
     padding: 0;
-    margin: 0 auto;
 }
 
 /* Wow! Cube sidebar */
 #wowCubeSidebar {
     display: flex;
     flex-direction: column;
+    margin-right: 2%;
     text-align: center;
 }
 
@@ -1847,29 +2086,22 @@ nav li:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .cubeSwitchTabBtn {
     width: 250px;
     height: 30px;
-    margin: 2px;
+    margin: 3px;
+    transition-duration: 0.15s;
 }
 
-#wowCubeSidebar > p {
-    margin: 0 auto;
-    line-height: 1.1em;
-    font-size: 0.9em;
+.cubeSwitchTabBtn:hover {
+    background-color: #333;
 }
 
-#wowCubeSidebar br {
-    margin: 0.2em auto;
-}
-
-p#cubeToQuarkTimer,
-p#cubeToQuarkTimerValue {
-    font-size: 1.1em;
-}
+#wowCubeSidebar > p { margin: 0; }
+#cubeToQuarkTimer { font-size: 1.2em; }
 
 .cubePlacement1 {
     font-size: 1.2em;
@@ -1902,32 +2134,26 @@ p#cubeToQuarkTimerValue {
     color: white;
     background-color: black;
     border: 1px solid gold;
+    transition-duration: 0.15s;
+}
+
+.cubeBtn:hover {
+    background-color: #333;
 }
 
 p[id$="BlessingsTotal"] {
     padding: 15px;
 }
 
-#cubeBlessingsTotal {
-    color: orange;
-}
-
-#tesseractBlessingsTotal {
-    color: orchid;
-}
-
-#hypercubeBlessingsTotal {
-    color: rgb(255 0 76);
-}
-
-#platonicBlessingsTotal {
-    color: orange;
-}
+#cubeBlessingsTotal { color: orange; }
+#tesseractBlessingsTotal { color: orchid; }
+#hypercubeBlessingsTotal { color: rgb(255 0 76); }
+#platonicBlessingsTotal { color: orange; }
 
 #cubesWrapper {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 40px;
     margin-left: -185px;
 }
 
@@ -1959,6 +2185,11 @@ p[id$="BlessingsTotal"] {
     justify-content: center;
 }
 
+.heptNotification {
+    height: 20px;
+    width: 20px;
+}
+
 .cubeBonus {
     margin-left: -2px;
     margin-top: 5px;
@@ -1966,14 +2197,14 @@ p[id$="BlessingsTotal"] {
 }
 
 .cubeIcon {
-    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 .cubeTab {
     flex-direction: column;
     align-items: center;
     width: 700px;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 
 #cubeTab5Wrapper {
@@ -1984,18 +2215,11 @@ p[id$="BlessingsTotal"] {
     margin-top: 15px;
 }
 
-#cubeTab5Wrapper > p {
-    margin: 0.1em auto;
-}
+#cubeTab5Wrapper > p { margin: 2px; }
 
 #cubeTab6 {
     flex-direction: row;
     align-items: flex-start;
-}
-
-#c15Rewards > p {
-    margin: 0 auto;
-    line-height: 1.1em;
 }
 
 #cube1Bonus {
@@ -2010,34 +2234,16 @@ p[id$="BlessingsTotal"] {
     width: 1500px;
 }
 
-#cubeAmount2 {
-    color: white;
-}
+#cubeAmount2 { color: white; }
 
 #cubeUpgradeTable {
-    table-layout: fixed;
     border-collapse: collapse;
     font-size: 0;
 }
 
-#cubeTab5Wrapper button {
-    text-align: center;
-    color: white;
+#toggleCubeBuy {
+    width: 200px;
     height: 30px;
-}
-
-#toggleAutoOpenCubes,
-#toggleTesseractBAB,
-#toggleAutoSingularity {
-    width: 250px;
-    text-align: center;
-    color: white;
-    height: 30px;
-    margin: 2px auto;
-}
-
-#toggleCubeAutoBuy {
-    width: 110px;
 }
 
 .gridImg {
@@ -2066,10 +2272,6 @@ p[id$="BlessingsTotal"] {
 
 /* Credits */
 
-.credit > img {
-    image-rendering: auto;
-}
-
 #creditssubtab {
     margin-top: 4.5%;
     margin-left: 14%;
@@ -2086,6 +2288,23 @@ p[id$="BlessingsTotal"] {
     color: fuchsia;
 }
 
+#ascension {
+    position: relative;
+    padding: 0;
+    color: orange;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+#tesseractTexts { margin-top: 20px; }
+
+#tesseractTexts > p {
+    margin: 0;
+    text-align: center;
+}
+
 #ascendConstantUpgrades {
     display: flex;
     flex-direction: column;
@@ -2094,20 +2313,48 @@ p[id$="BlessingsTotal"] {
 }
 
 #ascendConstantUpgrades > p {
-    margin: 0.05em auto;
+    margin: 0;
     text-align: left;
     width: 100%;
 }
 
+#ascendautomation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
 #tesseractautobuytoggle,
+#tesseractautobuymode,
 #tesseractAmount {
     width: 150px;
 }
 
+#tesseractautobuytoggle,
+#tesseractautobuymode {
+    transition-duration: 0.15s;
+}
+
+#tesseractautobuytoggle:hover,
+#tesseractautobuymode:hover {
+    background-color: #333;
+}
+
 #tesseractAmount {
-    border: 1px solid orange;
+    border: 1px solid green;
     color: white;
-    background-color: #171717;
+    background-color: black;
+}
+
+#autotessbuyeramount {
+    color: white;
+    margin: 0;
+}
+
+#ascendHotKeys {
+    margin: 0;
+    color: gray;
     text-align: center;
 }
 
@@ -2165,6 +2412,11 @@ p[id$="BlessingsTotal"] {
     width: 150px;
     height: 30px;
     margin: 3px;
+    transition-duration: 0.15s;
+}
+
+#statsForNerds > button:hover {
+    background-color: #333;
 }
 
 .statContainer {
@@ -2222,6 +2474,10 @@ p[id$="BlessingsTotal"] {
     cursor: pointer;
 }
 
+.constUpgradeAvailable:hover {
+    background-color: #00b300;
+}
+
 .constUpgradeSingle {
     background-color: gold;
 }
@@ -2258,7 +2514,6 @@ p[id$="BlessingsTotal"] {
 
 .historySubTab {
     color: white;
-    margin-top: 10px;
 }
 
 .historySubTab p {
@@ -2279,21 +2534,13 @@ p[id$="BlessingsTotal"] {
     vertical-align: middle;
     height: 20px;
     margin-right: 3px;
-    image-rendering: auto;
 }
 
 .historySubTab tbody td {
     padding: 4px 6px;
     margin-right: 10px;
 }
-
-.historySubTab tbody .history-gain:last-child {
-    margin-right: 0;
-}
-
-.historySubTab tbody tr:nth-child(even) {
-    background: #111;
-}
+.historySubTab tbody .history-gain:last-child { margin-right: 0; }
 
 .historySubTab tbody tr:nth-child(odd) {
     background: #262626;
@@ -2305,11 +2552,6 @@ p[id$="BlessingsTotal"] {
 
 .historySubTab tbody .history-filler {
     padding: 0;
-}
-
-.historySubTab tbody .history-corruption {
-    display: grid;
-    grid: 20px / auto-flow 40px;
 }
 
 .historySubTab tbody *[title] {
@@ -2327,6 +2569,11 @@ p[id$="BlessingsTotal"] {
 
 #historyTogglePerSecondButton {
     float: right;
+    transition-duration: 0.15s;
+}
+
+#historyTogglePerSecondButton:hover {
+    background-color: #333;
 }
 
 .onOffToggle {
@@ -2344,12 +2591,17 @@ p[id$="BlessingsTotal"] {
 }
 
 #historyAscendTable {
+    min-width: 1180px;
     white-space: nowrap;
 }
 
 .historyTableWrap {
     max-height: 650px;
     overflow-y: auto;
+}
+
+#historyAscend .historyTableWrap {
+    min-width: 1212px;
 }
 
 .runeBlessingPurchaseSettings {
@@ -2361,7 +2613,7 @@ p[id$="BlessingsTotal"] {
 
 .runeBlessingRow {
     display: flex;
-    width: 1000px;
+    width: 1200px;
     align-self: center;
     align-items: center;
     white-space: nowrap;
@@ -2375,59 +2627,59 @@ p[id$="BlessingsTotal"] {
 }
 
 .runeTexts {
-    width: 185px;
+    width: 175px;
 }
 
 .runeButtons {
     height: 30px;
     width: 325px;
-    border: 2px solid yellow !important;
+    border: 1px solid yellow !important;
     margin-right: 15px;
     color: gold;
+    transition-duration: 0.15s;
+    cursor: default;
 }
 
 .runeButtonsAvailable {
-    background-color: #111;
+    background-color: #222;
     cursor: pointer;
 }
 
+.runeButtonsAvailable:hover {
+    background-color: #444;
+}
+
 #buyRuneBlessingInput {
-    width: 150px;
-    border: 2px solid white;
+    width: 100px;
+    border: 2px solid crimson;
     margin-right: 20px;
     background-color: #171717;
-    text-align: center;
     color: white;
-    font-size: 1em;
 }
 
 #buyRuneSpiritInput {
-    width: 150px;
-    border: 2px solid orchid;
+    width: 100px;
+    border: 2px solid orange;
     margin-right: 20px;
     background-color: #171717;
-    text-align: center;
     color: white;
-    font-size: 1em;
 }
 
 #traits {
-    position: relative;
     justify-content: center;
     width: 100%;
-    min-height: 600px;
+    min-height: 550px;
+    max-height: 600px;
+
+    /* Hopefully prevent some elements from overlapping with the tab buttons */
     margin-top: 10px;
-    padding: 0;
 }
 
 #corruptionMain {
-    display: flex;
-    justify-content: start;
-    flex-flow: column;
-    min-width: 700px;
-    width: 700px;
+    width: 800px;
     margin: 10px;
     padding: 10px;
+    margin-top: 60px;
 }
 
 #corruptionIntroduction {
@@ -2441,7 +2693,7 @@ p[id$="BlessingsTotal"] {
 
 #corruptionSelected {
     height: 70px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 #corruptionDetails {
@@ -2471,74 +2723,61 @@ p[id$="BlessingsTotal"] {
     color: gold;
 }
 
-.corruptionWoWs {
-    margin-left: 5%;
-    text-align: left;
-}
-
-#corruptionCubes {
-    margin-top: 10px;
-}
-
-#corruptionDisplays {
-    margin-top: 0;
-    margin-right: auto;
-    margin-bottom: 10px;
-    margin-left: auto;
-}
-
-#ascensionBox {
-    margin: 10px auto;
-}
-
 #ascensionAutomation {
-    margin: 0 30px;
-    text-align: center;
+    position: relative;
+    top: 20px;
+    width: 100%;
+    min-height: 100px;
 }
 
-#ascensionAmount,
-#ascensionamount {
-    width: 100px;
-    color: white;
-    background-color: #171717;
-    text-align: center;
+#ascensionAmount {
+    width: 150px;
+    border: 1px solid orange;
+    color: gold;
+    background-color: black;
 }
 
 #autoAscend {
     color: white;
-    width: 420px;
 }
 
 #ascensionAutoEnable,
 #ascensionAutoToggle {
     width: 150px;
+    transition-duration: 0.15s;
 }
 
-#ascensionAutoToggle {
-    display: none;
-}
-
-#corruptionStatsAscension {
-    min-width: 450px;
-    margin: 10px;
+#ascensionAutoEnable:hover,
+#ascensionAutoToggle:hover {
+    background-color: #333;
 }
 
 #corruptionStatsLoadouts {
-    width: 100%;
+    width: 500px;
+    margin: 10px;
+    padding: 10px;
     border: 1px solid orange;
-    align-items: stretch;
-}
-
-#corrButtonRow {
-    margin: 5px;
 }
 
 #corrStatsBtn,
 #corrLoadoutsBtn {
-    width: 150px;
-    height: 30px;
+    width: 120px;
+    height: 25px;
     border: 2px solid;
-    margin: 5px 25px;
+    transition-duration: 0.15s;
+}
+
+#corrStatsBtn:hover,
+#corrLoadoutsBtn:hover {
+    background-color: #333;
+}
+
+#corrButtonRow {
+    min-width: 300px;
+}
+
+.corruptionContainer {
+    display: flex;
 }
 
 .corruptionStatRow {
@@ -2546,18 +2785,17 @@ p[id$="BlessingsTotal"] {
     flex-flow: row;
     height: 40px;
     margin: 5px 0;
-    padding: 0 15px;
+    padding-left: 10px;
 }
 
 .corruptionImg {
     height: 100%;
     object-fit: contain;
-    image-rendering: auto;
 }
 
 .corrDesc {
     height: 30px;
-    min-width: 170px;
+    min-width: 150px;
     margin: auto;
     text-align: center;
 }
@@ -2576,6 +2814,11 @@ p[id$="BlessingsTotal"] {
     height: 30px;
     margin: 5px;
     padding: 3px;
+    transition-duration: 0.15s;
+}
+
+.corrBtn:hover {
+    background-color: #333;
 }
 
 .corruptionMax {
@@ -2596,23 +2839,24 @@ p[id$="BlessingsTotal"] {
     width: 50px;
 }
 
-#corruptionLoadouts,
-#corruptionStats {
-    min-height: 370px;
+#corruptionLoadouts {
+    height: 410px;
+    padding-top: 15px;
     box-sizing: border-box;
+}
+
+#corruptionDisplays {
+    margin-top: 5%;
+}
+
+.corrLoadoutName {
     white-space: nowrap;
-    width: 100%;
 }
 
 #corruptionLoadoutTable {
-    border-spacing: 0 4px;
+    border-collapse: separate;
+    border-spacing: 0 12.5px;
     width: 100%;
-    padding: 5px;
-}
-
-#corruptionLoadoutTable tbody th {
-    padding: 0;
-    font-size: 0;
 }
 
 #corrPicRow {
@@ -2626,6 +2870,7 @@ img.small {
 .corrSave {
     border: 1px solid dodgerblue;
     padding: 2px 5px;
+    transition-duration: 0.15s;
     width: 100%;
     margin-bottom: 1px;
 }
@@ -2633,8 +2878,14 @@ img.small {
 .corrLoad {
     border: 1px solid #5b5ddc;
     padding: 2px 5px;
+    transition-duration: 0.15s;
     width: 100%;
     margin-bottom: 1px;
+}
+
+.corrSave:hover,
+.corrLoad:hover {
+    background-color: #333;
 }
 
 #corruptionCleanse {
@@ -2642,14 +2893,21 @@ img.small {
     width: 150px;
     margin: auto 20px;
     border: 2px solid darkmagenta;
+    transition-duration: 0.15s;
 }
 
 #corruptionCleanseConfirm {
     height: 30px;
     width: 100px;
-    margin: auto 0;
+    margin: auto;
     border: 2px solid green;
     visibility: hidden;
+    transition-duration: 0.15s;
+}
+
+#corruptionCleanse:hover,
+#corruptionCleanseConfirm:hover {
+    background-color: #333;
 }
 
 header {
@@ -2665,28 +2923,15 @@ header .img {
 
 .subHeader {
     display: flex;
-    justify-content: center;
-    min-width: 1300px;
-    max-width: 1300px;
-    min-height: 90px;
-    max-height: 90px;
+    max-width: 1250px;
 }
 
 .currenciesContainer {
     display: flex;
     flex-direction: column;
+    width: 50%;
     align-items: flex-start;
-    min-width: 550px;
-    max-width: 550px;
-    font-variant-numeric: tabular-nums;
-}
-
-.resetInformationContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    min-width: 600px;
-    max-width: 600px;
+    min-width: 625px;
 }
 
 .currencyRow {
@@ -2700,7 +2945,7 @@ header .img {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    min-width: 140px;
+    min-width: 146px;
 }
 
 header #coinDisplay {
@@ -2744,7 +2989,6 @@ header #obtainiumDisplay {
     line-height: 20px;
     width: 60%;
     justify-content: space-evenly;
-    font-variant-numeric: tabular-nums;
 }
 
 #ascensionStats > span {
@@ -2757,7 +3001,6 @@ header #obtainiumDisplay {
     position: relative;
     height: 20px;
     margin-right: 4px;
-    image-rendering: auto;
 }
 
 #ascLen {
@@ -2789,7 +3032,7 @@ header #obtainiumDisplay {
 }
 
 #ascTimeTakenStats {
-    min-width: 140px; /* prevent bouncing around */
+    min-width: 125px; /* prevent bouncing around */
 }
 
 #ascTimeAccel {
@@ -2800,9 +3043,18 @@ header #obtainiumDisplay {
     color: orange;
 }
 
+#ascSingularityCount {
+    color: gold;
+}
+
+#ascSingLen {
+    color: gold;
+}
+
 #tabBorder {
     height: 2px;
-    width: 100%;
+    position: relative;
+    z-index: 0;
 }
 
 .challengeContainer {
@@ -2811,11 +3063,11 @@ header #obtainiumDisplay {
     flex-direction: column;
     align-items: flex-end;
     margin-bottom: auto;
-    padding: 5px 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
-.challengePortion,
-.challengeLabel {
+.challengePortion {
     width: 410px;
     height: auto;
     margin: auto;
@@ -2836,32 +3088,11 @@ header #obtainiumDisplay {
 .platonicUpgradesContainer {
     display: flex;
     flex-direction: column;
-    margin-left: 30px;
+    margin-left: 50px;
 }
 
 #platonicUpgrades {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 30px;
-}
-
-#platonicUpgradePics {
-    table-layout: fixed;
-    font-size: 0;
-}
-
-#platonicHelper {
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    width: 100%;
-    margin-left: 30px;
-}
-
-#platonicHelper > button {
-    height: 30px;
-    width: 100%;
-    margin: 5px 0;
+    margin-bottom: 50px;
 }
 
 .platonicUpgradeImage {
@@ -2869,15 +3100,17 @@ header #obtainiumDisplay {
 }
 
 .platonicContainer {
+    width: 400px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     margin-bottom: auto;
-    padding: 10px 5px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .platonicPortion {
-    width: 400px;
+    width: 380px;
     height: auto;
     margin: auto;
     color: white;
@@ -2895,8 +3128,7 @@ header #obtainiumDisplay {
     grid-column: shop 2/4;
     grid-row: 1;
     grid-column-gap: 15px;
-    grid-row-gap: 15px;
-    align-self: flex-start;
+    grid-row-gap: 30px;
 }
 
 .hepteractGrid > div {
@@ -2904,19 +3136,6 @@ header #obtainiumDisplay {
     grid-template-columns: repeat(3, 60px);
     grid-template-rows: repeat(3, 28px);
     align-items: center;
-}
-
-.hepteractGrid > div.hepteractHelper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.hepteractHelper > button {
-    width: 100%;
-    text-align: center;
-    height: 30px;
-    margin: 2px auto;
 }
 
 #hepteractToQuark,
@@ -2958,6 +3177,11 @@ header #obtainiumDisplay {
     border: 2px solid pink;
     width: 100%;
     height: 25px;
+    transition-duration: 0.15s;
+}
+
+.hepteractGrid button:hover {
+    background-color: #333;
 }
 
 .meter {
@@ -3002,12 +3226,11 @@ header #obtainiumDisplay {
     justify-content: center;
     text-align: center;
     margin-bottom: auto;
-    align-self: flex-start;
 }
 
 #hepteractCraftTexts > p {
     width: 750px;
-    margin: 0.05em auto;
+    margin: auto;
 }
 
 #hotkeys {
@@ -3040,13 +3263,9 @@ header #obtainiumDisplay {
     cursor: pointer;
 }
 
-#actualHotkey:hover {
-    text-decoration: underline;
-}
-
 #transparentBG {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background: rgb(0 0 0 / 50%);
     z-index: 6968;
     position: absolute;
@@ -3054,7 +3273,7 @@ header #obtainiumDisplay {
 }
 
 #saveString {
-    max-width: 500px;
+    max-width: 50vh;
     word-wrap: break-word;
 }
 
@@ -3071,7 +3290,27 @@ header #obtainiumDisplay {
     text-align: center;
 }
 
-#singularityUpgradeContainer {
+#singularityTabsToggle {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 10px;
+}
+
+#singularityTabsToggle > button {
+    height: 30px;
+    width: 100px;
+    margin: 0 7px;
+    text-align: center;
+    transition-duration: 0.15s;
+}
+
+#singularityTabsToggle > button:hover {
+    background-color: #333;
+}
+
+#singularityUpgradeContainer,
+#singularityOcteracts {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3081,20 +3320,26 @@ header #obtainiumDisplay {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 5px;
-    width: calc(36px * 20);
+    padding-bottom: 5px;
+    padding-top: 10px;
+    margin-top: 5px;
+    width: calc(105px * 5);
     border: 3px solid plum;
 }
 
 .singularityUpgrade {
     margin: 2px;
-    font-size: 0;
 }
 
-#singularityMultiline {
+#singularityPenaltiesMultiline,
+#singularityPerksMultiline {
     white-space: pre-line;
 }
 
 #testingMultiline {
     white-space: pre-line;
+}
+
+.newPerk {
+    color: gold;
 }
