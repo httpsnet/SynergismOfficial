@@ -1,0 +1,3100 @@
+html {
+    min-width: 1250px;
+    position: relative;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        "Open Sans",
+        "Helvetica Neue",
+        sans-serif;
+    scrollbar-width: none;
+}
+
+body {
+    background-color: #111;
+    transform-origin: 0 0;
+    overflow-x: hidden;
+    color: white;
+    margin: 0;
+    box-sizing: border-box;
+    transition-duration: 1s;
+    transition-property: background-color;
+}
+
+body.nofading {
+    transition-duration: 0s;
+}
+
+body.loading {
+    overflow-y: hidden;
+}
+
+body.dark {
+    background-color: #111;
+}
+
+body.gray {
+    background-color: #444;
+}
+
+body.light {
+    background-color: gray;
+}
+
+body.black {
+    background-color: black;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: white;
+}
+
+label {
+    display: block;
+}
+
+input,
+button,
+select,
+textarea {
+    font-size: 12px;
+    padding: 0.05em;
+    margin: 0;
+    box-sizing: border-box;
+    border: 0 solid #ccc;
+    overflow: visible;
+}
+
+input:disabled {
+    color: gray;
+}
+
+input[type="range"] {
+    height: 0;
+}
+
+input[type="image"] {
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+}
+
+button {
+    color: white;
+    background-color: #171717;
+    transition-duration: 0.15s;
+    cursor: pointer;
+}
+
+button:hover,
+button:active {
+    background-color: #333;
+}
+
+button:focus {
+    background-color: #333;
+    border-color: #333;
+}
+
+/* https://github.com/Pseudo-Corp/SynergismOfficial/issues/161 */
+img,
+input[type="image"] {
+    image-rendering: optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex.row {
+    flex-flow: row;
+}
+
+.flex.column {
+    flex-flow: column;
+}
+
+.flex.center {
+    justify-content: center;
+}
+
+.vAlign {
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+}
+
+.hCenter {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hCenter.tight {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translate(-101%, 30%);
+    }
+
+    to {
+        transform: translate(5%, 30%);
+    }
+}
+
+@keyframes slide-out {
+    to {
+        transform: translate(-101%, 30%);
+    }
+}
+
+#notification {
+    position: fixed;
+    display: none;
+    transform: translateY(30%);
+    z-index: 6969;
+    width: 250px;
+    max-width: 100%;
+    min-height: 100px;
+    overflow: hidden;
+    border-radius: 5px;
+    border: 1px solid gold;
+    background-color: #111;
+}
+
+.slide-in {
+    animation: slide-in 1200ms;
+    animation-fill-mode: forwards;
+}
+
+.slide-out {
+    animation: slide-out 1200ms;
+    animation-fill-mode: forwards;
+}
+
+#notification > p {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    text-align: center;
+    overflow-x: auto;
+    white-space: pre-line;
+}
+
+#notifx {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+}
+
+#confirmationBox {
+    display: none;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 6969;
+    width: 350px;
+    min-width: min(400px, 100%);
+    min-height: min(200px, 100%);
+    max-width: 100%;
+    max-height: 100%;
+    background-color: rgb(20 20 20);
+    border-radius: 5px;
+    border: 1px solid gold;
+    box-sizing: border-box;
+    padding: 15px;
+    justify-content: center;
+}
+
+#confirm > p,
+#alert > p,
+#prompt > p {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    white-space: pre-line;
+    margin: 0;
+}
+
+#confirmations {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/* Elements relating to the browser popup functions (Alert, Confirm, etc) */
+
+#prompt_text {
+    width: 75%;
+    margin: 10px auto;
+    padding: 3px;
+}
+
+#confirm button,
+#alert button,
+#prompt button {
+    width: 100px;
+    height: 30px;
+    border: 1px solid gold;
+    margin: 10px 20px;
+    padding: 3px;
+}
+
+#confirm,
+#alert,
+#prompt {
+    display: none;
+    min-width: 100%;
+    min-height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    place-self: stretch;
+    flex-wrap: nowrap;
+    outline: none;
+}
+
+#offlineContainer {
+    position: fixed;
+    z-index: 6970;
+    width: 100%;
+    height: 100vh;
+    background: rgb(0 0 0 / 50%);
+}
+
+#offlineContainer.unload {
+    background-color: rgb(10 10 10);
+    background-size: cover;
+    background-image: url("Pictures/Splash/base.png");
+}
+
+#offlineContainer[class=""] {
+    background-image: none !important;
+}
+
+#offlineContainerBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 6971;
+    position: absolute;
+    bottom: max(0px, calc(50% - 270px));
+    left: 50%;
+    min-width: 350px;
+    min-height: 550px;
+    background-color: rgb(20 20 20);
+    border-radius: 5px;
+    border: 1px solid gold;
+    box-sizing: border-box;
+    padding: 15px;
+    white-space: nowrap;
+    transform: translate(-50%, 0%);
+}
+
+.offlineStats {
+    display: flex;
+    flex-direction: column;
+}
+
+.offlineStat {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 32px;
+    margin-bottom: 2px;
+}
+
+.offlineStatElement {
+    height: 23px;
+    margin-left: 10px;
+}
+
+.offlineText {
+    margin: 10px 0;
+}
+
+#exitOffline {
+    height: 30px;
+    width: auto;
+    margin-top: 20px;
+    border: 2px solid ivory;
+    background-color: purple;
+    color: white;
+    visibility: visible;
+}
+
+#exitOffline.subtabContent {
+    visibility: hidden;
+    display: block;
+}
+
+#exitOffline:hover,
+#exitOffline:active {
+    background-color: darkviolet;
+}
+
+.resetsContainer {
+    display: flex;
+}
+
+.resetbtn {
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+#resetrow {
+    display: flex;
+    margin-left: -2px;
+}
+
+#resetrow img {
+    height: 32px;
+    width: 32px;
+    margin-left: 3px;
+}
+
+#resetinfo {
+    text-align: left; /* Keeps text from bouncing around */
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    width: 100%;
+}
+
+#resetrewards > div {
+    display: flex;
+    line-height: 32px;
+}
+
+#resetrewards > div > div {
+    margin-left: 3px;
+}
+
+#tabrow {
+    text-align: center;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    margin-inline: unset;
+    margin-block: unset;
+    padding-inline: unset;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 1300px;
+    height: 25px;
+}
+
+nav li {
+    display: inline-block;
+    border: 1px solid;
+    width: 100px;
+    min-width: 100px;
+    color: white;
+    background-color: #171717;
+    cursor: pointer;
+    line-height: 23px;
+    height: 23px;
+    margin-right: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: none;
+    transition-duration: 0.15s;
+    text-align: center;
+}
+
+nav li:hover {
+    background-color: #333;
+}
+
+#buildingstab {
+    border-color: orange;
+}
+
+#upgradestab {
+    border-color: orange;
+}
+
+#achievementstab {
+    border-color: white;
+}
+
+#runestab {
+    border-color: cyan;
+}
+
+#challengetab {
+    border-color: plum;
+}
+
+#researchtab {
+    border-color: green;
+}
+
+#anttab {
+    border-color: maroon;
+}
+
+#cubetab {
+    border-color: orange;
+    color: red;
+}
+
+#traitstab {
+    border-color: orange;
+    color: red;
+}
+
+#singularitytab {
+    border-color: lightgoldenrodyellow;
+    background-color: black;
+    color: red;
+}
+
+#settingstab {
+    color: white;
+    border-color: white;
+}
+
+#shoptab {
+    border-color: white;
+    background-color: purple;
+}
+
+#shoptab:hover {
+    background-color: #b300b2;
+}
+
+.subTabWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.subTabWrapper > button {
+    height: 30px;
+    width: 150px;
+    text-align: center;
+    margin-right: 17px;
+}
+
+.subBuildingsWrapper {
+    display: flex;
+    position: relative;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+}
+
+#buyamountcoin,
+#buyamountcrystal,
+#buyamountmythos,
+#buyamountparticle,
+#buyAmountTesseract,
+#buyAmountSingUpgrade {
+    position: absolute;
+    top: 5px;
+    left: calc(50% + 400px);
+}
+
+#togglecoinbuy,
+#togglecrystalbuy,
+#togglemythosbuy,
+#toggleparticlebuy,
+#toggleTesseractBuy {
+    font-size: 11px;
+    text-align: center;
+    margin: 0;
+}
+
+#buildingtext,
+#transcendTexts,
+#reincarnationTexts,
+#prestigeautomation,
+#transcendautomation,
+#reincarnateautomation > div,
+#ascendautomation {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#prestigeTexts,
+#tesseractTexts {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#buildingtext > p,
+#prestigeTexts > p,
+#transcendTexts > p,
+#reincarnationTexts > p,
+#tesseractTexts > p,
+#prestigeautomation > p,
+#transcendautomation > p,
+#reincarnateautomation > p,
+#ascendautomation > p {
+    margin: 0.05em auto;
+}
+
+#toggle21,
+#toggle27 {
+    margin-top: 60px;
+}
+
+#toggle27,
+#reincarnationamount,
+#reincarnateautotoggle {
+    width: 150px;
+}
+
+#upgrades {
+    position: relative;
+    text-align: center;
+    padding: 0;
+    color: gold;
+    margin: 0 auto;
+    max-width: 1400px;
+    min-width: 1150px;
+}
+
+#upgradesFlex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+#upgradesFlex > div {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    align-items: center;
+}
+
+#upgradesFlex > div > img {
+    width: 32px;
+    height: 32px;
+}
+
+#upgradesFlex > div > p {
+    margin: 5px auto;
+}
+
+#upgradesFlex > div > button {
+    width: 80px;
+    height: 30px;
+}
+
+#upgradesFlex > div > table {
+    height: 182px;
+    table-layout: fixed;
+    padding: 0;
+    font-size: 0;
+}
+
+#upgradesrow3 {
+    text-align: center;
+    margin-top: 7px;
+}
+
+#upgradesrow3 > p {
+    margin: 0.05em auto;
+}
+
+#upgradeeffect {
+    color: pink;
+}
+
+#toggle9 {
+    width: 130px;
+    height: 30px;
+    margin: 25px auto;
+}
+
+#settings {
+    position: relative;
+    padding: 0;
+    text-align: center;
+}
+
+/* Settings settings sub tab */
+
+#settingsubtab {
+    flex-direction: column;
+    margin-left: 12%;
+    margin-right: 12%;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.settingSubTabUpper {
+    display: flex;
+    margin-left: 25px;
+}
+
+.confirmationToggles {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+}
+
+.confirmationToggles > div > img {
+    background-color: black;
+}
+
+/* Utility functions including import/export, save file name, manual save, and manual reset */
+#exportButtons {
+    display: flex;
+    flex-direction: column;
+    margin: 0.8em 0;
+    min-width: 400px;
+}
+
+#exportButtons > * {
+    margin: 0.15em 0;
+}
+
+#importFileButton {
+    border: 2px solid white;
+    width: 176px;
+    margin: 2px auto;
+    padding: 0 0 2px;
+    cursor: pointer;
+    transition-duration: 0.15s;
+}
+
+#importFileButton:hover {
+    background-color: #333;
+}
+
+#savegame,
+#deleteGame,
+#resetHotkeys {
+    width: 180px;
+    margin: 2px auto;
+}
+
+#exportgame {
+    width: 150px;
+    height: 40px;
+    margin: 5px auto;
+}
+
+#saveStringLabel {
+    width: 180px;
+    margin: 2px auto;
+    font-size: 1em;
+}
+
+#saveStringInput {
+    width: 100%;
+    color: black;
+    border: 2px solid gray;
+    text-align: center;
+    font-size: 1em;
+    outline: none;
+}
+
+/* Third party URLs (Discord, Patreon, patch notes) */
+#thirdParty > div {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+    color: gold;
+    margin: 0.8em 0;
+}
+
+#thirdParty > div > a {
+    /* For whatever reason this fixes the click area for the external links */
+    margin: 0 auto;
+}
+
+/* Confirmation toggle box */
+.confirmationToggle {
+    display: flex;
+    flex-direction: column;
+    width: 40px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#confirmationToggleBox > button {
+    padding: 5px;
+    min-width: 65%;
+    margin-bottom: 3px;
+}
+
+#promocodeinfo {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.center {
+    margin: auto;
+}
+
+.settingpic {
+    flex-grow: unset;
+    margin: 4px;
+}
+
+.auto.square {
+    width: 40px;
+    height: 40px;
+}
+
+.buttonRow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 30px;
+    margin-left: 8.5%;
+}
+
+.buttonRow > div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 35px;
+}
+
+.buttonRow > div > p {
+    margin-top: 0.25em;
+}
+
+.buttonRow > div > .image {
+    height: 32px;
+    width: 32px;
+}
+
+.buttonRow > div > .desc {
+    width: 350px;
+    min-width: 350px;
+    margin-left: 10px;
+}
+
+.buildingPurchaseBtn {
+    width: 150px;
+    min-width: 150px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1px solid white !important;
+    background-color: #171717;
+    cursor: default;
+}
+
+.buildingPurchaseBtnAvailable {
+    cursor: pointer;
+    background-color: #555;
+}
+
+.buildingPurchaseBtnAvailable:hover {
+    background-color: #666;
+}
+
+.buttonRow > div > .auto {
+    width: 80px;
+    height: 30px;
+    margin-left: 15px;
+}
+
+.autobuyerToggleButton {
+    background-color: #171717;
+    transition: background-color 0.15s;
+}
+
+.buttonRow > div > .stats {
+    width: 400px;
+    margin-left: 10px;
+}
+
+#autoprestige,
+#autotranscend,
+#autoreincarnate,
+#autotessbuyeramount {
+    text-align: center;
+    color: white;
+    margin: 0 auto;
+}
+
+#buildinghotkeys,
+#prestigehotkeys,
+#transcendhotkeys,
+#reincarnatehotkeys,
+#ascendHotKeys {
+    color: gray;
+    text-align: center;
+    margin: 0 auto;
+    width: 1000px;
+}
+
+.tightText {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#statistics {
+    position: relative;
+    text-align: center;
+    padding: 0;
+    color: whitesmoke;
+}
+
+#achievementstable {
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 0;
+    margin: auto;
+}
+
+#achievementstable tbody td {
+    padding: 0;
+}
+
+#achievementinfo {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 50%;
+    margin: 0 auto;
+    overflow-wrap: break-word;
+}
+
+/* Removes giant space between paragraphs */
+#achievementinfo > p {
+    margin: 0.1em auto;
+}
+
+#achievementtutorial {
+    color: white;
+}
+
+#achievementdescription {
+    color: gold;
+}
+
+#achievementreward {
+    color: limegreen;
+}
+
+/* Decrease space between paragraphs */
+#achievementColorInfo > p {
+    margin: 0.1em auto;
+}
+
+#achievementcolorcode1 {
+    color: limegreen;
+}
+
+#achievementcolorcode2 {
+    color: purple;
+}
+
+#achievementcolorcode3 {
+    color: crimson;
+}
+
+#achievementcolorcode4 {
+    color: gray;
+}
+
+#buyamountoffering {
+    position: absolute;
+    width: 250px;
+    left: calc(50% + 300px);
+    top: 37px;
+}
+
+.talismanBuyAmountContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 30%;
+    margin-top: 23px;
+}
+
+#buyamounttalisman {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buyAmountBtn {
+    background-color: black;
+    cursor: pointer;
+    transition-duration: 0.15s;
+}
+
+.buyAmountBtn:hover {
+    background-color: #333;
+}
+
+#toggleofferingbuy,
+#toggletalismanbuy {
+    font-size: 11px;
+    text-align: center;
+    margin: 0;
+}
+
+#crystalupgradestable {
+    margin: 0 auto;
+}
+
+#prestigeshardinfo,
+#crystalupgrades > p {
+    margin: 2px;
+}
+
+#prestigeamount {
+    border: 1px solid cyan;
+    color: white;
+    background-color: #171717;
+    text-align: center;
+}
+
+#toggle15,
+#prestigeautotoggle,
+#prestigeamount {
+    width: 150px;
+}
+
+#runes {
+    position: relative;
+    padding: 0;
+}
+
+#runeContainer1,
+#runeContainer3,
+#runeContainer4 {
+    flex-direction: column;
+    align-items: center;
+}
+
+#runeContainer2 {
+    margin-top: 20px;
+}
+
+#runesToggle {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#runesToggle > button {
+    height: 30px;
+    width: 100px;
+    margin: 0 7px;
+    text-align: center;
+}
+
+#offeringDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: auto;
+}
+
+#offeringDetails > p {
+    height: auto;
+    margin: auto;
+}
+
+#runeDetails {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    height: auto;
+    margin: 10px auto;
+}
+
+.runeType {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    white-space: nowrap;
+    min-width: 150px;
+}
+
+.runeType > button {
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    border: 2px solid gold;
+    cursor: default;
+}
+
+.runeTypeElement {
+    margin: auto;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
+.runeTypeImage {
+    background-color: #171717;
+    transition-duration: 0.15s;
+}
+
+.runeTypeImage:hover {
+    background-color: #333;
+}
+
+.runeType > .runeButtonAvailable {
+    background-color: purple;
+    cursor: pointer;
+    transition-duration: 0.15s;
+}
+
+.runeType > .runeButtonAvailable:hover {
+    background-color: #b300b2;
+}
+
+#runeEffectDisplays {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: auto;
+}
+
+#runeEffectDisplays > p {
+    margin: 0 auto;
+}
+
+#toggleautofortify,
+#toggleautoenhance {
+    width: 125px;
+    height: 30px;
+    color: white;
+    border: 2px solid red;
+}
+
+#talismanFragmentCost {
+    width: 250px;
+    text-align: center;
+    font-size: 1.1em;
+    margin-right: -30px;
+}
+
+.talismanShardsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 33%;
+    margin-top: 23px;
+}
+
+.talismanShardContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.talismanShardIcon {
+    width: 32px;
+}
+
+.talismanShardAmount {
+    min-width: 70px;
+    margin-left: 4px;
+    font-size: 0.9em;
+}
+
+.talismanBtn {
+    height: 30px;
+    width: 80px;
+    min-width: 80px;
+    color: orange;
+}
+
+.talisminBtnAvailable {
+    background-color: purple;
+    cursor: pointer;
+}
+
+.talisminBtnAvailable:hover {
+    background-color: #b300b2;
+}
+
+.talismansContainer {
+    display: flex;
+    position: relative;
+    width: 70%;
+    justify-content: space-around;
+    padding: 0 10px;
+}
+
+.talismanContainer {
+    flex-direction: column;
+    min-width: 102px;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.talismanName {
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.talismanIcon {
+    width: 72px;
+    border: 4px solid white;
+    cursor: pointer;
+}
+
+.talismanLevel {
+    margin-top: 1px;
+    margin-bottom: 3px;
+}
+
+#respecAllTalismans {
+    height: 30px;
+    width: 80px;
+    color: plum;
+    border: 2px solid white;
+    margin: 10px;
+}
+
+#talismanEffect {
+    position: absolute;
+    left: 50%;
+    width: 600px;
+    margin-left: -300px;
+    top: 290px;
+    text-align: center;
+}
+
+#talismanEffect > p {
+    margin: 3px auto;
+}
+
+#talismanlevelup {
+    position: absolute;
+    left: 50%;
+    width: 600px;
+    margin-left: -300px;
+    top: 280px;
+    text-align: center;
+}
+
+#talismanrespec {
+    position: absolute;
+    left: 50%;
+    width: 350px;
+    margin-left: -180px;
+    top: 280px;
+    text-align: center;
+}
+
+.talismanRespecBtn {
+    height: 30px;
+    width: 200px;
+    margin: 1px;
+    text-align: center;
+}
+
+#confirmTalismanRespec {
+    position: absolute;
+    top: 110px;
+    left: 300px;
+}
+
+#cancelTalismanRespec {
+    position: absolute;
+    top: 142px;
+    left: 300px;
+}
+
+#transcendshardinfo {
+    margin: 2px;
+}
+
+#transcendshardbonus {
+    margin-bottom: 100px;
+    margin-top: 2px;
+}
+
+#transcendamount {
+    border: 1px solid plum;
+    color: white;
+    background-color: #171717;
+    text-align: center;
+}
+
+#toggle21,
+#transcendautotoggle,
+#transcendamount {
+    width: 150px;
+    margin: 0 auto;
+}
+
+#challenges {
+    position: relative;
+    padding: 0;
+}
+
+#challengesWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#challengeIntroduction {
+    text-align: center;
+    color: white;
+    font-size: 1.2em;
+    margin: 20px auto 10px;
+}
+
+#challengesAutoToggles {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#challengesAutoToggles > button {
+    height: 30px;
+    width: 200px;
+    margin: 7px;
+}
+
+#toggleAutoChallengeStart {
+    border: 2px solid gold;
+}
+
+#startChallenge {
+    border: 2px solid red;
+    font-size: 1.1em;
+    width: 300px;
+    height: 75px;
+    background-color: black;
+    color: white;
+}
+
+#startChallenge:hover {
+    background-color: #333;
+}
+
+#retryChallenge {
+    border: 2px solid plum;
+}
+
+/* Hide the last 3 buttons until the user clicks on a challenge */
+#toggleAutoChallengeIgnore,
+#startChallenge,
+#retryChallenge {
+    display: none;
+}
+
+#challengeIcons {
+    font-size: 0;
+    align-self: center;
+    margin-top: 10px;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.challengeLevels {
+    font-size: 12px;
+    text-align: center;
+    margin: 2px;
+}
+
+#challengeDetails {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#challengeTimers {
+    margin-right: 20px;
+}
+
+#oneChallengeDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 600px;
+}
+
+#oneChallengeDetails > p {
+    margin: 0.05em auto;
+    height: auto;
+}
+
+#challengeName {
+    color: white;
+}
+
+#challengeFlavor {
+    color: plum;
+}
+
+#challengeRestrictions {
+    color: crimson;
+}
+
+#challengeGoal {
+    color: gold;
+}
+
+#challengePerCompletionRewards {
+    color: white;
+}
+
+*[id^="challengePer"] {
+    color: pink;
+}
+
+#challengeFirstCompletionRewards {
+    color: white;
+}
+
+#challengeFirst1 {
+    color: orange;
+}
+
+#challengeQuarkBonus {
+    color: cyan;
+}
+
+#challengeTimersText > p {
+    margin: 0 auto;
+    font-size: 1.2em;
+}
+
+#challengeTimersText > input {
+    height: 20px;
+    font-size: 1.1em;
+    border: 2px solid orchid;
+    color: white;
+    background-color: #171717;
+    text-align: center;
+}
+
+#challengeWorthlessTexts {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#challengeWorthlessTexts > p {
+    margin: 5px auto;
+}
+
+#challengehotkeys {
+    color: gray;
+}
+
+#challengewarning {
+    color: crimson;
+}
+
+#challengewarningreincarnation {
+    color: limegreen;
+}
+
+.challenge {
+    font-size: 0;
+    background-color: #171717;
+    cursor: pointer;
+    transition-duration: 0.15s;
+}
+
+.challenge:hover {
+    background-color: #333;
+}
+
+.challengeActive {
+    background-color: plum;
+}
+
+.challengeActive:hover {
+    background-color: #ebc7eb;
+}
+
+#reincarnationamount {
+    border: 1px solid greenyellow;
+    color: white;
+    background-color: #171717;
+    text-align: center;
+}
+
+#reincarnationinfo {
+    color: lime;
+}
+
+#research {
+    position: relative;
+    padding: 0;
+}
+
+#researchtable {
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 0;
+    margin: 0 auto;
+    margin-top: 15px;
+}
+
+#researchDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: auto;
+}
+
+#researchDetails > p {
+    width: 850px;
+    margin: 0.05em auto;
+}
+
+#researchToggles {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: auto;
+}
+
+#researchToggles > button {
+    width: 175px;
+    height: 30px;
+    margin: 0 7px;
+    text-align: center;
+}
+
+#researchinfo2 {
+    height: 40px;
+}
+
+.researchAvailable {
+    cursor: pointer;
+    transition-duration: 0.15s;
+}
+
+.researchAvailable:hover {
+    background-color: #333;
+}
+
+.researchPurchased {
+    background-color: purple;
+}
+
+.researchPurchasedAvailable {
+    cursor: pointer;
+    transition-duration: 0.15s;
+}
+
+.researchPurchasedAvailable:hover {
+    background-color: #b300b2;
+}
+
+.researchRoomba {
+    background-color: orange;
+}
+
+.researchMaxed {
+    background-color: green;
+}
+
+#shop {
+    text-align: center;
+    position: relative;
+}
+
+#shopWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#actualWrapper {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+#actualShopContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#actualShop {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    width: calc(115px * 8);
+    border: 3px solid plum;
+}
+
+#actualShop > div {
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 110px;
+}
+
+#actualPotionShop > div > p {
+    margin: 3px;
+    white-space: nowrap;
+}
+
+#actualShop > div > p {
+    margin: 0;
+    white-space: nowrap;
+}
+
+#shoptop {
+    color: whitesmoke;
+    font-size: 1.2em;
+    margin-top: 15px;
+}
+
+#actualConsumables {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(130px * 2);
+    margin-right: 2%;
+}
+
+#actualPotionShop {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(70px, 130px));
+    border: 3px solid yellow;
+    margin-top: 10px;
+    padding: 5px 0;
+}
+
+#quarksDisplay {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#quarkamount {
+    font-size: 1.2em;
+    color: aqua;
+    margin-left: 5px;
+}
+
+#consumables {
+    color: orangered;
+    font-size: 1.2em;
+    margin-top: 15px;
+}
+
+#shopButtons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    float: right;
+    margin: 5px;
+}
+
+#shopButtons > button {
+    width: 250px;
+    height: 30px;
+    margin: 3px;
+}
+
+#shopHovers {
+    width: 600px;
+}
+
+#shopHovers > p {
+    margin: 0 auto;
+}
+
+.consumablebutton {
+    width: 127px;
+    height: 40px;
+}
+
+.permshopbutton {
+    width: 110px;
+    height: 40px;
+}
+
+#ants {
+    position: relative;
+    min-width: 1250px;
+    max-width: 1600px;
+    padding: 0;
+    margin: 0 auto;
+}
+
+#antsWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    flex-shrink: 0;
+    margin-left: -100px;
+}
+
+#antsWelcomeTexts {
+    margin-top: 30px;
+}
+
+#antsWelcomeTexts > p {
+    margin: 2px;
+}
+
+#antwelcome {
+    font-size: 1.3em;
+}
+
+#antrow1 {
+    margin-top: 15px;
+}
+
+#antrow2 {
+    margin-top: 10px;
+    height: 150px;
+}
+
+#antrow3 {
+    height: 100px;
+}
+
+#antrow4 {
+    margin-top: 10px;
+}
+
+#antrow2 > p {
+    margin: 0.1em auto;
+}
+
+#crumbcount {
+    font-size: 1.2em;
+}
+
+#antrow3 > p {
+    margin: 0.1em auto;
+}
+
+#antToggleFeatures {
+    display: flex;
+    justify-content: center;
+    margin: 5px 0;
+}
+
+#antSacrificeButtons {
+    display: flex;
+    flex-direction: column;
+}
+
+.antSacrificeButtonsContainer {
+    display: flex;
+    justify-content: center;
+}
+
+#toggleAntMax {
+    height: 37px;
+    width: 100px;
+    margin-right: 10px;
+    border: 1px solid gold;
+}
+
+#toggleAutoSacrificeAnt {
+    height: 37px;
+    width: 150px;
+    margin-right: 10px;
+    border: 1px solid crimson;
+}
+
+.antSacrificeSettingsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+#autoSacrificeAntMode {
+    height: 20px;
+    width: 150px;
+    border: 1px solid green;
+}
+
+#autoAntSacrificeAmount {
+    width: 150px;
+    border: 1px solid green;
+    color: white;
+    background-color: #171717;
+    text-align: center;
+}
+
+#autoAntSacrifice {
+    text-align: center;
+    width: 100%;
+}
+
+#sacrificeAnts {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    width: 200px;
+    top: 5px;
+    left: -170px;
+    text-align: center;
+}
+
+#antSacrificeTimer {
+    margin: 0 10px 5px 0;
+}
+
+#antSacrificeSummary {
+    position: absolute;
+    padding: 0;
+    width: 300px;
+    top: 25px;
+    text-align: left;
+    left: 73%;
+}
+
+#antSacrificeSummary > p {
+    margin: 0.1em auto;
+}
+
+#antSacrificeTable {
+    margin: 40px 0 0 70px;
+    padding: 0;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-variant-numeric: tabular-nums;
+}
+
+#antSacrificeTable img {
+    margin-right: 5px;
+}
+
+.antBtn {
+    background-color: #171717;
+}
+
+.antTierBtnAvailable {
+    cursor: pointer;
+    background-color: white;
+}
+
+.antUpgradeBtnAvailable {
+    cursor: pointer;
+    background-color: silver;
+}
+
+#cubes {
+    position: relative;
+    max-width: 1600px;
+    padding: 0;
+    margin: 0 auto;
+}
+
+/* Wow! Cube sidebar */
+#wowCubeSidebar {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+#wowCubeSidebarButtons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.cubeSwitchTabBtn {
+    width: 250px;
+    height: 30px;
+    margin: 2px;
+}
+
+#wowCubeSidebar > p {
+    margin: 0 auto;
+    line-height: 1.1em;
+    font-size: 0.9em;
+}
+
+#wowCubeSidebar br {
+    margin: 0.2em auto;
+}
+
+p#cubeToQuarkTimer,
+p#cubeToQuarkTimerValue {
+    font-size: 1.1em;
+}
+
+.cubePlacement1 {
+    font-size: 1.2em;
+}
+
+.cubePlacement2,
+.cubePlacement3 {
+    font-size: 1em;
+}
+
+.cubePlacement4 {
+    position: absolute;
+    text-align: center;
+    top: 100px;
+    left: 30%;
+    margin-left: -32px;
+}
+
+.cubePlacement5 {
+    position: absolute;
+    text-align: center;
+    top: 84px;
+    left: 40%;
+    margin-left: -96px;
+}
+
+.cubeBtn {
+    width: 100px;
+    height: 30px;
+    color: white;
+    background-color: black;
+    border: 1px solid gold;
+}
+
+p[id$="BlessingsTotal"] {
+    padding: 15px;
+}
+
+#cubeBlessingsTotal {
+    color: orange;
+}
+
+#tesseractBlessingsTotal {
+    color: orchid;
+}
+
+#hypercubeBlessingsTotal {
+    color: rgb(255 0 76);
+}
+
+#platonicBlessingsTotal {
+    color: orange;
+}
+
+#cubesWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: -185px;
+}
+
+.openGrid {
+    display: flex;
+    align-self: flex-start;
+    margin-top: 10px;
+}
+
+.openImage {
+    height: 64px;
+    width: 64px;
+}
+
+.inventory {
+    white-space: nowrap;
+    margin: 6px 10px;
+}
+
+.openBtn {
+    grid-row: 2;
+    grid-column: 2;
+    margin-left: 10px;
+}
+
+.openButtons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cubeBonus {
+    margin-left: -2px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.cubeIcon {
+    border-collapse: collapse;
+}
+
+.cubeTab {
+    flex-direction: column;
+    align-items: center;
+    width: 700px;
+    margin-left: 30px;
+}
+
+#cubeTab5Wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 700px;
+    margin-top: 15px;
+}
+
+#cubeTab5Wrapper > p {
+    margin: 0.1em auto;
+}
+
+#cubeTab6 {
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+#c15Rewards > p {
+    margin: 0 auto;
+    line-height: 1.1em;
+}
+
+#cube1Bonus {
+    width: 1500px;
+}
+
+#tesseract1Bonus {
+    width: 1500px;
+}
+
+#hypercube1Bonus {
+    width: 1500px;
+}
+
+#cubeAmount2 {
+    color: white;
+}
+
+#cubeUpgradeTable {
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 0;
+}
+
+#cubeTab5Wrapper button {
+    text-align: center;
+    color: white;
+    height: 30px;
+}
+
+#toggleAutoOpenCubes,
+#toggleTesseractBAB,
+#toggleAutoSingularity {
+    width: 250px;
+    text-align: center;
+    color: white;
+    height: 30px;
+    margin: 2px auto;
+}
+
+#toggleCubeAutoBuy {
+    width: 110px;
+}
+
+.gridImg {
+    cursor: pointer;
+}
+
+#switchsettingtab {
+    position: absolute;
+    height: 30px;
+    width: 200px;
+    left: 50%;
+    margin-left: -100px;
+    top: 10px;
+    border: 2px solid gold;
+}
+
+#switchsettingtab2 {
+    position: absolute;
+    height: 30px;
+    width: 200px;
+    left: 50%;
+    margin-left: -100px;
+    top: 40px;
+    border: 2px solid orange;
+}
+
+/* Credits */
+
+.credit > img {
+    image-rendering: auto;
+}
+
+#creditssubtab {
+    margin-top: 4.5%;
+    margin-left: 14%;
+    margin-right: 14%;
+}
+
+#creditssubtab > * {
+    font-size: 1.2em;
+    text-align: center;
+    margin: 0.4em 0;
+}
+
+#versionnumber {
+    color: fuchsia;
+}
+
+#ascendConstantUpgrades {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 450px;
+}
+
+#ascendConstantUpgrades > p {
+    margin: 0.05em auto;
+    text-align: left;
+    width: 100%;
+}
+
+#tesseractautobuytoggle,
+#tesseractAmount {
+    width: 150px;
+}
+
+#tesseractAmount {
+    border: 1px solid orange;
+    color: white;
+    background-color: #171717;
+    text-align: center;
+}
+
+#creditssubtab > h1 {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#creditList {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(250px, 1fr));
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.credit {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2px;
+}
+
+.credit > a {
+    margin-left: 5px;
+}
+
+#artistList {
+    display: grid;
+    grid-template-columns: repeat(4, 160px);
+    justify-content: center;
+}
+
+#statisticsSubTab {
+    padding-top: 25px;
+    overflow-x: auto;
+    grid-template-columns: repeat(2, minmax(50px, 25%));
+    justify-content: center;
+
+    /* don't inherit this property; defaults to center and messes it up */
+    scrollbar-width: none;
+}
+
+#statisticsSubTab::-webkit-scrollbar {
+    display: none;
+}
+
+#statsForNerds {
+    display: grid;
+    grid-template-columns: repeat(3, 33.33%);
+    grid-template-rows: repeat(9, 12.5%);
+    height: 300px;
+    width: 500px;
+}
+
+#statsForNerds > button {
+    width: 150px;
+    height: 30px;
+    margin: 3px;
+}
+
+.statContainer {
+    width: 400px;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 25px;
+    display: none;
+}
+
+#miscStats {
+    display: block;
+}
+
+.statPortion {
+    width: 380px;
+    height: auto;
+    margin: auto;
+    color: white;
+    text-align: left;
+    font-size: 1em;
+}
+
+.statPortion.indented {
+    width: 360px;
+    padding-left: 20px;
+}
+
+.statNumber {
+    color: yellow;
+    font-size: 0.9em;
+    float: right;
+}
+
+.statPortion.statTotal {
+    color: orange;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.statNumber.statTotal {
+    color: deepskyblue;
+}
+
+.constUpgrade {
+    background-color: #171717;
+    transition-duration: 0.2s;
+}
+
+.constUpgradeAvailable {
+    background-color: green;
+    cursor: pointer;
+}
+
+.constUpgradeSingle {
+    background-color: gold;
+}
+
+.constUpgradeSingleAvailable {
+    background-color: gold;
+    cursor: pointer;
+}
+
+.constUpgradeSingleAvailable:hover {
+    background-color: #fff4b3;
+}
+
+.subtabSwitcher > button.buttonActive {
+    background-color: crimson;
+}
+
+.subtabContent {
+    display: none;
+}
+
+.subtabContent.subtabActive {
+    display: block;
+}
+
+.subtabContent.subtabActive.subtabDisplayFlex {
+    display: flex;
+    justify-content: center;
+}
+
+.subtabContent.subtabActive.subtabDisplayGrid {
+    display: grid;
+}
+
+.historySubTab {
+    color: white;
+    margin-top: 10px;
+}
+
+.historySubTab p {
+    margin: 8px 0 12px;
+}
+
+.historySubTab table {
+    margin: auto;
+    border-collapse: collapse;
+    min-width: 100%;
+}
+
+.historySubTab tbody {
+    text-align: left;
+}
+
+.historySubTab tbody img {
+    vertical-align: middle;
+    height: 20px;
+    margin-right: 3px;
+    image-rendering: auto;
+}
+
+.historySubTab tbody td {
+    padding: 4px 6px;
+    margin-right: 10px;
+}
+
+.historySubTab tbody .history-gain:last-child {
+    margin-right: 0;
+}
+
+.historySubTab tbody tr:nth-child(even) {
+    background: #111;
+}
+
+.historySubTab tbody tr:nth-child(odd) {
+    background: #262626;
+}
+
+.historySubTab tbody .history-seconds {
+    white-space: nowrap;
+}
+
+.historySubTab tbody .history-filler {
+    padding: 0;
+}
+
+.historySubTab tbody .history-corruption {
+    display: grid;
+    grid: 20px / auto-flow 40px;
+}
+
+.historySubTab tbody *[title] {
+    text-decoration: underline;
+}
+
+#historyReset,
+#historyAnts {
+    margin-left: 20px;
+}
+
+#historyAscend {
+    margin: 0 auto;
+}
+
+#historyTogglePerSecondButton {
+    float: right;
+}
+
+.onOffToggle {
+    text-align: center;
+    padding: 5px;
+    border: 2px solid red;
+}
+
+#historyResetTable {
+    min-width: 540px;
+}
+
+#historyAntsTable {
+    min-width: 700px;
+}
+
+#historyAscendTable {
+    white-space: nowrap;
+}
+
+.historyTableWrap {
+    max-height: 650px;
+    overflow-y: auto;
+}
+
+.runeBlessingPurchaseSettings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+.runeBlessingRow {
+    display: flex;
+    width: 1000px;
+    align-self: center;
+    align-items: center;
+    white-space: nowrap;
+    margin-bottom: 10px;
+}
+
+.runeIcons {
+    height: 64px;
+    width: 64px;
+    margin-right: 20px;
+}
+
+.runeTexts {
+    width: 185px;
+}
+
+.runeButtons {
+    height: 30px;
+    width: 325px;
+    border: 2px solid yellow !important;
+    margin-right: 15px;
+    color: gold;
+}
+
+.runeButtonsAvailable {
+    background-color: #111;
+    cursor: pointer;
+}
+
+#buyRuneBlessingInput {
+    width: 150px;
+    border: 2px solid white;
+    margin-right: 20px;
+    background-color: #171717;
+    text-align: center;
+    color: white;
+    font-size: 1em;
+}
+
+#buyRuneSpiritInput {
+    width: 150px;
+    border: 2px solid orchid;
+    margin-right: 20px;
+    background-color: #171717;
+    text-align: center;
+    color: white;
+    font-size: 1em;
+}
+
+#traits {
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    min-height: 600px;
+    margin-top: 10px;
+    padding: 0;
+}
+
+#corruptionMain {
+    display: flex;
+    justify-content: start;
+    flex-flow: column;
+    min-width: 700px;
+    width: 700px;
+    margin: 10px;
+    padding: 10px;
+}
+
+#corruptionIntroduction {
+    font-size: 1.2em;
+    color: darkorchid;
+}
+
+#corruptionInfo1 {
+    color: yellow;
+}
+
+#corruptionSelected {
+    height: 70px;
+    margin-top: 10px;
+}
+
+#corruptionDetails {
+    display: flex;
+    min-height: 150px;
+    visibility: hidden;
+}
+
+#corruptionName {
+    font-size: 1.2em;
+    color: red;
+}
+
+#corruptionDescription {
+    color: darkviolet;
+}
+
+#corruptionLevelCurrent {
+    color: orchid;
+}
+
+#corruptionLevelPlanned {
+    color: lime;
+}
+
+#corruptionSpiritContribution {
+    color: gold;
+}
+
+.corruptionWoWs {
+    margin-left: 5%;
+    text-align: left;
+}
+
+#corruptionCubes {
+    margin-top: 10px;
+}
+
+#corruptionDisplays {
+    margin-top: 0;
+    margin-right: auto;
+    margin-bottom: 10px;
+    margin-left: auto;
+}
+
+#ascensionBox {
+    margin: 10px auto;
+}
+
+#ascensionAutomation {
+    margin: 0 30px;
+    text-align: center;
+}
+
+#ascensionAmount,
+#ascensionamount {
+    width: 100px;
+    color: white;
+    background-color: #171717;
+    text-align: center;
+}
+
+#autoAscend {
+    color: white;
+    width: 420px;
+}
+
+#ascensionAutoEnable,
+#ascensionAutoToggle {
+    width: 150px;
+}
+
+#ascensionAutoToggle {
+    display: none;
+}
+
+#corruptionStatsAscension {
+    min-width: 450px;
+    margin: 10px;
+}
+
+#corruptionStatsLoadouts {
+    width: 100%;
+    border: 1px solid orange;
+    align-items: stretch;
+}
+
+#corrButtonRow {
+    margin: 5px;
+}
+
+#corrStatsBtn,
+#corrLoadoutsBtn {
+    width: 150px;
+    height: 30px;
+    border: 2px solid;
+    margin: 5px 25px;
+}
+
+.corruptionStatRow {
+    display: flex;
+    flex-flow: row;
+    height: 40px;
+    margin: 5px 0;
+    padding: 0 15px;
+}
+
+.corruptionImg {
+    height: 100%;
+    object-fit: contain;
+    image-rendering: auto;
+}
+
+.corrDesc {
+    height: 30px;
+    min-width: 170px;
+    margin: auto;
+    text-align: center;
+}
+
+.corrLoadoutName:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.corrLoadoutNameCol {
+    width: 17%;
+}
+
+.corrBtn {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    padding: 3px;
+}
+
+.corruptionMax {
+    border: 2px solid green !important;
+    width: 50px;
+}
+
+.corruptionUp {
+    border: 1px solid green !important;
+}
+
+.corruptionDown {
+    border: 1px solid red !important;
+}
+
+.corruptionReset {
+    border: 2px solid red !important;
+    width: 50px;
+}
+
+#corruptionLoadouts,
+#corruptionStats {
+    min-height: 370px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    width: 100%;
+}
+
+#corruptionLoadoutTable {
+    border-spacing: 0 4px;
+    width: 100%;
+    padding: 5px;
+}
+
+#corruptionLoadoutTable tbody th {
+    padding: 0;
+    font-size: 0;
+}
+
+#corrPicRow {
+    height: 30px;
+}
+
+img.small {
+    height: 32px;
+}
+
+.corrSave {
+    border: 1px solid dodgerblue;
+    padding: 2px 5px;
+    width: 100%;
+    margin-bottom: 1px;
+}
+
+.corrLoad {
+    border: 1px solid #5b5ddc;
+    padding: 2px 5px;
+    width: 100%;
+    margin-bottom: 1px;
+}
+
+#corruptionCleanse {
+    height: 30px;
+    width: 150px;
+    margin: auto 20px;
+    border: 2px solid darkmagenta;
+}
+
+#corruptionCleanseConfirm {
+    height: 30px;
+    width: 100px;
+    margin: auto 0;
+    border: 2px solid green;
+    visibility: hidden;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header .img {
+    height: 32px;
+    width: 32px;
+}
+
+.subHeader {
+    display: flex;
+    justify-content: center;
+    min-width: 1300px;
+    max-width: 1300px;
+    min-height: 90px;
+    max-height: 90px;
+}
+
+.currenciesContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 550px;
+    max-width: 550px;
+    font-variant-numeric: tabular-nums;
+}
+
+.resetInformationContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 600px;
+    max-width: 600px;
+}
+
+.currencyRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.currencyContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 140px;
+}
+
+header #coinDisplay {
+    color: gold;
+}
+
+header #diamondDisplay {
+    color: cyan;
+}
+
+header #offeringDisplay {
+    color: gold;
+}
+
+header #mythosDisplay {
+    color: plum;
+}
+
+header #mythosshardDisplay {
+    color: plum;
+}
+
+header #particlesDisplay {
+    color: limegreen;
+}
+
+header #obtainiumDisplay {
+    color: pink;
+}
+
+.statDisplay {
+    padding-left: 6px;
+    line-height: 32px;
+}
+
+#ascensionStats {
+    display: flex;
+    gap: 10px;
+    padding-top: 10px;
+    margin-bottom: 15px;
+    line-height: 20px;
+    width: 60%;
+    justify-content: space-evenly;
+    font-variant-numeric: tabular-nums;
+}
+
+#ascensionStats > span {
+    display: flex;
+    white-space: pre;
+    align-items: center;
+}
+
+#ascensionStats img {
+    position: relative;
+    height: 20px;
+    margin-right: 4px;
+    image-rendering: auto;
+}
+
+#ascLen {
+    color: darkcyan;
+}
+
+#ascC10 {
+    color: limegreen;
+}
+
+#ascCubes {
+    color: yellow;
+}
+
+#ascTess {
+    color: orchid;
+}
+
+#ascHyper {
+    color: crimson;
+}
+
+#ascPlatonic {
+    color: lightgoldenrodyellow;
+}
+
+#ascHepteract {
+    color: pink;
+}
+
+#ascTimeTakenStats {
+    min-width: 140px; /* prevent bouncing around */
+}
+
+#ascTimeAccel {
+    color: royalblue;
+}
+
+#ascAscensionTimeAccel {
+    color: orange;
+}
+
+#tabBorder {
+    height: 2px;
+    width: 100%;
+}
+
+.challengeContainer {
+    width: 410px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: auto;
+    padding: 5px 10px;
+}
+
+.challengePortion,
+.challengeLabel {
+    width: 410px;
+    height: auto;
+    margin: auto;
+    color: white;
+    text-align: left;
+    font-size: 1em;
+}
+
+.challengeNumber {
+    width: 380px;
+    height: auto;
+    margin: auto;
+    color: white;
+    text-align: left;
+    font-size: 1em;
+}
+
+.platonicUpgradesContainer {
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+}
+
+#platonicUpgrades {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+}
+
+#platonicUpgradePics {
+    table-layout: fixed;
+    font-size: 0;
+}
+
+#platonicHelper {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    margin-left: 30px;
+}
+
+#platonicHelper > button {
+    height: 30px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.platonicUpgradeImage {
+    cursor: pointer;
+}
+
+.platonicContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: auto;
+    padding: 10px 5px;
+}
+
+.platonicPortion {
+    width: 400px;
+    height: auto;
+    margin: auto;
+    color: white;
+    text-align: left;
+    font-size: 1em;
+}
+
+.hepteractGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 180px);
+    margin-top: 10px;
+    padding: 8px;
+    width: calc(180px * 4 + 45px);
+    border: 3px solid plum;
+    grid-column: shop 2/4;
+    grid-row: 1;
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    align-self: flex-start;
+}
+
+.hepteractGrid > div {
+    display: grid;
+    grid-template-columns: repeat(3, 60px);
+    grid-template-rows: repeat(3, 28px);
+    align-items: center;
+}
+
+.hepteractGrid > div.hepteractHelper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hepteractHelper > button {
+    width: 100%;
+    text-align: center;
+    height: 30px;
+    margin: 2px auto;
+}
+
+#hepteractToQuark,
+#overfluxPowder {
+    display: grid;
+    grid-template-columns: 12px 32px 31px 90px 15px;
+    grid-template-rows: 32px 15px 15px 15px;
+}
+
+#hepteractToQuarkImage,
+#overfluxPowderImage {
+    grid-column: 2;
+}
+
+#hepteractToQuarkTrade,
+#powderDayWarp {
+    grid-column: 4;
+}
+
+.heptTypeImage {
+    grid-row: 1 / span 2;
+}
+
+.heptGridInventory {
+    grid-column: 2 / span 3;
+    display: block;
+}
+
+.heptGridInventoryLabel,
+.heptGridInventoryValue {
+    float: left;
+}
+
+.heptGridInventoryValue {
+    float: right;
+}
+
+.hepteractGrid button {
+    border: 2px solid pink;
+    width: 100%;
+    height: 25px;
+}
+
+.meter {
+    height: 15px;
+    position: relative;
+    background: #555;
+    border-radius: 5px;
+    padding: 2px;
+    grid-column: 1 / span 3;
+    text-align: center;
+}
+
+.meter > span {
+    display: block;
+    height: 100%;
+}
+
+.progressBar {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    overflow: hidden;
+    left: 0;
+    top: 0;
+    position: absolute;
+    z-index: 1;
+}
+
+.progressText {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -2px;
+    width: 100%;
+}
+
+#hepteractCraftTexts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: auto;
+    align-self: flex-start;
+}
+
+#hepteractCraftTexts > p {
+    width: 750px;
+    margin: 0.05em auto;
+}
+
+#hotkeys {
+    flex-direction: column;
+}
+
+.hotkeys {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(250px, 1fr));
+    margin: 10px auto;
+}
+
+.hotkeyItem {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2px;
+}
+
+#hotKeyDesc {
+    margin: 0;
+}
+
+#hotkeyTooltip {
+    color: darkorchid;
+}
+
+#actualHotkey {
+    padding: 1px 15px;
+    color: gold;
+    cursor: pointer;
+}
+
+#actualHotkey:hover {
+    text-decoration: underline;
+}
+
+#transparentBG {
+    width: 100%;
+    height: 100vh;
+    background: rgb(0 0 0 / 50%);
+    z-index: 6968;
+    position: absolute;
+    display: none;
+}
+
+#saveString {
+    max-width: 500px;
+    word-wrap: break-word;
+}
+
+#currentBonus {
+    color: springgreen;
+
+    /* Remove padding */
+    margin: 0;
+}
+
+#singularity {
+    position: relative;
+    padding: 0;
+    text-align: center;
+}
+
+#singularityUpgradeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#actualSingularityUpgradeContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 5px;
+    width: calc(36px * 20);
+    border: 3px solid plum;
+}
+
+.singularityUpgrade {
+    margin: 2px;
+    font-size: 0;
+}
+
+#singularityMultiline {
+    white-space: pre-line;
+}
+
+#testingMultiline {
+    white-space: pre-line;
+}
