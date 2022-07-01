@@ -1330,6 +1330,9 @@ export const singularityOverride = (hold: Player, singsing = false) => {
     hold.theme = player.theme
     hold.lastCode = player.lastCode
     hold.hotkeys = Object.assign(hold.hotkeys, player.hotkeys)
+    hold.ascStatToggles = Object.assign(hold.ascStatToggles, player.ascStatToggles)
+    hold.dayTimer = player.dayTimer
+    hold.dayCheck = player.dayCheck
 
     // Building toggle settings
     Object.assign(hold.toggles, player.toggles)
@@ -1402,7 +1405,6 @@ export const singularityOverride = (hold: Player, singsing = false) => {
 
     // Auto challenge settings
     hold.autoChallengeRunning = player.autoChallengeRunning
-    hold.autoChallengeStartExponent = player.autoChallengeStartExponent
     hold.retrychallenges = player.retrychallenges
     Object.assign(hold.autoChallengeToggles, player.autoChallengeToggles);
     Object.assign(hold.autoChallengeTimer, player.autoChallengeTimer);

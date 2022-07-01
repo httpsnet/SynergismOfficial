@@ -796,7 +796,7 @@ export const saveSynergy = async (button?: boolean) => {
     const save = btoa(JSON.stringify(p));
     if (save !== null) {
         const saveBlob = new Blob([save], { type: 'text/plain' });
-        await localforage.setItem<Blob>('Synergysave2', saveBlob);
+        await localforage.setItem<Blob>(saveName, saveBlob);
         //        console.log('Saved the game ', Date.now());
     }
 
@@ -821,8 +821,8 @@ const toAdapt = new Map<keyof Player,(data: PlayerSave) => unknown>([
 const loadSynergy = async () => {
     console.log('loaded attempted');
     const save =
-        await localforage.getItem<Blob>('Synergysave2') ??
-        localStorage.getItem('Synergysave2');
+        await localforage.getItem<Blob>(saveName) ??
+        localStorage.getItem(saveName);
 
     const saveString = typeof save === 'string' ? save : await save?.text();
     const data = saveString
@@ -3468,7 +3468,7 @@ function tack(dt: number) {
         }
     }
 
-    if (player.autoAscend) {
+    if (player.autoAscend && player.challengecompletions[11] > 0) {
         G['autoResetTimers'].ascension += dt;
         const time = Math.max(0.01, player.ascensionamount);
         if (G['autoResetTimers'].ascension >= time && player.ascensionCounter > 0) {
@@ -3602,6 +3602,8 @@ document.addEventListener('keydown', (event) => {
 
 });
 
+export const saveName = 'Synergysave1';
+
 /**
  * Reloads shit.
  * @param reset if this param is passed, offline progression will not be calculated.
@@ -3620,8 +3622,8 @@ export const reloadShit = async (reset = false) => {
     });
 
     const save =
-        await localforage.getItem<Blob>('Synergysave2') ??
-        localStorage.getItem('Synergysave2');
+        await localforage.getItem<Blob>(saveName) ??
+        localStorage.getItem(saveName);
     const saveObject = typeof save === 'string' ? save : await save?.text();
     if (saveObject) {
         const dec = LZString.decompressFromBase64(saveObject);
@@ -3636,7 +3638,7 @@ export const reloadShit = async (reset = false) => {
             }
             localStorage.clear();
             const blob = new Blob([saveString], { type: 'text/plain' });
-            await localforage.setItem<Blob>('Synergysave2', blob);
+            await localforage.setItem<Blob>(saveName, blob);
             await Alert('Transferred save to new format successfully!');
         }
 
