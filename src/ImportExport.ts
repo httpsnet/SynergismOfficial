@@ -1,4 +1,4 @@
-import { player, saveSynergy, blankSave, reloadShit, format } from './Synergism';
+import { player, saveSynergy, blankSave, reloadShit, format, formatTimeShort, saveName } from './Synergism';
 import { testing, version } from './Config';
 import { getElementById, productContents, sumContents } from './Utility';
 import LZString from 'lz-string';
@@ -83,8 +83,8 @@ export const exportSynergism = async () => {
 
     const toClipboard = getElementById<HTMLInputElement>('saveType').checked;
     const save =
-        await localforage.getItem<Blob>('Synergysave2') ??
-        localStorage.getItem('Synergysave2');
+        await localforage.getItem<Blob>(saveName) ??
+        localStorage.getItem(saveName);
     const saveString = typeof save === 'string' ? save : await save?.text();
 
     if (saveString === undefined) {
@@ -156,7 +156,7 @@ export const importSynergism = async (input: string, reset = false) => {
         }
 
         const item = new Blob([saveString], { type: 'text/plain' });
-        await localforage.setItem<Blob>('Synergysave2', item);
+        await localforage.setItem<Blob>(saveName, item);
 
         localStorage.setItem('saveScumIsCheating', Date.now().toString());
 
@@ -392,7 +392,13 @@ export const promocodes = async (lastCode = false) => {
 
         const ascensionSpeed = calculateAscensionAcceleration()
         const perSecond = 1/(24 * 3600 * 365) * baseMultiplier * productContents(valueMultipliers) * ascensionSpeed
-        return Alert(`You will gain an octeract (when they come out) every ${format(1 / perSecond, 2, true)} seconds, assuming you have them unlocked!`)
+        const perSecondText = perSecond >= 1 ? `${format(perSecond, 2, true)} Ot/s` : `${format(1 / perSecond, 2, true)} seconds`
+        return Alert(`You will gain an octeract (when they come out) every ${perSecondText}, assuming you have them unlocked!`)
+    } else if (input === 'date') {
+        // Help: Why was this code born?
+        // https://discord.com/channels/677271830838640680/896134295524085761/987429826950467614
+        const ascensionSeconds = player.ascensionCounter / calculateAscensionAcceleration();
+        return Alert(`I guess it's been ${formatTimeShort(ascensionSeconds)} since you last ascended!`);
     } else {
         el.textContent = 'Your code is either invalid or already used. Try again!'
         player.lastCode = '';

@@ -204,7 +204,7 @@ export const revealStuff = () => {
 
     const singularityShopItems = document.getElementsByClassName('singularityShopUnlock') as HTMLCollectionOf<HTMLElement>;
     for (const item of Array.from(singularityShopItems)) { // Ability to buy upgrade tier 1s
-        item.style.display = player.singularityUpgrades.wowPass.getEffect().bonus > 0 ? 'block' : 'none';
+        item.style.display = player.singularityUpgrades.wowPass.getEffect().bonus ? 'block' : 'none';
     }
 
     const singularityShopItems2 = document.getElementsByClassName('singularityShopUnlock2') as HTMLCollectionOf<HTMLElement>;
@@ -456,9 +456,9 @@ export const revealStuff = () => {
     }
 
     Object.keys(automationUnlocks).forEach(key => {
-        const el = DOMCacheGetOrSet(key);
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (!el) {
+        const el = DOMCacheGetOrSet(key) as HTMLElement | null;
+        if (el === null) {
+            // eslint-disable-next-line no-console
             console.error(`Automation unlock failed to find element with ID '${key}'.`);
             return;
         }
@@ -499,7 +499,7 @@ export const hideStuff = () => {
 
     const tab = DOMCacheGetOrSet('settingstab')!;
     tab.style.backgroundColor = '';
-    tab.style.border = '1px solid white';
+    tab.style.borderColor = 'white';
 
     if (G['currentTab'] === 'buildings') {
         DOMCacheGetOrSet('buildingstab').style.backgroundColor = 'orange';
@@ -514,7 +514,7 @@ export const hideStuff = () => {
         DOMCacheGetOrSet('settings').style.display = 'block'
         const tab = DOMCacheGetOrSet('settingstab')!;
         tab.style.backgroundColor = 'orange';
-        tab.style.border = '1px solid gold';
+        tab.style.borderColor = 'gold';
     }
     if (G['currentTab'] === 'achievements') {
         DOMCacheGetOrSet('statistics').style.display = 'block'
@@ -585,13 +585,13 @@ const visualTab: Record<typeof G['currentTab'], () => void> = {
 export const htmlInserts = () => {
     // ALWAYS Update these, for they are the most important resources
 
-    const playerRequirements = ['coins', 'runeshards', 'prestigePoints', 'transcendPoints', 'transcendShards', 'reincarnationPoints', 'worlds', 'researchPoints'] as const
-    const domRequirements = ['coinDisplay', 'offeringDisplay', 'diamondDisplay', 'mythosDisplay', 'mythosshardDisplay', 'particlesDisplay', 'quarkDisplay', 'obtainiumDisplay'] as const
+    const playerRequirements = ['coins', 'runeshards', 'prestigePoints', 'transcendPoints', 'transcendShards', 'reincarnationPoints', 'worlds', 'researchPoints'] as const;
+    const domRequirements = ['coinDisplay', 'offeringDisplay', 'diamondDisplay', 'mythosDisplay', 'mythosshardDisplay', 'particlesDisplay', 'quarkDisplay', 'obtainiumDisplay'] as const;
     for (let i = 0; i < playerRequirements.length; i++) {
-        const text = format(player[playerRequirements[i]])
-        const dom = DOMCacheGetOrSet(domRequirements[i])
-        if (dom.textContent != text) {
-            dom.textContent = text
+        const text = format(player[`${playerRequirements[i]}` as const]);
+        const dom = DOMCacheGetOrSet(`${domRequirements[i]}` as const);
+        if (dom.textContent !== text) {
+            dom.textContent = text;
         }
     }
 
@@ -895,13 +895,13 @@ const updateAscensionStats = () => {
         'ascHyper': format(hyper * (player.ascStatToggles[3] ? 1 : 1 / t), 4),
         'ascPlatonic': format(platonic * (player.ascStatToggles[4] ? 1 : 1 / t), 5),
         'ascHepteract': format(hepteract * (player.ascStatToggles[5] ? 1 : 1 / t), 3),
-        'ascC10': player.challengecompletions[10] + '',
+        'ascC10': `${format(player.challengecompletions[10])}`,
         'ascTimeAccel': `${format(calculateTimeAcceleration(), 3)}x`,
         'ascAscensionTimeAccel': `${format(calculateAscensionAcceleration(), 3)}x`
     }
     for (const key in fillers) {
-        const dom = DOMCacheGetOrSet(key)
-        if (dom.textContent != fillers[key]) {
+        const dom = DOMCacheGetOrSet(key);
+        if (dom.textContent !== fillers[key]) {
             dom.textContent = fillers[key];
         }
     }
@@ -1055,6 +1055,9 @@ export const PromptCB = (text: string, value2: string, cb: (value: string | null
     popup.querySelector('input')!.addEventListener('keyup', kbListener);
 }
 
+let closeNotification: ReturnType<typeof setTimeout>;
+let closedNotification: ReturnType<typeof setTimeout>;
+
 const NotificationCB = (text: string, time = 30000, cb: () => void) => {
     const notification = DOMCacheGetOrSet('notification');
     const textNode = document.querySelector<HTMLElement>('#notification > p')!;
@@ -1065,21 +1068,32 @@ const NotificationCB = (text: string, time = 30000, cb: () => void) => {
     notification.classList.remove('slide-out');
     notification.classList.add('slide-in');
 
-    if (time > 30000) {
-        console.log(text);
+    const closed = () => {
+        notification.style.display = 'none';
+        textNode.textContent = '';
+        closedNotification = 0;
     }
 
     const close = () => {
         notification.classList.add('slide-out');
         notification.classList.remove('slide-in');
 
+        closeNotification = 0;
         x.removeEventListener('click', close);
+        closedNotification = setTimeout(closed, 1000);
         cb();
     }
 
     x.addEventListener('click', close);
+    // Reset the close timer if reopened before closed
+    if (closeNotification > 0) {
+        clearTimeout(closeNotification);
+    }
+    if (closedNotification > 0) {
+        clearTimeout(closedNotification);
+    }
     // automatically close out after <time> ms
-    setTimeout(close, time);
+    closeNotification = setTimeout(close, time);
 }
 
 /*** Promisified version of the AlertCB function. */
