@@ -1,4 +1,4 @@
-import { player, saveSynergy, blankSave, reloadShit, format, formatTimeShort } from './Synergism';
+import { player, saveSynergy, blankSave, reloadShit, format, formatTimeShort, saveName } from './Synergism';
 import { testing, version } from './Config';
 import { getElementById, productContents, sumContents } from './Utility';
 import LZString from 'lz-string';
@@ -83,8 +83,8 @@ export const exportSynergism = async () => {
 
     const toClipboard = getElementById<HTMLInputElement>('saveType').checked;
     const save =
-        await localforage.getItem<Blob>('Synergysave2') ??
-        localStorage.getItem('Synergysave2');
+        await localforage.getItem<Blob>(saveName) ??
+        localStorage.getItem(saveName);
     const saveString = typeof save === 'string' ? save : await save?.text();
 
     if (saveString === undefined) {
@@ -156,7 +156,7 @@ export const importSynergism = async (input: string, reset = false) => {
         }
 
         const item = new Blob([saveString], { type: 'text/plain' });
-        await localforage.setItem<Blob>('Synergysave2', item);
+        await localforage.setItem<Blob>(saveName, item);
 
         localStorage.setItem('saveScumIsCheating', Date.now().toString());
 
