@@ -510,6 +510,14 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         } else {
             player.autoChallengeIndex = 1;
         }
+        // 10/14s must start c10 before Ant Sacrifice, or c10 may not be achieved. It's a temporary solution.
+        const corr14s = player.usedCorruptions.slice(3, 10).findIndex(function(value) {
+            return value <= 14;
+        });
+        if ((input === 'ascension' || input === 'ascensionChallenge') && player.usedCorruptions[2] >= 10 && player.autoChallengeToggles[10] && corr14s) {
+            player.autoChallengeIndex = 10;
+        }
+
         toggleAutoChallengeModeText('START');
 
         G['autoChallengeTimerIncrement'] = 0;
