@@ -12,6 +12,7 @@ import type { Player } from './types/Synergism'
 import { Alert } from './UpdateHTML'
 import { formatS } from './Utility'
 import { Globals as G } from './Variables'
+import ClipboardJS from 'clipboard'
 
 export const generateExportSummary = async():Promise<void> => {
     const titleText = '===== SUMMARY STATS ====='
@@ -173,7 +174,7 @@ export const generateExportSummary = async():Promise<void> => {
     // Create Shop Stuffs
     let shopUpgradeStats = '\n'
     if (player.reincarnationCount > 0 || player.highestSingularityCount > 0) {
-        shopUpgradeStats = '===== SHOP UPGRADES =====\n - [✔]: Upgrade is unlocked - \n - [✖]: Upgrade is locked - \n'
+        shopUpgradeStats = '===== SHOP UPGRADES =====\n - [★]: Upgrade is MAXXED - \n - [✔]: Upgrade is unlocked - \n - [✖]: Upgrade is locked - \n'
         const shopUpgrade = Object.keys(player.shopUpgrades) as (keyof Player['shopUpgrades'])[]
         let totalShopUpgradeCount = 0
         let totalShopUpgradeUnlocked = 0
@@ -199,7 +200,7 @@ export const generateExportSummary = async():Promise<void> => {
                                 shopData[key].priceIncrease * shopUpg * (shopUpg - 1) / 2
 
             upgradeText = upgradeText + (isShopUpgradeUnlocked(key) ?
-                '[✔]':
+                (shopUpg === shopData[key].maxLevel ? '[★]' : '[✔]'):
                 '[✖]')
 
             upgradeText = upgradeText + ` ${friendlyShopName(key)}:`
@@ -220,7 +221,7 @@ export const generateExportSummary = async():Promise<void> => {
     // Create Singularity Stuffs
     let singularityUpgradeStats = '\n'
     if (player.highestSingularityCount > 0) {
-        singularityUpgradeStats = '===== SINGULARITY UPGRADES =====\n - [✔]: Upgrade is unlocked - \n - [✖]: Upgrade is locked - \n'
+        singularityUpgradeStats = '===== SINGULARITY UPGRADES =====\n - [★]: Upgrade is MAXXED - \n - [∞]: Upgrade is infinite - \n - [✔]: Upgrade is unlocked - \n - [✖]: Upgrade is locked - \n'
         const singUpgrade = Object.keys(player.singularityUpgrades) as (keyof Player['singularityUpgrades'])[]
         let totalSingUpgradeCount = -1 // One upgrade cannot ever be leveled, by design, so subtract that from the actual count
         let totalSingInfiniteLevel = 0
@@ -244,9 +245,18 @@ export const generateExportSummary = async():Promise<void> => {
 
             totalGoldenQuarksSpent += singUpg.goldenQuarksInvested
 
-            upgradeText = upgradeText + (player.singularityCount >= singUpg.minimumSingularity ?
-                '[✔]':
-                '[✖]')
+            let unicodeSymbol = '[✖]'
+            if (player.singularityCount >= singUpg.minimumSingularity) {
+                if (singUpg.maxLevel === -1) {
+                    unicodeSymbol = '[∞]'
+                } else if (singUpg.level === singUpg.maxLevel) {
+                    unicodeSymbol = '[★]'
+                } else {
+                    unicodeSymbol = '[✔]'
+                }
+            }
+
+            upgradeText = upgradeText + unicodeSymbol
             upgradeText = upgradeText + ` ${singUpg.name}:`
             upgradeText = upgradeText + (singUpg.maxLevel === -1 ?
                 ` Level ${singUpg.level}`:
@@ -272,7 +282,7 @@ export const generateExportSummary = async():Promise<void> => {
     // Create Octeract Stuff
     let octeractUpgradeStats =  '\n'
     if (player.singularityUpgrades.octeractUnlock.getEffect().bonus) {
-        octeractUpgradeStats =  '===== OCTERACT UPGRADES =====\n'
+        octeractUpgradeStats =  '===== OCTERACT UPGRADES =====\n - [★]: Upgrade is MAXXED - \n - [∞]: Upgrade is infinite - \n - [ ]: Upgrade INCOMPLETE - \n'
         const octUpgrade = Object.keys(player.octeractUpgrades) as (keyof Player['octeractUpgrades'])[]
         let totalOctUpgradeCount = 0
         let totalOctUpgradeMax = 0
@@ -290,6 +300,14 @@ export const generateExportSummary = async():Promise<void> => {
             }
             totalOcteractsSpent += octUpg.octeractsInvested
 
+            let unicodeSymbol = '[ ]'
+            if (octUpg.maxLevel === -1) {
+                unicodeSymbol = '[∞]'
+            } else if (octUpg.level === octUpg.maxLevel) {
+                unicodeSymbol = '[★]'
+            }
+
+            upgradeText = upgradeText + unicodeSymbol
             upgradeText = upgradeText + octUpg.name + ':'
             upgradeText = upgradeText + (octUpg.maxLevel === -1 ?
                 ` Level ${octUpg.level}`:
@@ -327,36 +345,29 @@ export const generateExportSummary = async():Promise<void> => {
 
         // Old/bad browsers (legacy Edge, Safari because of limitations)
         const textArea = document.createElement('textarea');
-        const old = [textArea.contentEditable, textArea.readOnly] as const
-        textArea.value = returnString;
-        textArea.contentEditable = 'true'
-        textArea.readOnly = false
 
-        textArea.setAttribute('style', 'top: 0; left: 0; position: fixed;');
+        textArea.setAttribute('style', 'top: 0; left: 0; position: fixed;')
+        textArea.setAttribute('data-clipboard-text', returnString)
 
         document.body.appendChild(textArea);
         textArea.focus()
         textArea.select()
 
-        // Safari
-        const range = document.createRange()
-        range.selectNodeContents(textArea)
+        const clipboard = new ClipboardJS(textArea)
 
-        const selection = window.getSelection()
-        selection?.removeAllRanges()
-        selection?.addRange(range)
-
-        textArea.setSelectionRange(0, textArea.value.length)
-        textArea.contentEditable = old[0]
-        textArea.readOnly = old[1]
-
-        try {
-            document.execCommand('copy');
-        } catch (e) {
-            return Alert(`Unable to write the save to clipboard (tried two methods): ${(e as Error).message}`);
-        } finally {
-            document.body.removeChild(textArea);
+        const cleanup = () => {
+            clipboard.destroy()
+            document.body.removeChild(textArea)
         }
+
+        clipboard.on('success', () => {
+            document.getElementById('exportinfo')!.textContent = 'Copied save to clipboard!'
+            cleanup()
+        })
+
+        clipboard.on('error', () => {
+            void Alert('Unable to write the save to clipboard.').finally(cleanup)
+        })
     }
 
     const a = document.createElement('a');
