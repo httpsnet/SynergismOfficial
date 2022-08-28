@@ -34,7 +34,7 @@ export class OcteractUpgrade extends DynamicUpgrade {
      * @returns An alert indicating cannot afford, already maxxed or purchased with how many
      *          levels purchased
      */
-     public async buyLevel(event: MouseEvent): Promise<void> {
+    public async buyLevel(event: MouseEvent): Promise<void> {
         let purchased = 0;
         let maxPurchasable = 1;
         let OCTBudget = player.wowOcteracts;
