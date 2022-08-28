@@ -295,6 +295,8 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         divinePack: new SingularityUpgrade(singularityData['divinePack']),
         wowPass2: new SingularityUpgrade(singularityData['wowPass2']),
         potionBuff: new SingularityUpgrade(singularityData['potionBuff']),
+        potionBuff2: new SingularityUpgrade(singularityData['potionBuff2']),
+        potionBuff3: new SingularityUpgrade(singularityData['potionBuff3']),
         singChallengeExtension: new SingularityUpgrade(singularityData['singChallengeExtension']),
         singChallengeExtension2: new SingularityUpgrade(singularityData['singChallengeExtension2']),
         singChallengeExtension3: new SingularityUpgrade(singularityData['singChallengeExtension3']),
@@ -782,5 +784,20 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                 player.singularityUpgrades.goldenQuarks3.freeLevels += 2;
             }
         }
+    }
+
+    const oldest = localStorage.getItem('firstPlayed')
+
+    if (data.firstPlayed == undefined) {
+        // If the save is from before v2.9.7 staticians
+        player.firstPlayed = oldest ?? new Date().toISOString()
+    } else if (data.firstPlayed?.includes('Before')) {
+        // The first version with player.firstPlayed set the date to
+        // "Before {date.toString}"
+        player.firstPlayed = oldest ?? new Date().toISOString()
+    } else {
+        // Otherwise just set the firstPlayed time to either the oldest
+        // stored, or the date in the save being loaded.
+        player.firstPlayed = oldest ?? data.firstPlayed
     }
 }

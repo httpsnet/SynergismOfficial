@@ -38,7 +38,7 @@ import { AbyssHepteract, AcceleratorBoostHepteract, AcceleratorHepteract, Challe
 import { QuarkHandler } from './Quark';
 import { WowCubes, WowHypercubes, WowPlatonicCubes, WowTesseracts } from './CubeExperimental';
 import { updatePlatonicUpgradeBG } from './Platonic';
-import { testing, version, lastUpdated } from './Config';
+import { testing, version, lastUpdated, prod } from './Config';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import localforage from 'localforage';
 import { singularityData, SingularityUpgrade } from './singularity';
@@ -76,6 +76,7 @@ export const clearInt = new Proxy(clearInterval, {
 });
 
 export const player: Player = {
+    firstPlayed: new Date().toISOString(),
     worlds: new QuarkHandler({ quarks: 0, bonus: 0 }),
     coins: new Decimal('1e2'),
     coinsThisPrestige: new Decimal('1e2'),
@@ -761,6 +762,8 @@ export const player: Player = {
         divinePack: new SingularityUpgrade(singularityData['divinePack']),
         wowPass2: new SingularityUpgrade(singularityData['wowPass2']),
         potionBuff: new SingularityUpgrade(singularityData['potionBuff']),
+        potionBuff2: new SingularityUpgrade(singularityData['potionBuff2']),
+        potionBuff3: new SingularityUpgrade(singularityData['potionBuff3']),
         singChallengeExtension: new SingularityUpgrade(singularityData['singChallengeExtension']),
         singChallengeExtension2: new SingularityUpgrade(singularityData['singChallengeExtension2']),
         singChallengeExtension3: new SingularityUpgrade(singularityData['singChallengeExtension3']),
@@ -875,7 +878,7 @@ const loadSynergy = async () => {
         ? JSON.parse(atob(saveString)) as PlayerSave & Record<string, unknown>
         : null;
 
-    if (testing) {
+    if (testing || prod === false) {
         Object.defineProperty(window, 'player', {
             value: player
         });

@@ -30,7 +30,9 @@ export const buyGenerator = (i: number, state: boolean) => {
         player[type] = player[type].sub(cost);
         player.upgrades[i] = 1;
         upgradeupdate(i, state)
-        player.reincarnatenocoinprestigetranscendorgeneratorupgrades = false;
+        if (player.singularityCount < 25) {
+            player.reincarnatenocoinprestigetranscendorgeneratorupgrades = false;
+        }
     }
 }
 
