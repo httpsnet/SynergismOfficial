@@ -596,7 +596,7 @@ export const visualUpdateShop = () => {
                 DOMCacheGetOrSet(`${key}Level`).textContent = player.shopUpgrades[key] >= shopItem.maxLevel ? 'Bought!' : 'Not Bought!';
             } else {
                 // Case: max level greater than 1, treat it as a fraction out of max level
-                DOMCacheGetOrSet(`${key}Level`).textContent = (player.singularityCount > 0 || player.ascensionCount > 0 ? '' : 'Level ') + format(player.shopUpgrades[key]) + '/' + format(shopItem.maxLevel);
+                DOMCacheGetOrSet(`${key}Level`).textContent = (player.highestSingularityCount > 0 || player.ascensionCount > 0 ? '' : 'Level ') + format(player.shopUpgrades[key]) + '/' + format(shopItem.maxLevel);
             }
             // Handles Button - max level needs no price indicator, otherwise it's necessary
 
@@ -622,7 +622,7 @@ export const visualUpdateShop = () => {
             const singularityShopItems3 = document.getElementsByClassName('singularityShopUnlock3') as HTMLCollectionOf<HTMLElement>;
 
             if (player.shopHideToggle && player.shopUpgrades[key] >= shopItem.maxLevel && !shopData[key].refundable) {
-                if (player.singularityCount >= 20) {
+                if (player.highestSingularityCount >= 20) {
                     shopData.offeringAuto.refundable = false;
                     shopData.offeringEX.refundable = false;
                     shopData.obtainiumAuto.refundable = false;
@@ -676,7 +676,7 @@ export const visualUpdateShop = () => {
                     }
                 }
                 for (const i of Array.from(shopUnlock8)) {
-                    if (i.style.display === 'block' && player.challenge15Exponent < 1e15) {
+                    if (i.style.display === 'block' && !player.unlocks.hepteract) {
                         i.style.display = 'none';
                     }
                 }
@@ -728,7 +728,7 @@ export const visualUpdateShop = () => {
                     i.style.display = player.challengecompletions[14] > 0 ? 'block' : 'none';
                 }
                 for (const i of Array.from(shopUnlock8)) {
-                    i.style.display = player.challenge15Exponent >= 1e15 ? 'block' : 'none';
+                    i.style.display = player.unlocks.hepteract ? 'block' : 'none';
                 }
                 for (const i of Array.from(singularityShopItems)) {
                     i.style.display = player.singularityUpgrades.wowPass.getEffect().bonus ? 'block' : 'none';

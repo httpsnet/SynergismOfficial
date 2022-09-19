@@ -607,8 +607,18 @@ TODO: Fix this entire tab it's utter shit
         DOMCacheGetOrSet(`${String(key)}`).addEventListener('mouseover', () => player.octeractUpgrades[`${String(key)}`].updateUpgradeHTML())
         DOMCacheGetOrSet(`${String(key)}`).addEventListener('click', (event) => player.octeractUpgrades[`${String(key)}`].buyLevel(event))
     }
+
+    // BBShard Upgrades
+    const bbshardUpgrades = Object.keys(player.bbshardUpgrades) as (keyof Player['bbshardUpgrades'])[];
+    for (const key of bbshardUpgrades) {
+        DOMCacheGetOrSet(`${String(key)}`).addEventListener('mouseover', () => player.bbshardUpgrades[`${String(key)}`].updateUpgradeHTML())
+        DOMCacheGetOrSet(`${String(key)}`).addEventListener('click', (event) => player.bbshardUpgrades[`${String(key)}`].buyLevel(event))
+    }
+
+    DOMCacheGetOrSet('singularityReset').addEventListener('click', () => resetCheck('singularityCount'));
+
     //Toggle subtabs of Singularity tab
-    for (let index = 0; index < 4; index++) {
+    for (let index = 0; index < 5; index++) {
         DOMCacheGetOrSet(`toggleSingularitySubTab${index+1}`).addEventListener('click', () => toggleSubTab(10, index))
     }
 

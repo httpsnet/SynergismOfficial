@@ -3021,8 +3021,9 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
             <p class="ascendunlock statPortion" id="totalQuarkCountStatisticSing" alt="totalQuarkCountStatisticSing" label="totalQuarkCountStatisticSing" style="color: white">Total Quarks This Singularity: <span id="sMisc13" alt="sMisc13" label="sMisc13" class="statNumber">0</span></p>
             <p class="ascendunlock statPortion" id="totalQuarkCountStatistic" alt="totalQuarkCountStatistic" label="totalQuarkCountStatistic" style="color: white">Total Quarks Ever (TQE): <span id="sMisc14" alt="sMisc14" label="sMisc14" class="statNumber">0</span></p>
             <p class="prestigeunlock statPortion" id="totalQuarkTimerStatistic" alt="totalQuarkTimerStatistic" label="totalQuarkTimerStatistic" style="color: white">Quarks on export with Timer: <span id="sMisc15" alt="sMisc15" label="sMisc15" class="statNumber">0</span></p>
-            <p class="statPortion singularity" id="singularityStatistic" alt="singularityStatistic" label="singularityStatistic" style="color: gold">Singularity Count:<span id="sMisc16" alt="sMisc16" label="sMisc16" class="statNumber">0</span></p>
-            <p class="statPortion" id="gameStageStatistic" alt="gameStageStatistic" label="gameStageStatistic" style="color: gold">Synergism Stage: <span id="sMisc17" alt="sMisc17" label="sMisc17" class="statNumber">0</span></p>
+            <p class="statPortion singularity" id="singularityStatistic" alt="singularityStatistic" label="singularityStatistic" style="color: gold">Current Singularity:<span id="sMisc16" alt="sMisc16" label="sMisc16" class="statNumber">0</span></p>
+            <p class="statPortion singularity" id="singularityStatistic" alt="singularityStatistic" label="singularityStatistic" style="color: gold">Highest Singularity Reached:<span id="sMisc17" alt="sMisc17" label="sMisc17" class="statNumber">0</span></p>
+            <p class="statPortion" id="gameStageStatistic" alt="gameStageStatistic" label="gameStageStatistic" style="color: gold">Synergism Stage: <span id="sMisc18" alt="sMisc18" label="sMisc18" class="statNumber">0</span></p>
         </div>
         <div id="acceleratorStats" alt="acceleratorStats" label="acceleratorStats" class="statContainer" style="display: none;">
             <p id="acceleratorStatTitle" alt="acceleratorStatTitle" label="acceleratorStatTitle" class="statPortion" style="color: goldenrod; font-size: 1.2em">Free Accelerators</p>
@@ -3114,6 +3115,8 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
             <p id="statGQM20" alt="statGQM20" label="statGQM20" class="statPortion octeracts">Octeract Starter Pack:<span id="sGQM20" alt="sGQM20" label="sGQM20" class="statNumber">0</span></p>
             <p id="statGQM21" alt="statGQM21" label="statGQM21" class="statPortion octeracts">Quark Oct Bonus:<span id="sGQM21" alt="sGQM21" label="sGQM21" class="statNumber">0</span></p>
             <p id="statGQM22" alt="statGQM22" label="statGQM22" class="statPortion octeracts">Total Octeract Bonus:<span id="sGQM22" alt="sGQM22" label="sGQM22" class="statNumber">0</span></p>
+            <p id="statGQM23" alt="statGQM23" label="statGQM23" class="statPortion octeracts">Quark Oct2 Bonus:<span id="sGQM23" alt="sGQM23" label="sGQM23" class="statNumber">0</span></p>
+            <p id="statGQM24" alt="statGQM24" label="statGQM24" class="statPortion bbshards">BBShard Quark:<span id="sGQM24" alt="sGQM24" label="sGQM24" class="statNumber">0</span></p>
             <p id ="statGQMT" alt="statGQMT" label="statGQMT" class="statPortion statTotal" style='color: white'>TOTAL QUARK MULTIPLIER:<span id="sGQMT" alt="sGQMT" label="sGQMT" class="statNumber statTotal">0</span></p>
         </div>
         <div id="globalCubeMultiplierStats" alt="globalCubeMultiplierStats" label="globalCubeMultiplierStats" class="statContainer" style="display: none;">
@@ -3139,6 +3142,8 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
             <p id="statGCM19" alt="statGCM19" label="statGCM19" class="statPortion">-<span id="sGCM19" alt="sGCM19" label="sGCM19" class="statNumber">-</span></p>
             <p id="statGCM20" alt="statGCM20" label="statGCM20" class="statPortion">-<span id="sGCM20" alt="sGCM20" label="sGCM20" class="statNumber">-</span></p>
             <p id="statGCM21" alt="statGCM21" label="statGCM21" class="statPortion">-<span id="sGCM21" alt="sGCM21" label="sGCM21" class="statNumber">-</span></p>
+            <p id="statGCM22" alt="statGCM22" label="statGCM22" class="statPortion">-<span id="sGCM22" alt="sGCM22" label="sGCM22" class="statNumber">-</span></p>
+            <p id="statGCM23" alt="statGCM23" label="statGCM23" class="statPortion">-<span id="sGCM23" alt="sGCM23" label="sGCM23" class="statNumber">-</span></p>
             <p id="statGCMT" alt="statGCMT" label="statGCMT" class="statPortion statTotal" style="color: orange">TOTAL GLOBAL CUBE MULTIPLIER: <span
                 id="sGCMT" alt="sGCMT" label="sGCMT" class="statNumber statTotal">0</span></p>
         </div>
@@ -3621,10 +3626,11 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
             <button id="toggleSingularitySubTab2" alt="toggleSingularitySubTab2" label="toggleSingularitySubTab2" style="border: 2px solid orange; color: white">Penalties</button>
             <button id="toggleSingularitySubTab3" alt="toggleSingularitySubTab3" label="toggleSingularitySubTab3" style="border: 2px solid greenyellow; color: white">Perks</button>
             <button id="toggleSingularitySubTab4" class="octeracts" alt="toggleSingularitySubTab4" label="toggleSingularitySubTab4" style="border: 2px solid blue; color: white">Octeracts</button>
+            <button id="toggleSingularitySubTab5" class="bbshards" alt="toggleSingularitySubTab5" label="toggleSingularitySubTab5" style="border: 2px solid purple; color: white">BBShards</button>
         </div>
 
         <div id="singularityContainer1" alt="singularityContainer1" label="singularityContainer1">
-            <div id="singularityUpgradeContainer" alt="singularityUpgradeContainer" label="singularityUpgradeContainer">
+            <div class="singularityContainer">
                 <div id="buyamountsingularity" alt="buyamountsingularity" label="buyamountsingularity" style="display: none;">
                     <table id="singularitybuyamount" alt="singularitybuyamount" label="singularitybuyamount" title="Toggle the number of levels to buy per sacrifice" style="font-size: 0;">
                         <tr>
@@ -3693,10 +3699,10 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
                         <img id="cookies4" alt="cookies4" label="cookies4" src="Pictures/SingularityCookies4.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="cookies5" alt="cookies5" label="cookies5" src="Pictures/SingularityCookies5.png" style="cursor: pointer">
+                        <img id="cookies5" alt="cookies5" label="cookies5" src="Pictures/SingularityCookies5.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="ascensions" alt="ascensions" label="ascensions" src="Pictures/Singularity Ascensions.png" style="cursor:pointer">
+                        <img id="ascensions" alt="ascensions" label="ascensions" src="Pictures/Singularity Ascensions.png">
                     </div>
                     <div class="singularityUpgrade">
                         <img id="corruptionFourteen" alt="corruptionFourteen" label="corruptionFourteen" src="Pictures/Singularity Corruption 14.png">
@@ -3705,22 +3711,22 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
                         <img id="corruptionFifteen" alt="corruptionFifteen" label="corruptionFifteen" src="Pictures/Singularity Corruption 15.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="platonicTau" alt="platonicTau" src="Pictures/Singularity Tau.png" style="cursor: pointer">
+                        <img id="platonicTau" alt="platonicTau" src="Pictures/Singularity Tau.png">
                     </div>
                     <div class="singularityUpgrade">
                         <img id="offeringAutomatic" alt="offeringAutomatic" label="offeringAutomatic" src="Pictures/Singularity Offering Automatic.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="platonicAlpha" alt="platonicAlpha" src="Pictures/Singularity Alpha.png" style="cursor: pointer">
+                        <img id="platonicAlpha" alt="platonicAlpha" src="Pictures/Singularity Alpha.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="platonicDelta" alt="platonicDelta" src="Pictures/Singularity Delta.png" style="cursor: pointer">
+                        <img id="platonicDelta" alt="platonicDelta" src="Pictures/Singularity Delta.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="platonicPhi" alt="platonicPhi" src="Pictures/Singularity Phi.png" style="cursor: pointer">
+                        <img id="platonicPhi" alt="platonicPhi" src="Pictures/Singularity Phi.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="singOfferings1" alt="singOfferings1" label="singOfferings1" src="Pictures/Singularity Offerings 1.png" style="cursor: pointer">
+                        <img id="singOfferings1" alt="singOfferings1" label="singOfferings1" src="Pictures/Singularity Offerings 1.png">
                     </div>
                     <div class="singularityUpgrade">
                         <img id="singOfferings2" alt="singOfferings2" label="singOfferings2" src="Pictures/Singularity Offerings 2.png">
@@ -3780,28 +3786,28 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
                         <img id="singQuarkHepteract3" alt="singQuarkHepteract3" label="singQuarkHepteract3" src="Pictures/Singularity Quark Hepteract 3.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="singOcteractGain" src="Pictures/Singularity Octeract Gain 1.png" style="cursor: pointer">
+                        <img id="singOcteractGain" src="Pictures/Singularity Octeract Gain 1.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="singOcteractGain2" src="Pictures/Singularity Octeract Gain 2.png" style="cursor: pointer">
+                        <img id="singOcteractGain2" src="Pictures/Singularity Octeract Gain 2.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="singOcteractGain3" src="Pictures/Singularity Octeract Gain 3.png" style="cursor: pointer">
+                        <img id="singOcteractGain3" src="Pictures/Singularity Octeract Gain 3.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="singOcteractGain4" src="Pictures/Singularity Octeract Gain 4.png" style="cursor: pointer">
+                        <img id="singOcteractGain4" src="Pictures/Singularity Octeract Gain 4.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="singOcteractGain5" src="Pictures/Singularity Octeract Gain 5.png" style="cursor: pointer">
+                        <img id="singOcteractGain5" src="Pictures/Singularity Octeract Gain 5.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="singFastForward" src="Pictures/Singularity Fast Forward.png" style="cursor: pointer">
+                        <img id="singFastForward" src="Pictures/Singularity Fast Forward.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="singFastForward2" src="Pictures/Singularity Fast Forward 2.png" style="cursor: pointer">
+                        <img id="singFastForward2" src="Pictures/Singularity Fast Forward 2.png">
                     </div>
                     <div class="singularityUpgrade">
-                        <img id="ultimatePen" src="Pictures/Ultimate Pen.png" style="cursor: pointer">
+                        <img id="ultimatePen" src="Pictures/Ultimate Pen.png">
                     </div>
                 </div>
             </div>
@@ -3811,19 +3817,19 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
         </div>
 
         <div id="singularityContainer2" alt="singularityContainer2" label="singularityContainer2" style="display: none;">
-            <div id="singularityPenalties" alt="singularityPenalties" label="singularityPenalties" class="singularityContainer">
+            <div class="singularityContainer">
                 <p id="singularityPenaltiesMultiline" alt="singularityPenaltiesMultiline" label="singularityPenaltiesMultiline"></p>
             </div>
         </div>
 
         <div id="singularityContainer3" alt="singularityContainer3" label="singularityContainer3" style="display: none;">
-            <div id="singularityPerks" alt="singularityPerks" label="singularityPerks" class="singularityContainer">
+            <div class="singularityContainer">
                 <p id="singularityPerksMultiline" alt="singularityPerksMultiline" label="singularityPerksMultiline"></p>
             </div>
         </div>
 
         <div id="singularityContainer4" alt="singularityContainer4" label="singularityContainer4" style="display: none;">
-            <div id="singularityOcteracts" alt="singularityOcteracts" label="singularityOcteracts" class="singularityContainer">
+            <div class="singularityContainer">
                 <div id="buyamountocteract" alt="buyamountocteract" label="buyamountocteract" style="display: none;">
                     <table id="octeractbuyamount" alt="octeractbuyamount" label="octeractbuyamount" title="Toggle the number of levels to buy per sacrifice" style="font-size: 0;">
                         <tr>
@@ -3851,69 +3857,181 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
                 </div>
                 <div class="boxColor" id="octeractUpgradeContainer" alt="octeractUpgradeContainer" label="octeractUpgradeContainer">
                     <div class="octeractUpgrade">
-                        <img id="octeractStarter" src='Pictures/OcteractStarter.png' style="cursor: pointer">
+                        <img id="octeractStarter" src='Pictures/OcteractStarter.png'>
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractGain" src='Pictures/Octeract Octeracts.png' style="cursor: pointer">
+                        <img id="octeractGain" src='Pictures/Octeract Octeracts.png'>
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractQuarkGain" src='Pictures/Octeract Quarks.png' style="cursor: pointer">
+                        <img id="octeractQuarkGain" src='Pictures/Octeract Quarks.png'>
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractCorruption" src="Pictures/OcteractCorruptions.png" style="cursor: pointer">
+                        <img id="octeractCorruption" src="Pictures/OcteractCorruptions.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractGQCostReduce" src="Pictures/Octeract Golden Quark Cost.png" style="cursor: pointer">
+                        <img id="octeractGQCostReduce" src="Pictures/Octeract Golden Quark Cost.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractExportQuarks" src="Pictures/Octeract Export Quarks.png" style="cursor: pointer">
+                        <img id="octeractExportQuarks" src="Pictures/Octeract Export Quarks.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractImprovedDaily" src="Pictures/Octeract Improved Daily.png" style="cursor: pointer">
+                        <img id="octeractImprovedDaily" src="Pictures/Octeract Improved Daily.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractImprovedDaily2" src="Pictures/Octeract Improved Daily2.png" style="cursor: pointer">
+                        <img id="octeractImprovedDaily2" src="Pictures/Octeract Improved Daily2.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractImprovedQuarkHept" src="Pictures/Octeract Improved Quark Hepteract.png" style="cursor:pointer">
+                        <img id="octeractImprovedQuarkHept" src="Pictures/Octeract Improved Quark Hepteract.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractImprovedGlobalSpeed" src="Pictures/Octeract Improved Global Speed.png" style="cursor: pointer">
+                        <img id="octeractImprovedGlobalSpeed" src="Pictures/Octeract Improved Global Speed.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractImprovedAscensionSpeed" src="Pictures/Octeract Improved Ascension Speed.png" style="cursor: pointer">
+                        <img id="octeractImprovedAscensionSpeed" src="Pictures/Octeract Improved Ascension Speed.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractImprovedAscensionSpeed2" src="Pictures/Octeract Improved Ascension Speed 2.png" style="cursor: pointer">
+                        <img id="octeractImprovedAscensionSpeed2" src="Pictures/Octeract Improved Ascension Speed 2.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractImprovedFree" src="Pictures/Octeract Free Upgrade Improvement.png" style="cursor: pointer">
+                        <img id="octeractImprovedFree" src="Pictures/Octeract Free Upgrade Improvement.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractImprovedFree2" src="Pictures/Octeract Free Upgrade Improvement2.png" style="cursor: pointer">
+                        <img id="octeractImprovedFree2" src="Pictures/Octeract Free Upgrade Improvement2.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractImprovedFree3" src="Pictures/Octeract Free Upgrade Improvement3.png" style="cursor: pointer">
+                        <img id="octeractImprovedFree3" src="Pictures/Octeract Free Upgrade Improvement3.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractOfferings1" src="Pictures/Octeract Offerings.png" style="cursor: pointer">
+                        <img id="octeractOfferings1" src="Pictures/Octeract Offerings.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractObtainium1" src="Pictures/Octeract Obtainium.png" style="cursor: pointer">
+                        <img id="octeractObtainium1" src="Pictures/Octeract Obtainium.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractAscensions" src="Pictures/Octeract Ascension Count.png" style="cursor: pointer">
+                        <img id="octeractAscensions" src="Pictures/Octeract Ascension Count.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractAscensionsOcteractGain" src="Pictures/Octeract Ascension Octeracts.png" style="cursor: pointer">
+                        <img id="octeractAscensionsOcteractGain" src="Pictures/Octeract Ascension Octeracts.png">
                     </div>
                     <div class="octeractUpgrade">
-                        <img id="octeractFastForward" src="Pictures/Octeract Fast Forward.png" style="cursor: pointer">
+                        <img id="octeractFastForward" src="Pictures/Octeract Fast Forward.png">
+                    </div>
+                    <div class="octeractUpgrade">
+                        <img id="octeractImprovedGlobalSpeed2" src="Pictures/OcteractWIP.png">
+                    </div>
+                    <div class="octeractUpgrade bbshards">
+                        <img id="octeractCubeAccelerator" src="Pictures/OcteractWIP.png">
+                    </div>
+                    <div class="octeractUpgrade bbshards">
+                        <img id="octeractBBShardReplication" src="Pictures/OcteractWIP.png">
+                    </div>
+                    <div class="octeractUpgrade bbshards">
+                        <img id="octeractSingPropulsion" src="Pictures/OcteractWIP.png">
+                    </div>
+                    <div class="octeractUpgrade bbshards">
+                        <img id="octeractQuarkGain2" src="Pictures/OcteractWIP.png">
+                    </div>
+                    <div class="octeractUpgrade bbshards">
+                        <img id="octeractImprovedDaily3" src="Pictures/OcteractWIP.png">
+                    </div>
+                    <div class="octeractUpgrade bbshards">
+                        <img id="octeractImprovedDaily4" src="Pictures/OcteractWIP.png">
+                    </div>
+                </div>
+                <div id="octeractUpgradeValues" alt="octeractUpgradeValues" label="octeractUpgradeValues">
+                    <p id="singularityOcteractsMultiline" alt="singularityOcteractsMultiline" label="singularityOcteractsMultiline"></p>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="singularityContainer5" alt="singularityContainer5" label="singularityContainer5" style="display: none;">
+            <div class="singularityContainer">
+                <div id="bbshardDisplay" alt="bbshardDisplay" label="bbshardDisplay">
+                    <img src="Pictures/BBShards.png" width="32px" height="32px" loading="lazy">
+                    <p id="bbshardAmount" alt="bbshardAmount" label="bbshardAmount">You have 0 BBShards</p>
+                    <div class="bbshardContainer">
+                        <button id="singularityReset" alt="singularityReset" label="singularityReset">Singularity Reset</button>
                     </div>
                 </div>
 
-                <div id="octeractUpgradeValues" alt="octeractUpgradeValues" label="octeractUpgradeValues">
-                    <p id="singularityOcteractsMultiline" alt="singularityOcteractsMultiline" label="singularityOcteractsMultiline"></p>
+                <div class="boxColor" id="bbshardUpgradeContainer" alt="bbshardUpgradeContainer" label="bbshardUpgradeContainer">
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardStarter" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardSingularityPenalties" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardSingularityTrail" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardSingularityElevator" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardNoResetQuarks" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardDailyQuality" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardDailyOcteract" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardCubes" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardAscensionSpeed" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardGlobalSpeed" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardHeptUnlock" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardHepteractForgePenaltie" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardQuark" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardAscensionScore" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardTimer" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardChallenge" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardSingFastForward" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardCorruption" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardAscensionEffective" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardAscensionSpeedPenaltie" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardGQCubeBonus" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardOcteractASBonus" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardGlobalSpeedPenaltie" src="Pictures/BBShardWIP.png">
+                    </div>
+                    <div class="bbshardUpgrade">
+                        <img id="bbshardAscensionSpeed2" src="Pictures/BBShardWIP.png">
+                    </div>
+                </div>
+
+                <div id="bbshardUpgradeValues" alt="bbshardUpgradeValues" label="bbshardUpgradeValues">
+                    <p id="singularityBBShardMultiline" alt="singularityBBShardMultiline" label="singularityBBShardMultiline"></p>
                 </div>
 
             </div>

@@ -101,7 +101,7 @@ export class OcteractUpgrade extends DynamicUpgrade {
         const color = this.maxLevel === this.level ? 'plum' : 'white';
 
         let freeLevelInfo = this.freeLevels > 0 ?
-            `<span style="color: orange"> [+${format(this.freeLevels, 1, true)}]</span>` : ''
+            `<span style="color: orange"> [+${format(this.freeLevels, 2, true)}]</span>` : ''
 
         if (this.freeLevels > this.level) {
             freeLevelInfo = freeLevelInfo + '<span style="color: maroon"> (Softcapped) </span>'
@@ -158,7 +158,7 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
         costFormula: (level: number, baseCost: number) => {
             return baseCost * (Math.pow(level + 1, 6) - Math.pow(level, 6))
         },
-        maxLevel: -1,
+        maxLevel: 100000000,
         costPerLevel: 1e-8,
         effect: (n: number) => {
             return {
@@ -211,8 +211,8 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
         costPerLevel: 1e-9,
         effect: (n: number) => {
             return {
-                bonus: 1 - n/100,
-                desc: `Golden Quarks are ${n}% cheaper!`
+                bonus: 1 - Math.min(0.75, n / 100),
+                desc: `Golden Quarks are ${format(n, 1 , true)}% cheaper!`
             }
         }
     },
@@ -242,7 +242,7 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
         effect: (n: number) => {
             return {
                 bonus: n,
-                desc: `Code 'daily' gives +${n} free Singularity upgrades per use.`
+                desc: `Code 'daily' gives +${format(n, 1 , true)} free Singularity upgrades per use.`
             }
         }
     },
@@ -257,7 +257,7 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
         effect: (n: number) => {
             return {
                 bonus: 1 + 0.01 * n,
-                desc: `Code 'daily' gives +${n}% more free Singularity upgrades per use.`
+                desc: `Code 'daily' gives +${format(n, 1 , true)}% more free Singularity upgrades per use.`
             }
         }
     },
@@ -347,7 +347,7 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
         effect: (n: number) => {
             return {
                 bonus: 0.05 * n,
-                desc: `Exponent of previous upgrade +${format(n / 20, 2, true)}.`
+                desc: `Exponent of previous upgrade +${format(n / 20, 3, true)}.`
             }
         }
     },
@@ -362,7 +362,7 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
         effect: (n: number) => {
             return {
                 bonus: 0.05 * n,
-                desc: `Exponent of the first upgrade +${format(n/20, 2, true)}`
+                desc: `Exponent of the first upgrade +${format(n/20, 3, true)}`
             }
         }
     },
@@ -410,7 +410,7 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
         costFormula: (level: number, baseCost: number) => {
             return baseCost * Math.pow(level + 1, 3)
         },
-        maxLevel: -1,
+        maxLevel: 100000000,
         costPerLevel: 1,
         effect: (n: number) => {
             return {
@@ -448,6 +448,111 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
                 desc: `Singularities give ${100 * n}% more GQ and count as ${n} more.`
             }
         }
-    }
+    },
+    octeractImprovedGlobalSpeed2: {
+        name: 'The forbidden clock of time 2',
+        description: 'Hypothesized to be locked in a hyperbolic time chamber. +1% Global Speed per level per singularity!',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * (Math.pow(level + 1, 6) - Math.pow(level, 6))
+        },
+        maxLevel: 9900,
+        costPerLevel: 1,
+        effect: (n: number) => {
+            return {
+                bonus: n/100,
+                desc: `Global Speed per singularity +${format(n,0,true)}%`
+            }
+        }
+    },
+    octeractCubeAccelerator: {
+        name: 'Cube Accelerator',
+        description: '3-7 Dimensional Cubes from Octeracts are stronger.',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * Math.pow(2, level)
+        },
+        maxLevel: 100,
+        costPerLevel: 1e15,
+        effect: (n: number) => {
+            return {
+                bonus: n / 50,
+                desc: `Increase by +^${format(n / 50, 2, true)}`
+            }
+        }
+    },
+    octeractBBShardReplication: {
+        name: 'Derpsmith\'s BBShard Replication',
+        description: 'Only Derpsmith knows how to clone BBShard. It says it increases by 1% per level.',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * Math.pow(2, level)
+        },
+        maxLevel: -1,
+        costPerLevel: 1e20,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + n * 0.01,
+                desc: `BBShard gain +${format(n)}%`
+            }
+        }
+    },
+    octeractSingPropulsion: {
+        name: 'Derpsmith\'s Singularity Propulsion',
+        description: 'Derpsmith knows how to reduce Singularity rising load. Each level seems to reduce the Singularity Penalty by 1.',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * Math.pow(2, level)
+        },
+        maxLevel: -1,
+        costPerLevel: 1.5e20,
+        effect: (n: number) => {
+            return {
+                bonus: n,
+                desc: `Reduce the Singularity Penalty by ${format(n)}.`
+            }
+        }
+    },
+    octeractQuarkGain2: {
+        name: 'Quark Octimization',
+        description: 'Gain 1% per level of Quark, energy obtained from fusion fueled by Octeracts. Don\'t know what\'s going on.',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * Math.pow(level + 1, 3) * Math.pow(2, level / 10)
+        },
+        maxLevel: 9900,
+        costPerLevel: 1e20,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.01 * n,
+                desc: `Quark gain is increased by ${format(n, 0 , true)}%.`
+            }
+        }
+    },
+    octeractImprovedDaily3: {
+        name: 'CHONKER 2 Daily Code',
+        description: 'There are calculations optimized by Derpsmith. Daily Codes give you more free Singularity upgrades!',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * Math.pow(2, level)
+        },
+        maxLevel: 100,
+        costPerLevel: 1e0,
+        effect: (n: number) => {
+            return {
+                bonus: n * player.singularityCount * 0.02,
+                desc: `Code 'daily' gives +${format(3 * (Math.pow(player.highestSingularityCount + player.singularityCount * n * 0.02, 0.5 + 0.005 * player.octeractUpgrades.octeractImprovedDaily4.level) - Math.pow(player.highestSingularityCount, 0.5 + 0.005 * player.octeractUpgrades.octeractImprovedDaily4.level)), 0 , true)} more free Singularity upgrades per use.`
+            }
+        }
+    },
+    octeractImprovedDaily4: {
+        name: 'CHONKERER 2 Daily Code',
+        description: 'There are calculations optimized by Derpsmith. Daily Codes give you more free Singularity upgrades!',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * Math.pow(2, level)
+        },
+        maxLevel: 50,
+        costPerLevel: 1e0,
+        effect: (n: number) => {
+            return {
+                bonus: 0.005 * n,
+                desc: `Code 'daily' gives +${format(3 * (Math.pow(player.highestSingularityCount + player.octeractUpgrades.octeractImprovedDaily3.level * player.singularityCount * 0.02, 0.5 + n * 0.005) - Math.pow(player.highestSingularityCount + player.octeractUpgrades.octeractImprovedDaily3.level * player.singularityCount * 0.02, 0.5)), 0 , true)} more free Singularity upgrades per use.`
+            }
+        }
+    },
 }
 

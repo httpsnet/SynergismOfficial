@@ -915,11 +915,11 @@ export const resetShopUpgrades = async (ignoreBoolean = false) => {
             const key = shopItem as keyof typeof shopData;
             if (shopData[key].refundable && player.shopUpgrades[key] > shopData[key].refundMinimumLevel){
 
-                if (shopData[key].tier === 'Reincarnation' && player.singularityCount >= 20) {
+                if (shopData[key].tier === 'Reincarnation' && player.highestSingularityCount >= 20) {
                     continue;
                 }
 
-                if (shopData[key].tier === 'Ascension' && player.singularityCount >= 51) {
+                if (shopData[key].tier === 'Ascension' && player.highestSingularityCount >= 51) {
                     continue;
                 }
 
@@ -1015,13 +1015,13 @@ export const isShopUpgradeUnlocked = (upgrade: ShopUpgradeNames):boolean => {
         case 'constantEX':
             return player.highestchallengecompletions[14] > 0 || player.highestSingularityCount > 0
         case 'powderEX':
-            return player.challenge15Exponent >= 1e15 || player.highestSingularityCount > 0
+            return player.unlocks.hepteract || player.highestSingularityCount > 0
         case 'chronometer2':
-            return player.challenge15Exponent >= 1e15 || player.highestSingularityCount > 0
+            return player.unlocks.hepteract || player.highestSingularityCount > 0
         case 'chronometer3':
             return Boolean(player.singularityUpgrades.wowPass.getEffect().bonus)
         case 'seasonPassY':
-            return player.challenge15Exponent >= 1e15 || player.highestSingularityCount > 0
+            return player.unlocks.hepteract || player.highestSingularityCount > 0
         case 'seasonPassZ':
             return Boolean(player.singularityUpgrades.wowPass.getEffect().bonus)
         case 'challengeTome2':
@@ -1047,7 +1047,7 @@ export const isShopUpgradeUnlocked = (upgrade: ShopUpgradeNames):boolean => {
         case 'extraWarp':
             return Boolean(player.singularityUpgrades.wowPass3.getEffect().bonus)
         case 'improveQuarkHept':
-            return player.challenge15Exponent >= 1e15 || player.highestSingularityCount > 0
+            return player.unlocks.hepteract || player.highestSingularityCount > 0
         case 'improveQuarkHept2':
             return Boolean(player.singularityUpgrades.wowPass.getEffect().bonus)
         case 'improveQuarkHept3':

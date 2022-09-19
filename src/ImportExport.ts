@@ -1,5 +1,5 @@
 import { player, saveSynergy, blankSave, reloadShit, format } from './Synergism';
-import { octeractGainPerSecond } from './Calculate';
+import { octeractGainPerSecond, calculateDailyRolls } from './Calculate';
 import { testing, version } from './Config';
 import { getElementById } from './Utility';
 import LZString from 'lz-string';
@@ -18,6 +18,7 @@ import { Globals as G } from './Variables';
 import { singularityData } from './singularity';
 import { getEvent } from './Event';
 import { synergismStage } from './Statistics';
+import { octeractData } from './Octeracts';
 import ClipboardJS from 'clipboard';
 
 const format24 = new Intl.DateTimeFormat('EN-GB', {
@@ -311,10 +312,10 @@ export const promocodes = async (input: string | null, amount?: number) => {
         player.goldenQuarksTimer = 3600 * 168;
         addTimers('ascension', 4 * 3600);
 
-        if (player.challenge15Exponent >= 1e15 || player.singularityCount > 0) {
+        if (player.unlocks.hepteract || player.highestSingularityCount > 0) {
             player.hepteractCrafts.quark.CAP *= 2;
         }
-        if (player.singularityCount > 0) {
+        if (player.highestSingularityCount > 0) {
             player.singularityUpgrades.goldenQuarks1.freeLevels += 1;
             player.singularityUpgrades.goldenQuarks2.freeLevels += 1;
             player.singularityUpgrades.goldenQuarks3.freeLevels += 1;
@@ -324,8 +325,8 @@ export const promocodes = async (input: string | null, amount?: number) => {
         }
 
         return Alert(`Happy update!!!! Your Quark timer(s) have been replenished and you have been given 4 real life hours of Ascension progress! 
-                      ${(player.challenge15Exponent >= 1e15 || player.singularityCount > 0)? 'Derpsmith also hacked your save to expand Quark Hepteract for free!' : ''}
-                      ${(player.singularityCount > 0) ? 'You were also given free levels of GQ1-3!' : ''} 
+                      ${(player.unlocks.hepteract || player.highestSingularityCount > 0)? 'Derpsmith also hacked your save to expand Quark Hepteract for free!' : ''}
+                      ${(player.highestSingularityCount > 0) ? 'You were also given free levels of GQ1-3!' : ''} 
                       ${(player.singularityUpgrades.octeractUnlock.getEffect().bonus) ? 'Finally, you were given free levels of Octeract Cogenesis.': ''}`)
     }
     if (input === 'synergism2021' && !player.codes.get(1)) {
@@ -349,7 +350,7 @@ export const promocodes = async (input: string | null, amount?: number) => {
         let rewardMessage = 'Thank you for playing today!\nThe Ant God rewards you with this gift:';
 
         const rewards = dailyCodeReward();
-        const quarkMultiplier = 1 + Math.min(49, player.singularityCount)
+        const quarkMultiplier = 1 + Math.min(49, player.highestSingularityCount)
 
         let actualQuarkAward = player.worlds.applyBonus(rewards.quarks * quarkMultiplier);
         if (actualQuarkAward > 1e5) {
@@ -362,71 +363,167 @@ export const promocodes = async (input: string | null, amount?: number) => {
         if (rewards.goldenQuarks > 0) {
             rewardMessage += `\n${format(rewards.goldenQuarks, 0, true)} Golden Quarks`
         }
-        await Alert(rewardMessage);
 
-        if (player.singularityCount > 0) {
-            const upgradeDistribution: Record<
-            'goldenQuarks1' | 'goldenQuarks2' | 'goldenQuarks3' | 'singCubes1' | 'singCubes2' | 'singCubes3' |
-            'singOfferings1' | 'singOfferings2' | 'singOfferings3' |
-            'singObtainium1' | 'singObtainium2' | 'singObtainium3' | 'ascensions',
-            {value: number, pdf: (x: number) => boolean}> = {
-                goldenQuarks3: {value: 0.2, pdf: (x: number) => 0 <= x && x <= 1},
-                goldenQuarks2: {value: 0.2, pdf: (x: number) => 1 <= x && x <= 3},
-                goldenQuarks1: {value: 0.2, pdf: (x: number) => 3 <= x && x <= 10},
-                singCubes3: {value: 0.25, pdf: (x: number) => 10 < x && x <= 15},
-                singObtainium3: {value: 0.25, pdf: (x: number) => 15 < x && x <= 20},
-                singOfferings3: {value: 0.25, pdf: (x: number) => 20 < x && x <= 25},
-                singCubes2: {value: 0.5, pdf: (x: number) => 25 < x && x <= 80},
-                singObtainium2: {value: 0.5, pdf: (x: number) => 80 < x && x <= 140},
-                singOfferings2: {value: 0.5, pdf: (x: number) => 140 < x && x <= 200},
-                singCubes1: {value: 1, pdf: (x: number) => 200 < x && x <= 400},
-                singObtainium1: {value: 1, pdf: (x: number) => 400 < x && x <= 600},
-                singOfferings1: {value: 1, pdf: (x: number) => 600 < x && x <= 800},
-                ascensions: {value: 1, pdf: (x: number) => 800 < x && x <= 1000}
-            }
-            let rolls = 3 * Math.sqrt(player.singularityCount)
-            rolls += +player.octeractUpgrades.octeractImprovedDaily.getEffect().bonus
-            rolls += player.shopUpgrades.shopImprovedDaily2
-            rolls += player.shopUpgrades.shopImprovedDaily3
-            rolls += player.shopUpgrades.shopImprovedDaily4
-            rolls += (+player.singularityUpgrades.platonicPhi.getEffect().bonus *
-                        Math.min(50, 5 * player.singularityCounter / (3600 * 24)))
+        if (player.highestSingularityCount > 0) {
+            let rolls = calculateDailyRolls()
 
-            rolls *= +player.octeractUpgrades.octeractImprovedDaily2.getEffect().bonus
-            rolls = Math.floor(rolls)
+            const secondRoll = +player.bbshardUpgrades.bbshardDailyQuality.getEffect().bonus
 
-            const keys = Object
-                .keys(player.singularityUpgrades)
-                .filter(key => key in upgradeDistribution) as (keyof typeof upgradeDistribution)[];
-
-            rewardMessage = 'Feeling especially generous, the Ant God has also given you free levels of the following Singularity upgrades:'
-            // The same upgrade can be drawn several times, so we save the sum of the levels gained, to display them only once at the end
-            const freeLevels: Record<string, number> = {}
-            for (let i = 0; i < rolls; i++) {
-                const num = 1000 * Math.random();
-                for (const key of keys) {
-                    if (upgradeDistribution[key].pdf(num)) {
-                        player.singularityUpgrades[key].freeLevels = Math.round((player.singularityUpgrades[key].freeLevels + upgradeDistribution[key].value) * 10000) / 10000
-                        freeLevels[key] ? freeLevels[key] += upgradeDistribution[key].value : freeLevels[key] = upgradeDistribution[key].value
-                    }
+            let type = 1;
+            if (player.singularityUpgrades.octeractUnlock.getEffect().bonus) {
+                if (getRealTime('weekday', true) === 'sun') {
+                    type = 2;
+                }
+                if (player.singularityUpgrades.bbshardDailyOcteract.getEffect().bonus > Math.random()) {
+                    type = 2;
                 }
             }
 
-            if (player.highestSingularityCount >= 20) {
-                player.singularityUpgrades.goldenQuarks1.freeLevels += 0.2
-                freeLevels['goldenQuarks1'] ? freeLevels['goldenQuarks1'] += 0.2 : freeLevels['goldenQuarks1'] = 0.2
-                player.singularityUpgrades.goldenQuarks2.freeLevels += 0.2
-                freeLevels['goldenQuarks2'] ? freeLevels['goldenQuarks2'] += 0.2 : freeLevels['goldenQuarks2'] = 0.2
-                player.singularityUpgrades.goldenQuarks3.freeLevels += 1
-                freeLevels['goldenQuarks3'] ? freeLevels['goldenQuarks3'] += 1 : freeLevels['goldenQuarks3'] = 1
+            if (type === 1) {
+                const singUpgradeDistribution: Record<
+                'goldenQuarks1' | 'goldenQuarks2' | 'goldenQuarks3' | 'singCubes1' | 'singCubes2' | 'singCubes3' |
+                'singOfferings1' | 'singOfferings2' | 'singOfferings3' |
+                'singObtainium1' | 'singObtainium2' | 'singObtainium3' | 'ascensions' |
+                'singQuarkHepteract3' | 'singQuarkHepteract2' | 'singQuarkHepteract' |
+                'potionBuff' | 'potionBuff3' | 'potionBuff2' |
+                'singOcteractGain5' | 'singOcteractGain4' | 'singOcteractGain3' | 'singOcteractGain2' |
+                'singCitadel' | 'singOcteractGain',
+                {value: number, max: number, pdf: (x: number) => boolean}> = {
+                    goldenQuarks3: {value: 0.2, max: 0, pdf: (x: number) => 0 <= x && x <= 1},
+                    goldenQuarks2: {value: 0.2, max: 0, pdf: (x: number) => 1 <= x && x <= 3},
+                    goldenQuarks1: {value: 0.2, max: 0, pdf: (x: number) => 3 <= x && x <= 10},
+                    singCubes3: {value: 0.25, max: 0, pdf: (x: number) => 10 < x && x <= 15},
+                    singObtainium3: {value: 0.25, max: 0, pdf: (x: number) => 15 < x && x <= 20},
+                    singOfferings3: {value: 0.25, max: 0, pdf: (x: number) => 20 < x && x <= 25},
+                    singCubes2: {value: 0.5, max: 0, pdf: (x: number) => 25 < x && x <= 80},
+                    singObtainium2: {value: 0.5, max: 0, pdf: (x: number) => 80 < x && x <= 140},
+                    singOfferings2: {value: 0.5, max: 0, pdf: (x: number) => 140 < x && x <= 200},
+                    singCubes1: {value: 1, max: 0, pdf: (x: number) => 200 < x && x <= 400},
+                    singObtainium1: {value: 1, max: 0, pdf: (x: number) => 400 < x && x <= 600},
+                    singOfferings1: {value: 1, max: 0, pdf: (x: number) => 600 < x && x <= 800},
+                    ascensions: {value: 1, max: 0, pdf: (x: number) => 800 < x && x <= 1000},
+                    singQuarkHepteract3: {value: 0.1, max: 1, pdf: (x: number) => 1000 < x && x <= 1000.1},
+                    singQuarkHepteract2: {value: 0.1, max: 1, pdf: (x: number) => 1000.1 < x && x <= 1000.5},
+                    singQuarkHepteract: {value: 0.1, max: 1, pdf: (x: number) => 1000.5 < x && x <= 1003},
+                    potionBuff: {value: 0.1, max: 0, pdf: (x: number) => 1003 < x && x <= 1005},
+                    potionBuff3: {value: 0.1, max: 0, pdf: (x: number) => 1005 < x && x <= 1010},
+                    potionBuff2: {value: 0.1, max: 0, pdf: (x: number) => 1010 < x && x <= 1025},
+                    singOcteractGain5: {value: 0.2, max: 0, pdf: (x: number) => 1025 < x && x <= 1030},
+                    singOcteractGain4: {value: 0.2, max: 0, pdf: (x: number) => 1030 < x && x <= 1050},
+                    singOcteractGain3: {value: 0.2, max: 0, pdf: (x: number) => 1050 < x && x <= 1100},
+                    singOcteractGain2: {value: 0.2, max: 0, pdf: (x: number) => 1100 < x && x <= 1200},
+                    singCitadel: {value: 0.2, max: 0, pdf: (x: number) => 1200 < x && x <= 1500},
+                    singOcteractGain: {value: 0.2, max: 0, pdf: (x: number) => 1500 < x && x <= 2000}
+                }
 
-            }
+                const keys = Object
+                    .keys(player.singularityUpgrades)
+                    .filter(key => key in singUpgradeDistribution) as (keyof typeof singUpgradeDistribution)[];
 
-            for (const key of Object.keys(freeLevels)) {
-                rewardMessage += dailyCodeFormatFreeLevelMessage(key, freeLevels[key])
+                rewardMessage += '\n\nFeeling especially generous, the Ant God has also given you free levels of the following Singularity upgrades:'
+                // The same upgrade can be drawn several times, so we save the sum of the levels gained, to display them only once at the end
+                const freeLevels: Record<string, number> = {}
+                for (let i = 0; i < rolls; i++) {
+                    let num = 1000 * Math.random()
+                    if (secondRoll > Math.random()) {
+                        if (num > 25 && num <= 200) {
+                            num = 1000 * Math.random() + 1000
+                        } else if (num > 200) {
+                            num = Math.min(num, 200 * Math.random())
+                        }
+                    }
+                    for (const key of keys) {
+                        if (singUpgradeDistribution[key].pdf(num)) {
+                            if (player.highestSingularityCount >= singUpgradeDistribution[key].minimumSingularity && (singUpgradeDistribution[key].max <= 0 || player.singularityUpgrades[key].freeLevels < singUpgradeDistribution[key].max)) {
+                                player.singularityUpgrades[key].freeLevels = Math.round((player.singularityUpgrades[key].freeLevels + singUpgradeDistribution[key].value) * 10000) / 10000
+                                freeLevels[key] ? freeLevels[key] += singUpgradeDistribution[key].value : freeLevels[key] = singUpgradeDistribution[key].value
+                                break
+                            } else {
+                                i--
+                                break
+                            }
+                        }
+                    }
+                }
+
+                if (player.highestSingularityCount >= 20) {
+                    player.singularityUpgrades.goldenQuarks1.freeLevels += 0.2
+                    freeLevels['goldenQuarks1'] ? freeLevels['goldenQuarks1'] += 0.2 : freeLevels['goldenQuarks1'] = 0.2
+                    player.singularityUpgrades.goldenQuarks2.freeLevels += 0.2
+                    freeLevels['goldenQuarks2'] ? freeLevels['goldenQuarks2'] += 0.2 : freeLevels['goldenQuarks2'] = 0.2
+                    player.singularityUpgrades.goldenQuarks3.freeLevels += 1
+                    freeLevels['goldenQuarks3'] ? freeLevels['goldenQuarks3'] += 1 : freeLevels['goldenQuarks3'] = 1
+                }
+
+                for (const key of Object.keys(freeLevels)) {
+                    rewardMessage += dailyCodeFormatFreeLevelMessage(key, freeLevels[key])
+                }
+            } else if (type === 2) {
+                const octeractUpgradeDistribution: Record<
+                'octeractQuarkGain' | 'octeractImprovedAscensionSpeed' | 'octeractImprovedGlobalSpeed' |
+                'octeractObtainium1' | 'octeractOfferings1' | 'octeractAscensions' |
+                'octeractAscensionsOcteractGain' | 'octeractImprovedFree3' | 'octeractImprovedFree2' | 'octeractImprovedDaily2' |
+                'octeractImprovedDaily' | 'octeractGQCostReduce' | 'octeractExportQuarks' | 'octeractImprovedAscensionSpeed2',
+                {value: number, max: number, pdf: (x: number) => boolean}> = {
+                    octeractQuarkGain: {value: 1, max: 0, pdf: (x: number) => 0 <= x && x <= 10},
+                    octeractImprovedAscensionSpeed: {value: 0.2, max: 0, pdf: (x: number) => 10 <= x && x <= 25},
+                    octeractImprovedGlobalSpeed: {value: 1, max: 0, pdf: (x: number) => 25 <= x && x <= 200},
+                    octeractObtainium1: {value: 1, max: 0, pdf: (x: number) => 200 <= x && x <= 400},
+                    octeractOfferings1: {value: 1, max: 0, pdf: (x: number) => 400 <= x && x <= 600},
+                    octeractAscensions: {value: 1, max: 0, pdf: (x: number) => 600 <= x && x <= 800},
+                    octeractGain: {value: 1, max: 0, pdf: (x: number) => 800 <= x && x <= 1000},
+                    octeractImprovedQuarkHept: {value: 0.1, max: 3, pdf: (x: number) => 1000 <= x && x <= 1001},
+                    octeractAscensionsOcteractGain: {value: 0.2, max: 5, pdf: (x: number) => 1001 <= x && x <= 1002},
+                    octeractImprovedFree3: {value: 0.02, max: 0.5, pdf: (x: number) => 1002 <= x && x <= 1005},
+                    octeractImprovedFree2: {value: 0.02, max: 0.5, pdf: (x: number) => 1005 <= x && x <= 1010},
+                    octeractImprovedDaily2: {value: 1, max: 50, pdf: (x: number) => 1010 <= x && x <= 1020},
+                    octeractImprovedDaily: {value: 1, max: 50, pdf: (x: number) => 1020 <= x && x <= 1050},
+                    octeractGQCostReduce: {value: 0.2, max: 25, pdf: (x: number) => 1050 <= x && x <= 1100},
+                    octeractExportQuarks: {value: 1, max: 100, pdf: (x: number) => 1100 <= x && x <= 1200},
+                    octeractImprovedAscensionSpeed2: {value: 0.2, max: 0, pdf: (x: number) => 1200 <= x && x <= 2000}
+                }
+
+                const keys = Object
+                    .keys(player.octeractUpgrades)
+                    .filter(key => key in octeractUpgradeDistribution) as (keyof typeof octeractUpgradeDistribution)[];
+
+                rewardMessage += '\n\nFeeling especially generous, the Ant God has also given you free levels of the following Octeract upgrades:'
+                // The same upgrade can be drawn several times, so we save the sum of the levels gained, to display them only once at the end
+                const freeLevels: Record<string, number> = {}
+                for (let i = 0; i < rolls; i++) {
+                    let num = 1000 * Math.random()
+                    if (secondRoll > Math.random()) {
+                        if (num <= 25) {
+                            num = 1000 * Math.random() + 1000
+                        } else if (num > 200) {
+                            num = Math.min(num, 200 * Math.random())
+                        }
+                    }
+                    for (const key of keys) {
+                        if (octeractUpgradeDistribution[key].pdf(num)) {
+                            if (octeractUpgradeDistribution[key].max <= 0 || player.octeractUpgrades[key].freeLevels < octeractUpgradeDistribution[key].max) {
+                                player.octeractUpgrades[key].freeLevels = Math.round((player.octeractUpgrades[key].freeLevels + octeractUpgradeDistribution[key].value) * 10000) / 10000
+                                freeLevels[key] ? freeLevels[key] += octeractUpgradeDistribution[key].value : freeLevels[key] = octeractUpgradeDistribution[key].value
+                                break
+                            } else {
+                                i--
+                                break
+                            }
+                        }
+                    }
+                }
+
+                if (player.highestSingularityCount >= 200) {
+                    player.octeractUpgrades.octeractImprovedDaily.freeLevels += 1
+                    freeLevels['octeractImprovedDaily'] ? freeLevels['octeractImprovedDaily'] += 1 : freeLevels['octeractImprovedDaily'] = 1
+                }
+
+                for (const key of Object.keys(freeLevels)) {
+                    rewardMessage += dailyCodeFormatFreeLevelOcteractMessage(key, freeLevels[key])
+                }
             }
-            await Alert(rewardMessage);
         }
+        await Alert(rewardMessage);
         return;
     } else if (input.toLowerCase() === 'add') {
         const availableUses = addCodeAvailableUses();
@@ -618,7 +715,7 @@ export const promocodes = async (input: string | null, amount?: number) => {
             player.promoCodeTiming.time = Date.now();
 
             if (diff <= (2500 + 125 * player.cubeUpgrades[61])) {
-                const reward = Math.floor(Math.min(1000, (125 + 25 * player.singularityCount)) * (1 + player.cubeUpgrades[61] / 50));
+                const reward = Math.floor(Math.min(1000, (125 + 25 * player.highestSingularityCount)) * (1 + player.cubeUpgrades[61] / 50));
                 let actualQuarkAward = player.worlds.applyBonus(reward)
 
                 if (actualQuarkAward > 66666) {
@@ -705,11 +802,16 @@ const dailyCodeFormatFreeLevelMessage = (upgradeKey: string, freeLevelAmount: nu
     return `\n+${Math.round(freeLevelAmount * 10000) / 10000} extra levels of '${upgradeNiceName}'`;
 }
 
+const dailyCodeFormatFreeLevelOcteractMessage = (upgradeKey: string, freeLevelAmount: number): string => {
+    const upgradeNiceName = octeractData[upgradeKey].name;
+    return `\n+${Math.round(freeLevelAmount * 10000) / 10000} extra levels of '${upgradeNiceName}'`;
+}
+
 const dailyCodeReward = () => {
     let quarks = 0
     let goldenQuarks = 0
 
-    const ascended = player.ascensionCount > 0;
+    const ascended = player.highestSingularityCount > 0;
     const singularity = player.singularityCount > 0;
     if (player.reincarnationCount > 0 || ascended || singularity) {
         quarks += 20
@@ -770,7 +872,7 @@ const dailyCodeReward = () => {
     quarks = Math.floor(quarks)
 
     if (singularity) {
-        goldenQuarks += 2 + 3 * player.singularityCount
+        goldenQuarks += 2 + 3 * player.highestSingularityCount
         goldenQuarks *= 1 + 0.2 * player.shopUpgrades.shopImprovedDaily2
         goldenQuarks *= 1 + 0.15 * player.shopUpgrades.shopImprovedDaily3
         goldenQuarks *= 1 + player.shopUpgrades.shopImprovedDaily4

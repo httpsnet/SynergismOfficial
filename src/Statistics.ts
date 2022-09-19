@@ -84,7 +84,8 @@ export const loadStatisticsMiscellaneous = () => {
     DOMCacheGetOrSet('sMisc14').textContent = format(player.totalQuarksEver + player.quarksThisSingularity, 0, true)
     DOMCacheGetOrSet('sMisc15').textContent = formatTimeShort(player.quarkstimer) + ' / ' + formatTimeShort(90000 + 18000 * player.researches[195])
     DOMCacheGetOrSet('sMisc16').textContent = format(player.singularityCount, 0, true);
-    DOMCacheGetOrSet('sMisc17').textContent = synergismStage(0);
+    DOMCacheGetOrSet('sMisc17').textContent = format(player.highestSingularityCount, 0, true);
+    DOMCacheGetOrSet('sMisc18').textContent = synergismStage(0);
 }
 
 export const loadStatisticsAccelerator = () => {
@@ -129,7 +130,7 @@ export const loadQuarkMultiplier = () => {
     DOMCacheGetOrSet('sGQM9').textContent = 'x' + format(player.worlds.applyBonus(1 / calculateQuarkMultiplier()), 3, true) //Patreon Bonus
     DOMCacheGetOrSet('sGQM10').textContent = 'x' + format((G['isEvent'] ? 1 + calculateEventBuff('Quarks') : 1), 3, true) //Event
     DOMCacheGetOrSet('sGQM11').textContent = 'x' + format(1.1 + 0.15 / 75 * calculateEffectiveIALevel(), 3, true) //IA Rune
-    DOMCacheGetOrSet('sGQM12').textContent = 'x' + format(player.challenge15Exponent >= 1e15 ? 1 + 5/10000 * hepteractEffective('quark') : 1, 3, true) //Quark Hepteract
+    DOMCacheGetOrSet('sGQM12').textContent = 'x' + format(player.unlocks.hepteract ? 1 + 5/10000 * hepteractEffective('quark') : 1, 3, true) //Quark Hepteract
     DOMCacheGetOrSet('sGQM13').textContent = 'x' + format(calculateQuarkMultFromPowder(), 3, true) //Powder
     DOMCacheGetOrSet('sGQM14').textContent = 'x' + format(1 + player.achievements[266] * Math.min(0.1, (player.ascensionCount) / 1e16), 3, true) // Achievement 266 [Max: 10% at 1Qa Ascensions]
     DOMCacheGetOrSet('sGQM15').textContent = 'x' + format(1 + player.singularityCount / 10, 3, true) //Singularity
@@ -144,6 +145,8 @@ export const loadQuarkMultiplier = () => {
     DOMCacheGetOrSet('sGQM20').textContent = 'x' + format(1 + 0.25 * +player.octeractUpgrades.octeractStarter.getEffect().bonus, 3, true)
     DOMCacheGetOrSet('sGQM21').textContent = 'x' + format(+player.octeractUpgrades.octeractQuarkGain.getEffect().bonus, 3, true)
     DOMCacheGetOrSet('sGQM22').textContent = 'x' + format(calculateTotalOcteractQuarkBonus(), 3, true)
+    DOMCacheGetOrSet('sGQM23').textContent = 'x' + format(+player.octeractUpgrades.octeractQuarkGain2.getEffect().bonus, 3, true)
+    DOMCacheGetOrSet('sGQM24').textContent = 'x' + format(player.bbshardUpgrades.bbshardQuark.getEffect().bonus, 2, true) // BBShard Quark
     DOMCacheGetOrSet('sGQMT').textContent = 'x' + format(player.worlds.applyBonus(1), 3, true)
 }
 export const loadStatisticsCubeMultipliers = () => {
@@ -170,7 +173,9 @@ export const loadStatisticsCubeMultipliers = () => {
         18: {acc: 2, desc: 'Cookie Upgrade 8:'},
         19: {acc: 2, desc: 'Total Octeract Bonus:'},
         20: {acc: 2, desc: 'Citadel [GQ]'},
-        21: {acc: 4, desc: 'Platonic DELTA'}
+        21: {acc: 4, desc: 'Platonic DELTA'},
+        22: {acc: 2, desc: 'BBShard Cubes'},
+        23: {acc: 2, desc: 'Golden Quark Profit'}
     }
     for (let i = 0; i < arr0.length; i++) {
         const statGCMi = DOMCacheGetOrSet(`statGCM${i + 1}`);
@@ -624,12 +629,13 @@ export const gameStages = (): Stage[] => {
         {stage: 14, tier: 5, name: 'alpha-p2x1x10', unlocked: player.platonicUpgrades[6] >= 10, reset: player.achievements[183] === 1},
         {stage: 15, tier: 5, name: 'p2x1x10-p3x1', unlocked: player.platonicUpgrades[11] > 0, reset: player.achievements[183] === 1},
         {stage: 16, tier: 5, name: 'p3x1-beta', unlocked: player.platonicUpgrades[10] > 0, reset: player.achievements[183] === 1},
-        {stage: 17, tier: 5, name: 'beta-1e15-expo', unlocked: player.challenge15Exponent >= 1e15, reset: player.achievements[183] === 1},
+        {stage: 17, tier: 5, name: 'beta-1e15-expo', unlocked: player.unlocks.hepteract, reset: player.achievements[183] === 1},
         {stage: 18, tier: 5, name: '1e15-expo-omega', unlocked: player.platonicUpgrades[15] > 0, reset: player.achievements[183] === 1},
-        {stage: 19, tier: 5, name: 'omega-singularity', unlocked: player.singularityCount > 0 && player.runelevels[6] > 0, reset: player.achievements[183] === 1},
-        {stage: 20, tier: 6, name: 'singularity-octeracts', unlocked: player.singularityUpgrades.octeractUnlock.level > 0, reset: player.singularityCount > 0},
-        {stage: 21, tier: 6, name: 'octeracts-s100', unlocked: player.singularityCount >= 100, reset: player.singularityCount > 0},
-        {stage: 22, tier: 6, name: 's100', unlocked: false, reset: player.singularityCount > 0}
+        {stage: 19, tier: 5, name: 'omega-singularity', unlocked: player.highestSingularityCount > 0 && player.runelevels[6] > 0, reset: player.achievements[183] === 1},
+        {stage: 20, tier: 6, name: 'singularity-octeracts', unlocked: player.singularityUpgrades.octeractUnlock.level > 0, reset: player.highestSingularityCount > 0},
+        {stage: 21, tier: 6, name: 'octeracts-s100', unlocked: player.highestSingularityCount >= 100, reset: player.highestSingularityCount > 0},
+        {stage: 22, tier: 6, name: 's100', unlocked: false, reset: player.highestSingularityCount > 0},
+        {stage: 23, tier: 6, name: 'BBShard', unlocked: false, reset: player.singularityUpgrades.ultimatePen.getEffect().bonus}
     ];
     return stages;
 }
@@ -637,7 +643,7 @@ export const gameStages = (): Stage[] => {
 // Calculate which progress in the game you are playing
 // The progress displayed is based on Progression Chat and Questions
 // This will be used to determine the behavior of the profile of the autopilot function in the future
-export const synergismStage = (skipTier = player.singularityCount > 0 ? 5 : 0): string => {
+export const synergismStage = (skipTier = player.highestSingularityCount > 0 ? 5 : 0): string => {
     const stages = gameStages();
     for (let i = 0; i < stages.length; i++){
         const stage = stages[i];

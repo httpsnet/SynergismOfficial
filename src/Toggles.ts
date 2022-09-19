@@ -100,19 +100,23 @@ export const toggleSettings = (toggle: HTMLElement) => {
 
 export const toggleChallenges = (i: number, auto = false) => {
     if ((i <= 5)) {
-        player.currentChallenge.transcension = i;
-        reset('transcensionChallenge', false, 'enterChallenge');
-        player.transcendCount -= 1;
-        if (!player.currentChallenge.reincarnation && !document.querySelector('.resetbtn.hover')) {
-            resetrepeat('transcensionChallenge');
+        if (player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2 || player.ascensionCounterRealReal >= 2) {
+            player.currentChallenge.transcension = i;
+            reset('transcensionChallenge', false, 'enterChallenge');
+            player.transcendCount -= 1;
+            if (!player.currentChallenge.reincarnation && !document.querySelector('.resetbtn.hover')) {
+                resetrepeat('transcensionChallenge');
+            }
         }
     }
     if ((i >= 6 && i < 11)){
-        player.currentChallenge.reincarnation = i;
-        reset('reincarnationChallenge', false, 'enterChallenge');
-        player.reincarnationCount -= 1;
-        if (!document.querySelector('.resetbtn.hover')) {
-            resetrepeat('reincarnationChallenge');
+        if (player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2 || player.ascensionCounterRealReal >= 2) {
+            player.currentChallenge.reincarnation = i;
+            reset('reincarnationChallenge', false, 'enterChallenge');
+            player.reincarnationCount -= 1;
+            if (!document.querySelector('.resetbtn.hover')) {
+                resetrepeat('reincarnationChallenge');
+            }
         }
     }
     if (i >= 11 && ((!auto && player.toggles[31] === false) || player.challengecompletions[10] > 0) && player.achievements[141] === 1) {
@@ -176,7 +180,7 @@ export function tabs(mainTab: number): TabValue;
 export function tabs(mainTab?: number) {
     const tabs: Tab = {
         '-1': {tabName: 'settings', unlocked: true},
-        0: {tabName: 'shop', unlocked: player.unlocks.reincarnate || player.singularityCount > 0},
+        0: {tabName: 'shop', unlocked: player.unlocks.reincarnate || player.highestSingularityCount > 0},
         1: {tabName: 'buildings', unlocked: true},
         2: {tabName: 'upgrades', unlocked: true},
         3: {tabName: 'achievements', unlocked: player.unlocks.coinfour},
@@ -186,7 +190,7 @@ export function tabs(mainTab?: number) {
         7: {tabName: 'ants', unlocked: player.achievements[127] > 0},
         8: {tabName: 'cubes', unlocked: player.achievements[141] > 0},
         9: {tabName: 'traits', unlocked: player.challengecompletions[11] > 0},
-        10: {tabName: 'singularity', unlocked: player.singularityCount > 0}
+        10: {tabName: 'singularity', unlocked: player.highestSingularityCount > 0}
     }
 
     if (typeof mainTab === 'undefined') {
@@ -215,7 +219,7 @@ export const subTabsInMainTab = (mainTab: number) => {
                 {subTabID: 'statisticsSubTab', unlocked: true},
                 {subTabID: 'resetHistorySubTab', unlocked: player.unlocks.prestige},
                 {subTabID: 'ascendHistorySubTab', unlocked: player.ascensionCount > 0},
-                {subTabID: 'singularityHistorySubTab', unlocked: player.singularityCount > 0},
+                {subTabID: 'singularityHistorySubTab', unlocked: player.highestSingularityCount > 0},
                 { subTabID: 'hotkeys', unlocked: true }
             ]
         },
@@ -251,7 +255,7 @@ export const subTabsInMainTab = (mainTab: number) => {
                 {subTabID: 4, unlocked: player.achievements[218] > 0, buttonID: 'switchCubeSubTab4'},
                 {subTabID: 5, unlocked: player.achievements[141] > 0, buttonID: 'switchCubeSubTab5'},
                 {subTabID: 6, unlocked: player.achievements[218] > 0, buttonID: 'switchCubeSubTab6'},
-                {subTabID: 7, unlocked: player.challenge15Exponent >= 1e15, buttonID: 'switchCubeSubTab7'}]
+                {subTabID: 7, unlocked: player.unlocks.hepteract, buttonID: 'switchCubeSubTab7'}]
         },
         9: {
             tabSwitcher: toggleCorruptionLoadoutsStats,
@@ -262,10 +266,12 @@ export const subTabsInMainTab = (mainTab: number) => {
         10: {
             tabSwitcher: toggleSingularityScreen,
             subTabList: [
-                {subTabID: 1, unlocked: player.singularityCount > 0, buttonID: 'toggleSingularitySubTab1'},
-                {subTabID: 2, unlocked: player.singularityCount > 0, buttonID: 'toggleSingularitySubTab2'},
-                {subTabID: 3, unlocked: player.singularityCount > 0, buttonID: 'toggleSingularitySubTab3'},
-                {subTabID: 4, unlocked: Boolean(player.singularityUpgrades.octeractUnlock.getEffect().bonus), buttonID: 'toggleSingularitySubTab4'}]
+                {subTabID: 1, unlocked: player.highestSingularityCount > 0, buttonID: 'toggleSingularitySubTab1'},
+                {subTabID: 2, unlocked: player.highestSingularityCount > 0, buttonID: 'toggleSingularitySubTab2'},
+                {subTabID: 3, unlocked: player.highestSingularityCount > 0, buttonID: 'toggleSingularitySubTab3'},
+                {subTabID: 4, unlocked: Boolean(player.singularityUpgrades.octeractUnlock.getEffect().bonus), buttonID: 'toggleSingularitySubTab4'},
+                {subTabID: 5, unlocked: Boolean(player.singularityUpgrades.ultimatePen.getEffect().bonus), buttonID: 'toggleSingularitySubTab5'}
+            ]
         }
     }
     return subTabs[mainTab]!;
@@ -615,7 +621,7 @@ export const toggleSingularityScreen = (index: number) => {
     const screens = ['shop', 'penalties', 'perks'];
     G['singularityscreen'] = screens[index - 1];
 
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 5; i++) {
         const a = DOMCacheGetOrSet('toggleSingularitySubTab' + i);
         const b = DOMCacheGetOrSet('singularityContainer' + i);
         if (i === index) {
@@ -930,7 +936,7 @@ export const toggleAutoAscend = (mode = 0, toggle = true) => {
         }
     } else if (mode === 1) {
         if (toggle) {
-            if (player.autoAscendMode === 'c10Completions' && player.singularityCount >= 5) {
+            if (player.autoAscendMode === 'c10Completions' && player.highestSingularityCount >= 5) {
                 player.autoAscendMode = 'realAscensionTime'
             } else {
                 player.autoAscendMode = 'c10Completions'
@@ -943,7 +949,7 @@ export const toggleAutoAscend = (mode = 0, toggle = true) => {
     }
 }
 
-export const toggleautoopensCubes = (i: number, toggle = player.singularityCount >= 35) => {
+export const toggleautoopensCubes = (i: number, toggle = player.highestSingularityCount >= 35) => {
     if (i === 1) {
         if (toggle) {
             player.autoOpenCubes = !player.autoOpenCubes;

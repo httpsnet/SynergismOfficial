@@ -12,7 +12,7 @@ import { updateResearchBG, maxRoombaResearchIndex, buyResearch } from './Researc
 import { updateChallengeDisplay, revealStuff, showCorruptionStatsLoadouts, updateAchievementBG, updateChallengeLevel, buttoncolorchange, htmlInserts, changeTabColor, Confirm, Alert, Notification } from './UpdateHTML';
 import { calculateHypercubeBlessings } from './Hypercubes';
 import { calculateTesseractBlessings } from './Tesseracts';
-import { calculateCubeBlessings, calculateObtainium, calculateAnts, calculateRuneLevels, calculateOffline, calculateSigmoidExponential, calculateCorruptionPoints, calculateTotalCoinOwned, calculateTotalAcceleratorBoost, dailyResetCheck, calculateOfferings, calculateAcceleratorMultiplier, calculateTimeAcceleration, exitOffline, calculateGoldenQuarkGain } from './Calculate';
+import { calculateCubeBlessings, calculateObtainium, calculateAnts, calculateRuneLevels, calculateOffline, calculateSigmoidExponential, calculateCorruptionPoints, calculateTotalCoinOwned, calculateTotalAcceleratorBoost, dailyResetCheck, calculateOfferings, calculateAcceleratorMultiplier, calculateTimeAcceleration, exitOffline, calculateGoldenQuarkGain, calculateIncrementSingCount, calculateBBShard } from './Calculate';
 import { updateTalismanAppearance, toggleTalismanBuy, updateTalismanInventory, buyTalismanEnhance, buyTalismanLevels, calculateMaxTalismanLevel } from './Talismans';
 import { toggleAscStatPerSecond, toggleChallenges, toggleauto, toggleAutoChallengeModeText, toggleShops, toggleTabs, toggleSubTab, updateAutoChallenge, updateRuneBlessingBuyAmount, toggleUpdates } from './Toggles';
 import { c15RewardUpdate } from './Statistics';
@@ -46,6 +46,7 @@ import type { PlayerSave } from './types/LegacySynergism';
 import { eventCheck } from './Event';
 import { eventHotkeys, disableHotkeys } from './Hotkeys';
 import { octeractData, OcteractUpgrade } from './Octeracts';
+import { bbshardData, BBShardUpgrade } from './BBShards';
 import { settingTheme } from './Themes';
 
 /**
@@ -364,7 +365,8 @@ export const player: Player = {
         rrow1: false,
         rrow2: false,
         rrow3: false,
-        rrow4: false
+        rrow4: false,
+        hepteract: false
     },
     achievements: Array(281).fill(0) as number[],
 
@@ -728,6 +730,7 @@ export const player: Player = {
     totalQuarksEver: 0,
     hotkeys: {},
     theme: 'Dark Mode',
+    bbshards: 0,
 
     singularityUpgrades: {
         goldenQuarks1: new SingularityUpgrade(singularityData['goldenQuarks1']),
@@ -805,7 +808,41 @@ export const player: Player = {
         octeractObtainium1: new OcteractUpgrade(octeractData['octeractObtainium1']),
         octeractAscensions: new OcteractUpgrade(octeractData['octeractAscensions']),
         octeractAscensionsOcteractGain: new OcteractUpgrade(octeractData['octeractAscensionsOcteractGain']),
-        octeractFastForward: new OcteractUpgrade(octeractData['octeractFastForward'])
+        octeractFastForward: new OcteractUpgrade(octeractData['octeractFastForward']),
+        octeractImprovedGlobalSpeed2: new OcteractUpgrade(octeractData['octeractImprovedGlobalSpeed2']),
+        octeractCubeAccelerator: new OcteractUpgrade(octeractData['octeractCubeAccelerator']),
+        octeractBBShardReplication: new OcteractUpgrade(octeractData['octeractBBShardReplication']),
+        octeractSingPropulsion: new OcteractUpgrade(octeractData['octeractSingPropulsion']),
+        octeractQuarkGain2: new OcteractUpgrade(octeractData['octeractQuarkGain2']),
+        octeractImprovedDaily3: new OcteractUpgrade(octeractData['octeractImprovedDaily3']),
+        octeractImprovedDaily4: new OcteractUpgrade(octeractData['octeractImprovedDaily4'])
+    },
+
+    bbshardUpgrades: {
+        bbshardStarter: new BBShardUpgrade(bbshardData['bbshardStarter']),
+        bbshardSingularityPenalties: new BBShardUpgrade(bbshardData['bbshardSingularityPenalties']),
+        bbshardSingularityTrail: new BBShardUpgrade(bbshardData['bbshardSingularityTrail']),
+        bbshardSingularityElevator: new BBShardUpgrade(bbshardData['bbshardSingularityElevator']),
+        bbshardNoResetQuarks: new BBShardUpgrade(bbshardData['bbshardNoResetQuarks']),
+        bbshardDailyQuality: new BBShardUpgrade(bbshardData['bbshardDailyQuality']),
+        bbshardDailyOcteract: new BBShardUpgrade(bbshardData['bbshardDailyOcteract']),
+        bbshardCubes: new BBShardUpgrade(bbshardData['bbshardCubes']),
+        bbshardAscensionSpeed: new BBShardUpgrade(bbshardData['bbshardAscensionSpeed']),
+        bbshardGlobalSpeed: new BBShardUpgrade(bbshardData['bbshardGlobalSpeed']),
+        bbshardHeptUnlock: new BBShardUpgrade(bbshardData['bbshardHeptUnlock']),
+        bbshardHepteractForgePenaltie: new BBShardUpgrade(bbshardData['bbshardHepteractForgePenaltie']),
+        bbshardQuark: new BBShardUpgrade(bbshardData['bbshardQuark']),
+        bbshardAscensionScore: new BBShardUpgrade(bbshardData['bbshardAscensionScore']),
+        bbshardTimer: new BBShardUpgrade(bbshardData['bbshardTimer']),
+        bbshardChallenge: new BBShardUpgrade(bbshardData['bbshardChallenge']),
+        bbshardSingFastForward: new BBShardUpgrade(bbshardData['bbshardSingFastForward']),
+        bbshardCorruption: new BBShardUpgrade(bbshardData['bbshardCorruption']),
+        bbshardAscensionEffective: new BBShardUpgrade(bbshardData['bbshardAscensionEffective']),
+        bbshardAscensionSpeedPenaltie: new BBShardUpgrade(bbshardData['bbshardAscensionSpeedPenaltie']),
+        bbshardGQCubeBonus: new BBShardUpgrade(bbshardData['bbshardGQCubeBonus']),
+        bbshardOcteractASBonus: new BBShardUpgrade(bbshardData['bbshardOcteractASBonus']),
+        bbshardGlobalSpeedPenaltie: new BBShardUpgrade(bbshardData['bbshardGlobalSpeedPenaltie']),
+        bbshardAscensionSpeed2: new BBShardUpgrade(bbshardData['bbshardAscensionSpeed2'])
     },
 
     dailyCodeUsed: false,
@@ -1574,6 +1611,12 @@ const loadSynergy = async () => {
         DOMCacheGetOrSet('hepteractToQuarkTradeAuto').textContent = `Auto ${player.overfluxOrbsAutoBuy ? 'ON' : 'OFF'}`
         DOMCacheGetOrSet('hepteractToQuarkTradeAuto').style.border = `2px solid ${player.overfluxOrbsAutoBuy ? 'green' : 'red'}`;
         toggleAutoBuyOrbs(true, true);
+
+        DOMCacheGetOrSet('bbshardAmount').innerHTML = `You have ${format(player.bbshards, 0 , true)} BBShards`;
+
+        DOMCacheGetOrSet('testingMultiline').innerHTML = '';
+        DOMCacheGetOrSet('singularityOcteractsMultiline').innerHTML = '';
+        DOMCacheGetOrSet('singularityBBShardMultiline').innerHTML = '';
 
         toggleTalismanBuy(player.buyTalismanShardPercent);
         updateTalismanInventory();
@@ -2595,15 +2638,15 @@ export const updateAntMultipliers = (): void => {
         G['globalAntMult'] = G['globalAntMult'].times(100000)
     }
 
-    if (player.singularityCount >= 30) {
+    if (player.highestSingularityCount >= 30) {
         G['globalAntMult'] = G['globalAntMult'].times(1000)
     }
 
-    if (player.singularityCount >= 70) {
+    if (player.highestSingularityCount >= 70) {
         G['globalAntMult'] = G['globalAntMult'].times(1000)
     }
 
-    if (player.singularityCount >= 100) {
+    if (player.highestSingularityCount >= 100) {
         G['globalAntMult'] = G['globalAntMult'].times(1e6)
     }
 }
@@ -2703,7 +2746,7 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
                 maxInc = 10;
             }
             if (player.shopUpgrades.instantChallenge2 > 0) {
-                maxInc += player.singularityCount;
+                maxInc += player.highestSingularityCount;
             }
             if (player.currentChallenge.ascension === 13) {
                 maxInc = 1;
@@ -2766,7 +2809,7 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
                 maxInc = 10;
             }
             if (player.shopUpgrades.instantChallenge2 > 0) {
-                maxInc += player.singularityCount;
+                maxInc += player.highestSingularityCount;
             }
             if (player.currentChallenge.ascension === 13) {
                 maxInc = 1;
@@ -2881,7 +2924,7 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             return Alert('Hmph. Please return with an Antiquity. Thank you. -Ant God')
         }
 
-        if (player.singularityCount > 249) {
+        if (player.singularityCount > 9999) {
             return Alert(`Well. It seems you've reached the eye of the Singularity. I'm pleased. This also means there is nowhere
             to go from here. At least, not until higher powers expand your journey.`)
         }
@@ -2889,12 +2932,12 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
         let confirmed = false;
         canSave = false;
         if (!player.toggles[33] && player.singularityCount > 0) {
-            confirmed = await Confirm(`Do you wish to start singularity #${format(player.singularityCount + 1)}? Your next universe is harder but you will gain ${format(calculateGoldenQuarkGain(), 2, true)} Golden Quarks.`)
+            confirmed = await Confirm(`Do you wish to start singularity #${format(player.singularityCount + calculateIncrementSingCount())}? Your next universe is harder but you will gain ${format(calculateGoldenQuarkGain(), 2, true)} Golden Quarks.`)
         } else {
             await Alert('You have reached the end of the game, on Singularity #' +format(player.singularityCount)+'. Platonic and the Ant God are proud of you.')
             await Alert('You may choose to sit on your laurels, and consider the game \'beaten\', or you may do something more interesting.')
             await Alert('You\'re too powerful for this current universe. The multiverse of Synergism is truly endless, but out there are even more challenging universes parallel to your very own.')
-            await Alert(`Start anew, and enter Singularity #${format(player.singularityCount + 1)}. Your next universe is harder than your current one, but unlock a permanent +10% Quark Bonus, +10% Ascension Count Bonus, and Gain ${format(calculateGoldenQuarkGain(), 2, true)} Golden Quarks, which can purchase game-changing endgame upgrades [Boosted by ${format(player.worlds.BONUS)}% due to patreon bonus!].`)
+            await Alert(`Start anew, and enter Singularity #${format(player.singularityCount + calculateIncrementSingCount())}. Your next universe is harder than your current one, but unlock a permanent +10% Quark Bonus, +10% Ascension Count Bonus, and Gain ${format(calculateGoldenQuarkGain(), 2, true)} Golden Quarks, which can purchase game-changing endgame upgrades [Boosted by ${format(player.worlds.BONUS)}% due to patreon bonus!].`)
             await Alert('However, all your past accomplishments are gone! ALL Challenges, Refundable Shop upgrades, Upgrade Tab, Runes, All Cube upgrades, All Cube Openings, Hepteracts (Except for your Quark Hepteracts), Achievements will be wiped clean.')
 
             confirmed = await Confirm('So, what do you say? Do you wish to enter the Singularity?')
@@ -2913,6 +2956,33 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             await singularity();
             canSave = true;
             return Alert('Welcome to Singularity #' + format(player.singularityCount) + '. You\'re back to familiar territory, but something doesn\'t seem right.')
+        }
+    }
+
+    if (i === 'singularityCount') {
+        if (player.runelevels[6] === 0) {
+            return Alert('Hmph. Please return with an Antiquity. Thank you. -Ant God')
+        }
+
+        if (player.highestSingularityCount < 100 && !player.singularityUpgrades.ultimatePen.getEffect().bonus) {
+            return Alert('Error: Something is missing!')
+        }
+
+        let confirmed = false;
+        canSave = false;
+        if (player.singularityCount > 0) {
+            confirmed = await Confirm('Note! Resets the Singularity count and does Singularity. \nHighest Singularity is not reset here. \nAnd all BBShards upgrades are refunded and you have ' + format(calculateBBShard(true), 0, false) + ' BBShards.')
+            if (confirmed) {
+                confirmed = await Confirm('Are you sure you wish to enter the Singularity?\nWe recommend exporting before running!')
+            }
+            if (!confirmed) {
+                canSave = true;
+                return Alert('If you decide to change your mind, let me know. -Ant God')
+            } else {
+                await singularity(true);
+                canSave = true;
+                return Alert('Welcome to Singularity #' + format(player.singularityCount) + '. You\'re back to familiar territory, but something doesn\'t seem right.')
+            }
         }
     }
 }
@@ -3019,6 +3089,11 @@ export const updateAll = (): void => {
     }
     if (player.cubeUpgrades[50] >= 1e5 && player.achievements[251] < 1) {
         achievementaward(251)
+    }
+
+    if (player.challenge15Exponent >= 1e15 && !player.unlocks.hepteract) {
+        player.unlocks.hepteract = true;
+        revealStuff();
     }
 
     //Autobuy "Upgrades" Tab
@@ -3791,6 +3866,11 @@ export const reloadShit = async (reset = false) => {
         localStorage.setItem('pleaseStar', '');
     }
 
+    if (localStorage.getItem('unofficial') === null) {
+        void Alert('Note! \nThis is an unofficial page in which httpsNet forked from pseudo-corp/synergismofficial\nSave data cannot be used official');
+        localStorage.setItem('unofficial', '');
+    }
+
     // All versions of Chrome and Firefox supported by the game have this API,
     // but not all versions of Edge and Safari do.
     if (
@@ -3823,7 +3903,7 @@ window.addEventListener('load', () => {
             textUpdate +
             ` ${testing ? 'Savefiles cannot be used in live!' : ''}`;
     }
-    document.title = `Synergism v${version}`;
+    document.title = `Synergism Unofficial v${version}`;
 
     generateEventHandlers();
 

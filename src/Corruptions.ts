@@ -38,6 +38,7 @@ export const maxCorruptionLevel = () => {
         max += 1
     }
     max += +player.octeractUpgrades.octeractCorruption.getEffect().bonus
+    max += +player.bbshardUpgrades.bbshardCorruption.getEffect().bonus
 
     return max
 }

@@ -117,7 +117,7 @@ export const autoUpgrades = () => {
         }
     }
 
-    if (player.singularityCount >= 25 && player.shoptoggles.automations === true) {
+    if (player.highestSingularityCount >= 25 && player.shoptoggles.automations === true) {
         for (let i = 81; i <= 100; i++) {
             if (player.upgrades[i] === 0) {
                 clickUpgrades(i, true);

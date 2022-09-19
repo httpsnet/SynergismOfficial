@@ -30,6 +30,10 @@ function getSingularityOridnalText(singularityCount: number): string {
     return 'You are in the <span style="color: gold">' + toOrdinal(singularityCount) + ' Singularity</span>';
 }
 
+function getHighestSingularityOridnalText(singularityCount: number): string {
+    return 'You are in the <span style="color: gold">' + toOrdinal(singularityCount) + ' Highest Singularity</span>';
+}
+
 export interface ISingularityData extends IUpgradeData {
     goldenQuarksInvested?: number
     minimumSingularity?: number
@@ -61,10 +65,10 @@ export class SingularityUpgrade extends DynamicUpgrade {
             ? ''
             : `/${format(this.maxLevel, 0 , true)}`;
         const color = this.maxLevel === this.level ? 'plum' : 'white';
-        const minReqColor = player.singularityCount < this.minimumSingularity ? 'crimson' : 'green';
+        const minReqColor = player.highestSingularityCount < this.minimumSingularity ? 'crimson' : 'green';
         const minimumSingularity = this.minimumSingularity > 0
-            ? `Minimum Singularity: ${this.minimumSingularity}`
-            : 'No minimal Singularity to purchase required'
+            ? `Minimum Highest Singularity: ${this.minimumSingularity}`
+            : 'No minimal Highest Singularity to purchase required'
 
         let freeLevelInfo = this.freeLevels > 0 ?
             `<span style="color: orange"> [+${format(this.freeLevels, 2, true)}]</span>` : ''
@@ -132,7 +136,7 @@ export class SingularityUpgrade extends DynamicUpgrade {
             return Alert('hey! You have already maxxed this upgrade. :D')
         }
 
-        if (player.singularityCount < this.minimumSingularity) {
+        if (player.highestSingularityCount < this.minimumSingularity) {
             return Alert('you\'re not powerful enough to purchase this yet.')
         }
         while (maxPurchasable > 0) {
@@ -851,8 +855,8 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
         name: 'The Ultimate Pen',
         description: 'You. It is you who is the author of your own story!',
         maxLevel: 1,
-        costPerLevel: 999999999999,
-        minimumSingularity: 250,
+        costPerLevel: 1000000000000,
+        minimumSingularity: 150,
         effect: (n: number) => {
             return {
                 bonus: n > 0,
@@ -863,7 +867,7 @@ export const singularityData: Record<keyof Player['singularityUpgrades'], ISingu
 }
 
 /**
- * Singularity Perks are automatically obtained and upgraded, based on player.singularityCount
+ * Singularity Perks are automatically obtained and upgraded, based on player.highestSingularityCount
  * They can have one or several levels with a description for each level
  */
 export class SingularityPerk {
@@ -878,7 +882,7 @@ export class SingularityPerk {
     }
 }
 
-// List of Singularity Perks based on player.singularityCount
+// List of Singularity Perks based on player.highestSingularityCount
 // The list is ordered on first level acquisition, so be careful when inserting a new one ;)
 export const singularityPerks: SingularityPerk[] = [
     {
@@ -986,7 +990,7 @@ export const singularityPerks: SingularityPerk[] = [
     },
     {
         name: 'Even more Quarks',
-        levels: [5, 20, 35, 50, 65, 80, 90, 100, 121, 144, 150, 169, 196, 200, 225, 250],
+        levels: [5, 20, 35, 50, 65, 80, 90, 100, 121, 144, 150, 169, 196, 200, 225, 250, 275, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000],
         description: (n: number, levels: number[]) => {
 
             for (let i = levels.length - 1; i >= 0; i--) {
@@ -1070,7 +1074,7 @@ export const singularityPerks: SingularityPerk[] = [
     },
     {
         name: 'Derpsmith\'s Cornucopia',
-        levels: [18, 38, 58, 78, 88, 98, 118, 148, 178, 188, 198, 208, 218, 228, 238, 248],
+        levels: [18, 38, 58, 78, 88, 98, 118, 148, 178, 188, 198, 208, 218, 228, 238, 248, 268, 288, 348, 398, 448, 548, 648, 748, 848, 948],
         description: (n: number, levels: number[]) => {
             let counter = 0
             for (const singCount of levels) {
@@ -1185,8 +1189,8 @@ export const singularityPerks: SingularityPerk[] = [
 ]
 
 export const updateSingularityPerks = (): void => {
-    const singularityCount = player.singularityCount;
-    const str = getSingularityOridnalText(singularityCount) +
+    const singularityCount = player.highestSingularityCount;
+    const str = getHighestSingularityOridnalText(singularityCount) +
                 `<br/><br/>Here is the list of Perks you have acquired to compensate the Penalties
                 (Hover for more details. Perks in <span class="newPerk">gold text</span> were added or improved in this Singularity)<br/>`
                 + getAvailablePerksDescription(singularityCount)
@@ -1352,6 +1356,8 @@ export type SingularityDebuffs = 'Offering' | 'Obtainium' | 'Global Speed' | 'Re
                                  'Platonic Costs' | 'Hepteract Costs'
 
 export const calculateEffectiveSingularities = (singularityCount: number = player.singularityCount): number => {
+    singularityCount = Math.max(0, singularityCount - player.bbshardUpgrades.bbshardOcteractASBonus.getEffect().bonus);
+
     let effectiveSingularities = singularityCount;
     effectiveSingularities *= Math.min(4.75, 0.75 * singularityCount / 10 + 1)
     if (singularityCount > 10) {
@@ -1374,14 +1380,31 @@ export const calculateEffectiveSingularities = (singularityCount: number = playe
     }
     if (singularityCount > 100) {
         effectiveSingularities *= singularityCount / 25
-        effectiveSingularities *= Math.pow(1.1, singularityCount - 100)
+        effectiveSingularities *= Math.pow(2, Math.floor(singularityCount / 100))
+        effectiveSingularities *= Math.pow(1.15, Math.min(singularityCount - 100, 50))
     }
     if (singularityCount > 150) {
-        effectiveSingularities *= 3
-        effectiveSingularities *= Math.pow(1.04, singularityCount - 150)
+        effectiveSingularities *= 10
+        effectiveSingularities *= Math.pow(1.13, Math.min(singularityCount - 150, 50))
     }
-    if (singularityCount === 250) {
-        effectiveSingularities *= 100
+    if (singularityCount > 200) {
+        effectiveSingularities *= Math.pow(1.10, Math.min(singularityCount - 150, 100))
+    }
+    if (singularityCount > 300) {
+        effectiveSingularities *= Math.pow(1.07, Math.min(singularityCount - 300, 200))
+    }
+    if (singularityCount > 500) {
+        effectiveSingularities *= Math.pow(1.05, Math.min(singularityCount - 500, 200))
+    }
+    if (singularityCount > 700) {
+        effectiveSingularities *= Math.pow(1.04, Math.min(singularityCount - 750, 300))
+    }
+    if (singularityCount > 1000) {
+        effectiveSingularities *= Math.pow(5, Math.floor(singularityCount / 1000))
+        effectiveSingularities *= Math.pow(1.03, singularityCount - 300)
+    }
+    if (player.singularityCount < player.highestSingularityCount) {
+        effectiveSingularities /= +player.bbshardUpgrades.bbshardSingularityTrail.getEffect().bonus
     }
 
     return effectiveSingularities
@@ -1395,28 +1418,25 @@ export const calculateSingularityDebuff = (debuff: SingularityDebuffs, singulari
         return 1
     }
 
-    const effectiveSingularities = calculateEffectiveSingularities(singularityCount);
+    let effectiveSingularities = calculateEffectiveSingularities(singularityCount);
+    effectiveSingularities = Math.pow(effectiveSingularities, 1 - (player.bbshardUpgrades.bbshardStarter.getEffect().bonus + player.bbshardUpgrades.bbshardSingularityPenalties.getEffect().bonus))
 
     if (debuff === 'Offering') {
-        return Math.sqrt(Math.min(effectiveSingularities, calculateEffectiveSingularities(150)) + 1)
+        return Math.sqrt((singularityCount > 150 ? calculateEffectiveSingularities(75 + singularityCount / 2) : effectiveSingularities) + 1)
     } else if (debuff === 'Global Speed') {
-        return 1 + Math.sqrt(effectiveSingularities) / 4
+        return Math.pow(Math.sqrt(1 + singularityCount > 150 ? calculateEffectiveSingularities(75 + singularityCount / 2) : effectiveSingularities) / 4, 1 - player.bbshardUpgrades.bbshardGlobalSpeedPenaltie.getEffect().bonus)
     } else if (debuff === 'Obtainium') {
-        return Math.sqrt(Math.min(effectiveSingularities, calculateEffectiveSingularities(150))  + 1)
+        return Math.sqrt((singularityCount > 150 ? calculateEffectiveSingularities(75 + singularityCount / 2) : effectiveSingularities) + 1)
     } else if (debuff === 'Researches') {
         return 1 + Math.sqrt(effectiveSingularities) / 2
     } else if (debuff === 'Ascension Speed') {
-        return (singularityCount < 150) ?
-            1 + Math.sqrt(effectiveSingularities) / 5:
-            1 + Math.pow(effectiveSingularities, 0.75) / 10000
+        return Math.pow(1 + Math.sqrt(effectiveSingularities) / 5, 1 - player.bbshardUpgrades.bbshardAscensionSpeedPenaltie.getEffect().bonus)
     } else if (debuff === 'Cubes') {
-        return (player.singularityCount < 150) ?
-            1 + Math.sqrt(effectiveSingularities) / 4:
-            1 + Math.pow(effectiveSingularities, 0.75) / 1000
+        return 1 + Math.sqrt(effectiveSingularities) / 4
     } else if (debuff === 'Platonic Costs') {
         return (singularityCount > 36) ? 1 + Math.pow(effectiveSingularities, 3/10) / 12 : 1
     } else if (debuff === 'Hepteract Costs') {
-        return (singularityCount > 50) ? 1 + Math.pow(effectiveSingularities, 11/50) / 25 : 1
+        return (singularityCount > 50) ? Math.pow(1 + Math.pow(effectiveSingularities, 11/50) / 25, 1 - player.bbshardUpgrades.bbshardHepteractForgePenaltie.getEffect().bonus) : 1
     } else {
         // Cube upgrades
         return Math.cbrt(effectiveSingularities + 1)

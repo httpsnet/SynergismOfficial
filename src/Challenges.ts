@@ -46,6 +46,7 @@ export const getMaxChallenges = (i: number) => {
         maxChallenge += 2 * +player.singularityUpgrades.singChallengeExtension.getEffect().bonus
         maxChallenge += 2 * +player.singularityUpgrades.singChallengeExtension2.getEffect().bonus
         maxChallenge += 2 * +player.singularityUpgrades.singChallengeExtension3.getEffect().bonus
+        maxChallenge += 4 * +player.bbshardUpgrades.bbshardChallenge.getEffect().bonus
         return maxChallenge
     }
     //Ascension Challenge
@@ -72,6 +73,7 @@ export const getMaxChallenges = (i: number) => {
         maxChallenge += +player.singularityUpgrades.singChallengeExtension.getEffect().bonus
         maxChallenge += +player.singularityUpgrades.singChallengeExtension2.getEffect().bonus
         maxChallenge += +player.singularityUpgrades.singChallengeExtension3.getEffect().bonus
+        maxChallenge += 2 * +player.bbshardUpgrades.bbshardChallenge.getEffect().bonus
         return maxChallenge
     }
 
@@ -729,7 +731,7 @@ export const getChallengeCompletes = () => {
 }
 
 export const autoAscensionChallengeSweepUnlock = () => {
-    return player.achievements[141] === 1 && player.singularityCount >= 101 && player.shopUpgrades.instantChallenge2 > 0;
+    return player.achievements[141] === 1 && player.highestSingularityCount >= 101 && player.shopUpgrades.instantChallenge2 > 0;
 }
 
 export const challenge15ScoreMultiplier = () => {

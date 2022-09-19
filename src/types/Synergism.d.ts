@@ -6,6 +6,7 @@ import { OcteractUpgrade } from '../Octeracts';
 import { IPlatBaseCost } from '../Platonic';
 import type { QuarkHandler } from '../Quark';
 import { SingularityUpgrade } from '../singularity';
+import { BBShardUpgrade } from '../BBShards';
 
 export interface Player {
     firstPlayed: string
@@ -243,7 +244,8 @@ export interface Player {
         rrow1: boolean,
         rrow2: boolean,
         rrow3: boolean,
-        rrow4: boolean
+        rrow4: boolean,
+        hepteract: boolean
     },
     achievements: number[],
 
@@ -571,10 +573,13 @@ export interface Player {
     totalQuarksEver: number,
     hotkeys: Record<number, string[]>,
     theme: string,
+    bbshards: number,
 
     singularityUpgrades: Record<keyof typeof singularityData, SingularityUpgrade>,
 
     octeractUpgrades: Record<keyof typeof octeractData, OcteractUpgrade>,
+
+    bbshardUpgrades: Record<keyof typeof bbshardData, BBShardUpgrade>,
 
     dailyCodeUsed: boolean,
     hepteractAutoCraftPercentage: number,

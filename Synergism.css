@@ -1897,7 +1897,8 @@ p#reincarnatehotkeys {
 #quarksDisplay,
 #goldenQuarksDisplay,
 #octeractsDisplay,
-#totalOcteractsDisplay {
+#totalOcteractsDisplay,
+#bbshardDisplay {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -1929,6 +1930,12 @@ p#reincarnatehotkeys {
 #octeractAmount {
     font-size: 1.2em;
     color: lightseagreen;
+    margin-left: 5px;
+}
+
+#bbshardAmount {
+    font-size: 1.2em;
+    color: limegreen;
     margin-left: 5px;
 }
 
@@ -3442,15 +3449,15 @@ header #obtainiumDisplay { color: pink; }
     text-align: center;
 }
 
-#singularityUpgradeContainer,
-#singularityOcteracts {
+.singularityContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 #actualSingularityUpgradeContainer,
-#octeractUpgradeContainer {
+#octeractUpgradeContainer,
+#bbshardUpgradeContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -3461,12 +3468,14 @@ header #obtainiumDisplay { color: pink; }
 }
 
 .singularityUpgrade,
-.octeractUpgrade {
+.octeractUpgrade,
+.bbshardUpgrade {
     font-size: 0;
 }
 
 .singularityUpgrade > img,
-.octeractUpgrade > img {
+.octeractUpgrade > img,
+.bbshardUpgrade > img {
     cursor: pointer;
 }
 
@@ -3476,9 +3485,22 @@ header #obtainiumDisplay { color: pink; }
 }
 
 #testingMultiline,
-#singularityOcteractsMultiline {
+#singularityOcteractsMultiline,
+#singularityBBShardMultiline {
     white-space: pre-line;
     margin: 15px 0 0;
+}
+
+#singularityReset {
+    width: 12em;
+    margin-left: 150px;
+    min-width: 150px;
+    border: 2px solid purple;
+}
+
+.bbshardContainer {
+    width: 0;
+    overflow: visible;
 }
 
 .newPerk {

@@ -15,6 +15,8 @@ import type { ISingularityData} from './singularity';
 import { singularityData, SingularityUpgrade } from './singularity';
 import type { IOcteractData} from './Octeracts';
 import { octeractData, OcteractUpgrade } from './Octeracts';
+import type { IBBShardData} from './BBShards';
+import { bbshardData, BBShardUpgrade } from './BBShards';
 
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
@@ -68,6 +70,9 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
     }
     if (data.shoptoggles?.reincarnate === undefined) {
         player.shoptoggles.reincarnate = true
+    }
+    if (data.unlocks?.hepteract === undefined) {
+        player.unlocks.hepteract = false
     }
     if (data.ascendBuilding1 === undefined) {
         player.ascendBuilding1 = {
@@ -338,7 +343,41 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         octeractObtainium1: new OcteractUpgrade(octeractData['octeractObtainium1']),
         octeractAscensions: new OcteractUpgrade(octeractData['octeractAscensions']),
         octeractAscensionsOcteractGain: new OcteractUpgrade(octeractData['octeractAscensionsOcteractGain']),
-        octeractFastForward: new OcteractUpgrade(octeractData['octeractFastForward'])
+        octeractFastForward: new OcteractUpgrade(octeractData['octeractFastForward']),
+        octeractImprovedGlobalSpeed2: new OcteractUpgrade(octeractData['octeractImprovedGlobalSpeed2']),
+        octeractCubeAccelerator: new OcteractUpgrade(octeractData['octeractCubeAccelerator']),
+        octeractBBShardReplication: new OcteractUpgrade(octeractData['octeractBBShardReplication']),
+        octeractSingPropulsion: new OcteractUpgrade(octeractData['octeractSingPropulsion']),
+        octeractQuarkGain2: new OcteractUpgrade(octeractData['octeractQuarkGain2']),
+        octeractImprovedDaily3: new OcteractUpgrade(octeractData['octeractImprovedDaily3']),
+        octeractImprovedDaily4: new OcteractUpgrade(octeractData['octeractImprovedDaily4'])
+    }
+
+    player.bbshardUpgrades = {
+        bbshardStarter: new BBShardUpgrade(bbshardData['bbshardStarter']),
+        bbshardSingularityPenalties: new BBShardUpgrade(bbshardData['bbshardSingularityPenalties']),
+        bbshardSingularityTrail: new BBShardUpgrade(bbshardData['bbshardSingularityTrail']),
+        bbshardSingularityElevator: new BBShardUpgrade(bbshardData['bbshardSingularityElevator']),
+        bbshardNoResetQuarks: new BBShardUpgrade(bbshardData['bbshardNoResetQuarks']),
+        bbshardDailyQuality: new BBShardUpgrade(bbshardData['bbshardDailyQuality']),
+        bbshardDailyOcteract: new BBShardUpgrade(bbshardData['bbshardDailyOcteract']),
+        bbshardCubes: new BBShardUpgrade(bbshardData['bbshardCubes']),
+        bbshardAscensionSpeed: new BBShardUpgrade(bbshardData['bbshardAscensionSpeed']),
+        bbshardGlobalSpeed: new BBShardUpgrade(bbshardData['bbshardGlobalSpeed']),
+        bbshardHeptUnlock: new BBShardUpgrade(bbshardData['bbshardHeptUnlock']),
+        bbshardHepteractForgePenaltie: new BBShardUpgrade(bbshardData['bbshardHepteractForgePenaltie']),
+        bbshardQuark: new BBShardUpgrade(bbshardData['bbshardQuark']),
+        bbshardAscensionScore: new BBShardUpgrade(bbshardData['bbshardAscensionScore']),
+        bbshardTimer: new BBShardUpgrade(bbshardData['bbshardTimer']),
+        bbshardChallenge: new BBShardUpgrade(bbshardData['bbshardChallenge']),
+        bbshardSingFastForward: new BBShardUpgrade(bbshardData['bbshardSingFastForward']),
+        bbshardCorruption: new BBShardUpgrade(bbshardData['bbshardCorruption']),
+        bbshardAscensionEffective: new BBShardUpgrade(bbshardData['bbshardAscensionEffective']),
+        bbshardAscensionSpeedPenaltie: new BBShardUpgrade(bbshardData['bbshardAscensionSpeedPenaltie']),
+        bbshardGQCubeBonus: new BBShardUpgrade(bbshardData['bbshardGQCubeBonus']),
+        bbshardOcteractASBonus: new BBShardUpgrade(bbshardData['bbshardOcteractASBonus']),
+        bbshardGlobalSpeedPenaltie: new BBShardUpgrade(bbshardData['bbshardGlobalSpeedPenaltie']),
+        bbshardAscensionSpeed2: new BBShardUpgrade(bbshardData['bbshardAscensionSpeed2'])
     }
 
     if (data.loadedOct4Hotfix === undefined || player.loadedOct4Hotfix === false) {
@@ -649,7 +688,7 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                 }
                 player.singularityUpgrades[k] = new SingularityUpgrade(updatedData);
 
-                if (player.singularityUpgrades[k].minimumSingularity > player.singularityCount) {
+                if (player.singularityUpgrades[k].minimumSingularity > player.highestSingularityCount) {
                     player.singularityUpgrades[k].refund()
                 }
 
@@ -681,6 +720,29 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                     freeLevels: data.octeractUpgrades[k].freeLevels
                 }
                 player.octeractUpgrades[k] = new OcteractUpgrade(updatedData);
+            }
+        }
+    }
+
+    if (data.bbshardUpgrades != null) {
+        for (const item in blankSave.bbshardUpgrades) {
+            const k = item as keyof Player['bbshardUpgrades'];
+            let updatedData:IBBShardData
+            if (data.bbshardUpgrades[k]) {
+                updatedData = {
+                    name: bbshardData[k].name,
+                    description: bbshardData[k].description,
+                    maxLevel: bbshardData[k].maxLevel,
+                    costPerLevel: bbshardData[k].costPerLevel,
+                    level: data.bbshardUpgrades[k].level,
+                    bbshardsInvested: data.bbshardUpgrades[k].bbshardsInvested,
+                    toggleBuy: data.bbshardUpgrades[k].toggleBuy,
+                    minimumSingularity: bbshardData[k].minimumSingularity,
+                    effect: bbshardData[k].effect,
+                    costFormula: bbshardData[k].costFormula,
+                    freeLevels: data.bbshardUpgrades[k].freeLevels
+                }
+                player.bbshardUpgrades[k] = new BBShardUpgrade(updatedData);
             }
         }
     }
@@ -772,15 +834,15 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
 
     if (data.highestSingularityCount === undefined) {
         player.highestSingularityCount = player.singularityCount
-        if (player.singularityCount > 0) {
+        if (player.highestSingularityCount > 0) {
             player.goldenQuarks += 200;
-            player.goldenQuarks += 100 * Math.min(10, player.singularityCount)
+            player.goldenQuarks += 100 * Math.min(10, player.highestSingularityCount)
 
-            if (player.singularityCount >= 5) {
+            if (player.highestSingularityCount >= 5) {
                 player.singularityUpgrades.goldenQuarks3.freeLevels += 1;
             }
 
-            if (player.singularityCount >= 10) {
+            if (player.highestSingularityCount >= 10) {
                 player.singularityUpgrades.goldenQuarks3.freeLevels += 2;
             }
         }
@@ -799,5 +861,9 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         // Otherwise just set the firstPlayed time to either the oldest
         // stored, or the date in the save being loaded.
         player.firstPlayed = oldest ?? data.firstPlayed
+    }
+
+    if (data.bbshards === undefined){
+        player.bbshards = 0;
     }
 }

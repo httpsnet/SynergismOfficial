@@ -376,7 +376,7 @@ export const researchDescriptions = (index: number) => {
 
     // Hover to Buy
     if (player.researchPoints > metaData.cost && player.researches[index] < (G['researchMaxLevels'][index])) {
-        if (player.toggles[38] === true && player.singularityCount > 0) {
+        if (player.toggles[38] === true && player.highestSingularityCount > 0) {
             buyResearch(index, false, true);
         }
     }

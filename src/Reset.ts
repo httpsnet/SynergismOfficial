@@ -2,7 +2,8 @@ import { player, clearInt, interval, format, blankSave, updateAll } from './Syne
 import {
     calculateOfferings, CalcCorruptionStuff, calculateCubeBlessings, calculateRuneLevels,
     calculateAnts, calculateObtainium, calculateTalismanEffects, calculateAntSacrificeELO,
-    calcAscensionCount, calculateGoldenQuarkGain, calculatePowderConversion} from './Calculate';
+    calcAscensionCount, calculateGoldenQuarkGain, calculatePowderConversion,
+    calculateIncrementSingCount, calculateBBShard } from './Calculate';
 import { resetofferings } from './Runes';
 import { updateTalismanInventory, updateTalismanAppearance } from './Talismans';
 import { calculateTesseractBlessings } from './Tesseracts';
@@ -310,7 +311,7 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
     player.prestigenocoinupgrades = true;
 
     // Notify new players the reset
-    if (player.singularityCount === 0) {
+    if (player.highestSingularityCount === 0) {
         if (input === 'prestige' && player.unlocks.prestige === false) {
             DOMCacheGetOrSet('prestigebtn').style.boxShadow = '';
         }
@@ -505,7 +506,7 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         player.currentChallenge.reincarnation = 0;
 
         // The start of the auto challenge to improve QoL starts with C10
-        if ((input === 'ascension' || input === 'ascensionChallenge') && player.currentChallenge.ascension > 10 && player.singularityCount >= 2 && player.autoChallengeToggles[10]) {
+        if ((input === 'ascension' || input === 'ascensionChallenge') && player.currentChallenge.ascension > 10 && player.highestSingularityCount >= 2 && player.autoChallengeToggles[10]) {
             player.autoChallengeIndex = 10;
         } else {
             player.autoChallengeIndex = 1;
@@ -519,6 +520,31 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         }
 
         toggleAutoChallengeModeText('START');
+
+        const bbshardHeptUnlock = player.bbshardUpgrades.bbshardHeptUnlock.getEffect().bonus;
+        if (bbshardHeptUnlock > 0) {
+            if (player.achievements[255] > 0 && !player.unlocks.hepteract) {
+                player.unlocks.hepteract = true;
+                fast = true;
+            }
+            if (bbshardHeptUnlock >= 2 && !player.hepteractCrafts.challenge.UNLOCKED) {
+                player.hepteractCrafts.challenge.UNLOCKED = true;
+                fast = true;
+            }
+            if (bbshardHeptUnlock >= 3 && !player.hepteractCrafts.abyss.UNLOCKED) {
+                player.hepteractCrafts.abyss.UNLOCKED = true;
+                fast = true;
+            }
+            if (bbshardHeptUnlock >= 4 && !player.hepteractCrafts.accelerator.UNLOCKED) {
+                player.hepteractCrafts.accelerator.UNLOCKED = true;
+                player.hepteractCrafts.acceleratorBoost.UNLOCKED = true;
+                player.hepteractCrafts.multiplier.UNLOCKED = true;
+                fast = true;
+            }
+            if (bbshardHeptUnlock >= 5 && player.currentChallenge.ascension !== 15) {
+                player.challenge15Exponent = Math.max(metaData[1], player.challenge15Exponent);
+            }
+        }
 
         G['autoChallengeTimerIncrement'] = 0;
         //reset rest
@@ -611,7 +637,7 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         calculateObtainium();
         ascensionAchievementCheck(1);
 
-        player.ascensionCounter = 0;
+        player.ascensionCounter = player.bbshardUpgrades.bbshardSingFastForward.getEffect().bonus;
         player.ascensionCounterReal = 0;
         player.ascensionCounterRealReal = 0;
 
@@ -683,7 +709,7 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         // Hepteract Autocraft
         const autoHepteractCrafts = getAutoHepteractCrafts();
         const numberOfAutoCraftsAndOrbs = autoHepteractCrafts.length + (player.overfluxOrbsAutoBuy ? 1 : 0);
-        if (numberOfAutoCraftsAndOrbs > 0) {
+        if (numberOfAutoCraftsAndOrbs > 0 && player.unlocks.hepteract) {
             // Computes the max number of Hepteracts to spend on each auto Hepteract craft
             const heptAutoSpend = Math.floor((player.wowAbyssals / numberOfAutoCraftsAndOrbs) * (player.hepteractAutoCraftPercentage / 100))
             for (const craft of autoHepteractCrafts) {
@@ -732,7 +758,7 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         autoBuyCubeUpgrades();
 
         //Auto open Cubes. If to remove !== 0, game will lag a bit if it was set to 0
-        if (player.singularityCount >= 35) {
+        if (player.highestSingularityCount >= 35) {
             if (player.autoOpenCubes && player.openCubes > 0) {
                 player.wowCubes.open(Math.floor(Number(player.wowCubes) / 100 * player.openCubes), player.openCubes >= 100)
             }
@@ -741,7 +767,7 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
                     player.wowTesseracts.open(Math.floor(Number(player.wowTesseracts) / 100 * player.openTesseracts), player.openTesseracts >= 100)
                 }
             }
-            if (player.autoOpenHypercubes && player.openHypercubes > 0 && player.challengecompletions[13] > 0 && player.researches[183] > 0) {
+            if (player.autoOpenHypercubes && player.openHypercubes > 0 && player.challengecompletions[13] > 0) {
                 player.wowHypercubes.open(Math.floor(Number(player.wowHypercubes) / 100 * player.openHypercubes), player.openHypercubes >= 100)
             }
             if (player.autoOpenPlatonicsCubes && player.openPlatonicsCubes > 0 && player.challengecompletions[14] > 0) {
@@ -813,25 +839,25 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
  * Computes which achievements in 274-280 are achievable given current singularity number
  */
 export const updateSingularityAchievements = (): void => {
-    if (player.singularityCount >= 1) {
+    if (player.highestSingularityCount >= 1) {
         achievementaward(274)
     }
-    if (player.singularityCount >= 2) {
+    if (player.highestSingularityCount >= 2) {
         achievementaward(275)
     }
-    if (player.singularityCount >= 3) {
+    if (player.highestSingularityCount >= 3) {
         achievementaward(276)
     }
-    if (player.singularityCount >= 4) {
+    if (player.highestSingularityCount >= 4) {
         achievementaward(277)
     }
-    if (player.singularityCount >= 5) {
+    if (player.highestSingularityCount >= 5) {
         achievementaward(278)
     }
-    if (player.singularityCount >= 7) {
+    if (player.highestSingularityCount >= 7) {
         achievementaward(279)
     }
-    if (player.singularityCount >= 10) {
+    if (player.highestSingularityCount >= 10) {
         achievementaward(280)
     }
 }
@@ -931,10 +957,10 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
             achievementaward(176 + i)
         }
     }
-    if (player.singularityCount > 10) { // Must be the same as autoResearchEnabled()
+    if (player.highestSingularityCount > 10) { // Must be the same as autoResearchEnabled()
         player.cubeUpgrades[9] = 1;
     }
-    if (player.singularityCount >= 15) {
+    if (player.highestSingularityCount >= 15) {
         player.challengecompletions[8] = 5;
         player.highestchallengecompletions[8] = 5;
         if (player.currentChallenge.ascension !== 12) {
@@ -943,7 +969,7 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
         player.fifthOwnedAnts = 1;
         player.cubeUpgrades[20] = 1;
     }
-    if (player.singularityCount >= 20) {
+    if (player.highestSingularityCount >= 20) {
         player.challengecompletions[9] = 1;
         player.highestchallengecompletions[9] = 1;
         achievementaward(134);
@@ -956,18 +982,18 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
         player.shopUpgrades.antSpeed = shopData.antSpeed.maxLevel
         player.shopUpgrades.cashGrab = shopData.cashGrab.maxLevel
     }
-    if (player.singularityCount >= 25) {
+    if (player.highestSingularityCount >= 25) {
         player.eighthOwnedAnts = 1;
     }
-    if (player.singularityCount >= 30) {
+    if (player.highestSingularityCount >= 30) {
         player.researches[130] = 1;
         player.researches[135] = 1;
         player.researches[145] = 1;
     }
-    if (player.singularityCount >= 40) {
+    if (player.highestSingularityCount >= 40) {
         player.researches[150] = 1;
     }
-    if ((player.singularityCount >= 101 && singularityReset) || (player.singularityCount >= 11 && player.ascensionCount > 0 && !singularityReset)) {
+    if ((player.highestSingularityCount >= 101 && singularityReset) || (player.highestSingularityCount >= 11 && player.ascensionCount > 0 && !singularityReset)) {
         if (player.cubeUpgrades[51] === 0) {
             player.cubeUpgrades[51] = 1;
             awardAutosCookieUpgrade();
@@ -998,7 +1024,7 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
     revealStuff();
 }
 
-export const singularity = async (): Promise<void> => {
+export const singularity = async (countReset = false): Promise<void> => {
     if (player.runelevels[6] === 0) {
         return Alert('You nearly triggered a double singularity bug! Oh no! Luckily, our staff prevented this from happening.');
     }
@@ -1029,14 +1055,10 @@ export const singularity = async (): Promise<void> => {
     // reset the rune instantly to hopefully prevent a double singularity
     player.runelevels[6] = 0;
 
-    let incrementSingCount = 1
-    incrementSingCount += +player.singularityUpgrades.singFastForward.getEffect().bonus
-    incrementSingCount += +player.singularityUpgrades.singFastForward2.getEffect().bonus
-    incrementSingCount += +player.octeractUpgrades.octeractFastForward.getEffect().bonus
-
     player.goldenQuarks += calculateGoldenQuarkGain();
-    if (player.singularityCount === player.highestSingularityCount) {
-        player.highestSingularityCount += incrementSingCount
+    player.singularityCount += calculateIncrementSingCount();
+    if (player.singularityCount >= player.highestSingularityCount) {
+        player.highestSingularityCount = player.singularityCount;
 
         if (player.highestSingularityCount === 5) {
             player.singularityUpgrades.goldenQuarks3.freeLevels += 1;
@@ -1045,9 +1067,6 @@ export const singularity = async (): Promise<void> => {
             player.singularityUpgrades.goldenQuarks3.freeLevels += 2;
         }
     }
-    player.singularityCount = player.highestSingularityCount;
-
-
 
     player.totalQuarksEver += player.quarksThisSingularity;
     await resetShopUpgrades(true);
@@ -1064,13 +1083,22 @@ export const singularity = async (): Promise<void> => {
     toggleSubTab(10, 0); // set 'singularity main'
     toggleSubTab(-1, 0); // set 'statistics main'
 
+    if (countReset === true) {
+        hold.bbshards = calculateBBShard();
+        player.singularityCount = 1;
+        player.singularityCount = calculateIncrementSingCount();
+    } else {
+        hold.bbshards = player.bbshards;
+        hold.bbshardUpgrades = player.bbshardUpgrades;
+    }
+
     hold.history.singularity = player.history.singularity;
     hold.totalQuarksEver = player.totalQuarksEver
     hold.singularityCount = player.singularityCount;
     hold.highestSingularityCount = player.highestSingularityCount;
     hold.goldenQuarks = player.goldenQuarks;
     hold.shopUpgrades = player.shopUpgrades;
-    hold.worlds = new QuarkHandler({ quarks: 0, bonus: 0 })
+    hold.worlds = new QuarkHandler({ quarks: Number(player.worlds) * player.bbshardUpgrades.bbshardNoResetQuarks.getEffect().bonus, bonus: 0 })
     hold.singularityUpgrades = player.singularityUpgrades
     hold.octeractUpgrades = player.octeractUpgrades
     hold.autoChallengeToggles = player.autoChallengeToggles
@@ -1149,8 +1177,19 @@ export const singularity = async (): Promise<void> => {
     hold.overfluxOrbsAutoBuy = player.overfluxOrbsAutoBuy
     hold.hotkeys = player.hotkeys
     hold.theme = player.theme
+    hold.firstPlayed = player.firstPlayed
     hold.autoCubeUpgradesToggle = player.autoCubeUpgradesToggle
     hold.autoPlatonicUpgradesToggle = player.autoPlatonicUpgradesToggle
+
+    // Inherit more data if not exceed highestSingularityCount
+    if (hold.highestSingularityCount > hold.singularityCount) {
+        hold.quarkstimer = player.quarkstimer
+        hold.goldenQuarksTimer = player.goldenQuarksTimer
+        hold.rngCode = player.rngCode
+        hold.promoCodeTiming = player.promoCodeTiming
+        hold.skillCode = player.skillCode
+        hold.dailyPowderResetUses = player.dailyPowderResetUses
+    }
 
     // Quark Hepteract craft is saved entirely. For other crafts we only save their auto setting
     hold.hepteractCrafts.quark = player.hepteractCrafts.quark;
@@ -1346,7 +1385,7 @@ const resetResearches = () => {
         176, 177, 178, 179, 181, 182, 184, 186, 187, 188, 189, 191, 192, 193, 194, 196, 197, 199
     ];
 
-    if (player.singularityCount < 25) {
+    if (player.highestSingularityCount < 25) {
         destroy.push(138, 153, 168, 183, 198)
     }
 
@@ -1367,3 +1406,4 @@ const resetTalismans = () => {
     player.legendaryFragments = 0;
     player.mythicalFragments = 0;
 }
+

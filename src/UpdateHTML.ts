@@ -197,13 +197,13 @@ export const revealStuff = () => {
 
     const example32 = document.getElementsByClassName('hepteracts') as HTMLCollectionOf<HTMLElement>;
     for (const ex of Array.from(example32)) { // Ability to use and gain hepteracts //
-        ex.style.display = player.challenge15Exponent >= 1e15 ? 'block' : 'none';
+        ex.style.display = player.unlocks.hepteract ? 'block' : 'none';
     }
 
     const singularityHTMLs = document.getElementsByClassName('singularity') as HTMLCollectionOf<HTMLElement>;
     for (const HTML of Array.from(singularityHTMLs)) { // Ability to view singularity features.
         const count = Number(HTML.getAttribute('count')) || 1;
-        HTML.style.display = player.singularityCount >= count ? 'block' : 'none';
+        HTML.style.display = player.highestSingularityCount >= count ? 'block' : 'none';
     }
 
     visualUpdateShop();
@@ -348,7 +348,7 @@ export const revealStuff = () => {
         DOMCacheGetOrSet('toggleautosacrifice').style.display = 'block' :
         DOMCacheGetOrSet('toggleautosacrifice').style.display = 'none';
 
-    player.singularityCount >= 25 ? //Auto Fragments Buy (After Cx1)
+    player.highestSingularityCount >= 25 ? //Auto Fragments Buy (After Cx1)
         DOMCacheGetOrSet('toggleautoBuyFragments').style.display = 'block' :
         DOMCacheGetOrSet('toggleautoBuyFragments').style.display = 'none';
 
@@ -376,16 +376,16 @@ export const revealStuff = () => {
         (DOMCacheGetOrSet('rune7area').style.display = 'flex', DOMCacheGetOrSet('runeshowpower7').style.display = 'block') :
         (DOMCacheGetOrSet('rune7area').style.display = 'none', DOMCacheGetOrSet('runeshowpower7').style.display = 'none') ;
 
-    player.singularityCount > 0 ?
+    player.highestSingularityCount > 0 ?
         (DOMCacheGetOrSet('singularitytab').style.display = 'block'):
         (DOMCacheGetOrSet('singularitytab').style.display = 'none');
 
-    player.singularityCount > 0 ? //Save Offerings
+    player.highestSingularityCount > 0 ? //Save Offerings
         DOMCacheGetOrSet('saveOffToggle').style.display = 'block' :
         DOMCacheGetOrSet('saveOffToggle').style.display = 'none';
 
     // Auto Open Cubes toggle
-    if (player.singularityCount >= 35) {
+    if (player.highestSingularityCount >= 35) {
         DOMCacheGetOrSet('openCubes').style.display = 'block';
         DOMCacheGetOrSet('cubeOpensInput').style.display = 'block';
         DOMCacheGetOrSet('openTesseracts').style.display = 'block';
@@ -405,25 +405,25 @@ export const revealStuff = () => {
         DOMCacheGetOrSet('platonicCubeOpensInput').style.display = 'none';
     }
 
-    player.singularityCount >= 45 ? // Auto Cube Upgrades
+    player.highestSingularityCount >= 45 ? // Auto Cube Upgrades
         DOMCacheGetOrSet('toggleAutoCubeUpgrades').style.display = 'block' :
         DOMCacheGetOrSet('toggleAutoCubeUpgrades').style.display = 'none';
 
-    player.singularityCount >= 50 ? // Auto Platonic Upgrades
+    player.highestSingularityCount >= 50 ? // Auto Platonic Upgrades
         DOMCacheGetOrSet('toggleAutoPlatonicUpgrades').style.display = 'block' :
         DOMCacheGetOrSet('toggleAutoPlatonicUpgrades').style.display = 'none';
 
     // Singularity confirmation toggle pic
-    player.singularityCount > 0 && player.ascensionCount > 0 ?
+    player.highestSingularityCount > 0 && player.ascensionCount > 0 ?
         (DOMCacheGetOrSet('settingpic6').style.display = 'block'):
         (DOMCacheGetOrSet('settingpic6').style.display = 'none');
 
     // Hepteract Confirmations toggle
-    player.singularityCount > 0 && player.challenge15Exponent >= 1e15 ?
+    player.highestSingularityCount > 0 && player.unlocks.hepteract ?
         (DOMCacheGetOrSet('heptnotificationpic').style.display = 'block'):
         (DOMCacheGetOrSet('heptnotificationpic').style.display = 'none');
 
-    if (player.unlocks.reincarnate || player.singularityCount > 0) {
+    if (player.unlocks.reincarnate || player.highestSingularityCount > 0) {
         DOMCacheGetOrSet('shoptab').style.display = 'block';
     }
 
@@ -432,15 +432,20 @@ export const revealStuff = () => {
         item.style.display = player.singularityUpgrades.octeractUnlock.getEffect().bonus ? 'block' : 'none';
     }
 
-    (player.runelevels[6] > 0 || player.singularityCount > 0) ?
+    const bbshardUnlocks = document.getElementsByClassName('bbshards') as HTMLCollectionOf<HTMLElement>;
+    for (const item of Array.from(bbshardUnlocks)) { // Stuff that you need octeracts to access
+        item.style.display = player.singularityUpgrades.ultimatePen.getEffect().bonus ? 'block' : 'none';
+    }
+
+    (player.runelevels[6] > 0 || player.highestSingularityCount > 0) ?
         (DOMCacheGetOrSet('singularitybtn').style.display = 'block') :
         (DOMCacheGetOrSet('singularitybtn').style.display = 'none');
 
-    player.singularityCount > 0 && player.ascensionCount >= 1 ?
+    player.highestSingularityCount > 0 && player.ascensionCount >= 1 ?
         (DOMCacheGetOrSet('totalQuarkCountStatisticSing').style.display = 'block') :
         (DOMCacheGetOrSet('totalQuarkCountStatisticSing').style.display = 'none') ;
 
-    DOMCacheGetOrSet('ascensionStats').style.visibility = (player.achievements[197] > 0 || player.singularityCount > 0) ? 'visible' : 'hidden';
+    DOMCacheGetOrSet('ascensionStats').style.visibility = (player.achievements[197] > 0 || player.highestSingularityCount > 0) ? 'visible' : 'hidden';
     DOMCacheGetOrSet('ascHyperStats').style.display = player.challengecompletions[13] > 0 ? '' : 'none';
     DOMCacheGetOrSet('ascPlatonicStats').style.display = player.challengecompletions[14] > 0 ? '' : 'none';
     DOMCacheGetOrSet('ascHepteractStats').style.display = player.achievements[255] > 0 ? '' : 'none';
@@ -490,18 +495,18 @@ export const revealStuff = () => {
         'prestigeAutoUpgrade': player.upgrades[92] === 1, // Feature - Upgrades - Auto Buy Diamond Upgrades
         'transcendAutoUpgrade': player.upgrades[99] === 1, // Feature - Upgrades - Auto Buy Mythos Upgrades
         'generatorsAutoUpgrade': player.upgrades[90] === 1, // Feature - Upgrades - Auto Buy Generator Upgrades
-        'automationsAutoUpgrade': player.singularityCount >= 25, // Feature - Upgrades - Auto Buy Automation Upgrades
+        'automationsAutoUpgrade': player.highestSingularityCount >= 25, // Feature - Upgrades - Auto Buy Automation Upgrades
         'toggle28': player.prestigeCount > 0.5 || player.reincarnationCount > 0.5, // Settings - Confirmations - Prestige
         'toggle29': player.transcendCount > 0.5 || player.reincarnationCount > 0.5,  // Settings - Confirmations - Transcension
         'toggle30': player.reincarnationCount > 0.5, // Settings - Confirmations - Reincarnation
         'toggle31': player.ascensionCount > 0, // Settings - Confirmations - Ascension and Asc. Challenge
         'toggle32': player.achievements[173] > 0, // Settings - Confirmations - Ant Sacrifice
-        'toggle33': player.singularityCount > 0 && player.ascensionCount > 0, // Settings - Confirmations - Singularity
+        'toggle33': player.highestSingularityCount > 0 && player.ascensionCount > 0, // Settings - Confirmations - Singularity
         'toggle34': player.unlocks.coinfour, // Achievements - Notifications
-        'toggle35': player.challenge15Exponent >= 1e15 && player.singularityCount > 0, // Hepteracts - Notifications
-        'toggle36': player.singularityCount >= 15, // Auto Blessings
-        'toggle37': player.singularityCount >= 15, // Auto Spirits
-        'toggle38': player.singularityCount > 0, // Researchs Hover to Buy
+        'toggle35': player.unlocks.hepteract && player.highestSingularityCount > 0, // Hepteracts - Notifications
+        'toggle36': player.highestSingularityCount >= 15, // Auto Blessings
+        'toggle37': player.highestSingularityCount >= 15, // Auto Spirits
+        'toggle38': player.highestSingularityCount > 0, // Researchs Hover to Buy
         'toggle39': player.unlocks.prestige, // Hotkeys
         'toggle40': player.unlocks.prestige, // Number Hotkeys
         'toggle41': player.challengecompletions[11] > 0, // Loadouts Notifx
@@ -677,7 +682,7 @@ export const buttoncolorchange = () => {
     DOMCacheGetOrSet('ascendbtn').style.backgroundColor = player.autoAscend && player.challengecompletions[11] > 0 && player.cubeUpgrades[10] > 0 ? 'green' : '';
 
     // Notify new players the reset
-    if (player.toggles[33] === true && player.singularityCount === 0) {
+    if (player.toggles[33] === true && player.highestSingularityCount === 0) {
         if (player.toggles[28] === true && player.unlocks.prestige === false) {
             DOMCacheGetOrSet('prestigebtn').style.boxShadow = player.coinsThisPrestige.gte(1e16) ? 'cyan 0px 0px 10px 2px' : '';
         }

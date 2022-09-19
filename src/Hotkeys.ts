@@ -38,15 +38,15 @@ export const defaultHotkeys = new Map<string, Hotkey>([
     ['SHIFT+A', ['Reset Ascend', () => resetCheck('ascension'), false, () => player.achievements[183] === 1, 'Enter Reset Ascend.']],
     ['SHIFT+B', ['Auto Ascend', () => toggleAutoAscend(0), false, () => player.challengecompletions[11] > 0, 'Toggle Auto Ascend.']],
     ['SHIFT+C', ['Cleanse Corruptions', () => toggleCorruptionLevel(10, 999), false, () => player.challengecompletions[11] > 0, 'Cleanse Corruptions.']],
-    ['SHIFT+D', ['Spec. Action Add x1', () => promocodes('add', 1), false, () => player.singularityCount > 0, 'Execute Special Action Add x1. It will not be executed if the Add is insufficient.']],
+    ['SHIFT+D', ['Spec. Action Add x1', () => promocodes('add', 1), false, () => player.highestSingularityCount > 0, 'Execute Special Action Add x1. It will not be executed if the Add is insufficient.']],
     ['SHIFT+E', ['Exit Asc. Challenge', () => resetCheck('ascensionChallenge'), false, () => player.achievements[183] === 1, 'Exit Ascension Challenge.']], // Its already checks if inside Asc. Challenge
-    ['SHIFT+F', ['Open 10% All Cubes', () => allOpenCubes(10), false, () => player.singularityCount > 0, 'Open 10% for 3-6 Dimensional Cubes.']],
-    ['SHIFT+G', ['Open 50% All Cubes', () => allOpenCubes(50), false, () => player.singularityCount > 0, 'Open 50% for 3-6 Dimensional Cubes.']],
-    ['SHIFT+H', ['Open 100% All Cubes', () => allOpenCubes(100), false, () => player.singularityCount > 0, 'Open 100% for 3-6 Dimensional Cubes.']],
+    ['SHIFT+F', ['Open 10% All Cubes', () => allOpenCubes(10), false, () => player.highestSingularityCount > 0, 'Open 10% for 3-6 Dimensional Cubes.']],
+    ['SHIFT+G', ['Open 50% All Cubes', () => allOpenCubes(50), false, () => player.highestSingularityCount > 0, 'Open 50% for 3-6 Dimensional Cubes.']],
+    ['SHIFT+H', ['Open 100% All Cubes', () => allOpenCubes(100), false, () => player.highestSingularityCount > 0, 'Open 100% for 3-6 Dimensional Cubes.']],
     ['SHIFT+R', ['Auto Runes', () => toggleAutoSacrifice(0), false, () => player.shopUpgrades.offeringAuto > 0, 'Toggle Auto Runes.']],
-    ['SHIFT+O', ['Use Off. Potion', () => useConsumable('offeringPotion'), false, () => player.singularityCount > 0, 'Use the Offerings Potion. It will be ignored when the number is insufficient.']],
-    ['SHIFT+P', ['Use Obt. Potion', () => useConsumable('obtainiumPotion'), false, () => player.singularityCount > 0, 'Use Obtainium Potion. It will be ignored when the number is insufficient.']],
-    ['SHIFT+S', ['Reset Singularity', () => resetCheck('singularity'), false, () => player.singularityCount > 0, 'Enter Reset Singularity.']]
+    ['SHIFT+O', ['Use Off. Potion', () => useConsumable('offeringPotion'), false, () => player.highestSingularityCount > 0, 'Use the Offerings Potion. It will be ignored when the number is insufficient.']],
+    ['SHIFT+P', ['Use Obt. Potion', () => useConsumable('obtainiumPotion'), false, () => player.highestSingularityCount > 0, 'Use Obtainium Potion. It will be ignored when the number is insufficient.']],
+    ['SHIFT+S', ['Reset Singularity', () => resetCheck('singularity'), false, () => player.highestSingularityCount > 0, 'Enter Reset Singularity.']]
 ]);
 
 const lockedName = 'LOCKED';

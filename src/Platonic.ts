@@ -388,14 +388,14 @@ export const buyPlatonicUpgrades = (index: number, auto = false) => {
             player.hepteractCrafts.abyss.spend(Math.floor(platUpgradeBaseCosts[index].abyssals * priceMultiplier));
 
             Synergism.emit('boughtPlatonicUpgrade', platUpgradeBaseCosts[index]);
-            if (index === 20 && !auto && player.singularityCount === 0) {
+            if (index === 20 && !auto && player.highestSingularityCount === 0) {
                 return Alert('While I strongly recommended you not to buy this, you did it anyway. For that, you have unlocked the rune of Grandiloquence, for you are a richass.')
             }
         } else {
             break;
         }
 
-        if (player.platonicUpgrades[index] === platUpgradeBaseCosts[index].maxLevel || player.singularityCount === 0) {
+        if (player.platonicUpgrades[index] === platUpgradeBaseCosts[index].maxLevel || player.highestSingularityCount === 0) {
             break
         }
     }
@@ -405,7 +405,7 @@ export const buyPlatonicUpgrades = (index: number, auto = false) => {
 }
 
 export const autoBuyPlatonicUpgrades = () => {
-    if (player.autoPlatonicUpgradesToggle === true && player.singularityCount >= 50) {
+    if (player.autoPlatonicUpgradesToggle === true && player.highestSingularityCount >= 50) {
         for (let i = 1; i < player.platonicUpgrades.length; i++) {
             if (player.platonicUpgrades[i] < platUpgradeBaseCosts[i].maxLevel) {
                 const resourceCheck = checkPlatonicUpgrade(i, true);
