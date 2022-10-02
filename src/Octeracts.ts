@@ -30,8 +30,8 @@ export class OcteractUpgrade extends DynamicUpgrade {
     }
 
     /**
-     * Buy levels up until togglebuy or maxxed.
-     * @returns An alert indicating cannot afford, already maxxed or purchased with how many
+     * Buy levels up until togglebuy or maxed.
+     * @returns An alert indicating cannot afford, already maxed or purchased with how many
      *          levels purchased
      */
     public async buyLevel(event: MouseEvent): Promise<void> {
@@ -40,7 +40,7 @@ export class OcteractUpgrade extends DynamicUpgrade {
         let OCTBudget = player.wowOcteracts;
 
         if (event.shiftKey) {
-            maxPurchasable = 100000
+            maxPurchasable = player.octeractbuyamount;
             const buy = Number(await Prompt(`How many Octeracts would you like to spend? You have ${format(player.wowOcteracts, 0, true)} OCT. Type -1 to use max!`))
 
             if (isNaN(buy) || !isFinite(buy) || !Number.isInteger(buy)) { // nan + Infinity checks
@@ -62,7 +62,7 @@ export class OcteractUpgrade extends DynamicUpgrade {
         }
 
         if (maxPurchasable === 0) {
-            return Alert('hey! You have already maxxed this upgrade. :D')
+            return Alert('Hey! You have already maxed this upgrade. :D')
         }
 
         while (maxPurchasable > 0) {
@@ -167,6 +167,21 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
             }
         }
     },
+    octeractGain2: {
+        name: 'Octeract Trigenesis',
+        description: 'It turns out that you have six additional dimensions to modify your Cogenesis. +1% more Octs per level!',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * Math.pow(10, Math.pow(level, 0.5) / 3)
+        },
+        maxLevel: -1,
+        costPerLevel: 1e10,
+        effect: (n: number) => {
+            return {
+                bonus: 1 + 0.01 * n,
+                desc: `Octeract Gain is increased by ${format(n, 0 , true)}%.`
+            }
+        }
+    },
     octeractQuarkGain: {
         name: 'Quark Octeract',
         description: 'An altered forme of the hepteract, this gives a 1% Quark Bonus per level without Diminishing Return.',
@@ -177,7 +192,7 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
                 return baseCost * (Math.pow(1001, 7) - Math.pow(1000, 7)) * Math.pow(10, level / 1000)
             }
         },
-        maxLevel: 9900,
+        maxLevel: 19900,
         costPerLevel: 1e-7,
         effect: (n: number) => {
             return {
@@ -366,6 +381,36 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
             }
         }
     },
+    octeractImprovedFree4: {
+        name: 'Coupon of Ultimate Penniless Derpsmiths',
+        description: 'Each level adds 0.001 to the exponent of free upgrades, with the first level adding another 0.01!',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * Math.pow(1e20, level / 40)
+        },
+        maxLevel: 40,
+        costPerLevel: 1e20,
+        effect: (n: number) => {
+            return {
+                bonus: 0.001 * n + ((n > 0)? 0.01: 0),
+                desc: `Exponent of the first upgrade +${format(0.001 * n + ((n > 0)? 0.01: 0), 3, true)}`
+            }
+        }
+    },
+    octeractSingUpgradeCap: {
+        name: 'Overwriting Pointers',
+        description: 'Derpsmith encountered a SegFault after reassigning null... +1 to level cap on certain Singularity Upgrades per level!',
+        costFormula: (level: number, baseCost: number) => {
+            return baseCost * Math.pow(1e3, level)
+        },
+        maxLevel: 10,
+        costPerLevel: 1e10,
+        effect: (n: number) => {
+            return {
+                bonus: n,
+                desc: `Some Singularity Upgrades have +${n} max level!`
+            }
+        }
+    },
     octeractOfferings1: {
         name: 'Offering Electrolosis',
         description: 'Gain 1% more offerings per level.',
@@ -410,7 +455,7 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
         costFormula: (level: number, baseCost: number) => {
             return baseCost * Math.pow(level + 1, 3)
         },
-        maxLevel: -1,
+        maxLevel: 1000000,
         costPerLevel: 1,
         effect: (n: number) => {
             return {
@@ -425,12 +470,12 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
         costFormula: (level: number, baseCost: number) => {
             return baseCost * Math.pow(40, level)
         },
-        maxLevel: 5,
+        maxLevel: -1,
         costPerLevel: 1000,
         effect: (n: number) => {
             return {
                 bonus: n / 100,
-                desc: `Octeract Gain per OOM Ascension count +${n}%`
+                desc: `Octeract Gain per OOM Ascension count +${format(n, 1, true)}%`
             }
         }
     },

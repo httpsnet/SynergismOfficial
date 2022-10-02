@@ -1,7 +1,7 @@
 import { player, saveSynergy, blankSave, reloadShit, format } from './Synergism';
 import { octeractGainPerSecond } from './Calculate';
 import { testing, version } from './Config';
-import { getElementById } from './Utility';
+import { cleanString, getElementById } from './Utility';
 import LZString from 'lz-string';
 import { achievementaward } from './Achievements';
 import type { Player } from './types/Synergism';
@@ -69,7 +69,7 @@ const getRealTime = (type = 'default', use12 = false) => {
 
 export const updateSaveString = (input: HTMLInputElement) => {
     const value = input.value.slice(0, 100);
-    player.saveString = value;
+    player.saveString = cleanString(value);
 }
 
 export const getVer = () => /[\d?=.]+/.exec(version)?.[0] ?? version
@@ -114,7 +114,7 @@ export const saveFilename = () => {
         }
     });
 
-    return t;
+    return cleanString(t)
 }
 
 export const exportGainQuarks = () => {
@@ -138,6 +138,12 @@ export const exportSynergism = async () => {
     exportGainQuarks();
     await saveSynergy();
 
+    const saved = await saveSynergy();
+
+    if (!saved) {
+        return
+    }
+
     const toClipboard = getElementById<HTMLInputElement>('saveType').checked;
     const save =
         await localforage.getItem<Blob>('Synergysave2') ??
@@ -154,6 +160,7 @@ export const exportSynergism = async () => {
             // - TypeError (browser doesn't support this feature)
             // - Failed to copy (browser limitation; Safari)
             await navigator.clipboard.writeText(saveString)
+            DOMCacheGetOrSet('exportinfo').textContent = 'Copied save to clipboard!';
         } catch (err) {
             // So we fallback to the deprecated way of doing it,
             // which isn't limited by any browser.
@@ -182,6 +189,7 @@ export const exportSynergism = async () => {
             })
 
             clipboard.on('error', () => {
+                DOMCacheGetOrSet('exportinfo').textContent = 'Export failed!'
                 void Alert('Unable to write the save to clipboard.').finally(cleanup)
             })
         }
@@ -196,9 +204,9 @@ export const exportSynergism = async () => {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+        DOMCacheGetOrSet('exportinfo').textContent = 'Savefile copied to file!';
     }
-
-    DOMCacheGetOrSet('exportinfo').textContent = 'Savefile copied to file!';
+    setTimeout(() => DOMCacheGetOrSet('exportinfo').textContent = '', 15_000);
 }
 
 export const preloadDeleteGame = async () => {
@@ -230,10 +238,10 @@ export const resetGame = async () => {
     toggleSubTab(10, 0); // set 'singularity main'
     toggleSubTab(-1, 0); // set 'statistics main'
     //Import Game
-    await importSynergism(btoa(JSON.stringify(hold))!, true);
+    await importSynergism(btoa(JSON.stringify(hold)), true);
 }
 
-export const importSynergism = async (input: string, reset = false) => {
+export const importSynergism = async (input: string | null, reset = false) => {
     if (typeof input !== 'string') {
         return Alert('Invalid character, could not save! 😕');
     }
@@ -305,10 +313,10 @@ export const promocodes = async (input: string | null, amount?: number) => {
     if (input === null) {
         return Alert('Alright, come back soon!')
     }
-    if (input === 'derpsmith' && !player.codes.get(42) && G['isEvent'] && getEvent().name === '&#128151 Derpsmith Arrival Ceremony! &#128151 [link!]') {
-        player.codes.set(42, true);
+    if (input === 'derpsmith' && !player.codes.get(43) && G['isEvent'] && getEvent().name === 'Derpsmith Tea Party') {
+        player.codes.set(43, true);
         player.quarkstimer = quarkHandler().maxTime;
-        player.goldenQuarksTimer = 3600 * 168;
+        player.goldenQuarksTimer = 3600 * 24;
         addTimers('ascension', 4 * 3600);
 
         if (player.challenge15Exponent >= 1e15 || player.singularityCount > 0) {
@@ -320,13 +328,15 @@ export const promocodes = async (input: string | null, amount?: number) => {
             player.singularityUpgrades.goldenQuarks3.freeLevels += 1;
             if (player.singularityUpgrades.octeractUnlock.getEffect().bonus) {
                 player.octeractUpgrades.octeractGain.freeLevels += 5;
+                player.octeractUpgrades.octeractGain2.freeLevels += 3;
+                player.octeractUpgrades.octeractAscensionsOcteractGain.freeLevels += 0.1
             }
         }
 
         return Alert(`Happy update!!!! Your Quark timer(s) have been replenished and you have been given 4 real life hours of Ascension progress! 
                       ${(player.challenge15Exponent >= 1e15 || player.singularityCount > 0)? 'Derpsmith also hacked your save to expand Quark Hepteract for free!' : ''}
                       ${(player.singularityCount > 0) ? 'You were also given free levels of GQ1-3!' : ''} 
-                      ${(player.singularityUpgrades.octeractUnlock.getEffect().bonus) ? 'Finally, you were given free levels of Octeract Cogenesis.': ''}`)
+                      ${(player.singularityUpgrades.octeractUnlock.getEffect().bonus) ? 'Finally, you were given free levels of Octeract Geneses and Accumulator!': ''}`)
     }
     if (input === 'synergism2021' && !player.codes.get(1)) {
         player.codes.set(1, true);
@@ -643,7 +653,12 @@ export const promocodes = async (input: string | null, amount?: number) => {
         el.textContent = 'Your code is either invalid or already used. Try again!'
     }
 
-    await saveSynergy(); // should fix refresh bug where you can continuously enter promocodes
+    const saved = await saveSynergy(); // should fix refresh bug where you can continuously enter promocodes
+
+    if (!saved) {
+        return
+    }
+
     Synergism.emit('promocode', input);
 
     setTimeout(() => el.textContent = '', 15000);
@@ -669,6 +684,8 @@ const addCodeMaxUses = () : number => {
 const addCodeInterval = () : number => {
     let time = hour
     time *= (1 - 0.02 * player.shopUpgrades.calculator4)
+    time *= (1 - Math.min(.5, (player.highestSingularityCount >= 125 ? player.highestSingularityCount / 1000 : 0)
+                            - (player.highestSingularityCount >= 200 ? player.highestSingularityCount / 1000 : 0)))
     return time
 }
 
@@ -680,12 +697,7 @@ const addCodeAvailableUses = (): number => {
 }
 
 const addCodeTimeToNextUse = (): number => {
-    let timeInterval = hour
-    timeInterval *= (1 - 0.02 * player.shopUpgrades.calculator4)
-    timeInterval *= (1 - (player.highestSingularityCount >= 125 ? player.highestSingularityCount / 1000 : 0)
-                       - (player.highestSingularityCount >= 200 ? player.highestSingularityCount / 1000 : 0))
-
-    return Math.floor(timeInterval + player.rngCode - Date.now())/1000;
+    return Math.floor(addCodeInterval() + player.rngCode - Date.now())/1000;
 }
 
 const timeCodeAvailableUses = (): number => {
