@@ -295,6 +295,8 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         divinePack: new SingularityUpgrade(singularityData['divinePack']),
         wowPass2: new SingularityUpgrade(singularityData['wowPass2']),
         potionBuff: new SingularityUpgrade(singularityData['potionBuff']),
+        potionBuff2: new SingularityUpgrade(singularityData['potionBuff2']),
+        potionBuff3: new SingularityUpgrade(singularityData['potionBuff3']),
         singChallengeExtension: new SingularityUpgrade(singularityData['singChallengeExtension']),
         singChallengeExtension2: new SingularityUpgrade(singularityData['singChallengeExtension2']),
         singChallengeExtension3: new SingularityUpgrade(singularityData['singChallengeExtension3']),
@@ -313,12 +315,15 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         platonicDelta: new SingularityUpgrade(singularityData['platonicDelta']),
         platonicPhi: new SingularityUpgrade(singularityData['platonicPhi']),
         singFastForward: new SingularityUpgrade(singularityData['singFastForward']),
-        singFastForward2: new SingularityUpgrade(singularityData['singFastForward2'])
+        singFastForward2: new SingularityUpgrade(singularityData['singFastForward2']),
+        singAscensionSpeed: new SingularityUpgrade(singularityData['singAscensionSpeed']),
+        singAscensionSpeed2: new SingularityUpgrade(singularityData['singAscensionSpeed2'])
     }
 
     player.octeractUpgrades = {
         octeractStarter: new OcteractUpgrade(octeractData['octeractStarter']),
         octeractGain: new OcteractUpgrade(octeractData['octeractGain']),
+        octeractGain2: new OcteractUpgrade(octeractData['octeractGain2']),
         octeractQuarkGain: new OcteractUpgrade(octeractData['octeractQuarkGain']),
         octeractCorruption: new OcteractUpgrade(octeractData['octeractCorruption']),
         octeractGQCostReduce: new OcteractUpgrade(octeractData['octeractGQCostReduce']),
@@ -332,6 +337,8 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         octeractImprovedFree: new OcteractUpgrade(octeractData['octeractImprovedFree']),
         octeractImprovedFree2: new OcteractUpgrade(octeractData['octeractImprovedFree2']),
         octeractImprovedFree3: new OcteractUpgrade(octeractData['octeractImprovedFree3']),
+        octeractImprovedFree4: new OcteractUpgrade(octeractData['octeractImprovedFree4']),
+        octeractSingUpgradeCap: new OcteractUpgrade(octeractData['octeractSingUpgradeCap']),
         octeractOfferings1: new OcteractUpgrade(octeractData['octeractOfferings1']),
         octeractObtainium1: new OcteractUpgrade(octeractData['octeractObtainium1']),
         octeractAscensions: new OcteractUpgrade(octeractData['octeractAscensions']),
@@ -643,7 +650,8 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                     toggleBuy: data.singularityUpgrades[k].toggleBuy,
                     minimumSingularity: singularityData[k].minimumSingularity,
                     effect: singularityData[k].effect,
-                    freeLevels: data.singularityUpgrades[k].freeLevels
+                    freeLevels: data.singularityUpgrades[k].freeLevels,
+                    canExceedCap: singularityData[k].canExceedCap
                 }
                 player.singularityUpgrades[k] = new SingularityUpgrade(updatedData);
 
@@ -654,6 +662,7 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                 const cost = player.singularityUpgrades[k].level * (player.singularityUpgrades[k].level + 1) *
                              player.singularityUpgrades[k].costPerLevel / 2
                 if (player.singularityUpgrades[k].maxLevel !== -1 &&
+                    player.singularityUpgrades[k].level <= player.singularityUpgrades[k].maxLevel &&
                     player.singularityUpgrades[k].goldenQuarksInvested !== cost) {
                     player.singularityUpgrades[k].refund()
                 }
@@ -782,5 +791,20 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                 player.singularityUpgrades.goldenQuarks3.freeLevels += 2;
             }
         }
+    }
+
+    const oldest = localStorage.getItem('firstPlayed')
+
+    if (data.firstPlayed == undefined) {
+        // If the save is from before v2.9.7 staticians
+        player.firstPlayed = oldest ?? new Date().toISOString()
+    } else if (data.firstPlayed?.includes('Before')) {
+        // The first version with player.firstPlayed set the date to
+        // "Before {date.toString}"
+        player.firstPlayed = oldest ?? new Date().toISOString()
+    } else {
+        // Otherwise just set the firstPlayed time to either the oldest
+        // stored, or the date in the save being loaded.
+        player.firstPlayed = oldest ?? data.firstPlayed
     }
 }

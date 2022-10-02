@@ -12,11 +12,11 @@ import { antRepeat, sacrificeAnts, buyAntProducers, updateAntDescription, antUpg
 import { buyCubeUpgrades, cubeUpgradeDesc } from './Cubes'
 import { buyPlatonicUpgrades, createPlatonicDescription } from './Platonic'
 import { corruptionCleanseConfirm, corruptionDisplay } from './Corruptions'
-import { exportSynergism, updateSaveString, promocodes, promocodesPrompt, promocodesInfo, importSynergism, resetGame, preloadDeleteGame } from './ImportExport'
+import { exportSynergism, updateSaveString, promocodes, promocodesPrompt, promocodesInfo, importSynergism, resetGame, preloadDeleteGame, handleLastModified } from './ImportExport'
 import { resetHistoryTogglePerSecond } from './History'
 import { resetShopUpgrades, shopDescriptions, buyShopUpgrades, buyConsumable, useConsumableClick, shopData, shopUpgradeTypes } from './Shop'
 import { Globals as G } from './Variables';
-import { changeTabColor } from './UpdateHTML'
+import { changeTabColor, Confirm } from './UpdateHTML'
 import { hepteractDescriptions, hepteractToOverfluxOrbDescription, tradeHepteractToOverfluxOrb, overfluxPowderDescription, overfluxPowderWarp, toggleAutoBuyOrbs } from './Hepteracts'
 import { exitOffline, forcedDailyReset, timeWarp } from './Calculate'
 import type { OneToFive, Player } from './types/Synergism'
@@ -27,6 +27,7 @@ import { toggleTheme } from './Themes'
 import { buyGoldenQuarks } from './singularity'
 import { resetHotkeys } from './Hotkeys'
 import { shopOthersDescriptions } from './UpdateVisuals'
+import { generateExportSummary } from './Summary'
 
 /* STYLE GUIDE */
 /*
@@ -542,6 +543,8 @@ export const generateEventHandlers = () => {
         s.addEventListener('click', (e) => displayStats(e.target as HTMLElement));
     }
 
+    DOMCacheGetOrSet('summaryGeneration').addEventListener('click', () => generateExportSummary());
+
     // Various functions
     /*Export Files*/ DOMCacheGetOrSet('exportgame').addEventListener('click', () => exportSynergism())
     /*Update name of File*/
@@ -595,14 +598,14 @@ TODO: Fix this entire tab it's utter shit
     const singularityUpgrades = Object.keys(player.singularityUpgrades) as (keyof Player['singularityUpgrades'])[];
     for (const key of singularityUpgrades) {
         DOMCacheGetOrSet(`${String(key)}`).addEventListener('mouseover', () => player.singularityUpgrades[`${String(key)}`].updateUpgradeHTML())
-        DOMCacheGetOrSet(`${String(key)}`).addEventListener('click', () => player.singularityUpgrades[`${String(key)}`].buyLevel())
+        DOMCacheGetOrSet(`${String(key)}`).addEventListener('click', (event) => player.singularityUpgrades[`${String(key)}`].buyLevel(event))
     }
 
     // Octeract Upgrades
     const octeractUpgrades = Object.keys(player.octeractUpgrades) as (keyof Player['octeractUpgrades'])[];
     for (const key of octeractUpgrades) {
         DOMCacheGetOrSet(`${String(key)}`).addEventListener('mouseover', () => player.octeractUpgrades[`${String(key)}`].updateUpgradeHTML())
-        DOMCacheGetOrSet(`${String(key)}`).addEventListener('click', () => player.octeractUpgrades[`${String(key)}`].buyLevel())
+        DOMCacheGetOrSet(`${String(key)}`).addEventListener('click', (event) => player.octeractUpgrades[`${String(key)}`].buyLevel(event))
     }
     //Toggle subtabs of Singularity tab
     for (let index = 0; index < 4; index++) {
@@ -632,9 +635,31 @@ TODO: Fix this entire tab it's utter shit
         }
 
         element.value = '';
+        handleLastModified(file.lastModified)
 
         return importSynergism(save);
     });
 
     DOMCacheGetOrSet('theme').addEventListener('click', () => toggleTheme());
+
+    DOMCacheGetOrSet('saveType').addEventListener('click', async (event) => {
+        const element = event.target as HTMLInputElement
+
+        if (!element.checked) {
+            localStorage.removeItem('copyToClipboard')
+            event.stopPropagation()
+            return
+        }
+
+        event.preventDefault()
+
+        const confirmed = await Confirm('Are you sure you want to enable copy save to clipboard?')
+
+        if (confirmed) {
+            element.checked = !element.checked
+            localStorage.setItem('copyToClipboard', '')
+        } else {
+            localStorage.removeItem('copyToClipboard')
+        }
+    })
 }

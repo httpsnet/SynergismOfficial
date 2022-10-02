@@ -373,6 +373,7 @@ export const buyPlatonicUpgrades = (index: number, auto = false) => {
         if (platUpgradeBaseCosts[index].priceMult) {
             priceMultiplier = Math.pow(platUpgradeBaseCosts[index].priceMult!, Math.pow(player.platonicUpgrades[index] / (platUpgradeBaseCosts[index].maxLevel - 1), 1.25))
         }
+        priceMultiplier *= calculateSingularityDebuff('Platonic Costs');
 
         if (resourceCheck.canBuy) {
             player.platonicUpgrades[index] += 1
@@ -389,7 +390,7 @@ export const buyPlatonicUpgrades = (index: number, auto = false) => {
 
             Synergism.emit('boughtPlatonicUpgrade', platUpgradeBaseCosts[index]);
             if (index === 20 && !auto && player.singularityCount === 0) {
-                return Alert('While I strongly recommended you not to buy this, you did it anyway. For that, you have unlocked the rune of Grandiloquence, for you are a richass.')
+                void Alert('While I strongly recommended you not to buy this, you did it anyway. For that, you have unlocked the rune of Grandiloquence, for you are a richass.')
             }
         } else {
             break;

@@ -1,4 +1,4 @@
-import { player, clearInt, interval, format, blankSave, updateAll } from './Synergism';
+import { player, format, blankSave, updateAll } from './Synergism';
 import {
     calculateOfferings, CalcCorruptionStuff, calculateCubeBlessings, calculateRuneLevels,
     calculateAnts, calculateObtainium, calculateTalismanEffects, calculateAntSacrificeELO,
@@ -38,12 +38,13 @@ import { getAutoHepteractCrafts } from './Hepteracts'
 import type { TesseractBuildings } from './Buy';
 import { updatePlatonicUpgradeBG, autoBuyPlatonicUpgrades } from './Platonic';
 import { sumContents } from './Utility';
+import { setInterval, clearInterval } from './Timers'
 
 let repeatreset: ReturnType<typeof setTimeout>;
 
 export const resetrepeat = (input: resetNames) => {
-    clearInt(repeatreset);
-    repeatreset = interval(() => resetdetails(input), 50);
+    clearInterval(repeatreset);
+    repeatreset = setInterval(() => resetdetails(input), 50);
 }
 
 export const resetdetails = (input: resetNames) => {
@@ -175,10 +176,7 @@ export const updateAutoReset = (i: number) => {
 }
 
 export const updateTesseractAutoBuyAmount = () => {
-    let value = Math.floor(parseFloat((DOMCacheGetOrSet('tesseractAmount') as HTMLInputElement).value)) || 0;
-    if (player.resettoggle4 === 2) { // Auto mode: PERCENTAGE
-        value = Math.min(value, 100);
-    }
+    const value = Math.floor(parseFloat((DOMCacheGetOrSet('tesseractAmount') as HTMLInputElement).value)) || 0;
     player.tesseractAutoBuyerAmount = Math.max(value, 0);
 }
 
@@ -559,10 +557,6 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
             player.thirdOwnedParticles = 1;
             player.fourthOwnedParticles = 1;
             player.fifthOwnedParticles = 1;
-        }
-
-        if (player.cubeUpgrades[48] > 0) {
-            player.firstOwnedAnts += 1
         }
 
         // If challenge 10 is incomplete, you won't get a cube no matter what
@@ -1141,6 +1135,7 @@ export const singularity = async (): Promise<void> => {
     hold.overfluxOrbsAutoBuy = player.overfluxOrbsAutoBuy
     hold.hotkeys = player.hotkeys
     hold.theme = player.theme
+    hold.firstPlayed = player.firstPlayed
     hold.autoCubeUpgradesToggle = player.autoCubeUpgradesToggle
     hold.autoPlatonicUpgradesToggle = player.autoPlatonicUpgradesToggle
 
@@ -1154,6 +1149,8 @@ export const singularity = async (): Promise<void> => {
     }
 
     const saveCode42 = player.codes.get(42) ?? false
+    const saveCode43 = player.codes.get(43) ?? false
+
     // Import Game
 
     await importSynergism(btoa(JSON.stringify(hold)), true);
@@ -1163,6 +1160,7 @@ export const singularity = async (): Promise<void> => {
     player.codes.set(40, true);
     player.codes.set(41, true);
     player.codes.set(42, saveCode42)
+    player.codes.set(43, saveCode43)
     updateSingularityMilestoneAwards();
 }
 
@@ -1282,10 +1280,6 @@ const resetUpgrades = (i: number) => {
 
 export const resetAnts = () => {
     player.firstOwnedAnts = 0;
-    if (player.cubeUpgrades[48] > 0) {
-        player.firstOwnedAnts = 1
-    }
-
     player.secondOwnedAnts = 0;
     player.thirdOwnedAnts = 0;
     player.fourthOwnedAnts = 0;
@@ -1311,6 +1305,11 @@ export const resetAnts = () => {
     player.sixthCostAnts = new Decimal('1e36');
     player.seventhCostAnts = new Decimal('1e100');
     player.eighthCostAnts = new Decimal('1e300');
+
+    if (player.cubeUpgrades[48] > 0) {
+        player.firstOwnedAnts = 1;
+        player.firstCostAnts = new Decimal('1e741');
+    }
 
     const ant12 = player.antUpgrades[12-1];
     player.antUpgrades = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ant12];

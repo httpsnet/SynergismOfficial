@@ -3253,6 +3253,7 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
             <p id="statOcMT" alt="statOcMT" label="statOcMT" class="statPortion statTotal" style="color: orange">TOTAL OCTERACT MULTIPLIER: <span
                     id="sOcMT" alt="sOcMT" label="sOcMT" class="statNumber statTotal">0</span></p>
         </div>
+        <button id="summaryGeneration" style="border: 2px solid grey; height: 20px; width: 250px;">Generate Savefile Stats Summary</button>
     </div>
     <div class="subtabContent subtabDisplayFlex historySubTab" id="resetHistorySubTab" alt="resetHistorySubTab" label="resetHistorySubTab">
         <div class="scrollbarX">
@@ -3293,14 +3294,14 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
         <div class="scrollbarX">
             <div id="historySingularity" alt="historySingularity" label="historySingularity">
                 <div>
-                    <p style="float: left">Your last singularities got you the following:</p>
-                </div>
-                <div class="historyTableWrap" style="clear: both">
+                <p style="float: left">Your last singularities got you the following:</p>
+                 </div>
+                 <div class="historyTableWrap" style="clear: both">
                     <table id="historySingularityTable" alt="historySingularityTable" label="historySingularityTable">
                         <tbody></tbody>
                     </table>
                 </div>
-            </div>
+             </div>
         </div>
     </div>
     <div class="subtabContent subtabDisplayFlex" id="hotkeys" alt="hotkeys" label="hotkeys">
@@ -3315,7 +3316,7 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
             <button id="resetHotkeys" style="border: 2px solid brown">Reset Hotkeys</button>
             <button class="auto" id="toggle39" alt="toggle39" label="toggle39" toggleid="39" alt="39" label="39" format="Hotkeys: $" style="border:2px solid green">Hotkeys: ON</button>
             <button class="auto" id="toggle40" alt="toggle40" label="toggle40" toggleid="40" alt="40" label="40" format="Number Hotkeys: $" style="border:2px solid green">Number Hotkeys: ON</button>
-            <button class="auto" id="toggle41" alt="toggle41" label="toggle41" toggleid="41" alt="41" label="41" format="Loadouts Notifx: $" style="border:2px solid green">Loadouts Notifx: ON</button>
+            <button class="auto" id="toggle41" alt="toggle41" label="toggle41" toggleid="41" alt="41" label="41" format="Loadouts Notify: $" style="border:2px solid green">Loadouts Notify: ON</button>
         </div>
     </div>
 </div>
@@ -3639,6 +3640,9 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
                     <img src="Pictures/Golden Quark.png" width="32px" height="32px" loading="lazy">
                     <p id="goldenQuarkamount" alt="goldenQuarkamount" label="goldenQuarkamount">You have 0 Golden Quarks!</p>
                 </div>
+                <div id="goldenQuarksMultiBuyInfo">
+                    <p id="goldenQuarkMultiBuyText">Buy multiple levels at once by holding <span style="color: orchid">'SHIFT'</span> while clicking!</p>
+                </div>
                 <div class="boxColor" id="actualSingularityUpgradeContainer" alt="actualSingularityUpgradeContainer" label="actualSingularityUpgradeContainer">
                     <div class="singularityUpgrade">
                         <img id="goldenQuarks1" alt="goldenQuarks1" label="goldenQuarks1" src="Pictures/SingularityCurrency1.png">
@@ -3751,6 +3755,12 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
                         <img id="potionBuff" alt="potionBuff" label="potionBuff" src="Pictures/Singularity Potions.png">
                     </div>
                     <div class="singularityUpgrade">
+                        <img id="potionBuff2" alt="potionBuff2" label="potionBuff2" src="Pictures/Singularity Potions 2.png">
+                    </div>
+                    <div class="singularityUpgrade">
+                        <img id="potionBuff3" alt="potionBuff3" label="potionBuff3" src="Pictures/Singularity Potions 3.png">
+                    </div>
+                    <div class="singularityUpgrade">
                         <img id="singChallengeExtension" alt="singChallengeExtension" label="singChallengeExtension" src="Pictures/Singularity Challenges 1.png">
                     </div>
                     <div class="singularityUpgrade">
@@ -3788,6 +3798,12 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
                     </div>
                     <div class="singularityUpgrade">
                         <img id="singFastForward2" src="Pictures/Singularity Fast Forward 2.png" style="cursor: pointer">
+                    </div>
+                    <div class="singularityUpgrade">
+                        <img id="singAscensionSpeed" src="Pictures/Singularity Ascension Speed.png" style="cursor: pointer">
+                    </div>
+                    <div class="singularityUpgrade">
+                        <img id="singAscensionSpeed2" src="Pictures/Singularity Ascension Speed 2.png" style="cursor: pointer">
                     </div>
                     <div class="singularityUpgrade">
                         <img id="ultimatePen" src="Pictures/Ultimate Pen.png" style="cursor: pointer">
@@ -3835,12 +3851,18 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
                     <p id="totalOcteractCubeBonus" alt="totalOcteractCubeBonus" label="totalOcteractCubeBonus">3-7 Dimensional Cubes <span id="octCubeBonus" style="color: yellow">+199%</span></p>
                     <p id="totalOcteractQuarkBonus" alt="totalOcteractQuarkBonus" label="totalOcteractQuarkBonus">Quarks <span id="octQuarkBonus" style="color: aqua">+4%</span></p>
                 </div>
+                <div id="octeractsMultiBuyInfo">
+                    <p id="octeractMultiBuyText">Buy multiple levels at once by holding <span style="color: orchid">'SHIFT'</span> while clicking!</p>
+                </div>
                 <div class="boxColor" id="octeractUpgradeContainer" alt="octeractUpgradeContainer" label="octeractUpgradeContainer">
                     <div class="octeractUpgrade">
                         <img id="octeractStarter" src='Pictures/OcteractStarter.png' style="cursor: pointer">
                     </div>
                     <div class="octeractUpgrade">
                         <img id="octeractGain" src='Pictures/Octeract Octeracts.png' style="cursor: pointer">
+                    </div>
+                    <div class="octeractUpgrade">
+                        <img id="octeractGain2" src='Pictures/Octeract Octeracts 2.png' style="cursor: pointer">
                     </div>
                     <div class="octeractUpgrade">
                         <img id="octeractQuarkGain" src='Pictures/Octeract Quarks.png' style="cursor: pointer">
@@ -3880,6 +3902,12 @@ $STAGES$ for synergism stage is total" style="color: white"></p>
                     </div>
                     <div class="octeractUpgrade">
                         <img id="octeractImprovedFree3" src="Pictures/Octeract Free Upgrade Improvement3.png" style="cursor: pointer">
+                    </div>
+                    <div class="octeractUpgrade">
+                        <img id="octeractImprovedFree4" src="Pictures/Octeract Free Upgrade Improvement4.png" style="cursor: pointer">
+                    </div>
+                    <div class="octeractUpgrade">
+                        <img id="octeractSingUpgradeCap" src="Pictures/Octeract Max Singularity Upgrade.png" style="cursor: pointer">
                     </div>
                     <div class="octeractUpgrade">
                         <img id="octeractOfferings1" src="Pictures/Octeract Offerings.png" style="cursor: pointer">

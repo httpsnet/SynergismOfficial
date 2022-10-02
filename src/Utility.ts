@@ -104,7 +104,9 @@ export const updateClassList = (targetElement: string, additions: string[], remo
 export const btoa = (s: string) => {
     try {
         return window.btoa(s);
-    } catch {
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('An error occurred:', err)
         // e.code = 5
         return null;
     }
@@ -130,4 +132,30 @@ export const toOrdinal = (int: number):string => {
     }
 
     return format(int,0,true)+suffix
+}
+
+export const formatMS = (ms: number) => Object.entries({
+    d: format(Math.floor(ms / 86400000), 0, true),
+    h: Math.floor(ms / 3600000) % 24,
+    m: Math.floor(ms / 60000) % 60,
+    s: Math.floor(ms / 1000) % 60
+})
+    .filter(f => f[1] > 0)
+    .map(t => `${t[1]}${t[0]}`)
+    .join(' ') || '0s'
+
+export const formatS = (s: number) => {
+    return formatMS(1000 * s)
+}
+
+export const cleanString = (s: string): string => {
+    let cleaned = ''
+
+    for (let i = 0; i < s.length; i++) {
+        const code = s.charCodeAt(i)
+
+        cleaned += code > 255 ? '_' : s[i]
+    }
+
+    return cleaned
 }
