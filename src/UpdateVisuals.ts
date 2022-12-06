@@ -11,11 +11,11 @@ import { getShopCosts, isShopUpgradeUnlocked, shopData, shopUpgradeTypes } from 
 import { quarkHandler } from './Quark';
 import type { Player, ZeroToFour } from './types/Synergism';
 import type { hepteractTypes } from './Hepteracts';
-import { hepteractTypeList } from './Hepteracts';
+import { hepteractTypeList, getAutoHepteractCrafts } from './Hepteracts';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import type { IMultiBuy } from './Cubes';
 import { calculateMaxTalismanLevel } from './Talismans';
-import { getGoldenQuarkCost } from './singularity';
+import { getGoldenQuarkCost, calculateSingularityDebuff } from './singularity';
 import { loadStatisticsUpdate } from './Statistics';
 
 export const visualUpdateBuildings = () => {
@@ -459,7 +459,8 @@ const UpdateHeptGridValues = (type: hepteractTypes) => {
     const bar = type + 'ProgressBar';
     const textEl = DOMCacheGetOrSet(text);
     const barEl = DOMCacheGetOrSet(bar);
-    const unlocked = player.hepteractCrafts[type].UNLOCKED;
+    const hept = player.hepteractCrafts[type];
+    const unlocked = hept.UNLOCKED;
 
     if (!unlocked) {
         textEl.textContent = 'LOCKED';
@@ -468,12 +469,53 @@ const UpdateHeptGridValues = (type: hepteractTypes) => {
     } else {
         const balance = player.hepteractCrafts[type].BAL;
         const cap = player.hepteractCrafts[type].CAP;
-        const barWidth = Math.round((balance / cap) * 100);
+        const barWidth = Math.floor((balance / cap) * 100);
+
+        // This calculation will notify the user with a blue progress bar that the Autocraft expand works on Ascension
+        // Called the computation of Hepteract.autoCraft(). If you change it, you should also fix it here
+        let maxCraftPer = 0;
+        if (hept.AUTO && hept.UNLOCKED) {
+            const autoHepteractCrafts = getAutoHepteractCrafts();
+            const numberOfAutoCraftsAndOrbs = autoHepteractCrafts.length + (player.overfluxOrbsAutoBuy ? 1 : 0);
+
+            let hepteracts = player.wowAbyssals;
+
+            // Calculate the reward for this ascension
+            if (player.challengecompletions[10] > 0 && player.ascensionCounter > 0) {
+                hepteracts = Math.min(1e300, hepteracts + CalcCorruptionStuff()[8]);
+            }
+
+            if (player.highestSingularityCount >= 1 && numberOfAutoCraftsAndOrbs > 0 && isFinite(hepteracts)) {
+                // Computes the max number of Hepteracts to spend on each auto Hepteract craft
+                const heptAmount = Math.floor((hepteracts / numberOfAutoCraftsAndOrbs) * (player.hepteractAutoCraftPercentage / 100))
+
+                const craftCostMulti = calculateSingularityDebuff('Hepteract Costs')
+                const hepteractLimitCraft = Math.floor((heptAmount / (craftCostMulti * hept.HEPTERACT_CONVERSION)) * 1 / (1 - hept.DISCOUNT));
+
+                // Create an array of how many we can craft using our conversion limits for additional items
+                const itemLimits: number[] = [];
+                for (const item in hept.OTHER_CONVERSIONS) {
+                    // When Auto is turned on, only Quarks and hepteracts are consumed.
+                    if (item == 'worlds') {
+                        itemLimits.push(Math.floor((player[item as keyof Player] as number) / hept.OTHER_CONVERSIONS[item as keyof Player]!) * 1 / (1 - hept.DISCOUNT))
+                    }
+                }
+
+                // Get the smallest of the array we created [If Empty, this will be infinite]
+                const smallestItemLimit = Math.min(...itemLimits);
+
+                const amountToCraft = Math.min(smallestItemLimit, hepteractLimitCraft);
+                maxCraftPer = ((amountToCraft + balance) / cap) * 100;
+            }
+        }
 
         let barColor = '';
-        if (barWidth < 34) {
+        // The color of the bar is confusing if it shows blue when less than 100%, so a fix should be discussed
+        if (barWidth >= 100 && maxCraftPer >= 200) {
+            barColor = '#3366bb';
+        } else if (barWidth < 25) {
             barColor = 'red';
-        } else if (barWidth >= 34 && barWidth < 68) {
+        } else if (barWidth >= 25 && barWidth < 50) {
             barColor = '#cca300';
         } else {
             barColor = 'green';
