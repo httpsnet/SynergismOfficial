@@ -1,13 +1,14 @@
 import { sacrificeAnts } from './Ants';
 import { buyAccelerator, boostAccelerator, buyMultiplier } from './Buy';
 import { player, resetCheck, synergismHotkeys } from './Synergism';
-import { keyboardTabChange, toggleAutoChallengeRun, toggleCorruptionLevel, confirmReply } from './Toggles';
+import { keyboardTabChange, toggleAutoChallengeRun, toggleCorruptionLevel, confirmReply, toggleAutoAscend } from './Toggles';
 import { Alert, Prompt, Confirm } from './UpdateHTML';
 import { Globals as G } from './Variables';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { useConsumable } from  './Shop';
 import { promocodes } from './ImportExport';
 
+// Editing hotkey shortcuts registered here and deleting entries is prohibition
 export const defaultHotkeys = new Map<string, [string,() => unknown, boolean]>([
     ['A', ['Buy Accelerators', () => buyAccelerator(), false]],
     ['B', ['Boost Accelerator', () => boostAccelerator(), false]],
@@ -33,6 +34,7 @@ export const defaultHotkeys = new Map<string, [string,() => unknown, boolean]>([
     ['ARROWUP', ['Back a subtab', () => keyboardTabChange(-1, false), false]],
     ['ARROWDOWN', ['Next subtab', () => keyboardTabChange(1, false), false]],
     ['SHIFT+A', ['Reset Ascend', () => resetCheck('ascension'), false]],
+    ['SHIFT+B', ['Auto Ascend', () => toggleAutoAscend(0), false]],
     ['SHIFT+C', ['Cleanse Corruptions', () => toggleCorruptionLevel(10, 999), false]],
     ['SHIFT+D', ['Spec. Action Add x1', () => promocodes('add', 1), false]],
     ['SHIFT+E', ['Exit Asc. Challenge', () => resetCheck('ascensionChallenge'), false]], // Its already checks if inside Asc. Challenge

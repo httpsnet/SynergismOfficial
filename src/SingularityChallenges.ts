@@ -77,6 +77,11 @@ export class SingularityChallenge {
         if (player.highestSingularityCount < this.unlockSingularity) {
             return Alert('Derpsmith prohibits you from entering this challenge. Go do some more singing first.')
         }
+
+        if (player.highestSingularityCount < this.computeSingularityRquirement()) {
+            return Alert('Derpsmith says your Singularity Challenge depth cannot start beyond Highest Singularity.')
+        }
+
         const confirmation = await(Confirm(`You are about to enter ${this.name}. Your Singularity Timer will not reset but you will be taken back to the beginning of a Singularity. Do you proceed?`))
 
         if (!confirmation) {
@@ -149,7 +154,7 @@ export class SingularityChallenge {
                 <span style="color: lightblue">${this.description}</span>
                 <span style="color: pink">Can be entered at highest Singularity ${this.unlockSingularity} [Your highest: ${player.highestSingularityCount}]</span>
                 Tiers completed: <span style="color: ${color}">${this.completions}/${this.maxCompletions}</span>
-                <span style="color: gold">The current tier of this challenge takes place in Singularity <span style="color: var(--orchid-text-color)">${this.singularityRequirement(this.baseReq, this.completions)}</span></span>
+                <span style="color: gold">The current tier of this challenge takes place in Singularity <span style="color: var(--orchid-text-color)">${this.computeSingularityRquirement()}</span></span>
                 <span>${this.rewardDescription}</span>`
     }
 

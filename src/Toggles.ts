@@ -96,22 +96,18 @@ export const toggleSettings = (toggle: HTMLElement) => {
 }
 
 export const toggleChallenges = (i: number, auto = false) => {
-    if ((i <= 5)) {
-        if (player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2){
-            player.currentChallenge.transcension = i;
-            reset('transcensionChallenge', false, 'enterChallenge');
-            player.transcendCount -= 1;
-        }
+    if (i <= 5) {
+        player.currentChallenge.transcension = i;
+        reset('transcensionChallenge', false, 'enterChallenge');
+        player.transcendCount = Math.max(0, player.transcendCount - 1);
         if (!player.currentChallenge.reincarnation && !document.querySelector('.resetbtn.hover')) {
             resetrepeat('transcensionChallenge');
         }
     }
-    if ((i >= 6 && i < 11)){
-        if (player.currentChallenge.ascension !== 15 || player.ascensionCounter >= 2){
-            player.currentChallenge.reincarnation = i;
-            reset('reincarnationChallenge', false, 'enterChallenge');
-            player.reincarnationCount -= 1;
-        }
+    if (i >= 6 && i < 11) {
+        player.currentChallenge.reincarnation = i;
+        reset('reincarnationChallenge', false, 'enterChallenge');
+        player.reincarnationCount = Math.max(0, player.reincarnationCount - 1);
         if (!document.querySelector('.resetbtn.hover')) {
             resetrepeat('reincarnationChallenge');
         }
@@ -230,7 +226,7 @@ export const subTabsInMainTab = (mainTab: number) => {
                 {subTabID: 'resetHistorySubTab', unlocked: player.unlocks.prestige},
                 {subTabID: 'ascendHistorySubTab', unlocked: player.ascensionCount > 0},
                 {subTabID: 'singularityHistorySubTab', unlocked: player.highestSingularityCount > 0},
-                { subTabID: 'hotkeys', unlocked: true }
+                {subTabID: 'hotkeys', unlocked: true }
             ]
         },
         0: {subTabList: []},
@@ -241,7 +237,8 @@ export const subTabsInMainTab = (mainTab: number) => {
                 {subTabID: 'diamond', unlocked: player.unlocks.prestige, buttonID: 'switchToDiamondBuilding'},
                 {subTabID: 'mythos', unlocked: player.unlocks.transcend, buttonID: 'switchToMythosBuilding'},
                 {subTabID: 'particle', unlocked: player.unlocks.reincarnate, buttonID: 'switchToParticleBuilding'},
-                {subTabID: 'tesseract', unlocked: player.achievements[183] > 0, buttonID: 'switchToTesseractBuilding'}]
+                {subTabID: 'tesseract', unlocked: player.achievements[183] > 0, buttonID: 'switchToTesseractBuilding'}
+            ]
         },
         2: {subTabList: []},
         3: {subTabList: []},
@@ -251,7 +248,8 @@ export const subTabsInMainTab = (mainTab: number) => {
                 {subTabID: 1, unlocked: player.unlocks.prestige, buttonID: 'toggleRuneSubTab1'},
                 {subTabID: 2, unlocked: player.achievements[134] > 0, buttonID: 'toggleRuneSubTab2'},
                 {subTabID: 3, unlocked: player.achievements[134] > 0, buttonID: 'toggleRuneSubTab3'},
-                {subTabID: 4, unlocked: player.achievements[204] > 0, buttonID: 'toggleRuneSubTab4'}]
+                {subTabID: 4, unlocked: player.achievements[204] > 0, buttonID: 'toggleRuneSubTab4'}
+            ]
         },
         5: {subTabList: []},
         6: {subTabList: []},
@@ -265,13 +263,15 @@ export const subTabsInMainTab = (mainTab: number) => {
                 {subTabID: 4, unlocked: player.achievements[218] > 0, buttonID: 'switchCubeSubTab4'},
                 {subTabID: 5, unlocked: player.achievements[141] > 0, buttonID: 'switchCubeSubTab5'},
                 {subTabID: 6, unlocked: player.achievements[218] > 0, buttonID: 'switchCubeSubTab6'},
-                {subTabID: 7, unlocked: player.challenge15Exponent >= 1e15, buttonID: 'switchCubeSubTab7'}]
+                {subTabID: 7, unlocked: player.challenge15Exponent >= 1e15, buttonID: 'switchCubeSubTab7'}
+            ]
         },
         9: {
             tabSwitcher: toggleCorruptionLoadoutsStats,
             subTabList: [
                 {subTabID: true, unlocked: player.achievements[141] > 0, buttonID: 'corrStatsBtn'},
-                {subTabID: false, unlocked: player.achievements[141] > 0, buttonID: 'corrLoadoutsBtn'}]
+                {subTabID: false, unlocked: player.achievements[141] > 0, buttonID: 'corrLoadoutsBtn'}
+            ]
         },
         10: {
             tabSwitcher: toggleSingularityScreen,
@@ -280,7 +280,8 @@ export const subTabsInMainTab = (mainTab: number) => {
                 {subTabID: 2, unlocked: player.highestSingularityCount > 0, buttonID: 'toggleSingularitySubTab2'},
                 {subTabID: 3, unlocked: player.highestSingularityCount > 0, buttonID: 'toggleSingularitySubTab3'},
                 {subTabID: 4, unlocked: Boolean(player.singularityUpgrades.octeractUnlock.getEffect().bonus), buttonID: 'toggleSingularitySubTab4'},
-                {subTabID: 5, unlocked: player.highestSingularityCount >= 25, buttonID: 'toggleSingularitySubTab5'}]
+                {subTabID: 5, unlocked: player.highestSingularityCount >= 25, buttonID: 'toggleSingularitySubTab5'}
+            ]
         }
     }
     return subTabs[mainTab]!;

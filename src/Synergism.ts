@@ -296,7 +296,11 @@ export const player: Player = {
         40: true,
         41: true,
         42: false,
-        43: false
+        43: false,
+        44: false,
+        45: false,
+        46: false,
+        47: false
     },
 
     challengecompletions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -1350,10 +1354,12 @@ const loadSynergy = async () => {
         // Calculate daily
         player.dayCheck = new Date(player.dayCheck.getFullYear(), player.dayCheck.getMonth(), player.dayCheck.getDate());
 
+        // Confirm corruption available
         const maxLevel = maxCorruptionLevel();
         player.usedCorruptions = player.usedCorruptions.map((curr:number, index:number) => {
             if (index >= 2 && index <= 9) {
-                return Math.min(maxLevel * (player.challengecompletions[corrChallengeMinimum(index)] > 0 ? 1: 0), curr)
+                return Math.min(maxLevel * (player.challengecompletions[corrChallengeMinimum(index)] > 0 ||
+                                            player.singularityUpgrades.platonicTau.getEffect().bonus ? 1: 0), curr)
             }
             return curr
         })
@@ -1390,66 +1396,23 @@ const loadSynergy = async () => {
         for (let j = 1; j < player.cubeUpgrades.length; j++) {
             updateCubeUpgradeBG(j);
         }
-        const platUpg = document.querySelectorAll('img[id^="platUpg"]');
-        for (let j = 1; j <= platUpg.length; j++) {
+        for (let j = 1; j < player.platonicUpgrades.length; j++) {
             updatePlatonicUpgradeBG(j);
         }
 
-        const q = ['coin', 'crystal', 'mythos', 'particle', 'offering', 'tesseract'] as const;
-        if (player.coinbuyamount !== 1 && player.coinbuyamount !== 10 && player.coinbuyamount !== 100 && player.coinbuyamount !== 1000) {
-            player.coinbuyamount = 1;
-        }
-        if (player.crystalbuyamount !== 1 && player.crystalbuyamount !== 10 && player.crystalbuyamount !== 100 && player.crystalbuyamount !== 1000) {
-            player.crystalbuyamount = 1;
-        }
-        if (player.mythosbuyamount !== 1 && player.mythosbuyamount !== 10 && player.mythosbuyamount !== 100 && player.mythosbuyamount !== 1000) {
-            player.mythosbuyamount = 1;
-        }
-        if (player.particlebuyamount !== 1 && player.particlebuyamount !== 10 && player.particlebuyamount !== 100 && player.particlebuyamount !== 1000) {
-            player.particlebuyamount = 1;
-        }
-        if (player.offeringbuyamount !== 1 && player.offeringbuyamount !== 10 && player.offeringbuyamount !== 100 && player.offeringbuyamount !== 1000) {
-            player.offeringbuyamount = 1;
-        }
-        if (player.tesseractbuyamount !== 1 && player.tesseractbuyamount !== 10 && player.tesseractbuyamount !== 100 && player.tesseractbuyamount !== 1000) {
-            player.tesseractbuyamount = 1;
-        }
-        for (let j = 0; j <= 5; j++) {
-            for (let k = 0; k < 4; k++) {
-                let d;
-                if (k === 0) {
-                    d = 'one';
-                }
-                if (k === 1) {
-                    d = 'ten'
-                }
-                if (k === 2) {
-                    d = 'hundred'
-                }
-                if (k === 3) {
-                    d = 'thousand'
-                }
-                const e = q[j] + d;
-                DOMCacheGetOrSet(e).style.backgroundColor = ''
+        const buildingTypesAlternate = ['coin', 'crystal', 'mythos', 'particle', 'offering', 'tesseract'] as const;
+        const buildingOrds = ['one', 'ten', 'hundred', 'thousand', '10k', '100k'];
+        const buildingOrdsToNum = [1, 10, 100, 1000, 10000, 100000];
+        for (let index = 0; index < buildingTypesAlternate.length; index++) {
+            let curBuyAmount = player[`${buildingTypesAlternate[index]}buyamount` as const];
+            if (buildingOrdsToNum.indexOf(curBuyAmount) === -1) {
+                curBuyAmount = buildingOrdsToNum[0];
+                player[`${buildingTypesAlternate[index]}buildingOrdsToNum` as const] = curBuyAmount;
             }
-            let c;
-            const curBuyAmount = player[`${q[j]}buyamount` as const];
-            if (curBuyAmount === 1) {
-                c = 'one'
+            for (let index2 = 0; index2 < buildingOrds.length; index2++) {
+                const id = buildingTypesAlternate[index] + buildingOrds[index2];
+                DOMCacheGetOrSet(id).style.backgroundColor = curBuyAmount === buildingOrdsToNum[index2] ? 'green' : '';
             }
-            if (curBuyAmount === 10) {
-                c = 'ten'
-            }
-            if (curBuyAmount === 100) {
-                c = 'hundred'
-            }
-            if (curBuyAmount === 1000) {
-                c = 'thousand'
-            }
-
-            const b = q[j] + c;
-            DOMCacheGetOrSet(b).style.backgroundColor = 'green'
-
         }
 
         const testArray = []
@@ -1469,15 +1432,15 @@ const loadSynergy = async () => {
         toggleauto();
 
         // Challenge summary should be displayed
+        let targetChallenge = 1;
         if (player.currentChallenge.transcension > 0) {
-            challengeDisplay(player.currentChallenge.transcension);
+            targetChallenge = player.currentChallenge.transcension;
         } else if (player.currentChallenge.reincarnation > 0) {
-            challengeDisplay(player.currentChallenge.reincarnation);
+            targetChallenge = player.currentChallenge.reincarnation;
         } else if (player.currentChallenge.ascension > 0) {
-            challengeDisplay(player.currentChallenge.ascension);
-        } else {
-            challengeDisplay(1);
+            targetChallenge = player.currentChallenge.ascension;
         }
+        challengeDisplay(targetChallenge);
 
         corruptionStatsUpdate();
         const corrs = Math.min(8, Object.keys(player.corruptionLoadouts).length) + 1;
@@ -2987,11 +2950,14 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             if (player.shopUpgrades.instantChallenge > 0) {
                 maxInc = 10;
             }
+            if (player.currentChallenge.ascension === 13) {
+                maxInc = 1;
+            }
             if (player.shopUpgrades.instantChallenge2 > 0) {
                 maxInc += player.highestSingularityCount;
             }
             if (player.currentChallenge.ascension === 13) {
-                maxInc = 1;
+                maxInc = Math.min(100, maxInc);
             }
             let counter = 0;
             let comp = player.challengecompletions[q];
@@ -3050,11 +3016,14 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             if (player.shopUpgrades.instantChallenge > 0) {
                 maxInc = 10;
             }
+            if (player.currentChallenge.ascension === 13) {
+                maxInc = 1;
+            }
             if (player.shopUpgrades.instantChallenge2 > 0) {
                 maxInc += player.highestSingularityCount;
             }
             if (player.currentChallenge.ascension === 13) {
-                maxInc = 1;
+                maxInc = Math.min(10, maxInc);
             }
             let counter = 0;
             let comp = player.challengecompletions[q];
@@ -3136,6 +3105,7 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
                 if (player.coins.gte(Decimal.pow(10, player.challenge15Exponent / c15SM))) {
                     player.challenge15Exponent = Decimal.log(player.coins.add(1), 10) * c15SM;
                     c15RewardUpdate();
+                    updateChallengeLevel(a);
                 }
             }
         }
@@ -3149,7 +3119,7 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
         }
 
         if (!player.retrychallenges || manual || leaving) {
-            if (!(!manual && (autoAscensionChallengeSweepUnlock() || !player.autoChallengeRunning) // If not autochallenge, don't reset
+            if (!(!manual && (autoAscensionChallengeSweepUnlock() || !player.autoChallengeRunning || player.autoAscend) // If not autochallenge, don't reset
                              && player.autoAscend && player.challengecompletions[11] > 0
                              && player.cubeUpgrades[10] > 0)) {
                 player.currentChallenge.ascension = 0;
@@ -3608,17 +3578,18 @@ export const updateAll = (): void => {
     G['optimalObtainiumTimer'] = 3600 + 120 * player.shopUpgrades.obtainiumEX;
     autoBuyAnts()
 
-    if (player.autoAscend && player.challengecompletions[11] > 0 && player.cubeUpgrades[10] > 0 && player.currentChallenge.reincarnation !== 10) {
+    if (player.autoAscend && player.achievements[141] > 0 && player.cubeUpgrades[10] > 0 && player.currentChallenge.reincarnation !== 10 &&
+        (player.toggles[46] || player.challengecompletions[11] > 0)) {
         let ascension = false;
         if (player.autoAscendMode === 'c10Completions' && player.challengecompletions[10] >= Math.max(1, player.autoAscendThreshold)) {
             ascension = true;
         }
-        if (player.autoAscendMode === 'realAscensionTime' && player.ascensionCounterRealReal >= Math.max(0.1, player.autoAscendThreshold)) {
+        if (player.autoAscendMode === 'realAscensionTime' && player.ascensionCounterRealReal >= Math.max(0.1, player.autoAscendThreshold) && (player.currentChallenge.ascension === 15 || player.challengecompletions[10] > 0)) {
             ascension = true;
         }
-        if (ascension === true && player.challengecompletions[10] > 0) {
+        if (ascension) {
             // Auto Ascension and Auto Challenge Sweep enables rotation of the Ascension Challenge
-            if (autoAscensionChallengeSweepUnlock() && player.currentChallenge.ascension !== 0 && player.retrychallenges && player.researches[150] === 1 && player.autoChallengeRunning) {
+            if (autoAscensionChallengeSweepUnlock() && player.currentChallenge.ascension !== 0 && player.retrychallenges && player.researches[150] > 0 && player.autoChallengeRunning) {
                 let nextChallenge = getNextChallenge(player.currentChallenge.ascension + 1, false, 11, 15);
                 if (nextChallenge <= 15 && player.currentChallenge.ascension !== nextChallenge) {
                     void resetCheck('ascensionChallenge', false, true);
@@ -3632,10 +3603,18 @@ export const updateAll = (): void => {
                 }
             } else {
                 if (player.currentChallenge.ascension !== 0) {
+                    const nextChallenge = player.currentChallenge.ascension;
                     void resetCheck('ascensionChallenge', false, true);
+                    player.currentChallenge.ascension = nextChallenge;
                     reset('ascensionChallenge', false);
                 } else {
-                    reset('ascension', false);
+                    if (player.toggles[46] && player.ascensionCount === 0 && player.challengecompletions[10] > 0) {
+                        void resetCheck('ascensionChallenge', false, true);
+                        player.currentChallenge.ascension = 11;
+                        reset('ascensionChallenge', false);
+                    } else {
+                        reset('ascension', false);
+                    }
                 }
             }
         }
@@ -3678,6 +3657,7 @@ export const updateAll = (): void => {
         if (player.coins.gte(Decimal.pow(10, player.challenge15Exponent / c15SM))) {
             player.challenge15Exponent = Decimal.log(player.coins.add(1), 10) * c15SM;
             c15RewardUpdate();
+            updateChallengeLevel(15);
         }
     }
 }

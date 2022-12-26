@@ -3355,14 +3355,14 @@ header #obtainiumDisplay { color: pink; }
     cursor: pointer;
 }
 
-.resetHotkeys {
+.toggleSettings {
     margin-top: 15px;
     display: flex;
     justify-content: center;
     gap: 10px;
 }
 
-.resetHotkeys > button {
+.toggleSettings > button {
     min-height: 20px;
     padding: 2px 4px;
 }

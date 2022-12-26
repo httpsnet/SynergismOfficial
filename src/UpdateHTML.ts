@@ -504,7 +504,11 @@ export const revealStuff = () => {
         'toggle40': player.unlocks.prestige, // Number Hotkeys
         'toggle41': player.challengecompletions[11] > 0, // Loadouts Notifx
         'toggle42': player.highestSingularityCount >= 6, // Potion Autogenerator for Offering Potions
-        'toggle43': player.highestSingularityCount >= 6 // Potion Autogenerator for Obtainium Potions
+        'toggle43': player.highestSingularityCount >= 6, // Potion Autogenerator for Obtainium Potions
+        'toggle44': player.highestSingularityCount >= 2, // Auto Restart Chal.10
+        'toggle45': player.highestSingularityCount >= 101, // Ascension Challenge Sweep
+        'toggle46': player.highestSingularityCount >= 201, // Auto Ascension Enhance
+        'toggle47': player.highestSingularityCount >= 45 // Ascension Auto Add
     }
 
     Object.keys(automationUnlocks).forEach(key => {
@@ -875,11 +879,11 @@ export const updateChallengeDisplay = () => {
 }
 
 export const updateChallengeLevel = (k: number) => {
-    const el = DOMCacheGetOrSet('challenge' + k + 'level');
+    const el = DOMCacheGetOrSet(`challenge${k}level`);
     const maxChallenges = getMaxChallenges(k);
 
     if (k === 15) {
-        el.textContent = format(player.challenge15Exponent, 0, true);
+        el.textContent = format(player.challenge15Exponent);
     } else {
         el.textContent = `${player.challengecompletions[k]}/${maxChallenges}`;
     }
@@ -920,16 +924,16 @@ export const showCorruptionStatsLoadouts = () => {
 }
 
 const updateAscensionStats = () => {
-    const t = player.ascensionCounter;
+    const ascMult = player.ascensionCounter > 0 ? 1 / player.ascensionCounter : 0;
     const [cubes, tess, hyper, platonic, hepteract] = CalcCorruptionStuff().slice(4);
     const addedAsterisk = (player.singularityUpgrades.oneMind.getEffect().bonus)
     const fillers: Record<string, string> = {
         'ascLen': formatTimeShort((player.ascStatToggles[6] ? player.ascensionCounter : player.ascensionCounterReal), 0),
-        'ascCubes': format(cubes * (player.ascStatToggles[1] ? 1 : 1 / t), 2),
-        'ascTess': format(tess * (player.ascStatToggles[2] ? 1 : 1 / t), 3),
-        'ascHyper': format(hyper * (player.ascStatToggles[3] ? 1 : 1 / t), 4),
-        'ascPlatonic': format(platonic * (player.ascStatToggles[4] ? 1 : 1 / t), 5),
-        'ascHepteract': format(hepteract * (player.ascStatToggles[5] ? 1 : 1 / t), 3),
+        'ascCubes': format(cubes * (player.ascStatToggles[1] ? 1 : ascMult), 2),
+        'ascTess': format(tess * (player.ascStatToggles[2] ? 1 : ascMult), 3),
+        'ascHyper': format(hyper * (player.ascStatToggles[3] ? 1 : ascMult), 4),
+        'ascPlatonic': format(platonic * (player.ascStatToggles[4] ? 1 : ascMult), 5),
+        'ascHepteract': format(hepteract * (player.ascStatToggles[5] ? 1 : ascMult), 3),
         'ascC10': `${format(player.challengecompletions[10])}`,
         'ascTimeAccel': `${format(calculateTimeAcceleration(), 3)}x`,
         'ascAscensionTimeAccel': `${format(calculateAscensionAcceleration(), 3)}x${addedAsterisk ? '*' : ''}`,

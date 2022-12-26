@@ -1168,6 +1168,28 @@ export const singularityPerks: SingularityPerk[] = [
         }
     },
     {
+        name: 'Enhanced Challenges',
+        levels: [2, 45, 101, 201],
+        description: (n: number, levels: number[]) => {
+            let titleText = '';
+            const textList = [
+                'Auto Restart Chal.10 is use Challenge 10 instead of Challenge 1 first in the Auto Challenge Sweep of the Ascension Challenge.',
+                'Ascension Auto Add is automatically uses 1 add just before doing Ascension, but requires Challenge 10.',
+                'Auto Challenge Sweep can run Ascension Challenges if you have better Instant Challenge Completions.',
+                'Auto Ascension Enhance can make many improvements in Auto Ascension.'
+            ];
+            for (let i = 0; j < levels.length; j++) {
+                if (n >= levels[i]) {
+                    if (i > 0) {
+                        titleText += '&#013';
+                    }
+                    titleText += textList[i];
+                }
+            }
+            return titleText;
+        }
+    },
+    {
         name: 'Super Start',
         levels: [2, 3, 4, 7, 15],
         description: (n: number, levels: number[]) => {
@@ -1428,13 +1450,6 @@ export const singularityPerks: SingularityPerk[] = [
             } else {
                 return 'Automatically buy Platonic Upgrades with each ascension, without spending Obtainium or Offerings, but only in a Singularity Challenge.'
             }
-        }
-    },
-    {
-        name: 'Auto Ascension Challenge Sweep',
-        levels: [101],
-        description: () => {
-            return 'Auto Challenge Sweep can run Ascension Challenges if you have better Instant Challenge Completions'
         }
     },
     {
