@@ -1407,7 +1407,7 @@ const loadSynergy = async () => {
             let curBuyAmount = player[`${buildingTypesAlternate[index]}buyamount` as const];
             if (buildingOrdsToNum.indexOf(curBuyAmount) === -1) {
                 curBuyAmount = buildingOrdsToNum[0];
-                player[`${buildingTypesAlternate[index]}buildingOrdsToNum` as const] = curBuyAmount;
+                player[`${buildingTypesAlternate[index]}buyamount` as const] = curBuyAmount;
             }
             for (let index2 = 0; index2 < buildingOrds.length; index2++) {
                 const id = buildingTypesAlternate[index] + buildingOrds[index2];

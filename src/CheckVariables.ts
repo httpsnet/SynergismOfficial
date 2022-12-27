@@ -757,11 +757,6 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
                     }
                 }
 
-                // completions must not exceed maxCompletions
-                if (singularityChallengeData[k].completions > singularityChallengeData[k].maxCompletions) {
-                    singularityChallengeData[k].completions = singularityChallengeData[k].maxCompletions
-                }
-
                 updatedData = {
                     name: singularityChallengeData[k].name,
                     descripton: singularityChallengeData[k].descripton,

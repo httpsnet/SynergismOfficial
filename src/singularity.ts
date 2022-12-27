@@ -1178,7 +1178,7 @@ export const singularityPerks: SingularityPerk[] = [
                 'Auto Challenge Sweep can run Ascension Challenges if you have better Instant Challenge Completions.',
                 'Auto Ascension Enhance can make many improvements in Auto Ascension.'
             ];
-            for (let i = 0; j < levels.length; j++) {
+            for (let i = 0; i < levels.length; i++) {
                 if (n >= levels[i]) {
                     if (i > 0) {
                         titleText += '&#013';
