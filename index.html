@@ -881,310 +881,399 @@
 
 
         <div id="statistics" alt="statistics" label="statistics" style="display: none;">
+            <div class="subTabWrapper">
+                <button id="toggleAchievementSubTab1" alt="toggleAchievementSubTab1" label="toggleAchievementSubTab1" style="border: 2px solid silver; color: white; background-color: crimson">All</button>
+                <button id="toggleAchievementSubTab2" alt="toggleAchievementSubTab2" label="toggleAchievementSubTab2" style="border: 2px solid greenyellow; color: white">General</button>
+                <button id="toggleAchievementSubTab3" alt="toggleAchievementSubTab3" label="toggleAchievementSubTab3" class="transcendunlock" style="border: 2px solid plum; color: white">Challenges</button>
+                <button id="toggleAchievementSubTab4" alt="toggleAchievementSubTab4" label="toggleAchievementSubTab4" class="ascendunlockib" style="border: 2px solid orange; color: white">Ascension</button>
+                <button id="toggleAchievementSubTab5" alt="toggleAchievementSubTab5" label="toggleAchievementSubTab5" class="singularity" style="border: 2px solid black; color: white">Singularity</button>
+            </div>
+
             <div class="NotificationToggle">
                 <p class="mainText" id="achievementprogress" alt="achievementprogress" label="achievementprogress"></p>
                 <img class="achNotification" id="achnotificationpic" alt="achnotificationpic" label="achnotificationpic" src = "Pictures/Notifications.png" title='Notifications' loading="lazy">
                 <button class="auto nonSquare" id="toggle34" alt="toggle34" label="toggle34" toggleid="34" alt="34" label="34" format="[$]" style="border: 2px solid green">[ON]</button>
             </div>
-            <div id="achievements" alt="achievements" label="achievements">
-                <div class="achievementstables scrollbarX">
-                <table id="achievementstable" alt="achievementstable" label="achievementstable" style="padding: 0; font-size:0;">
-                    <tr>
-                        <td><img src="Pictures/TransparentPics/ach1.png" id="ach1" alt="ach1" label="ach1" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach2.png" id="ach8" alt="ach8" label="ach8" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach3.png" id="ach15" alt="ach15" label="ach15" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach4.png" id="ach22" alt="ach22" label="ach22" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach5.png" id="ach29" alt="ach29" label="ach29" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach6.png" id="ach148" alt="ach148" label="ach148" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach7.png" id="ach155" alt="ach155" label="ach155"  loading="lazy"></td>
-                        <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach8.png" id="ach36" alt="ach36" label="ach36" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach14.png" id="ach162" alt="ach162" label="ach162" loading="lazy"></td>
-                        <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach15.png" id="ach60" alt="ach60" label="ach60" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach16.png" id="ach64" alt="ach64" label="ach64" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach19.png" id="ach43" alt="ach43" label="ach43" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach25.png" id="ach78" alt="ach78" label="ach78" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach26.png" id="ach85" alt="ach85" label="ach85" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach27.png" id="ach92" alt="ach92" label="ach92" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach28.png" id="ach99" alt="ach99" label="ach99" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach29.png" id="ach106" alt="ach106" label="ach106" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach31.png" id="ach71" alt="ach71" label="ach71" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach32.png" id="ach50" alt="ach50" label="ach50" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach38.png" id="ach113" alt="ach113" label="ach113" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach39.png" id="ach120" alt="ach120" label="ach120" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach40.png" id="ach127" alt="ach127" label="ach127" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach288.png" id="ach134" alt="ach134" label="ach134" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach295.png" id="ach141" alt="ach141" label="ach141" loading="lazy"></td>
-                        <td><img class="chal8 purpleach" src="Pictures/TransparentPics/ach302.png" id="ach169" alt="ach169" label="ach169" loading="lazy"></td>
-                        <td><img class="chal8 redach" src="Pictures/TransparentPics/ach309.png" id="ach176" alt="ach176" label="ach176" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach316.png" id="ach183" alt="ach183" label="ach183" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach323.png" id="ach190" alt="ach190" label="ach190" loading="lazy"></td>
-                        <td><img class="ascendunlock redach" src="Pictures/TransparentPics/ach330.png" id="ach197" alt="ach197" label="ach197" loading="lazy"></td>
-                        <td><img class="chal11 redach" src="Pictures/TransparentPics/ach337.png" id="ach204" alt="ach204" label="ach204" loading="lazy"></td>
-                        <td><img class="chal12 redach" src="Pictures/TransparentPics/ach344.png" id="ach211" alt="ach211" label="ach211" loading="lazy"></td>
-                        <td><img class="chal13 redach" src="Pictures/TransparentPics/ach351.png" id="ach218" alt="ach218" label="ach218" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach358.png" id="ach225" alt="ach225" label="ach225" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach365.png" id="ach232" alt="ach232" label="ach232" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach372.png" id="ach239" alt="ach239" label="ach239" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach379.png" id="ach246" alt="ach246" label="ach246" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach386.png" id="ach253" alt="ach253" label="ach253" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach393.png" id="ach260" alt="ach260" label="ach260" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach400.png" id="ach267" alt="ach267" label="ach267" loading="lazy"></td>
-                        <td><img class="singularity" src="Pictures/TransparentPics/ach407.png" id="ach274" alt="ach274" label="ach274" loading="lazy"></td>
-                    </tr>
-                    <tr>
-                        <td><img src="Pictures/TransparentPics/ach42.png" id="ach2" alt="ach2" label="ach2" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach43.png" id="ach9" alt="ach9" label="ach9" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach44.png" id="ach16" alt="ach16" label="ach16" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach45.png" id="ach23" alt="ach23" label="ach23" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach46.png" id="ach30" alt="ach30" label="ach30" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach47.png" id="ach149" alt="ach149" label="ach149" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach48.png" id="ach156" alt="ach156" label="ach156" loading="lazy"></td>
-                        <td><img class="prestigeunlock redach" src="Pictures/TransparentPics/ach49.png" id="ach37" alt="ach37" label="ach37" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach55.png" id="ach163" alt="ach163" label="ach163" loading="lazy"></td>
-                        <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach56.png" id="ach57" alt="ach57" label="ach57" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach57.png" id="ach65" alt="ach65" label="ach65" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach60.png" id="ach44" alt="ach44" label="ach44" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach66.png" id="ach79" alt="ach79" label="ach79" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach67.png" id="ach86" alt="ach86" label="ach86" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach68.png" id="ach93" alt="ach93" label="ach93" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach69.png" id="ach100" alt="ach100" label="ach100" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach70.png" id="ach107" alt="ach107" label="ach107" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach72.png" id="ach72" alt="ach72" label="ach72" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach73.png" id="ach51" alt="ach51" label="ach51" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach79.png" id="ach114" alt="ach114" label="ach114" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach80.png" id="ach121" alt="ach121" label="ach121" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach81.png" id="ach128" alt="ach128" label="ach128" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach289.png" id="ach135" alt="ach135" label="ach135" loading="lazy"></td>
-                        <td><img style="display: none;" class="reincarnationunlock" src="Pictures/TransparentPics/ach296.png" id="ach142" alt="ach142" label="ach142" loading="lazy"></td>
-                        <td><img style="display: none;" class="chal8" src="Pictures/TransparentPics/ach303.png" id="ach170" alt="ach170" label="ach170" loading="lazy"></td>
-                        <td><img class="chal8 redach" src="Pictures/TransparentPics/ach310.png" id="ach177" alt="ach177" label="ach177" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach317.png" id="ach184" alt="ach184" label="ach184" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach324.png" id="ach191" alt="ach191" label="ach191" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach331.png" id="ach198" alt="ach198" label="ach198" loading="lazy"></td>
-                        <td><img class="chal11 purpleach" src="Pictures/TransparentPics/ach338.png" id="ach205" alt="ach205" label="ach205" loading="lazy"></td>
-                        <td><img class="chal12 purpleach" src="Pictures/TransparentPics/ach345.png" id="ach212" alt="ach212" label="ach212" loading="lazy"></td>
-                        <td><img class="chal13 purpleach" src="Pictures/TransparentPics/ach352.png" id="ach219" alt="ach219" label="ach219" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach359.png" id="ach226" alt="ach226" label="ach226" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach366.png" id="ach233" alt="ach233" label="ach233" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach373.png" id="ach240" alt="ach240" label="ach240" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach380.png" id="ach247" alt="ach247" label="ach247" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach387.png" id="ach254" alt="ach254" label="ach254" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach394.png" id="ach261" alt="ach261" label="ach261" loading="lazy"></td>
-                        <td><img class="chal14" src="Pictures/TransparentPics/ach401.png" id="ach268" alt="ach268" label="ach268" loading="lazy"></td>
-                        <td><img class="singularity" src="Pictures/TransparentPics/ach408.png" id="ach275" alt="ach275" label="ach275" loading="lazy"></td>
-                    </tr>
-                    <tr>
-                        <td><img src="Pictures/TransparentPics/ach83.png" id="ach3" alt="ach3" label="ach3" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach84.png" id="ach10" alt="ach10" label="ach10" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach85.png" id="ach17" alt="ach17" label="ach17" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach86.png" id="ach24" alt="ach24" label="ach24" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach87.png" id="ach31" alt="ach31" label="ach31" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach88.png" id="ach150" alt="ach150" label="ach150" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach89.png" id="ach157" alt="ach157" label="ach157" loading="lazy"></td>
-                        <td><img class="prestigeunlock redach" src="Pictures/TransparentPics/ach90.png" id="ach38" alt="ach38" label="ach38"loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach96.png" id="ach164" alt="ach164" label="ach164"loading="lazy"></td>
-                        <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach97.png" id="ach61" alt="ach61" label="ach61" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach98.png" id="ach66" alt="ach66" label="ach66" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach101.png" id="ach45" alt="ach45" label="ach45" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach107.png" id="ach80" alt="ach80" label="ach80" loading="lazy"></td>
-                        <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach108.png" id="ach87" alt="ach87" label="ach87" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach109.png" id="ach94" alt="ach94" label="ach94" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach110.png" id="ach101" alt="ach101" label="ach101" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach111.png" id="ach108" alt="ach108" label="ach108" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach113.png" id="ach73" alt="ach73" label="ach73" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach114.png" id="ach52" alt="ach52" label="ach52" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach120.png" id="ach115" alt="ach115" label="ach115" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach121.png" id="ach122" alt="ach122" label="ach122" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach122.png" id="ach129" alt="ach129" label="ach129" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach290.png" id="ach136" alt="ach136" label="ach136" loading="lazy"></td>
-                        <td><img style="display: none;" class="reincarnationunlock" src="Pictures/TransparentPics/ach297.png" id="ach143" alt="ach143" label="ach143" loading="lazy"></td>
-                        <td><img class="chal8 purpleach" src="Pictures/TransparentPics/ach304.png" id="ach171" alt="ach171" label="ach171" loading="lazy"></td>
-                        <td><img class="chal8 redach" src="Pictures/TransparentPics/ach311.png" id="ach178" alt="ach178" label="ach178" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach318.png" id="ach185" alt="ach185" label="ach185" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach325.png" id="ach192" alt="ach192" label="ach192" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach332.png" id="ach199" alt="ach199" label="ach199" loading="lazy"></td>
-                        <td><img class="chal11 purpleach" src="Pictures/TransparentPics/ach339.png" id="ach206" alt="ach206" label="ach206" loading="lazy"></td>
-                        <td><img class="chal12 purpleach" src="Pictures/TransparentPics/ach346.png" id="ach213" alt="ach213" label="ach213" loading="lazy"></td>
-                        <td><img class="chal13 purpleach" src="Pictures/TransparentPics/ach353.png" id="ach220" alt="ach220" label="ach220" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach360.png" id="ach227" alt="ach227" label="ach227" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach367.png" id="ach234" alt="ach234" label="ach234" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach374.png" id="ach241" alt="ach241" label="ach241" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach381.png" id="ach248" alt="ach248" label="ach248" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach388.png" id="ach255" alt="ach255" label="ach255" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach395.png" id="ach262" alt="ach262" label="ach262" loading="lazy"></td>
-                        <td><img class="chal14" src="Pictures/TransparentPics/ach402.png" id="ach269" alt="ach269" label="ach269" loading="lazy"></td>
-                        <td><img class="singularity" src="Pictures/TransparentPics/ach409.png" id="ach276" alt="ach276" label="ach276" loading="lazy"></td>
-                    </tr>
-                    <tr>
-                        <td><img src="Pictures/TransparentPics/ach124.png" id="ach4" alt="ach4" label="ach4" class="redach"loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach125.png" id="ach11" alt="ach11" label="ach11" class="redach"loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach126.png" id="ach18" alt="ach18" label="ach18" class="redach"loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach127.png" id="ach25" alt="ach25" label="ach25" class="redach"loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach128.png" id="ach32" alt="ach32" label="ach32" class="redach"loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach129.png" id="ach151" alt="ach151" label="ach151" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach130.png" id="ach158" alt="ach158" label="ach158" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach131.png" id="ach39" alt="ach39" label="ach39" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach137.png" id="ach165" alt="ach165" label="ach165" loading="lazy"></td>
-                        <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach138.png" id="ach58" alt="ach58" label="ach58" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach139.png" id="ach67" alt="ach67" label="ach67" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach142.png" id="ach46" alt="ach46" label="ach46" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach148.png" id="ach81" alt="ach81" label="ach81" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach149.png" id="ach88" alt="ach88" label="ach88" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach150.png" id="ach95" alt="ach95" label="ach95" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach151.png" id="ach102" alt="ach102" label="ach102" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach152.png" id="ach109" alt="ach109" label="ach109" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach154.png" id="ach74" alt="ach74" label="ach74" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach155.png" id="ach53" alt="ach53" label="ach53" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach161.png" id="ach116" alt="ach116" label="ach116" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach162.png" id="ach123" alt="ach123" label="ach123" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach163.png" id="ach130" alt="ach130" label="ach130" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach291.png" id="ach137" alt="ach137" label="ach137" loading="lazy"></td>
-                        <td><img style="display: none;" class="reincarnationunlock" src="Pictures/TransparentPics/ach298.png" id="ach144" alt="ach144" label="ach144" loading="lazy"></td>
-                        <td><img class="chal8 purpleach" src="Pictures/TransparentPics/ach305.png" id="ach172" alt="ach172" label="ach172" loading="lazy"></td>
-                        <td><img class="chal8 redach" src="Pictures/TransparentPics/ach312.png" id="ach179" alt="ach179" label="ach179" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach319.png" id="ach186" alt="ach186" label="ach186" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach326.png" id="ach193" alt="ach193" label="ach193" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach333.png" id="ach200" alt="ach200" label="ach200" loading="lazy"></td>
-                        <td><img class="chal11 purpleach" src="Pictures/TransparentPics/ach340.png" id="ach207" alt="ach207" label="ach207" loading="lazy"></td>
-                        <td><img class="chal12 purpleach" src="Pictures/TransparentPics/ach347.png" id="ach214" alt="ach214" label="ach214" loading="lazy"></td>
-                        <td><img class="chal13 purpleach" src="Pictures/TransparentPics/ach354.png" id="ach221" alt="ach221" label="ach221" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach361.png" id="ach228" alt="ach228" label="ach228" loading="lazy"></td>
-                        <td><img class="chal12" src="Pictures/TransparentPics/ach368.png" id="ach235" alt="ach235" label="ach235" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach375.png" id="ach242" alt="ach242" label="ach242" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach382.png" id="ach249" alt="ach249" label="ach249" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach389.png" id="ach256" alt="ach256" label="ach256" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach396.png" id="ach263" alt="ach263" label="ach263" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach403.png" id="ach270" alt="ach270" label="ach270" loading="lazy"></td>
-                        <td><img class="singularity" src="Pictures/TransparentPics/ach410.png" id="ach277" alt="ach277" label="ach277" loading="lazy"></td>
-                    </tr>
-                    <tr>
-                        <td><img class="purpleach" src="Pictures/TransparentPics/ach165.png" id="ach5" alt="ach5" label="ach5" loading="lazy"></td>
-                        <td><img class="purpleach" src="Pictures/TransparentPics/ach166.png" id="ach12" alt="ach12" label="ach12" loading="lazy"></td>
-                        <td><img class="purpleach" src="Pictures/TransparentPics/ach167.png" id="ach19" alt="ach19" label="ach19" loading="lazy"></td>
-                        <td><img class="purpleach" src="Pictures/TransparentPics/ach168.png" id="ach26" alt="ach26" label="ach26" loading="lazy"></td>
-                        <td><img class="purpleach" src="Pictures/TransparentPics/ach169.png" id="ach33" alt="ach33" label="ach33" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach170.png" id="ach152" alt="ach152" label="ach152" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach171.png" id="ach159" alt="ach159" label="ach159" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach172.png" id="ach40" alt="ach40" label="ach40" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach178.png" id="ach166" alt="ach166" label="ach166" loading="lazy"></td>
-                        <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach179.png" id="ach62" alt="ach62" label="ach62" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach180.png" id="ach68" alt="ach68" label="ach68" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach183.png" id="ach47" alt="ach47" label="ach47" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach189.png" id="ach82" alt="ach82" label="ach82" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach190.png" id="ach89" alt="ach89" label="ach89" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach191.png" id="ach96" alt="ach96" label="ach96" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach192.png" id="ach103" alt="ach103" label="ach103" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach193.png" id="ach110" alt="ach110" label="ach110" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach195.png" id="ach75" alt="ach75" label="ach75" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach196.png" id="ach54" alt="ach54" label="ach54" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach202.png" id="ach117" alt="ach117" label="ach117" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach203.png" id="ach124" alt="ach124" label="ach124" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach204.png" id="ach131" alt="ach131" label="ach131" loading="lazy"></td>
-                        <td><img style="display: none;" class="reincarnationunlock" src="Pictures/TransparentPics/ach292.png" id="ach138" alt="ach138" label="ach138" loading="lazy"></td>
-                        <td><img style="display: none;" class="reincarnationunlock" src="Pictures/TransparentPics/ach299.png" id="ach145" alt="ach145" label="ach145" loading="lazy"></td>
-                        <td><img class="chal8 redach" src="Pictures/TransparentPics/ach306.png" id="ach173" alt="ach173" label="ach173" loading="lazy"></td>
-                        <td><img class="chal8 redach" src="Pictures/TransparentPics/ach313.png" id="ach180" alt="ach180" label="ach180" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach320.png" id="ach187" alt="ach187" label="ach187" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach327.png" id="ach194" alt="ach194" label="ach194" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach334.png" id="ach201" alt="ach201" label="ach201" loading="lazy"></td>
-                        <td><img class="chal11 purpleach" src="Pictures/TransparentPics/ach341.png" id="ach208" alt="ach208" label="ach208" loading="lazy"></td>
-                        <td><img class="chal12 purpleach" src="Pictures/TransparentPics/ach348.png" id="ach215" alt="ach215" label="ach215" loading="lazy"></td>
-                        <td><img class="chal13 purpleach" src="Pictures/TransparentPics/ach355.png" id="ach222" alt="ach222" label="ach222" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach362.png" id="ach229" alt="ach229" label="ach229" loading="lazy"></td>
-                        <td><img class="chal12" src="Pictures/TransparentPics/ach369.png" id="ach236" alt="ach236" label="ach236" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach376.png" id="ach243" alt="ach243" label="ach243" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach383.png" id="ach250" alt="ach250" label="ach250" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach390.png" id="ach257" alt="ach257" label="ach257" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach397.png" id="ach264" alt="ach264" label="ach264" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach404.png" id="ach271" alt="ach271" label="ach271" loading="lazy"></td>
-                        <td><img class="singularity" src="Pictures/TransparentPics/ach411.png" id="ach278" alt="ach278" label="ach278" loading="lazy"></td>
 
-                    </tr>
-                    <tr>
-                        <td><img src="Pictures/TransparentPics/ach206.png" id="ach6" alt="ach6" label="ach6" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach207.png" id="ach13" alt="ach13" label="ach13" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach208.png" id="ach20" alt="ach20" label="ach20" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach209.png" id="ach27" alt="ach27" label="ach27" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach210.png" id="ach34" alt="ach34" label="ach34" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach211.png" id="ach153" alt="ach153" label="ach153" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach212.png" id="ach160" alt="ach160" label="ach160" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach213.png" id="ach41" alt="ach41" label="ach41" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach219.png" id="ach167" alt="ach167" label="ach167" loading="lazy"></td>
-                        <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach220.png" id="ach59" alt="ach59" label="ach59" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach221.png" id="ach69" alt="ach69" label="ach69" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach224.png" id="ach48" alt="ach48" label="ach48" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach230.png" id="ach83" alt="ach83" label="ach83" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach231.png" id="ach90" alt="ach90" label="ach90" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach232.png" id="ach97" alt="ach97" label="ach97" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach233.png" id="ach104" alt="ach104" label="ach104" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach234.png" id="ach111" alt="ach111" label="ach111" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach236.png" id="ach76" alt="ach76" label="ach76" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach237.png" id="ach55" alt="ach55" label="ach55" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach243.png" id="ach118" alt="ach118" label="ach118" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach244.png" id="ach125" alt="ach125" label="ach125" loading="lazy"></td>
-                        <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach245.png" id="ach132" alt="ach132" label="ach132" loading="lazy"></td>
-                        <td><img style="display: none;" class="reincarnationunlock" src="Pictures/TransparentPics/ach293.png" id="ach139" alt="ach139" label="ach139" loading="lazy"></td>
-                        <td><img style="display: none;" class="reincarnationunlock" src="Pictures/TransparentPics/ach300.png" id="ach146" alt="ach146" label="ach146" loading="lazy"></td>
-                        <td><img style="display: none;" class="chal8 purpleach" src="Pictures/TransparentPics/ach307.png" id="ach174" alt="ach174" label="ach174" loading="lazy"></td>
-                        <td><img class="chal8 redach" src="Pictures/TransparentPics/ach314.png" id="ach181" alt="ach181" label="ach181" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach321.png" id="ach188" alt="ach188" label="ach188" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach328.png" id="ach195" alt="ach195" label="ach195" loading="lazy"></td>
-                        <td><img class="ascendunlock redach" src="Pictures/TransparentPics/ach335.png" id="ach202" alt="ach202" label="ach202" loading="lazy"></td>
-                        <td><img class="chal11 redach" src="Pictures/TransparentPics/ach342.png" id="ach209" alt="ach209" label="ach209" loading="lazy"></td>
-                        <td><img class="chal12 redach" src="Pictures/TransparentPics/ach349.png" id="ach216" alt="ach216" label="ach216" loading="lazy"></td>
-                        <td><img class="chal13 redach" src="Pictures/TransparentPics/ach356.png" id="ach223" alt="ach223" label="ach223" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach363.png" id="ach230" alt="ach230" label="ach230" loading="lazy"></td>
-                        <td><img class="chal12" src="Pictures/TransparentPics/ach370.png" id="ach237" alt="ach237" label="ach237" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach377.png" id="ach244" alt="ach244" label="ach244" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach384.png" id="ach251" alt="ach251" label="ach251" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach391.png" id="ach258" alt="ach258" label="ach258" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach398.png" id="ach265" alt="ach265" label="ach265" loading="lazy"></td>
-                        <td><img class="chal14" src="Pictures/TransparentPics/ach405.png" id="ach272" alt="ach272" label="ach272" loading="lazy"></td>
-                        <td><img class="singularity" src="Pictures/TransparentPics/ach412.png" id="ach279" alt="ach279" label="ach279" loading="lazy"></td>
-                    </tr>
-                    <tr>
-                        <td><img src="Pictures/TransparentPics/ach247.png" id="ach7" alt="ach7" label="ach7" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach248.png" id="ach14" alt="ach14" label="ach14" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach249.png" id="ach21" alt="ach21" label="ach21" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach250.png" id="ach28" alt="ach28" label="ach28" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach251.png" id="ach35" alt="ach35" label="ach35" class="purpleach" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach252.png" id="ach154" alt="ach154" label="ach154" loading="lazy"></td>
-                        <td><img src="Pictures/TransparentPics/ach253.png" id="ach161" alt="ach161" label="ach161" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach254.png" id="ach42" alt="ach42" label="ach42" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach260.png" id="ach168" alt="ach168" label="ach168" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach261.png" id="ach63" alt="ach63" label="ach63" loading="lazy"></td>
-                        <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach262.png" id="ach70" alt="ach70" label="ach70" loading="lazy"></td>
-                        <td><img class="transcendunlock" src="Pictures/TransparentPics/ach265.png" id="ach49" alt="ach49" label="ach49" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach271.png" id="ach84" alt="ach84" label="ach84" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach272.png" id="ach91" alt="ach91" label="ach91" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach273.png" id="ach98" alt="ach98" label="ach98" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach274.png" id="ach105" alt="ach105" label="ach105" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach275.png" id="ach112" alt="ach112" label="ach112" loading="lazy"></td>
-                        <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach277.png" id="ach77" alt="ach77" label="ach77" loading="lazy"></td>
-                        <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach278.png" id="ach56" alt="ach56" label="ach56" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach284.png" id="ach119" alt="ach119" label="ach119" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach285.png" id="ach126" alt="ach126" label="ach126" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach286.png" id="ach133" alt="ach133" label="ach133" loading="lazy"></td>
-                        <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach294.png" id="ach140" alt="ach140" label="ach140" loading="lazy"></td>
-                        <td><img style="display: none;" class="reincarnationunlock redach" src="Pictures/TransparentPics/ach301.png" id="ach147" alt="ach147" label="ach147" loading="lazy"></td>
-                        <td><img style="display: none;" class="chal8" src="Pictures/TransparentPics/ach308.png" id="ach175" alt="ach175" label="ach175" loading="lazy"></td>
-                        <td><img class="chal8 redach" src="Pictures/TransparentPics/ach315.png" id="ach182" alt="ach182" label="ach182" loading="lazy"></td>
-                        <td><img class="ascendunlock redach" src="Pictures/TransparentPics/ach322.png" id="ach189" alt="ach189" label="ach189" loading="lazy"></td>
-                        <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach329.png" id="ach196" alt="ach196" label="ach196" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach336.png" id="ach203" alt="ach203" label="ach203" loading="lazy"></td>
-                        <td><img class="chal11" src="Pictures/TransparentPics/ach343.png" id="ach210" alt="ach210" label="ach210" loading="lazy"></td>
-                        <td><img class="chal12" src="Pictures/TransparentPics/ach350.png" id="ach217" alt="ach217" label="ach217" loading="lazy"></td>
-                        <td><img class="chal13" src="Pictures/TransparentPics/ach357.png" id="ach224" alt="ach224" label="ach224" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach364.png" id="ach231" alt="ach231" label="ach231" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach371.png" id="ach238" alt="ach238" label="ach238" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach378.png" id="ach245" alt="ach245" label="ach245" loading="lazy"></td>
-                        <td><img class="ascendunlock" src="Pictures/TransparentPics/ach385.png" id="ach252" alt="ach252" label="ach252" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach392.png" id="ach259" alt="ach259" label="ach259" loading="lazy"></td>
-                        <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach399.png" id="ach266" alt="ach266" label="ach266" loading="lazy"></td>
-                        <td><img class="chal14" src="Pictures/TransparentPics/ach406.png" id="ach273" alt="ach273" label="ach273" loading="lazy"></td>
-                        <td><img class="singularity" src="Pictures/TransparentPics/ach413.png" id="ach280" alt="ach280" label="ach280" loading="lazy"></td>
-                    </tr>
-                    </table>
+            <div id="achievements" alt="achievements" label="achievements">
+                <div class="flex scrollbarX">
+                    <div id="achievementContainer1" alt="achievementContainer1" label="achievementContainer1"></div>
+                    <div id="achievementContainer2" alt="achievementContainer2" label="achievementContainer2">
+                        <table class="achievementstable">
+                            <tr>
+                                <td><img src="Pictures/TransparentPics/ach1.png" id="ach1" alt="ach1" label="ach1" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach2.png" id="ach8" alt="ach8" label="ach8" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach3.png" id="ach15" alt="ach15" label="ach15" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach4.png" id="ach22" alt="ach22" label="ach22" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach5.png" id="ach29" alt="ach29" label="ach29" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach6.png" id="ach148" alt="ach148" label="ach148" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach7.png" id="ach155" alt="ach155" label="ach155"  loading="lazy"></td>
+                                <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach8.png" id="ach36" alt="ach36" label="ach36" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach14.png" id="ach162" alt="ach162" label="ach162" loading="lazy"></td>
+                                <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach15.png" id="ach60" alt="ach60" label="ach60" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach16.png" id="ach64" alt="ach64" label="ach64" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach19.png" id="ach43" alt="ach43" label="ach43" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach31.png" id="ach71" alt="ach71" label="ach71" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach32.png" id="ach50" alt="ach50" label="ach50" loading="lazy"></td>
+                                <td><img class="chal8 purpleach" src="Pictures/TransparentPics/ach302.png" id="ach169" alt="ach169" label="ach169" loading="lazy"></td>
+                                <td><img class="chal8 redach" src="Pictures/TransparentPics/ach309.png" id="ach176" alt="ach176" label="ach176" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img src="Pictures/TransparentPics/ach42.png" id="ach2" alt="ach2" label="ach2" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach43.png" id="ach9" alt="ach9" label="ach9" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach44.png" id="ach16" alt="ach16" label="ach16" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach45.png" id="ach23" alt="ach23" label="ach23" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach46.png" id="ach30" alt="ach30" label="ach30" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach47.png" id="ach149" alt="ach149" label="ach149" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach48.png" id="ach156" alt="ach156" label="ach156" loading="lazy"></td>
+                                <td><img class="prestigeunlock redach" src="Pictures/TransparentPics/ach49.png" id="ach37" alt="ach37" label="ach37" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach55.png" id="ach163" alt="ach163" label="ach163" loading="lazy"></td>
+                                <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach56.png" id="ach57" alt="ach57" label="ach57" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach57.png" id="ach65" alt="ach65" label="ach65" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach60.png" id="ach44" alt="ach44" label="ach44" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach72.png" id="ach72" alt="ach72" label="ach72" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach73.png" id="ach51" alt="ach51" label="ach51" loading="lazy"></td>
+                                <td><img class="chal8" src="Pictures/TransparentPics/ach303.png" id="ach170" alt="ach170" label="ach170" loading="lazy"></td>
+                                <td><img class="chal8 redach" src="Pictures/TransparentPics/ach310.png" id="ach177" alt="ach177" label="ach177" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img src="Pictures/TransparentPics/ach83.png" id="ach3" alt="ach3" label="ach3" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach84.png" id="ach10" alt="ach10" label="ach10" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach85.png" id="ach17" alt="ach17" label="ach17" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach86.png" id="ach24" alt="ach24" label="ach24" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach87.png" id="ach31" alt="ach31" label="ach31" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach88.png" id="ach150" alt="ach150" label="ach150" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach89.png" id="ach157" alt="ach157" label="ach157" loading="lazy"></td>
+                                <td><img class="prestigeunlock redach" src="Pictures/TransparentPics/ach90.png" id="ach38" alt="ach38" label="ach38"loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach96.png" id="ach164" alt="ach164" label="ach164"loading="lazy"></td>
+                                <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach97.png" id="ach61" alt="ach61" label="ach61" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach98.png" id="ach66" alt="ach66" label="ach66" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach101.png" id="ach45" alt="ach45" label="ach45" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach113.png" id="ach73" alt="ach73" label="ach73" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach114.png" id="ach52" alt="ach52" label="ach52" loading="lazy"></td>
+                                <td><img class="chal8 purpleach" src="Pictures/TransparentPics/ach304.png" id="ach171" alt="ach171" label="ach171" loading="lazy"></td>
+                                <td><img class="chal8 redach" src="Pictures/TransparentPics/ach311.png" id="ach178" alt="ach178" label="ach178" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img src="Pictures/TransparentPics/ach124.png" id="ach4" alt="ach4" label="ach4" class="redach"loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach125.png" id="ach11" alt="ach11" label="ach11" class="redach"loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach126.png" id="ach18" alt="ach18" label="ach18" class="redach"loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach127.png" id="ach25" alt="ach25" label="ach25" class="redach"loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach128.png" id="ach32" alt="ach32" label="ach32" class="redach"loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach129.png" id="ach151" alt="ach151" label="ach151" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach130.png" id="ach158" alt="ach158" label="ach158" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach131.png" id="ach39" alt="ach39" label="ach39" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach137.png" id="ach165" alt="ach165" label="ach165" loading="lazy"></td>
+                                <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach138.png" id="ach58" alt="ach58" label="ach58" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach139.png" id="ach67" alt="ach67" label="ach67" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach142.png" id="ach46" alt="ach46" label="ach46" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach154.png" id="ach74" alt="ach74" label="ach74" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach155.png" id="ach53" alt="ach53" label="ach53" loading="lazy"></td>
+                                <td><img class="chal8 purpleach" src="Pictures/TransparentPics/ach305.png" id="ach172" alt="ach172" label="ach172" loading="lazy"></td>
+                                <td><img class="chal8 redach" src="Pictures/TransparentPics/ach312.png" id="ach179" alt="ach179" label="ach179" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="purpleach" src="Pictures/TransparentPics/ach165.png" id="ach5" alt="ach5" label="ach5" loading="lazy"></td>
+                                <td><img class="purpleach" src="Pictures/TransparentPics/ach166.png" id="ach12" alt="ach12" label="ach12" loading="lazy"></td>
+                                <td><img class="purpleach" src="Pictures/TransparentPics/ach167.png" id="ach19" alt="ach19" label="ach19" loading="lazy"></td>
+                                <td><img class="purpleach" src="Pictures/TransparentPics/ach168.png" id="ach26" alt="ach26" label="ach26" loading="lazy"></td>
+                                <td><img class="purpleach" src="Pictures/TransparentPics/ach169.png" id="ach33" alt="ach33" label="ach33" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach170.png" id="ach152" alt="ach152" label="ach152" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach171.png" id="ach159" alt="ach159" label="ach159" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach172.png" id="ach40" alt="ach40" label="ach40" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach178.png" id="ach166" alt="ach166" label="ach166" loading="lazy"></td>
+                                <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach179.png" id="ach62" alt="ach62" label="ach62" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach180.png" id="ach68" alt="ach68" label="ach68" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach183.png" id="ach47" alt="ach47" label="ach47" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach195.png" id="ach75" alt="ach75" label="ach75" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach196.png" id="ach54" alt="ach54" label="ach54" loading="lazy"></td>
+                                <td><img class="chal8 redach" src="Pictures/TransparentPics/ach306.png" id="ach173" alt="ach173" label="ach173" loading="lazy"></td>
+                                <td><img class="chal8 redach" src="Pictures/TransparentPics/ach313.png" id="ach180" alt="ach180" label="ach180" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img src="Pictures/TransparentPics/ach206.png" id="ach6" alt="ach6" label="ach6" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach207.png" id="ach13" alt="ach13" label="ach13" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach208.png" id="ach20" alt="ach20" label="ach20" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach209.png" id="ach27" alt="ach27" label="ach27" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach210.png" id="ach34" alt="ach34" label="ach34" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach211.png" id="ach153" alt="ach153" label="ach153" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach212.png" id="ach160" alt="ach160" label="ach160" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach213.png" id="ach41" alt="ach41" label="ach41" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach219.png" id="ach167" alt="ach167" label="ach167" loading="lazy"></td>
+                                <td><img class="prestigeunlock purpleach" src="Pictures/TransparentPics/ach220.png" id="ach59" alt="ach59" label="ach59" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach221.png" id="ach69" alt="ach69" label="ach69" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach224.png" id="ach48" alt="ach48" label="ach48" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach236.png" id="ach76" alt="ach76" label="ach76" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach237.png" id="ach55" alt="ach55" label="ach55" loading="lazy"></td>
+                                <td><img class="chal8 purpleach" src="Pictures/TransparentPics/ach307.png" id="ach174" alt="ach174" label="ach174" loading="lazy"></td>
+                                <td><img class="chal8 redach" src="Pictures/TransparentPics/ach314.png" id="ach181" alt="ach181" label="ach181" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img src="Pictures/TransparentPics/ach247.png" id="ach7" alt="ach7" label="ach7" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach248.png" id="ach14" alt="ach14" label="ach14" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach249.png" id="ach21" alt="ach21" label="ach21" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach250.png" id="ach28" alt="ach28" label="ach28" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach251.png" id="ach35" alt="ach35" label="ach35" class="purpleach" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach252.png" id="ach154" alt="ach154" label="ach154" loading="lazy"></td>
+                                <td><img src="Pictures/TransparentPics/ach253.png" id="ach161" alt="ach161" label="ach161" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach254.png" id="ach42" alt="ach42" label="ach42" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach260.png" id="ach168" alt="ach168" label="ach168" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach261.png" id="ach63" alt="ach63" label="ach63" loading="lazy"></td>
+                                <td><img class="prestigeunlock" src="Pictures/TransparentPics/ach262.png" id="ach70" alt="ach70" label="ach70" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach265.png" id="ach49" alt="ach49" label="ach49" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach277.png" id="ach77" alt="ach77" label="ach77" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach278.png" id="ach56" alt="ach56" label="ach56" loading="lazy"></td>
+                                <td><img class="chal8" src="Pictures/TransparentPics/ach308.png" id="ach175" alt="ach175" label="ach175" loading="lazy"></td>
+                                <td><img class="chal8 redach" src="Pictures/TransparentPics/ach315.png" id="ach182" alt="ach182" label="ach182" loading="lazy"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="achievementContainer3" alt="achievementContainer3" label="achievementContainer3">
+                        <table class="achievementstable transcendunlock">
+                            <tr>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach25.png" id="ach78" alt="ach78" label="ach78" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach26.png" id="ach85" alt="ach85" label="ach85" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach27.png" id="ach92" alt="ach92" label="ach92" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach28.png" id="ach99" alt="ach99" label="ach99" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach29.png" id="ach106" alt="ach106" label="ach106" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach38.png" id="ach113" alt="ach113" label="ach113" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach39.png" id="ach120" alt="ach120" label="ach120" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach40.png" id="ach127" alt="ach127" label="ach127" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach288.png" id="ach134" alt="ach134" label="ach134" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach295.png" id="ach141" alt="ach141" label="ach141" loading="lazy"></td>
+                                <td><img class="ascendunlock redach" src="Pictures/TransparentPics/ach330.png" id="ach197" alt="ach197" label="ach197" loading="lazy"></td>
+                                <td><img class="chal11 redach" src="Pictures/TransparentPics/ach337.png" id="ach204" alt="ach204" label="ach204" loading="lazy"></td>
+                                <td><img class="chal12 redach" src="Pictures/TransparentPics/ach344.png" id="ach211" alt="ach211" label="ach211" loading="lazy"></td>
+                                <td><img class="chal13 redach" src="Pictures/TransparentPics/ach351.png" id="ach218" alt="ach218" label="ach218" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach407.png" id="ach274" alt="ach274" label="ach274" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach66.png" id="ach79" alt="ach79" label="ach79" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach67.png" id="ach86" alt="ach86" label="ach86" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach68.png" id="ach93" alt="ach93" label="ach93" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach69.png" id="ach100" alt="ach100" label="ach100" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach70.png" id="ach107" alt="ach107" label="ach107" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach79.png" id="ach114" alt="ach114" label="ach114" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach80.png" id="ach121" alt="ach121" label="ach121" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach81.png" id="ach128" alt="ach128" label="ach128" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach289.png" id="ach135" alt="ach135" label="ach135" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach296.png" id="ach142" alt="ach142" label="ach142" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach331.png" id="ach198" alt="ach198" label="ach198" loading="lazy"></td>
+                                <td><img class="chal11 purpleach" src="Pictures/TransparentPics/ach338.png" id="ach205" alt="ach205" label="ach205" loading="lazy"></td>
+                                <td><img class="chal12 purpleach" src="Pictures/TransparentPics/ach345.png" id="ach212" alt="ach212" label="ach212" loading="lazy"></td>
+                                <td><img class="chal13 purpleach" src="Pictures/TransparentPics/ach352.png" id="ach219" alt="ach219" label="ach219" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach408.png" id="ach275" alt="ach275" label="ach275" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach107.png" id="ach80" alt="ach80" label="ach80" loading="lazy"></td>
+                                <td><img class="transcendunlock redach" src="Pictures/TransparentPics/ach108.png" id="ach87" alt="ach87" label="ach87" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach109.png" id="ach94" alt="ach94" label="ach94" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach110.png" id="ach101" alt="ach101" label="ach101" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach111.png" id="ach108" alt="ach108" label="ach108" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach120.png" id="ach115" alt="ach115" label="ach115" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach121.png" id="ach122" alt="ach122" label="ach122" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach122.png" id="ach129" alt="ach129" label="ach129" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach290.png" id="ach136" alt="ach136" label="ach136" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach297.png" id="ach143" alt="ach143" label="ach143" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach332.png" id="ach199" alt="ach199" label="ach199" loading="lazy"></td>
+                                <td><img class="chal11 purpleach" src="Pictures/TransparentPics/ach339.png" id="ach206" alt="ach206" label="ach206" loading="lazy"></td>
+                                <td><img class="chal12 purpleach" src="Pictures/TransparentPics/ach346.png" id="ach213" alt="ach213" label="ach213" loading="lazy"></td>
+                                <td><img class="chal13 purpleach" src="Pictures/TransparentPics/ach353.png" id="ach220" alt="ach220" label="ach220" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach409.png" id="ach276" alt="ach276" label="ach276" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach148.png" id="ach81" alt="ach81" label="ach81" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach149.png" id="ach88" alt="ach88" label="ach88" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach150.png" id="ach95" alt="ach95" label="ach95" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach151.png" id="ach102" alt="ach102" label="ach102" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach152.png" id="ach109" alt="ach109" label="ach109" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach161.png" id="ach116" alt="ach116" label="ach116" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach162.png" id="ach123" alt="ach123" label="ach123" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach163.png" id="ach130" alt="ach130" label="ach130" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach291.png" id="ach137" alt="ach137" label="ach137" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach298.png" id="ach144" alt="ach144" label="ach144" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach333.png" id="ach200" alt="ach200" label="ach200" loading="lazy"></td>
+                                <td><img class="chal11 purpleach" src="Pictures/TransparentPics/ach340.png" id="ach207" alt="ach207" label="ach207" loading="lazy"></td>
+                                <td><img class="chal12 purpleach" src="Pictures/TransparentPics/ach347.png" id="ach214" alt="ach214" label="ach214" loading="lazy"></td>
+                                <td><img class="chal13 purpleach" src="Pictures/TransparentPics/ach354.png" id="ach221" alt="ach221" label="ach221" loading="lazy"></td>
+                                <td><img class="chal14 redach" src="Pictures/TransparentPics/ach410.png" id="ach277" alt="ach277" label="ach277" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach189.png" id="ach82" alt="ach82" label="ach82" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach190.png" id="ach89" alt="ach89" label="ach89" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach191.png" id="ach96" alt="ach96" label="ach96" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach192.png" id="ach103" alt="ach103" label="ach103" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach193.png" id="ach110" alt="ach110" label="ach110" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach202.png" id="ach117" alt="ach117" label="ach117" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach203.png" id="ach124" alt="ach124" label="ach124" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach204.png" id="ach131" alt="ach131" label="ach131" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach292.png" id="ach138" alt="ach138" label="ach138" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach299.png" id="ach145" alt="ach145" label="ach145" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach334.png" id="ach201" alt="ach201" label="ach201" loading="lazy"></td>
+                                <td><img class="chal11 purpleach" src="Pictures/TransparentPics/ach341.png" id="ach208" alt="ach208" label="ach208" loading="lazy"></td>
+                                <td><img class="chal12 purpleach" src="Pictures/TransparentPics/ach348.png" id="ach215" alt="ach215" label="ach215" loading="lazy"></td>
+                                <td><img class="chal13 purpleach" src="Pictures/TransparentPics/ach355.png" id="ach222" alt="ach222" label="ach222" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach411.png" id="ach278" alt="ach278" label="ach278" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach230.png" id="ach83" alt="ach83" label="ach83" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach231.png" id="ach90" alt="ach90" label="ach90" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach232.png" id="ach97" alt="ach97" label="ach97" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach233.png" id="ach104" alt="ach104" label="ach104" loading="lazy"></td>
+                                <td><img class="transcendunlock" src="Pictures/TransparentPics/ach234.png" id="ach111" alt="ach111" label="ach111" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach243.png" id="ach118" alt="ach118" label="ach118" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach244.png" id="ach125" alt="ach125" label="ach125" loading="lazy"></td>
+                                <td><img class="reincarnationunlock purpleach" src="Pictures/TransparentPics/ach245.png" id="ach132" alt="ach132" label="ach132" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach293.png" id="ach139" alt="ach139" label="ach139" loading="lazy"></td>
+                                <td><img class="reincarnationunlock" src="Pictures/TransparentPics/ach300.png" id="ach146" alt="ach146" label="ach146" loading="lazy"></td>
+                                <td><img class="ascendunlock redach" src="Pictures/TransparentPics/ach335.png" id="ach202" alt="ach202" label="ach202" loading="lazy"></td>
+                                <td><img class="chal11 redach" src="Pictures/TransparentPics/ach342.png" id="ach209" alt="ach209" label="ach209" loading="lazy"></td>
+                                <td><img class="chal12 redach" src="Pictures/TransparentPics/ach349.png" id="ach216" alt="ach216" label="ach216" loading="lazy"></td>
+                                <td><img class="chal13 redach" src="Pictures/TransparentPics/ach356.png" id="ach223" alt="ach223" label="ach223" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach412.png" id="ach279" alt="ach279" label="ach279" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach271.png" id="ach84" alt="ach84" label="ach84" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach272.png" id="ach91" alt="ach91" label="ach91" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach273.png" id="ach98" alt="ach98" label="ach98" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach274.png" id="ach105" alt="ach105" label="ach105" loading="lazy"></td>
+                                <td><img class="transcendunlock purpleach" src="Pictures/TransparentPics/ach275.png" id="ach112" alt="ach112" label="ach112" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach284.png" id="ach119" alt="ach119" label="ach119" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach285.png" id="ach126" alt="ach126" label="ach126" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach286.png" id="ach133" alt="ach133" label="ach133" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach294.png" id="ach140" alt="ach140" label="ach140" loading="lazy"></td>
+                                <td><img class="reincarnationunlock redach" src="Pictures/TransparentPics/ach301.png" id="ach147" alt="ach147" label="ach147" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach336.png" id="ach203" alt="ach203" label="ach203" loading="lazy"></td>
+                                <td><img class="chal11" src="Pictures/TransparentPics/ach343.png" id="ach210" alt="ach210" label="ach210" loading="lazy"></td>
+                                <td><img class="chal12" src="Pictures/TransparentPics/ach350.png" id="ach217" alt="ach217" label="ach217" loading="lazy"></td>
+                                <td><img class="chal13" src="Pictures/TransparentPics/ach357.png" id="ach224" alt="ach224" label="ach224" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach413.png" id="ach280" alt="ach280" label="ach280" loading="lazy"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="achievementContainer4" alt="achievementContainer4" label="achievementContainer4">
+                        <table class="achievementstable ascendunlockib">
+                            <tr>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach316.png" id="ach183" alt="ach183" label="ach183" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach323.png" id="ach190" alt="ach190" label="ach190" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach358.png" id="ach225" alt="ach225" label="ach225" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach365.png" id="ach232" alt="ach232" label="ach232" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach372.png" id="ach239" alt="ach239" label="ach239" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach379.png" id="ach246" alt="ach246" label="ach246" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach386.png" id="ach253" alt="ach253" label="ach253" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach393.png" id="ach260" alt="ach260" label="ach260" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach400.png" id="ach267" alt="ach267" label="ach267" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach317.png" id="ach184" alt="ach184" label="ach184" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach324.png" id="ach191" alt="ach191" label="ach191" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach359.png" id="ach226" alt="ach226" label="ach226" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach366.png" id="ach233" alt="ach233" label="ach233" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach373.png" id="ach240" alt="ach240" label="ach240" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach380.png" id="ach247" alt="ach247" label="ach247" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach387.png" id="ach254" alt="ach254" label="ach254" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach394.png" id="ach261" alt="ach261" label="ach261" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach401.png" id="ach268" alt="ach268" label="ach268" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach318.png" id="ach185" alt="ach185" label="ach185" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach325.png" id="ach192" alt="ach192" label="ach192" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach360.png" id="ach227" alt="ach227" label="ach227" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach367.png" id="ach234" alt="ach234" label="ach234" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach374.png" id="ach241" alt="ach241" label="ach241" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach381.png" id="ach248" alt="ach248" label="ach248" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach388.png" id="ach255" alt="ach255" label="ach255" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach395.png" id="ach262" alt="ach262" label="ach262" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach402.png" id="ach269" alt="ach269" label="ach269" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach319.png" id="ach186" alt="ach186" label="ach186" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach326.png" id="ach193" alt="ach193" label="ach193" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach361.png" id="ach228" alt="ach228" label="ach228" loading="lazy"></td>
+                                <td><img class="chal12" src="Pictures/TransparentPics/ach368.png" id="ach235" alt="ach235" label="ach235" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach375.png" id="ach242" alt="ach242" label="ach242" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach382.png" id="ach249" alt="ach249" label="ach249" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach389.png" id="ach256" alt="ach256" label="ach256" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach396.png" id="ach263" alt="ach263" label="ach263" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach403.png" id="ach270" alt="ach270" label="ach270" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach320.png" id="ach187" alt="ach187" label="ach187" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach327.png" id="ach194" alt="ach194" label="ach194" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach362.png" id="ach229" alt="ach229" label="ach229" loading="lazy"></td>
+                                <td><img class="chal12" src="Pictures/TransparentPics/ach369.png" id="ach236" alt="ach236" label="ach236" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach376.png" id="ach243" alt="ach243" label="ach243" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach383.png" id="ach250" alt="ach250" label="ach250" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach390.png" id="ach257" alt="ach257" label="ach257" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach397.png" id="ach264" alt="ach264" label="ach264" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach404.png" id="ach271" alt="ach271" label="ach271" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach321.png" id="ach188" alt="ach188" label="ach188" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach328.png" id="ach195" alt="ach195" label="ach195" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach363.png" id="ach230" alt="ach230" label="ach230" loading="lazy"></td>
+                                <td><img class="chal12" src="Pictures/TransparentPics/ach370.png" id="ach237" alt="ach237" label="ach237" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach377.png" id="ach244" alt="ach244" label="ach244" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach384.png" id="ach251" alt="ach251" label="ach251" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach391.png" id="ach258" alt="ach258" label="ach258" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach398.png" id="ach265" alt="ach265" label="ach265" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach405.png" id="ach272" alt="ach272" label="ach272" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="ascendunlock redach" src="Pictures/TransparentPics/ach322.png" id="ach189" alt="ach189" label="ach189" loading="lazy"></td>
+                                <td><img class="ascendunlock purpleach" src="Pictures/TransparentPics/ach329.png" id="ach196" alt="ach196" label="ach196" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach364.png" id="ach231" alt="ach231" label="ach231" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach371.png" id="ach238" alt="ach238" label="ach238" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach378.png" id="ach245" alt="ach245" label="ach245" loading="lazy"></td>
+                                <td><img class="ascendunlock" src="Pictures/TransparentPics/ach385.png" id="ach252" alt="ach252" label="ach252" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach392.png" id="ach259" alt="ach259" label="ach259" loading="lazy"></td>
+                                <td><img class="chal14 purpleach" src="Pictures/TransparentPics/ach399.png" id="ach266" alt="ach266" label="ach266" loading="lazy"></td>
+                                <td><img class="chal14" src="Pictures/TransparentPics/ach406.png" id="ach273" alt="ach273" label="ach273" loading="lazy"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="achievementContainer5" alt="achievementContainer5" label="achievementContainer5">
+                        <!--
+                            These pictures are identical
+                        -->
+                        <table class="achievementstable singularity">
+                            <tr>
+                                <td><img class="singularity purpleach" src="Pictures/TransparentPics/ach414.png" id="ach281" alt="ach281" label="ach281" loading="lazy"></td>
+                                <td><img class="singularity purpleach" count="10" src="Pictures/TransparentPics/ach421.png" id="ach288" alt="ach288" label="ach288" loading="lazy"></td>
+                                <td><img class="singularity" count="100" src="Pictures/TransparentPics/ach428.png" id="ach295" alt="ach295" label="ach295" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="singularity purpleach" src="Pictures/TransparentPics/ach415.png" id="ach282" alt="ach282" label="ach282" loading="lazy"></td>
+                                <td><img class="singularity redach" count="10" src="Pictures/TransparentPics/ach422.png" id="ach289" alt="ach289" label="ach289" loading="lazy"></td>
+                                <td><img class="singularity" count="100" src="Pictures/TransparentPics/ach429.png" id="ach296" alt="ach296" label="ach296" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="singularity purpleach" src="Pictures/TransparentPics/ach416.png" id="ach283" alt="ach283" label="ach283" loading="lazy"></td>
+                                <td><img class="singularity purpleach" count="10" src="Pictures/TransparentPics/ach423.png" id="ach290" alt="ach290" label="ach290" loading="lazy"></td>
+                                <td><img class="singularity" count="100" src="Pictures/TransparentPics/ach430.png" id="ach297" alt="ach297" label="ach297" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="singularity purpleach" src="Pictures/TransparentPics/ach417.png" id="ach284" alt="ach284" label="ach284" loading="lazy"></td>
+                                <td><img class="singularity" count="10" src="Pictures/TransparentPics/ach424.png" id="ach291" alt="ach291" label="ach291" loading="lazy"></td>
+                                <td><img class="singularity purpleach" count="100" src="Pictures/TransparentPics/ach431.png" id="ach298" alt="ach298" label="ach298" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="singularity purpleach" src="Pictures/TransparentPics/ach418.png" id="ach285" alt="ach285" label="ach285" loading="lazy"></td>
+                                <td><img class="singularity" count="10" src="Pictures/TransparentPics/ach425.png" id="ach292" alt="ach292" label="ach292" loading="lazy"></td>
+                                <td><img class="singularity" count="100" src="Pictures/TransparentPics/ach432.png" id="ach299" alt="ach299" label="ach299" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="singularity purpleach" src="Pictures/TransparentPics/ach419.png" id="ach286" alt="ach286" label="ach286" loading="lazy"></td>
+                                <td><img class="singularity" count="10" src="Pictures/TransparentPics/ach426.png" id="ach293" alt="ach293" label="ach293" loading="lazy"></td>
+                                <td><img class="singularity" count="100" src="Pictures/TransparentPics/ach433.png" id="ach300" alt="ach300" label="ach300" loading="lazy"></td>
+                            </tr>
+                            <tr>
+                                <td><img class="singularity purpleach" src="Pictures/TransparentPics/ach420.png" id="ach287" alt="ach287" label="ach287" loading="lazy"></td>
+                                <td><img class="singularity purpleach" count="10" src="Pictures/TransparentPics/ach427.png" id="ach294" alt="ach294" label="ach294" loading="lazy"></td>
+                                <td><img class="singularity redach" count="100" src="Pictures/TransparentPics/ach434.png" id="ach301" alt="ach301" label="ach301" loading="lazy"></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div id="achievementinfo" alt="achievementinfo" label="achievementinfo">
@@ -1205,8 +1294,8 @@
             <div id="runesToggle" alt="runesToggle" label="runesToggle">
                 <button id="toggleautosacrifice" alt="toggleautosacrifice" label="toggleautosacrifice" style="border: 2px solid orangered">Auto Rune: OFF</button>
                 <button id="toggleRuneSubTab1" alt="toggleRuneSubTab1" label="toggleRuneSubTab1" style="border: 2px solid gold">Runes</button>
-                <button class="chal9" id="toggleRuneSubTab2" alt="toggleRuneSubTab2" label="toggleRuneSubTab2" style="border: 2px solid silver">Talismans</button>
-                <button class="chal9" id="toggleRuneSubTab3" alt="toggleRuneSubTab3" label="toggleRuneSubTab3" style="border: 2px solid silver">Blessings</button>
+                <button class="chal9" id="toggleRuneSubTab2" alt="toggleRuneSubTab2" label="toggleRuneSubTab2" style="border: 2px solid brown">Talismans</button>
+                <button class="chal9" id="toggleRuneSubTab3" alt="toggleRuneSubTab3" label="toggleRuneSubTab3" style="border: 2px solid orchid">Blessings</button>
                 <button class="chal12" id="toggleRuneSubTab4" alt="toggleRuneSubTab4" label="toggleRuneSubTab4" style="border: 2px solid silver">[=-Spirits-=]</button>
             </div>
 
@@ -3111,7 +3200,7 @@ $STAGE$ for synergism stage"></p>
         <div id="globalQuarkMultiplierStats" alt="globalQuarkMultiplierStats" label="globalQuarkMultiplierStats" class="statContainer" style="display: none;">
             <p id="GlobalQuarkStatTitle" alt="GlobalQuarkStatTitle" label="GlobalQuarkStatTitle" class='statPortion' style="color: white; font-size: 1.2em">Global Quark Multipliers</p>
             <p id="statGQM1" alt="statGQM1" label="statGQM1" class="statPortion">Base:<span id="sGQM1" alt="sGQM1" label="sGQM1" class="statNumber">0</span></p>
-            <p id="statGQM2" alt="statGQM2" label="statGQM2" class="statPortion">AP Bonus:<span id="sGQM2" alt="sGQM2" label="sGQM2" class="statNumber">0</span></p>
+            <p id="statGQM2" alt="statGQM2" label="statGQM2" class="statPortion">Achievement Points Bonus:<span id="sGQM2" alt="sGQM2" label="sGQM2" class="statNumber">0</span></p>
             <p id="statGQM3" alt="statGQM3" label="statGQM3" class="statPortion chal14">Maxed Research 8x25:<span id="sGQM3" alt="sGQM3" label="sGQM3" class="statNumber">0</span></p>
             <p id="statGQM4" alt="statGQM4" label="statGQM4" class="statPortion chal14">Maxed Cube upgrade 5x10:<span id="sGQM4" alt="sGQM4" label="sGQM4" class="statNumber">0</span></p>
             <p id="statGQM5" alt="statGQM5" label="statGQM5" class="statPortion chal14">Platonic ALPHA:<span id="sGQM5" alt="sGQM5" label="sGQM5" class="statNumber">0</span></p>
@@ -3427,7 +3516,7 @@ $STAGE$ for synergism stage"></p>
              </div>
         </div>
     </div>
-    <div class="subtabContent subtabDisplayFlex" id="hotkeys" alt="hotkeys" label="hotkeys">
+    <div class="subtabContent subtabDisplayFlex" id="hotkeysSubTab" alt="hotkeysSubTab" label="hotkeysSubTab">
         <div class="hotkeys">
 
         </div>

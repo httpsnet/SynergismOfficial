@@ -665,8 +665,18 @@ nav button {
     gap: 10px 15px;
 }
 
-.subTabWrapper > button {
+#buildings > .subTabWrapper > button {
     min-width: 150px;
+    text-align: center;
+}
+
+#statistics > .subTabWrapper > button {
+    min-width: 100px;
+    text-align: center;
+}
+
+#settings > .subTabWrapper > button {
+    min-width: 130px;
     text-align: center;
 }
 
@@ -1040,20 +1050,28 @@ p#promocodeinfo {
 }
 
 #achievements {
+    margin: 10px;
     display: flex;
     justify-content: center;
 }
 
-#achievementstable {
+.achievementstable {
+    padding: 0;
     font-size: 0;
     border-collapse: collapse;
 }
 
-#achievementstable img {
+.achievementstable td {
+    padding: 0;
+}
+
+.achievementstable img {
+    margin: 1px;
     background-color: var(--buttonimg-color);
 }
 
 .NotificationToggle {
+    margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1061,7 +1079,7 @@ p#promocodeinfo {
 }
 
 .NotificationToggle > p {
-    margin: 15px 0;
+    margin: 0;
 }
 
 .achNotification {
@@ -1076,10 +1094,6 @@ p#promocodeinfo {
 #achievementinfo > p,
 #achievementColorInfo > p {
     margin: 0;
-}
-
-#achievementinfo {
-    margin-top: 5px;
 }
 
 #achievementColorInfo {
@@ -3325,7 +3339,7 @@ header #obtainiumDisplay { color: pink; }
     margin: 0;
 }
 
-#hotkeys {
+#hotkeysSubTab {
     flex-direction: column;
 }
 

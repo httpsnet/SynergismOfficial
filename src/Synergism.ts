@@ -14,13 +14,13 @@ import { calculateHypercubeBlessings } from './Hypercubes';
 import { calculateTesseractBlessings } from './Tesseracts';
 import { calculateCubeBlessings, calculateObtainium, calculateAnts, calculateRuneLevels, calculateOffline, calculateSigmoidExponential, calculateCorruptionPoints, calculateTotalCoinOwned, calculateTotalAcceleratorBoost, dailyResetCheck, calculateOfferings, calculateAcceleratorMultiplier, calculateTimeAcceleration, exitOffline, calculateGoldenQuarkGain } from './Calculate';
 import { updateTalismanAppearance, toggleTalismanBuy, updateTalismanInventory, buyTalismanEnhance, buyTalismanLevels, calculateMaxTalismanLevel } from './Talismans';
-import { toggleAscStatPerSecond, toggleChallenges, toggleauto, toggleAutoChallengeModeText, toggleShops, toggleTabs, toggleSubTab, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleAutoAscend, updateAutoChallenge, updateRuneBlessingBuyAmount, autoCubeUpgradesToggle, autoPlatonicUpgradesToggle } from './Toggles';
+import { toggleAscStatPerSecond, toggleChallenges, toggleauto, toggleAutoChallengeModeText, toggleShops, toggleAntMaxBuy, toggleAntAutoSacrifice, toggleAutoAscend, updateAutoChallenge, updateRuneBlessingBuyAmount, autoCubeUpgradesToggle, autoPlatonicUpgradesToggle, resetTabs } from './Toggles';
 import { c15RewardUpdate } from './Statistics';
 import { resetHistoryRenderAllTables } from './History';
 import { calculatePlatonicBlessings } from './PlatonicCubes';
 import { antSacrificePointsToMultiplier, autoBuyAnts, calculateCrumbToCoinExp } from './Ants';
 import { calculatetax } from './Tax';
-import { ascensionAchievementCheck, challengeachievementcheck, achievementaward, resetachievementcheck, buildingAchievementCheck } from './Achievements';
+import { maxAchievements, ascensionAchievementCheck, challengeachievementcheck, achievementaward, buildingAchievementCheck, resetAchievementPoints } from './Achievements';
 import { reset, resetrepeat, singularity, updateSingularityAchievements, updateAutoReset, updateTesseractAutoBuyAmount, updateAutoCubesOpens, updateSingularityGlobalPerks } from './Reset';
 import type { TesseractBuildings } from './Buy';
 import { buyMax, buyAccelerator, buyMultiplier, boostAccelerator, buyCrystalUpgrades, buyParticleBuilding, getReductionValue, getCost, buyRuneBonusLevels, buyTesseractBuilding, calculateTessBuildingsInBudget } from './Buy';
@@ -339,7 +339,7 @@ export const player: Player = {
         rrow3: false,
         rrow4: false
     },
-    achievements: Array(281).fill(0) as number[],
+    achievements: Array(maxAchievements + 1).fill(0) as number[],
 
     achievementPoints: 0,
 
@@ -1830,8 +1830,10 @@ const loadSynergy = async () => {
         calculateAnts();
         calculateRuneLevels();
         resetHistoryRenderAllTables();
+        challengeachievementcheck(15);
         updateSingularityAchievements();
         updateSingularityGlobalPerks();
+        resetAchievementPoints();
     }
 
     updateAchievementBG();
@@ -2867,7 +2869,7 @@ export const updateAntMultipliers = (): void => {
     if (player.currentChallenge.ascension === 15 && player.platonicUpgrades[10] > 0) {
         G['globalAntMult'] = Decimal.pow(G['globalAntMult'], 1.25)
     }
-    if (player.achievements[274] > 0) {
+    if (player.highestSingularityCount >= 1) {
         G['globalAntMult'] = G['globalAntMult'].times(4.44)
     }
 
@@ -2967,7 +2969,6 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
             if (manual) {
                 void resetConfirmation('prestige');
             } else {
-                resetachievementcheck(1);
                 reset('prestige');
             }
         }
@@ -2978,7 +2979,6 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
                 void resetConfirmation('transcend');
             }
             if (!manual) {
-                resetachievementcheck(2);
                 reset('transcension');
             }
         }
@@ -3035,7 +3035,6 @@ export const resetCheck = async (i: resetNames, manual = true, leaving = false):
                 void resetConfirmation('reincarnate');
             }
             if (!manual) {
-                resetachievementcheck(3);
                 reset('reincarnation');
             }
         }
@@ -3219,11 +3218,9 @@ export const resetConfirmation = async (i: string): Promise<void> => {
         if (player.toggles[28] === true) {
             const r = await Confirm('Prestige will reset coin upgrades, coin producers AND crystals. The first Prestige unlocks new features. Would you like to Prestige? [Toggle this message in settings.]')
             if (r === true) {
-                resetachievementcheck(1);
                 reset('prestige');
             }
         } else {
-            resetachievementcheck(1);
             reset('prestige');
         }
     }
@@ -3231,11 +3228,9 @@ export const resetConfirmation = async (i: string): Promise<void> => {
         if (player.toggles[29] === true) {
             const z = await Confirm('Transcends will reset coin and prestige upgrades, coin producers, crystal producers AND diamonds. The first Transcension unlocks new features. Would you like to Transcend? [Toggle this message in settings.]')
             if (z === true) {
-                resetachievementcheck(2);
                 reset('transcension');
             }
         } else {
-            resetachievementcheck(2);
             reset('transcension');
         }
     }
@@ -3244,11 +3239,9 @@ export const resetConfirmation = async (i: string): Promise<void> => {
             if (player.toggles[30] === true) {
                 const z = await Confirm('Reincarnating will reset EVERYTHING but in return you will get extraordinarily powerful Particles, and unlock some very strong upgrades and some new features. would you like to Reincarnate? [Disable this message in settings.]')
                 if (z === true) {
-                    resetachievementcheck(3);
                     reset('reincarnation');
                 }
             } else {
-                resetachievementcheck(3);
                 reset('reincarnation');
             }
         }
@@ -3316,6 +3309,10 @@ export const updateAll = (): void => {
     }
     if (player.cubeUpgrades[50] >= 1e5 && player.achievements[251] < 1) {
         achievementaward(251)
+    }
+
+    if (player.achievements[252] === 0 && player.runelevels[6] > 0) {
+        achievementaward(252)
     }
 
     //Autobuy "Upgrades" Tab
@@ -3818,7 +3815,6 @@ const tack = (dt: number) => {
     //Auto Prestige. === 1 indicates amount, === 2 indicates time.
     if (player.resettoggle1 === 1 || player.resettoggle1 === 0) {
         if (player.toggles[15] === true && player.achievements[43] === 1 && G['prestigePointGain'].gte(player.prestigePoints.times(Decimal.pow(10, player.prestigeamount))) && player.coinsThisPrestige.gte(1e16)) {
-            resetachievementcheck(1);
             reset('prestige', true)
         }
     }
@@ -3826,14 +3822,12 @@ const tack = (dt: number) => {
         G['autoResetTimers'].prestige += dt;
         const time = Math.max(0.01, player.prestigeamount);
         if (player.toggles[15] === true && player.achievements[43] === 1 && G['autoResetTimers'].prestige >= time && player.coinsThisPrestige.gte(1e16)) {
-            resetachievementcheck(1);
             reset('prestige', true);
         }
     }
 
     if (player.resettoggle2 === 1 || player.resettoggle2 === 0) {
         if (player.toggles[21] === true && player.upgrades[89] === 1 && G['transcendPointGain'].gte(player.transcendPoints.times(Decimal.pow(10, player.transcendamount))) && player.coinsThisTranscension.gte(1e100) && player.currentChallenge.transcension === 0) {
-            resetachievementcheck(2);
             reset('transcension', true);
         }
     }
@@ -3841,7 +3835,6 @@ const tack = (dt: number) => {
         G['autoResetTimers'].transcension += dt
         const time = Math.max(0.01, player.transcendamount);
         if (player.toggles[21] === true && player.upgrades[89] === 1 && G['autoResetTimers'].transcension >= time && player.coinsThisTranscension.gte(1e100) && player.currentChallenge.transcension === 0) {
-            resetachievementcheck(2);
             reset('transcension', true);
         }
     }
@@ -3851,13 +3844,11 @@ const tack = (dt: number) => {
         if (player.resettoggle3 === 2) {
             const time = Math.max(0.01, player.reincarnationamount);
             if (player.toggles[27] === true && player.researches[46] > 0.5 && player.transcendShards.gte('1e300') && G['autoResetTimers'].reincarnation >= time && player.currentChallenge.transcension === 0 && player.currentChallenge.reincarnation === 0) {
-                resetachievementcheck(3);
                 reset('reincarnation', true);
             }
         }
         if (player.resettoggle3 === 1 || player.resettoggle3 === 0) {
             if (player.toggles[27] === true && player.researches[46] > 0.5 && G['reincarnationPointGain'].gte(player.reincarnationPoints.add(1).times(Decimal.pow(10, player.reincarnationamount))) && player.transcendShards.gte(1e300) && player.currentChallenge.transcension === 0 && player.currentChallenge.reincarnation === 0) {
-                resetachievementcheck(3);
                 reset('reincarnation', true)
             }
         }
@@ -3869,16 +3860,6 @@ export const synergismHotkeys = (event: KeyboardEvent, key: string): void => {
     if (player.toggles[40] === false) {
         return;
     }
-
-    const types = {
-        coin: 'Coin',
-        diamond: 'Diamonds',
-        mythos: 'Mythos',
-        particle: 'Particles',
-        tesseract: 'Tesseracts'
-    } as const;
-
-    const type = types[G['buildingSubTab']];
 
     if (event.shiftKey) {
         let num = Number(key) - 1;
@@ -3910,6 +3891,16 @@ export const synergismHotkeys = (event: KeyboardEvent, key: string): void => {
         case '5': {
             const num = Number(key) as OneToFive;
 
+            const types = {
+                coin: 'Coin',
+                diamond: 'Diamonds',
+                mythos: 'Mythos',
+                particle: 'Particles',
+                tesseract: 'Tesseracts'
+            } as const;
+
+            const type = types[G['currentSubTab'] as keyof typeof types];
+
             if (G['currentTab'] === 'buildings') {
                 if (type === 'Particles') {
                     buyParticleBuilding(num);
@@ -3923,13 +3914,13 @@ export const synergismHotkeys = (event: KeyboardEvent, key: string): void => {
                 categoryUpgrades(num, false);
             }
             if (G['currentTab'] === 'runes') {
-                if (G['runescreen'] === 'runes') {
+                if (G['currentSubTab'] === 'runes') {
                     redeemShards(num)
                 }
-                if (G['runescreen'] === 'blessings') {
+                if (G['currentSubTab'] === 'blessings') {
                     buyRuneBonusLevels('Blessings', num)
                 }
-                if (G['runescreen'] === 'spirits') {
+                if (G['currentSubTab'] === 'spirits') {
                     buyRuneBonusLevels('Spirits', num)
                 }
             }
@@ -3944,7 +3935,7 @@ export const synergismHotkeys = (event: KeyboardEvent, key: string): void => {
             if (G['currentTab'] === 'upgrades') {
                 categoryUpgrades(6, false);
             }
-            if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'diamond') {
+            if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'diamond') {
                 buyCrystalUpgrades(1)
             }
             if (G['currentTab'] === 'challenges' && player.reincarnationCount > 0) {
@@ -3953,7 +3944,7 @@ export const synergismHotkeys = (event: KeyboardEvent, key: string): void => {
             }
             break;
         case '7':
-            if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'diamond') {
+            if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'diamond') {
                 buyCrystalUpgrades(2)
             }
             if (G['currentTab'] === 'challenges' && player.achievements[113] === 1) {
@@ -3962,7 +3953,7 @@ export const synergismHotkeys = (event: KeyboardEvent, key: string): void => {
             }
             break;
         case '8':
-            if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'diamond') {
+            if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'diamond') {
                 buyCrystalUpgrades(3)
             }
             if (G['currentTab'] === 'challenges' && player.achievements[120] === 1) {
@@ -3971,7 +3962,7 @@ export const synergismHotkeys = (event: KeyboardEvent, key: string): void => {
             }
             break;
         case '9':
-            if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'diamond') {
+            if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'diamond') {
                 buyCrystalUpgrades(4)
             }
             if (G['currentTab'] === 'challenges' && player.achievements[127] === 1) {
@@ -3980,7 +3971,7 @@ export const synergismHotkeys = (event: KeyboardEvent, key: string): void => {
             }
             break;
         case '0':
-            if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'diamond') {
+            if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'diamond') {
                 buyCrystalUpgrades(5)
             }
             if (G['currentTab'] === 'challenges' && player.achievements[134] === 1) {
@@ -4066,14 +4057,8 @@ export const reloadShit = async (reset = false) => {
     htmlInserts();
     createTimer();
 
-    //Reset Displays
-    toggleTabs('buildings');
-    toggleSubTab(1, 0);
-    toggleSubTab(4, 0); // Set 'runes' subtab back to 'runes' tab
-    toggleSubTab(8, 0); // Set 'cube tribues' subtab back to 'cubes' tab
-    toggleSubTab(9, 0); // set 'corruption main'
-    toggleSubTab(10, 0); // set 'singularity main'
-    toggleSubTab(-1, 0); // set 'statistics main'
+    // Reset Displays
+    resetTabs();
 
     dailyResetCheck();
     setInterval(dailyResetCheck, 30000);

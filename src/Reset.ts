@@ -11,7 +11,7 @@ import { upgradeupdate } from './Upgrades';
 import { Globals as G } from './Variables';
 import Decimal from 'break_infinity.js';
 import { getElementById } from './Utility';
-import { achievementaward, ascensionAchievementCheck, challengeachievementcheck } from './Achievements';
+import { achievementaward, resetachievementcheck, ascensionAchievementCheck, challengeachievementcheck } from './Achievements';
 import { buyResearch, updateResearchBG } from './Research';
 import { calculateHypercubeBlessings } from './Hypercubes';
 import type {
@@ -26,7 +26,7 @@ import { Synergism } from './Events';
 import type { Player, resetNames, OneToFive } from './types/Synergism';
 import { updateClassList } from './Utility';
 import { corrChallengeMinimum, corruptionStatsUpdate, maxCorruptionLevel } from './Corruptions';
-import { toggleAutoChallengeModeText, toggleSubTab, toggleTabs } from './Toggles';
+import { toggleAutoChallengeModeText, resetTabs } from './Toggles';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { WowCubes } from './CubeExperimental';
 import { importSynergism } from './ImportExport';
@@ -267,6 +267,9 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
     // Handle adding history entries before actually resetting data, to ensure optimal accuracy.
     resetAddHistoryEntry(input, from);
 
+    // Check your achievements just before the reset
+    resetachievementcheck(1);
+
     resetofferings(input)
     resetUpgrades(1);
     player.coins = new Decimal('102');
@@ -333,8 +336,11 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
 
     G['generatorPower'] = new Decimal(1);
 
-    const types = ['transcension', 'transcensionChallenge', 'reincarnation', 'reincarnationChallenge', 'ascension', 'ascensionChallenge'];
+    const types = ['transcension', 'transcensionChallenge', 'reincarnation', 'reincarnationChallenge', 'ascension', 'ascensionChallenge', 'singularity'];
     if (types.includes(input)) {
+        // Check your achievements just before the reset
+        resetachievementcheck(2);
+
         resetUpgrades(2);
         player.coinsThisTranscension = new Decimal('100');
         player.firstOwnedDiamonds = 0;
@@ -416,9 +422,12 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         }
     }
 
-    if (input === 'reincarnation' || input === 'reincarnationChallenge' || input === 'ascension' || input === 'ascensionChallenge' || input == 'singularity') {
+    if (input === 'reincarnation' || input === 'reincarnationChallenge' || input === 'ascension' || input === 'ascensionChallenge' || input === 'singularity') {
+        // Check your achievements just before the reset
+        resetachievementcheck(3);
+
         // Fail safe if for some reason ascension achievement isn't awarded. hacky solution but am too tired to fix right now
-        if (player.ascensionCount > 0 && player.achievements[183] < 1) {
+        if (player.ascensionCount > 0) {
             ascensionAchievementCheck(1);
         }
 
@@ -797,35 +806,20 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
 
 /**
  *
- * Computes which achievements in 274-280 are achievable given current singularity number
+ * Computes which achievements in 281-287 are achievable given current singularity number
  */
 export const updateSingularityAchievements = (): void => {
-    if (player.highestSingularityCount >= 1) {
-        achievementaward(274)
-    }
-    if (player.highestSingularityCount >= 2) {
-        achievementaward(275)
-    }
-    if (player.highestSingularityCount >= 3) {
-        achievementaward(276)
-    }
-    if (player.highestSingularityCount >= 4) {
-        achievementaward(277)
-    }
-    if (player.highestSingularityCount >= 5) {
-        achievementaward(278)
-    }
-    if (player.highestSingularityCount >= 7) {
-        achievementaward(279)
-    }
-    if (player.highestSingularityCount >= 10) {
-        achievementaward(280)
+    const bestSingularity = [1, 2, 3, 4, 5, 7, 10, 15, 25, 35, 50, 65, 80, 100, 125, 150, 175, 200, 225, 250, 300];
+    for (let i = 0; i < bestSingularity.length; i++) {
+        if (player.highestSingularityCount >= bestSingularity[i] && player.achievements[281 + i] < 1) {
+            achievementaward(281 + i);
+        }
     }
 }
 
 export const updateSingularityMilestoneAwards = (singularityReset = true): void => {
     // 1 transcension, 1001 mythos
-    if (player.achievements[275] > 0) { // Singularity 2
+    if (player.highestSingularityCount >= 2) {
         if (singularityReset) {
             player.prestigeCount = 1;
             player.transcendCount = 1;
@@ -845,7 +839,7 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
         achievementaward(36); // 1 prestige
         achievementaward(43); // 1 transcension
     }
-    if (player.achievements[276] > 0) { // Singularity 3
+    if (player.highestSingularityCount >= 3) {
         if (player.currentChallenge.ascension !== 12) {
             if (singularityReset) {
                 player.reincarnationCount = 1;
@@ -876,7 +870,7 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
         achievementaward(87)
 
     }
-    if (player.achievements[277] > 0) { // Singularity 4
+    if (player.highestSingularityCount >= 4) {
         if (player.currentChallenge.ascension !== 14) {
             player.researchPoints = Math.floor(500 * calculateSingularityDebuff('Offering') * calculateSingularityDebuff('Researches'))
         }
@@ -887,15 +881,14 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
         player.highestchallengecompletions[6] = 1;
         achievementaward(113);
     }
-    const shopItemPerk_5 = ['offeringAuto', 'offeringEX', 'obtainiumAuto', 'obtainiumEX', 'antSpeed', 'cashGrab'] as const;
-    const perk_5 = player.achievements[278] > 0;
-    if (perk_5 && singularityReset) { // Singularity 5
+    if (player.highestSingularityCount >= 5 && singularityReset) {
+        const shopItemPerk_5 = ['offeringAuto', 'offeringEX', 'obtainiumAuto', 'obtainiumEX', 'antSpeed', 'cashGrab'] as const;
         for (const key of shopItemPerk_5) {
             player.shopUpgrades[key] = 10;
         }
         player.cubeUpgrades[7] = 1;
     }
-    if (player.achievements[279] > 0) { // Singularity 7
+    if (player.highestSingularityCount >= 7) {
         player.challengecompletions[7] = 1;
         player.highestchallengecompletions[7] = 1;
         achievementaward(120);
@@ -903,7 +896,7 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
             player.reincarnationPoints = new Decimal('1e100');
         }
     }
-    if (player.achievements[280] > 0) { // Singularity 10
+    if (player.highestSingularityCount >= 10) {
         achievementaward(124);
         achievementaward(127);
         player.challengecompletions[8] = 1;
@@ -983,7 +976,7 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
 // so that we can call on save load to fix game state
 export const updateSingularityGlobalPerks = () => {
 
-    const perk_5 = player.achievements[278] > 0;
+    const perk_5 = player.highestSingularityCount >= 5;
     const shopItemPerk_5 = ['offeringAuto', 'offeringEX', 'obtainiumAuto', 'obtainiumEX', 'antSpeed', 'cashGrab'] as const;
     for (const key of shopItemPerk_5) {
         shopData[key].refundMinimumLevel = perk_5 ? 10 : key.endsWith('Auto') ? 1 : 0;
@@ -1061,13 +1054,7 @@ export const singularity = async (setSingNumber = -1): Promise<void> => {
     }) as Player;
 
     // Reset Displays
-    toggleTabs('buildings');
-    toggleSubTab(1, 0);
-    toggleSubTab(4, 0); // Set 'runes' subtab back to 'runes' tab
-    toggleSubTab(8, 0); // Set 'cube tribues' subtab back to 'cubes' tab
-    toggleSubTab(9, 0); // set 'corruption main'
-    toggleSubTab(10, 0); // set 'singularity main'
-    toggleSubTab(-1, 0); // set 'statistics main'
+    resetTabs();
 
     hold.history.singularity = player.history.singularity;
     hold.totalQuarksEver = player.totalQuarksEver
@@ -1169,6 +1156,9 @@ export const singularity = async (setSingNumber = -1): Promise<void> => {
         }
     }
 
+    // Save some used code
+    hold.achievements[243] = player.achievements[243];
+    hold.achievements[244] = player.achievements[244];
     const saveCode42 = player.codes.get(42) ?? false
     const saveCode43 = player.codes.get(43) ?? false
     const saveCode44 = player.codes.get(44) ?? false
@@ -1185,7 +1175,6 @@ export const singularity = async (setSingNumber = -1): Promise<void> => {
     await importSynergism(btoa(JSON.stringify(hold)), true);
     //Techically possible to import game during reset. But that will only "hurt" that imported save
 
-    // TODO: Do not enable data that has never used an event code
     player.codes.set(39, true);
     player.codes.set(40, true);
     player.codes.set(41, true);

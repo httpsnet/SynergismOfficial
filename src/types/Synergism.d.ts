@@ -711,6 +711,7 @@ export interface GlobalVariables {
         | 'cubes'
         | 'traits'
         | 'singularity',
+    currentSubTab: string
 
     researchfiller1: string
     researchfiller2: string
@@ -797,10 +798,6 @@ export interface GlobalVariables {
     talisman6Power: number
     talisman7Quarks: number
 
-    runescreen: string
-    settingscreen: string
-    singularityscreen: string
-
     talismanResourceObtainiumCosts: number[]
     talismanResourceOfferingCosts: number[]
 
@@ -841,7 +838,6 @@ export interface GlobalVariables {
 
     prevReductionValue: number
 
-    buildingSubTab: BuildingSubtab
     //number000 of each before Diminishing Returns
     blessingbase: [null, ...number[]]
     blessingDRPower: [null, ...number[]]
@@ -971,13 +967,6 @@ export type cubeNames =
     | "hypercubes"
     | "platonics"
     | "hepteracts"
-
-export type BuildingSubtab =
-    | "coin"
-    | "diamond"
-    | "mythos"
-    | "particle"
-    | "tesseract"
 
 export type ZeroToFour = 0 | 1 | 2 | 3 | 4;
 

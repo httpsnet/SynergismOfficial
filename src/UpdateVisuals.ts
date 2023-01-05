@@ -24,7 +24,7 @@ export const visualUpdateBuildings = () => {
     }
 
     //When you're in Building --> Coin, update these.
-    if (G['buildingSubTab'] === 'coin') {
+    if (G['currentSubTab'] === 'coin') {
         // For the display of Coin Buildings
         const upper = ['produceFirst', 'produceSecond', 'produceThird', 'produceFourth', 'produceFifth'] as const;
         const names = [null, 'Workers', 'Investments', 'Printers', 'Coin Mints', 'Alchemies']
@@ -66,7 +66,7 @@ export const visualUpdateBuildings = () => {
             `Due to your excessive wealth, coin production is divided by ${format(G['taxdivisor'], 2)} to pay taxes! ${warning}`
     }
 
-    if (G['buildingSubTab'] === 'diamond') {
+    if (G['currentSubTab'] === 'diamond') {
         // For the display of Diamond Buildings
         const upper = ['produceFirstDiamonds', 'produceSecondDiamonds', 'produceThirdDiamonds', 'produceFourthDiamonds', 'produceFifthDiamonds'] as const;
         const names = [null, 'Refineries', 'Coal Plants', 'Coal Rigs', 'Pickaxes', 'Pandoras Boxes']
@@ -92,7 +92,7 @@ export const visualUpdateBuildings = () => {
         }
     }
 
-    if (G['buildingSubTab'] === 'mythos') {
+    if (G['currentSubTab'] === 'mythos') {
         // For the display of Mythos Buildings
         const upper = ['produceFirstMythos', 'produceSecondMythos', 'produceThirdMythos', 'produceFourthMythos', 'produceFifthMythos'] as const;
         const names = [null, 'Augments', 'Enchantments', 'Wizards', 'Oracles', 'Grandmasters']
@@ -117,7 +117,7 @@ export const visualUpdateBuildings = () => {
         }
     }
 
-    if (G['buildingSubTab'] === 'particle') {
+    if (G['currentSubTab'] === 'particle') {
 
         // For the display of Particle Buildings
         const upper = ['FirstParticles', 'SecondParticles', 'ThirdParticles', 'FourthParticles', 'FifthParticles'] as const;
@@ -148,7 +148,7 @@ export const visualUpdateBuildings = () => {
         }
     }
 
-    if (G['buildingSubTab'] === 'tesseract') {
+    if (G['currentSubTab'] === 'tesseract') {
         const names = [null, 'Dot', 'Vector', 'Three-Space', 'Bent Time', 'Hilbert Space']
         const perSecNames = [null, '+Constant/sec', 'Dot/sec', 'Vector/sec', 'Three-Space/sec', 'Bent Time/sec']
         for (let i = 1; i <= 5; i++) {
@@ -181,7 +181,7 @@ export const visualUpdateRunes = () => {
     if (G['currentTab'] !== 'runes') {
         return
     }
-    if (G['runescreen'] === 'runes') { //Placeholder and place work similarly to buildings, except for the specific Talismans.
+    if (G['currentSubTab'] === 'runes') { //Placeholder and place work similarly to buildings, except for the specific Talismans.
 
         const talismans = [
             'rune1Talisman',
@@ -233,14 +233,14 @@ export const visualUpdateRunes = () => {
         DOMCacheGetOrSet('offeringRecycleInfo').textContent = `You have ${format((1 - 1 / calculateRecycle) * 100, 2, true)}% chance of recycling your offerings. This multiplies EXP gain by ${format(calculateRecycle, 2, true)}!`
     }
 
-    if (G['runescreen'] === 'talismans') {
+    if (G['currentSubTab'] === 'talismans') {
         for (let i = 0; i < 7; i++) {
             const maxTalismanLevel = calculateMaxTalismanLevel(i);
             DOMCacheGetOrSet(`talisman${i + 1}level`).textContent = (player.ascensionCount > 0 ? '' : 'Level ') + format(player.talismanLevels[i]) + '/' + format(maxTalismanLevel)
         }
     }
 
-    if (G['runescreen'] === 'blessings') {
+    if (G['currentSubTab'] === 'blessings') {
         const blessingMultiplierArray = [0, 8, 10, 6.66, 2, 1]
         let t = 0;
         for (let i = 1; i <= 5; i++) {
@@ -259,7 +259,7 @@ export const visualUpdateRunes = () => {
         }
     }
 
-    if (G['runescreen'] === 'spirits') {
+    if (G['currentSubTab'] === 'spirits') {
         const spiritMultiplierArray = [0, 1, 1, 20, 1, 100]
         const subtract = [0, 0, 0, 1, 0, 0]
         for (let i = 1; i <= 5; i++) {
@@ -520,7 +520,7 @@ export const visualUpdateSettings = () => {
         return
     }
 
-    if (player.subtabNumber === 0) {
+    if (G['currentSubTab'] === 'settingsubtab') {
         DOMCacheGetOrSet('saveString').textContent =
             `Currently: ${player.saveString.replace('$VERSION$', 'v' + version)}`;
 
@@ -540,7 +540,7 @@ export const visualUpdateSettings = () => {
         DOMCacheGetOrSet('goldenQuarkTimerAmount').textContent =
             `Golden Quarks on export: ${format(Math.floor(player.goldenQuarksTimer * +player.singularityUpgrades.goldenQuarks3.getEffect().bonus/ 3600) * goldenQuarkMultiplier, 2)} [Max ${format(Math.floor(168 * +player.singularityUpgrades.goldenQuarks3.getEffect().bonus * goldenQuarkMultiplier))}]`
     }
-    if (player.subtabNumber === 2) {
+    if (G['currentSubTab'] === 'statisticsSubTab') {
         loadStatisticsUpdate();
     }
 }
@@ -549,7 +549,7 @@ export const visualUpdateSingularity = () => {
     if (G['currentTab'] !== 'singularity') {
         return
     }
-    if (player.subtabNumber === 0) {
+    if (G['currentSubTab'] === 'shop') {
         DOMCacheGetOrSet('goldenQuarkamount').textContent = 'You have ' + format(player.goldenQuarks, 0, true) + ' Golden Quarks!'
 
         const keys = Object.keys(player.singularityUpgrades) as (keyof Player['singularityUpgrades'])[];

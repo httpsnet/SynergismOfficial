@@ -2,7 +2,7 @@ import { player, format, formatTimeShort /*formatTimeShort*/ } from './Synergism
 import { Globals as G } from './Variables';
 import Decimal from 'break_infinity.js';
 import { CalcCorruptionStuff, calculateAscensionAcceleration, calculateTimeAcceleration } from './Calculate';
-import { achievementaward, totalachievementpoints } from './Achievements';
+import { maxAchievements, resetAchievementPoints } from './Achievements';
 import { displayRuneInformation } from './Runes';
 import { autoResearchEnabled } from './Research';
 import { visualUpdateBuildings, visualUpdateUpgrades, visualUpdateAchievements, visualUpdateRunes, visualUpdateChallenges, visualUpdateResearch, visualUpdateSettings, visualUpdateShop, visualUpdateSingularity, visualUpdateAnts, visualUpdateCubes, visualUpdateCorruptions } from './UpdateVisuals';
@@ -572,7 +572,7 @@ export const hideStuff = () => {
         DOMCacheGetOrSet('statistics').style.display = 'block'
         DOMCacheGetOrSet('achievementstab').style.backgroundColor = 'white'
         DOMCacheGetOrSet('achievementstab').style.color = 'black'
-        DOMCacheGetOrSet('achievementprogress').textContent = 'Achievement Points: ' + format(player.achievementPoints, 0, true) + '/' + format(totalachievementpoints, 0, true) + ' [' + (100 * player.achievementPoints / totalachievementpoints).toPrecision(4) + '%]'
+        resetAchievementPoints();
     }
     if (G['currentTab'] === 'runes') {
         DOMCacheGetOrSet('runes').style.display = 'block'
@@ -689,7 +689,7 @@ export const buttoncolorchange = () => {
         }
     }
 
-    if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'coin') {
+    if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'coin') {
         const a = DOMCacheGetOrSet('buycoin1');
         const b = DOMCacheGetOrSet('buycoin2');
         const c = DOMCacheGetOrSet('buycoin3');
@@ -724,7 +724,7 @@ export const buttoncolorchange = () => {
             : h.classList.remove('buildingPurchaseBtnAvailable');
     }
 
-    if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'diamond') {
+    if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'diamond') {
         const a = DOMCacheGetOrSet('buydiamond1');
         const b = DOMCacheGetOrSet('buydiamond2');
         const c = DOMCacheGetOrSet('buydiamond3');
@@ -764,14 +764,14 @@ export const buttoncolorchange = () => {
     }
 
     if (G['currentTab'] === 'runes') {
-        if (G['runescreen'] === 'runes') {
+        if (G['currentSubTab'] === 'runes') {
             for (let i = 1; i <= 7; i++) {
                 player.runeshards > 0.5
                     ? DOMCacheGetOrSet(`activaterune${i}`).classList.add('runeButtonAvailable')
                     : DOMCacheGetOrSet(`activaterune${i}`).classList.remove('runeButtonAvailable')
             }
         }
-        if (G['runescreen'] === 'talismans') {
+        if (G['currentSubTab'] === 'talismans') {
             const a = DOMCacheGetOrSet('buyTalismanItem1');
             const b = DOMCacheGetOrSet('buyTalismanItem2');
             const c = DOMCacheGetOrSet('buyTalismanItem3');
@@ -788,7 +788,7 @@ export const buttoncolorchange = () => {
         }
     }
 
-    if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'mythos') {
+    if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'mythos') {
         for (let i = 1; i <= 5; i++) {
             const toggle = player.toggles[i + 15];
             const mythos = player[`${G['ordinals'][i - 1 as ZeroToFour]}CostMythos` as const];
@@ -798,7 +798,7 @@ export const buttoncolorchange = () => {
         }
     }
 
-    if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'particle') {
+    if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'particle') {
         for (let i = 1; i <= 5; i++) {
             const costParticles = player[`${G['ordinals'][i - 1 as ZeroToFour]}CostParticles` as const];
             player.reincarnationPoints.gte(costParticles)
@@ -807,7 +807,7 @@ export const buttoncolorchange = () => {
         }
     }
 
-    if (G['currentTab'] === 'buildings' && G['buildingSubTab'] === 'tesseract') {
+    if (G['currentTab'] === 'buildings' && G['currentSubTab'] === 'tesseract') {
         for (let i = 1; i <= 5; i++) {
             const ascendBuilding = player[`ascendBuilding${i as OneToFive}` as const]['cost'];
             Number(player.wowTesseracts) >= ascendBuilding
@@ -886,9 +886,9 @@ export const updateChallengeLevel = (k: number) => {
 }
 
 export const updateAchievementBG = () => {
-    //When loading/importing, the game needs to correctly update achievement backgrounds.
-    for (let i = 1; i <= 280; i++) { //Initiates by setting all to default
-        DOMCacheGetOrSet('ach' + i).style.backgroundColor = ''
+    // When loading/importing, the game needs to correctly update achievement backgrounds.
+    for (let i = 1; i <= maxAchievements; i++) { //Initiates by setting all to default
+        DOMCacheGetOrSet(`ach${i}`).style.backgroundColor = ''
     }
     const fixDisplay1 = document.getElementsByClassName('purpleach') as HTMLCollectionOf<HTMLElement>;
     const fixDisplay2 = document.getElementsByClassName('redach') as HTMLCollectionOf<HTMLElement>;
@@ -898,9 +898,10 @@ export const updateAchievementBG = () => {
     for (let i = 0; i < fixDisplay2.length; i++) {
         fixDisplay2[i].style.backgroundColor = 'maroon' //Sets the appropriate achs to maroon (red)
     }
-    for (let i = 1; i < player.achievements.length; i++) {
+    // This sets all completed ach to green
+    for (let i = 1; i <= maxAchievements; i++) {
         if (player.achievements[i] > 0.5) {
-            achievementaward(i) //This sets all completed ach to green
+            DOMCacheGetOrSet(`ach${i}`).style.backgroundColor = 'green'
         }
     }
 }

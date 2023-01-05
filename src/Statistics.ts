@@ -143,7 +143,7 @@ export const loadQuarkMultiplier = () => {
     DOMCacheGetOrSet('sGQM11').textContent = 'x' + format(1.1 + 0.15 / 75 * calculateEffectiveIALevel(), 3, true) //IA Rune
     DOMCacheGetOrSet('sGQM12').textContent = 'x' + format(player.challenge15Exponent >= 1e15 ? 1 + 5/10000 * hepteractEffective('quark') : 1, 3, true) //Quark Hepteract
     DOMCacheGetOrSet('sGQM13').textContent = 'x' + format(calculateQuarkMultFromPowder(), 3, true) //Powder
-    DOMCacheGetOrSet('sGQM14').textContent = 'x' + format(1 + player.achievements[266] * Math.min(0.1, (player.ascensionCount) / 1e16), 3, true) // Achievement 266 [Max: 10% at 1Qa Ascensions]
+    DOMCacheGetOrSet('sGQM14').textContent = 'x' + format(1 + player.achievements[266] * 0.1 * Math.min(1, player.ascensionCount / 1e15), 3, true) // Achievement 266
     DOMCacheGetOrSet('sGQM15').textContent = 'x' + format(1 + player.singularityCount / 10, 3, true) //Singularity
     DOMCacheGetOrSet('sGQM16').textContent = 'x' + format(calculateSingularityQuarkMilestoneMultiplier(), 3, true) // Singularity Milestones
     DOMCacheGetOrSet('sGQM17').textContent = 'x' + format(1 + 0.10 * player.cubeUpgrades[53] / 100, 3, true) // Cube Upgrade 6x3 (Cx3)
@@ -798,10 +798,10 @@ export const gameStages = (): Stage[] => {
         {stage: 17, tier: 5, name: 'beta-1e15-expo', unlocked: player.challenge15Exponent >= 1e15, reset: player.achievements[183] === 1},
         {stage: 18, tier: 5, name: '1e15-expo-omega', unlocked: player.platonicUpgrades[15] > 0, reset: player.achievements[183] === 1},
         {stage: 19, tier: 5, name: 'omega-singularity', unlocked: player.singularityCount > 0 && player.runelevels[6] > 0, reset: player.achievements[183] === 1},
-        {stage: 20, tier: 6, name: 'singularity-liquidation', unlocked: player.singularityUpgrades.wowPass2.level > 0, reset: player.highestSingularityCount > 0},
-        {stage: 21, tier: 6, name: 'liquidation-onemind', unlocked: player.singularityUpgrades.oneMind.level > 0, reset: player.highestSingularityCount > 0},
-        {stage: 22, tier: 6, name: 'onemind-bbshards', unlocked: player.singularityUpgrades.offeringAutomatic.level > 0, reset: player.highestSingularityCount > 0},
-        {stage: 23, tier: 6, name: 'bbshards-pen', unlocked: player.singularityUpgrades.ultimatePen.level > 0, reset: player.highestSingularityCount > 0},
+        {stage: 20, tier: 6, name: 'singularity-liquidation', unlocked: Boolean(player.singularityUpgrades.wowPass2.getEffect().bonus), reset: player.highestSingularityCount > 0},
+        {stage: 21, tier: 6, name: 'liquidation-onemind', unlocked: Boolean(player.singularityUpgrades.oneMind.getEffect().bonus), reset: player.highestSingularityCount > 0},
+        {stage: 22, tier: 6, name: 'onemind-bbshards', unlocked: Boolean(player.singularityUpgrades.blueberries.getEffect().bonus > 0), reset: player.highestSingularityCount > 0},
+        {stage: 23, tier: 6, name: 'bbshards-pen', unlocked: Boolean(player.singularityUpgrades.ultimatePen.getEffect().bonus), reset: player.highestSingularityCount > 0},
         {stage: 24, tier: 6, name: 'pen', unlocked: false, reset: player.highestSingularityCount > 0}
     ];
     return stages;

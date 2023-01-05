@@ -196,6 +196,7 @@ export const Globals: GlobalVariables = {
     uFifteenMulti: new Decimal(1),
     tuSevenMulti: 1,
     currentTab: 'buildings',
+    currentSubTab: '',
 
     researchfiller1: 'Hover over the grid to get details about researches!',
     researchfiller2: 'Level: ',
@@ -282,10 +283,6 @@ export const Globals: GlobalVariables = {
     talisman6Power: 0,
     talisman7Quarks: 0,
 
-    runescreen: 'runes',
-    settingscreen: 'settings',
-    singularityscreen: 'shop',
-
     talismanResourceObtainiumCosts: [1e13, 1e14, 1e16, 1e18, 1e20, 1e22, 1e24],
     talismanResourceOfferingCosts: [100, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9],
 
@@ -327,7 +324,6 @@ export const Globals: GlobalVariables = {
 
     prevReductionValue: -1,
 
-    buildingSubTab: 'coin',
     //1,000 of each before Diminishing Returns
     blessingbase: [null, 1 / 500, 1 / 5000, 1 / 2000, 1 / 750, 1 / 200, 1 / 10000, 1 / 5000, 1 / 10, 1 / 10000, 1 / 1000],
     blessingDRPower: [null, 1 / 3, 1 / 3, 2 / 3, 1 / 2, 2 / 3, 2, 1 / 3, 1 / 3, 1 / 16, 1 / 16],

@@ -17,6 +17,7 @@ import type { IOcteractData } from './Octeracts';
 import { octeractData, OcteractUpgrade } from './Octeracts';
 import type { ISingularityChallengeData} from './SingularityChallenges';
 import { SingularityChallenge, singularityChallengeData } from './SingularityChallenges';
+import { maxAchievements } from './Achievements'
 
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
@@ -587,7 +588,7 @@ export const checkVariablesOnLoad = (data: PlayerSave) => {
         player.shopUpgrades.constantEX = 0;
     }
 
-    while (player.achievements[280] === undefined) {
+    while (player.achievements[maxAchievements] === undefined) {
         player.achievements.push(0)
     }
 

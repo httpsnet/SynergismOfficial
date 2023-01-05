@@ -1356,10 +1356,10 @@ export const calculateHepteractMultiplier = (score = -1) => {
         1 + 1.5 * player.shopUpgrades.seasonPass3 / 100,
         // Achievement 258 Bonus
         1 + Math.min(0.15, 0.6/100 * Math.log10(score + 1)) * player.achievements[258],
-        // Achievement 264 Bonus [Max: 8T Asc]
-        1 + Math.min(0.4, player.ascensionCount / 2e13) * player.achievements[264],
-        // Achievement 265 Bonus [Max: 160T Asc]
-        1 + Math.min(0.2, player.ascensionCount / 8e14) * player.achievements[265],
+        // Achievement 264 Bonus
+        1 + 0.4 * Math.min(1, player.ascensionCount / 1e13) * player.achievements[264],
+        // Achievement 265 Bonus
+        1 + 0.2 * Math.min(1, player.ascensionCount / 1e14) * player.achievements[265],
         // Achievement 270 Bonus
         Math.min(2, (1 + 1/1000000 * Decimal.log(player.ascendShards.add(1), 10) * player.achievements[270]))
         // Total Hepteract Multipliers: 7
@@ -1590,8 +1590,8 @@ export const calculateQuarkMultiplier = () => {
     if (player.overfluxPowder > 0) { // Overflux Powder [Max: 10% at 10,000]
         multiplier *= calculateQuarkMultFromPowder();
     }
-    if (player.achievements[266] > 0) { // Achievement 266 [Max: 10% at 1Qa Ascensions]
-        multiplier *= (1 + Math.min(0.1, (player.ascensionCount) / 1e16))
+    if (player.achievements[266] > 0) { // Achievement 266
+        multiplier *= (1 + 0.1 * Math.min(1, player.ascensionCount / 1e15))
     }
     if (player.singularityCount > 0) { // Singularity Modifier
         multiplier *= (1 + player.singularityCount / 10)
