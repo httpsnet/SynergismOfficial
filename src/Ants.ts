@@ -4,7 +4,7 @@ import { Globals as G } from './Variables';
 
 import type { DecimalSource } from 'break_infinity.js';
 import Decimal from 'break_infinity.js';
-import { achievementaward } from './Achievements';
+import { achievementaward, achievementBonus } from './Achievements';
 import { Confirm, revealStuff } from './UpdateHTML';
 import { updateTalismanInventory } from './Talismans';
 import { buyResearch } from './Research';
@@ -302,11 +302,9 @@ export const antUpgradeDescription = (i: number) => {
 //}
 
 export const antSacrificePointsToMultiplier = (points: number) => {
-    let multiplier = Math.pow(1 + points / 5000, 2)
-    multiplier *= (1 + 0.2 * Math.log(1 + points) / Math.log(10))
-    if (player.achievements[174] > 0) {
-        multiplier *= (1 + 0.4 * Math.log(1 + points) / Math.log(10))
-    }
+    let multiplier = Math.pow(1 + points / 5000, 2);
+    multiplier *= 1 + 0.2 * Math.log10(1 + points);
+    multiplier *= 1 + achievementBonus(174, points);
     return Math.min(1e300, multiplier);
 }
 
@@ -347,11 +345,11 @@ export const sacrificeAnts = async (auto = false) => {
             const antSacrificePointsBefore = player.antSacrificePoints;
 
             const sacRewards = calculateAntSacrificeRewards();
-            player.antSacrificePoints += sacRewards.antSacrificePoints;
-            player.runeshards += sacRewards.offerings;
+            player.antSacrificePoints = Math.min(1e300, player.antSacrificePoints + sacRewards.antSacrificePoints);
+            player.runeshards = Math.min(1e300, player.runeshards + sacRewards.offerings);
 
             if (player.currentChallenge.ascension !== 14) {
-                player.researchPoints += sacRewards.obtainium;
+                player.researchPoints = Math.min(1e300, player.researchPoints + sacRewards.obtainium);
             }
 
             const historyEntry: ResetHistoryEntryAntSacrifice = {

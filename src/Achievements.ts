@@ -470,7 +470,7 @@ export const areward = (i: number): string => {
         171: '+16.666% ALL Ant speed!',
         172: 'Gain more Ants the longer your Reincarnation lasts (Max speed achieved in 2 hours)',
         173: 'Unlock Ant Sacrifice, allowing you to reset your Ants and Ant upgrades in exchange for amazing rewards! Automatically buy Worker Ants.',
-        174: `Ant Multiplier from sacrifice is multiplied by another logarithm: x${format(0.4 * Decimal.log(player.antPoints.add(1), 10), 2)}`,
+        174: `Ant Multiplier from sacrifice is multiplied by another logarithm: x${format(achievementBonus(174, 1 + player.antSacrificePoints), 2)}`,
         176: 'Unlock Tier 2 Ant autobuy, and autobuy Inceptus and Fortunae Ants! Add +25 Base Ant ELO.',
         177: 'Unlock Tier 3 Ant autobuy, and autobuy Tributum Ants! Add +50 Base Ant ELO.',
         178: 'Unlock Tier 4 Ant autobuy, and autobuy Celeritas and Multa Ants! Add +75 Base Ant ELO.',
@@ -478,18 +478,18 @@ export const areward = (i: number): string => {
         180: 'Unlock Tier 6 Ant autobuy, and autobuy Hic and Experientia Ants! Add +1% Base Ant ELO.',
         181: 'Unlock Tier 7 Ant autobuy, and autobuy Praemoenio Ants! Add +2% Base Ant ELO.',
         182: 'Unlock Tier 8 Ant autobuy, and autobuy Scientia and Phylacterium Ants! Add +3% Base Ant ELO.',
-        187: `Gain an Ascension Cubes multiplier based on your score: x${format(Math.max(1, Math.log10(corr[3]+1) - 7), 2)}. Also: Offerings +${format(Math.min(100, player.ascensionCount / 10000), 2)}% [Max: 100% at 1M Ascensions]`,
-        188: `Gain +100 Ascension count for all Ascensions longer than 10 seconds. Also: Obtainium +${format(Math.min(100, player.ascensionCount / 50000), 2)}% [Max: 100% at 5M Ascensions]`,
+        187: `Gain an Ascension Cubes multiplier based on your score: x${format(Math.max(1, Math.log10(corr[3]+1) - 7), 2)}. Also: Offerings +${format(achievementBonus(187) * 100, 2)}% [Max: 100% at 1M Ascensions]`,
+        188: `Gain +100 Ascension count for all Ascensions longer than 10 seconds. Also: Obtainium +${format(achievementBonus(188) * 100, 2)}% [Max: 100% at 5M Ascensions]`,
         189: `Gain 20% of Excess time after 10 seconds each Ascension as a linear multiplier to Ascension count. Also: Cubes +${format(Math.min(200, player.ascensionCount / 2.5e6), 2)}% [Max: 200% at 500M Ascensions]`,
-        193: `Gain ${format(Decimal.log(player.ascendShards.add(1), 10) / 4, 2)}% more Cubes on Ascension!`,
-        195: `Gain ${format(Math.min(25000, Decimal.log(player.ascendShards.add(1), 10) / 4), 2)}% more Cubes and Tesseracts on Ascension! Multiplicative with the other Ach. bonus [MAX: 25,000% at e100,000 Const]`,
-        196: `Gain ${format(Math.min(2000, Decimal.log(player.ascendShards.add(1), 10) / 50), 2)}% more Platonic Cubes on Ascension! [MAX: 2,000% at e100,000 Const]`,
+        193: `Gain ${format(achievementBonus(193) * 100, 2)}% more Cubes on Ascension!`,
+        195: `Gain ${format(achievementBonus(195) * 100, 2)}% more Cubes and Tesseracts on Ascension! Multiplicative with the other Ach. bonus [MAX: 25,000% at e100,000 Const]`,
+        196: `Gain ${format(achievementBonus(196) * 100, 2)}% more Platonic Cubes on Ascension! [MAX: 2,000% at e100,000 Const]`,
         197: 'You will unlock a stat tracker for Ascensions.',
         198: 'Gain +4% Cubes on Ascension!',
         199: 'Gain +4% Cubes on Ascension!',
         200: 'Gain +4% Cubs on Ascension! Did I spell that wrong? You bet I did.',
         201: 'Gain +3% Cubes on Ascension!',
-        202: `Gain 20% of Excess time after 10 seconds each Ascensions as a linear multiplier to Ascension count. Also: Tesseracts +${format(Math.min(200, player.ascensionCount / 5e6), 2)}% [Max: 200% at 1B Ascensions]`,
+        202: `Gain 20% of Excess time after 10 seconds each Ascensions as a linear multiplier to Ascension count. Also: Tesseracts +${format(achievementBonus(202) * 100, 2)}% [Max: 200% at 1B Ascensions]`,
         204: 'You will gain 25% of Excess time after 10 seconds each Ascension as a linear multiplier to rewards.',
         205: 'Gain +4% Tesseracts on Ascension!',
         206: 'Gain +4% Tesseracts on Ascension!',
@@ -501,33 +501,33 @@ export const areward = (i: number): string => {
         213: 'Gain +4% Hypercubes on Ascension!',
         214: 'Gain +4% Hypercubes on Ascension!',
         215: 'Gain +3% Hypercubes on Ascension!',
-        216: `Gain 20% of Excess time after 10 seconds each Ascensions as a linear multiplier to Ascension count. Also: Hypercubes +${format(Math.min(200, player.ascensionCount / 1e7), 2)}% [Max: 200% at 2B Ascensions]`,
+        216: `Gain 20% of Excess time after 10 seconds each Ascensions as a linear multiplier to Ascension count. Also: Hypercubes +${format(achievementBonus(216) * 100, 2)}% [Max: 200% at 2B Ascensions]`,
         218: 'You gain gain 50% MORE MORE excess time (Total: 100%) after 10 seconds each Ascension as a linear multiplier to rewards.',
         219: 'Gain +4% Platonic Cubes on Ascension!',
         220: 'Gain +4% Platonic Cubes on Ascension!',
         221: 'Gain +4% Platonic Cubes on Ascension!',
         222: 'Gain +3% Platonic Cubes on Ascension!',
-        223: `Gain 20% of Excess time after 10 seconds each Ascensions as a linear multiplier to Ascension count. Also: Platonic Cubes +${format(Math.min(200, player.ascensionCount / 13370000), 2)}% [Max: 200% at 2.674B Ascensions]`,
-        240: `Ascension Cube Gain Multipliers is VERY slightly affected by global speed multipliers: ${format(Math.min(1.5, 1 + Math.max(2, Math.log10(calculateTimeAcceleration()))/20), 2)}x (Min: 1.10x, Max: 1.50x)`,
-        250: 'You gain a permanent +60% Obtainium and Offering bonus, with +6% all Cube types!',
-        251: 'You gain a permanent +100% Obtainium and Offering bonus, with +10% all Cube types!',
+        223: `Gain 20% of Excess time after 10 seconds each Ascensions as a linear multiplier to Ascension count. Also: Platonic Cubes +${format(achievementBonus(223) * 100, 2)}% [Max: 200% at 2.674B Ascensions]`,
+        240: `Ascension Cube Gain Multipliers is VERY slightly affected by global speed multipliers: ${format(1 + achievementBonus(240), 2)}x (Min: 1.10x, Max: 1.50x)`,
+        250: 'You gain a permanent +60% Obtainium and Offering bonus, with +6% all Cube types, +10% Quarks!',
+        251: 'You gain a permanent +100% Obtainium and Offering bonus, with +10% all Cube types, +10% Quarks!',
         253: 'You will gain +10% Hypercubes! Why? I don\'t know.',
-        254: `Cube Gain +${format(Math.min(15, Math.log10(corr[3]+1) * 0.6), 2, true)}% [Max: +15% at 1e25 Ascension Score]`,
-        255: `Tesseract Gain +${format(Math.min(15, Math.log10(corr[3]+1) * 0.6), 2, true)}% [Max: +15% at 1e25 Ascension Score], and allow gain of Hepteracts.`,
-        256: `Hypercube Gain +${format(Math.min(15, Math.log10(corr[3]+1) * 0.6), 2, true)}% [Max: +15% at 1e25 Ascension Score]. Also, Overflux Powder conversion rate is 5% better!`,
-        257: `Platonic Gain +${format(Math.min(15, Math.log10(corr[3]+1) * 0.6), 2, true)}% [Max: +15% at 1e25 Ascension Score]. Also, Overflux Powder conversion rate is 5% better!`,
-        258: `Hepteract Gain +${format(Math.min(15, Math.log10(corr[3]+1) * 0.6), 2, true)}% [Max: +15% at 1e25 Ascension Score]`,
-        259: 'Corruption score is increased by 1% for every expansion of Abyss Hepteract!',
+        254: `Cube Gain +${format(achievementBonus(254, corr[3]) * 100, 2, true)}% [Max: +15% at 1e25 Ascension Score]`,
+        255: `Tesseract Gain +${format(achievementBonus(255, corr[3]) * 100, 2, true)}% [Max: +15% at 1e25 Ascension Score], and allow gain of Hepteracts.`,
+        256: `Hypercube Gain +${format(achievementBonus(256, corr[3]) * 100, 2, true)}% [Max: +15% at 1e25 Ascension Score]. Also, Overflux Powder conversion rate is 5% better!`,
+        257: `Platonic Gain +${format(achievementBonus(257, corr[3]) * 100, 2, true)}% [Max: +15% at 1e25 Ascension Score]. Also, Overflux Powder conversion rate is 5% better!`,
+        258: `Hepteract Gain +${format(achievementBonus(258, corr[3]) * 100, 2, true)}% [Max: +15% at 1e25 Ascension Score]`,
+        259: `Corruption score is increased by 1% for every expansion of Abyss Hepteract. Also: Corruption score ${format(achievementBonus(259) * 100, 2, true)}%!`,
         260: 'You will gain 10% more Ascension count, forever!',
         261: 'You will gain 10% more Ascension count, forever!',
-        262: `Ascensions are ${format(Math.min(10, Math.log10(player.ascensionCount+1)), 2)}% faster! Max: +10%`,
-        263: `Ascensions are ${format(Math.min(10, Math.log10(player.ascensionCount+1)), 2)}% faster! Max: +10%`,
-        264: `Hepteracts +${format(0.4 * Math.min(1, player.ascensionCount / 1e13) * 100, 2)}% [Max: 40% at 1e13 Ascensions]!`,
-        265: `Hepteracts +${format(0.2 * Math.min(1, player.ascensionCount / 1e14) * 100, 2)}% [Max: 20% at 1e14 Ascensions]!`,
-        266: `Quarks +${format(0.1 * Math.min(1, player.ascensionCount / 1e15) * 100, 2)}% [Max: 10% at 1e15 Ascensions]!`,
-        267: `Ascension Score is boosted by ${format(Math.min(100, Decimal.log(player.ascendShards.add(1), 10) / 1000), 2)}% [Max: 100% at 1e100,000 Const]`,
-        270: `Hepteract Gain is boosted by ${format(Math.min(100, Decimal.log(player.ascendShards.add(1), 10) / 10000), 2)}% [Max: 100% at 1e1,000,000 const], Constant Upgrade 1 boosted to 1.06 (from 1.05), Constant Upgrade 2 boosted to 1.11 (from 1.10).`,
-        271: `When you open a Platonic Cube, gain ${format(Math.max(0, Math.min(1, (Decimal.log(player.ascendShards.add(1), 10) - 1e5) / 9e5)), 2, true)} Hypercubes, rounded down [Max: 1 at 1e1,000,000 Const]`,
+        262: `Ascensions are ${format(achievementBonus(262) * 100, 2)}% faster! Max: +10%`,
+        263: `Ascensions are ${format(achievementBonus(263) * 100, 2)}% faster! Max: +10%`,
+        264: `Hepteracts +${format(achievementBonus(264) * 100, 2)}% [Max: 40% at 1e13 Ascensions]!`,
+        265: `Hepteracts +${format(achievementBonus(265) * 100, 2)}% [Max: 20% at 1e14 Ascensions]!`,
+        266: `Quarks +${format(achievementBonus(266) * 100, 2)}% [Max: 10% at 1e15 Ascensions]!`,
+        267: `Ascension Score is boosted by ${format(achievementBonus(267) * 100, 2)}% [Max: 100% at 1e100,000 Const]`,
+        270: `Hepteract Gain is boosted by ${format(achievementBonus(270) * 100, 2)}% [Max: 100% at 1e1,000,000 const], Constant Upgrade 1 boosted to 1.06 (from 1.05), Constant Upgrade 2 boosted to 1.11 (from 1.10).`,
+        271: `When you open a Platonic Cube, gain ${format(achievementBonus(271), 2, true)} Hypercubes, rounded down [Max: 1 at 1e1,000,000 Const]`,
         277: 'Unlock Hepteracts!',
         281: 'Ant Speed is permanently multiplied by 4.44! Platonic Upgrades now BuyMax whenever affordable!',
         282: 'You immediately start Singularities with 1 Transcension and 1001 mythos!',
@@ -552,12 +552,49 @@ export const areward = (i: number): string => {
 }
 
 const acalcs: {[key: number]: ((...args: number[]) => number)} = {
-    266: (a) => a * (0.1 * Math.min(1, player.ascensionCount / 1e15))
-}
+    // too tired to move all the calculations here
+    174: (a, points) => a * (0.4 * Math.log10(1 + points)),
+    176: () => 25 * player.achievements[176] + 50 * player.achievements[177] + 75 * player.achievements[178] + 100 * player.achievements[179],
+    180: () => 0.01 * player.achievements[180] + 0.02 * player.achievements[181] + 0.03 * player.achievements[182],
+    187: (a) => a * Math.min(1, player.ascensionCount / 1e6),
+    188: (a) => a * Math.min(1, player.ascensionCount / 5e6),
+    189: (a) => a * 2 * Math.min(1, player.ascensionCount / 5e8),
+    193: (a) => a * Decimal.log(player.ascendShards.add(1), 10) / 400,
+    195: (a) => a * 250 * Math.min(1, Decimal.log(player.ascendShards.add(1), 10) / 100000),
+    196: (a) => a * 20 * Math.min(1, Decimal.log(player.ascendShards.add(1), 10) / 100000),
+    198: () => 4 / 100 * (player.achievements[198] + player.achievements[199] + player.achievements[200]) + 3 / 100 * player.achievements[201],
+    202: (a) => a * 2 * Math.min(1, player.ascensionCount / 1e9),
+    204: () => 1 / 4 * player.achievements[204] + 1 / 4 * player.achievements[211] + 1 / 2 * player.achievements[218],
+    209: () => player.achievements[189] + player.achievements[202] + player.achievements[209] + player.achievements[216] + player.achievements[223],
+    212: () => 4 / 100 * (player.achievements[212] + player.achievements[213] + player.achievements[214]) + 3 / 100 * player.achievements[215],
+    216: (a) => a * 2 * Math.min(1, player.ascensionCount / 2e9),
+    219: () => 4 / 100 * (player.achievements[219] + player.achievements[220] + player.achievements[221]) + 3 / 100 * player.achievements[222],
+    223: (a) => a * 2 * Math.min(1, player.ascensionCount / 2.674e9),
+    240: (a) => a * Math.min(0.5, Math.max(0.1, 1 / 20 * Math.log10(calculateTimeAcceleration() + 0.01))),
+    250: () => 0.6 * player.achievements[250] + 1 * player.achievements[251],
+    251: () => 0.6 * player.achievements[250] + 1 * player.achievements[251],
+    253: (a) => a * 0.1,
+    254: (a, score) => a * 0.15 * Math.min(1, Math.log10(score + 1) / 25),
+    255: (a, score) => a * 0.15 * Math.min(1, Math.log10(score + 1) / 25),
+    256: (a, score) => a * 0.15 * Math.min(1, Math.log10(score + 1) / 25),
+    257: (a, score) => a * 0.15 * Math.min(1, Math.log10(score + 1) / 25),
+    258: (a, score) => a * 0.15 * Math.min(1, Math.log10(score + 1) / 25),
+    259: (a) => a * Math.max(1, Math.pow(1.01, Math.log2(player.hepteractCrafts.abyss.CAP))),
+    260: (a) => a * 0.1,
+    261: (a) => a * 0.1,
+    262: (a) => a * 0.10 * Math.min(1, 1 / 10 * Math.log10(player.ascensionCount + 1)),
+    263: (a) => a * 0.10 * Math.min(1, 1 / 10 * Math.log10(player.ascensionCount + 1)),
+    264: (a) => a * 0.4 * Math.min(1, player.ascensionCount / 1e13),
+    265: (a) => a * 0.2 * Math.min(1, player.ascensionCount / 1e14),
+    266: (a) => a * 0.1 * Math.min(1, player.ascensionCount / 1e15),
+    267: (a) => a * Math.min(1, 1 / 100000 * Decimal.log(player.ascendShards.add(1), 10)),
+    270: (a) => a * Math.min(1, 1 / 1000000 * Decimal.log(player.ascendShards.add(1), 10)),
+    271: (a) => a * Math.max(0, Math.min(1, (Decimal.log(player.ascendShards.add(1), 10) - 1e5) / 9e5))
+}//                                achievementBonus(172)
 
-export const achievementBonus = (num: number): number => {
+export const achievementBonus = (num: number, value = 0): number => {
     if (num in acalcs) {
-        return acalcs[num](player.achievements[num], num);
+        return acalcs[num](player.achievements[num], value);
     } else {
         return 0;
     }
@@ -828,6 +865,9 @@ export const getAchievementQuarks = (i: number) => {
         actualMultiplier = Math.pow(100, 0.6) * Math.pow(actualMultiplier, 0.4)
     }
 
+    // Adds 0.01 seconds of quarks per AP for each highest singularity
+    // actualMultiplier += globalQuarkMultiplier * player.highestSingularityCount / 100;
+
     return Math.floor(achievementpointvalues[i] * actualMultiplier)
 }
 
@@ -865,7 +905,9 @@ export const achievementaward = (num: number) => {
 }
 
 export const achievementProgress = () => {
-    DOMCacheGetOrSet('achievementprogress').textContent = `Achievement Points: ${format(player.achievementPoints, 0, true)}/${format(totalachievementpoints, 0, true)} [${format(100 * player.achievementPoints / totalachievementpoints, 2)}%]`;
+    DOMCacheGetOrSet('achievementprogress').textContent =
+        `Achievement Points: ${format(player.achievementPoints, 0, true)} / ${format(totalachievementpoints, 0, true)}
+        [${format(100 * player.achievementPoints / totalachievementpoints, 2)}%]`;
 }
 
 export const totalAchievementPoints = () => {

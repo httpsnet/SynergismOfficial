@@ -1,7 +1,6 @@
 import { player, format, formatTimeShort } from './Synergism';
 import { Globals as G } from './Variables';
-import { hepteractEffective } from './Hepteracts'
-import {calculateSigmoidExponential, calculateCubeMultiplier, calculateOfferings, calculateTesseractMultiplier, calculateHypercubeMultiplier, calculatePlatonicMultiplier, calculateHepteractMultiplier, calculateAllCubeMultiplier, calculateSigmoid, calculatePowderConversion, calculateEffectiveIALevel, calculateQuarkMultFromPowder, calculateOcteractMultiplier, calculateQuarkMultiplier, calculateEventBuff, calculateSingularityQuarkMilestoneMultiplier, calculateTotalOcteractQuarkBonus, calculateAscensionSpeedMultiplier, calculateGoldenQuarkMultiplier } from './Calculate';
+import {calculateSigmoidExponential, calculateCubeMultiplier, calculateOfferings, calculateTesseractMultiplier, calculateHypercubeMultiplier, calculatePlatonicMultiplier, calculateHepteractMultiplier, calculateAllCubeMultiplier, calculateSigmoid, calculatePowderConversion, calculateOcteractMultiplier, calculateQuarkMultiplier, calculateAscensionAcceleration, calculateGoldenQuarkMultiplier } from './Calculate';
 import { challenge15ScoreMultiplier } from './Challenges';
 import type { GlobalVariables } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
@@ -59,7 +58,7 @@ export const loadStatisticsUpdate = () => {
                 loadStatisticsOfferingMultipliers();
                 break;
             case 'globalQuarkMultiplierStats':
-                loadQuarkMultiplier();
+                loadStatisticsQuarkMultiplier();
                 break;
             case 'powderMultiplierStats':
                 loadPowderMultiplier();
@@ -129,41 +128,46 @@ export const loadStatisticsMultiplier = () => {
     DOMCacheGetOrSet('sM12').textContent = '^' + format(Math.min(1, (1 + player.platonicUpgrades[6] / 30) * G['maladaptivePower'][player.usedCorruptions[2]]), 3, true)
     DOMCacheGetOrSet('sM13').textContent = format(G['freeMultiplier'], 3, true)
 }
-export const loadQuarkMultiplier = () => {
-    DOMCacheGetOrSet('sGQM1').textContent = 'x' + format(1, 3, true) //Base
-    DOMCacheGetOrSet('sGQM2').textContent = '+' + format(player.achievementPoints / 25000, 3, true) //AP
-    DOMCacheGetOrSet('sGQM3').textContent = '+' + format(player.achievements[250] > 0 ? 0.10 : 0, 3, true) //Max r8x25
-    DOMCacheGetOrSet('sGQM4').textContent = '+' + format(player.achievements[251] > 0 ? 0.10 : 0, 3, true) //Max w5x10
-    DOMCacheGetOrSet('sGQM5').textContent = '+' + format(player.platonicUpgrades[5] > 0 ? 0.10 : 0, 3, true) //ALPHA
-    DOMCacheGetOrSet('sGQM6').textContent = '+' + format(player.platonicUpgrades[10] > 0 ? 0.15 : 0, 3, true) //BETA
-    DOMCacheGetOrSet('sGQM7').textContent = '+' + format(player.platonicUpgrades[15] > 0 ? 0.20 : 0, 3, true) //OMEGA
-    DOMCacheGetOrSet('sGQM8').textContent = '+' + format(G.challenge15Rewards['quarks']-1, 3, true) //Challenge 15 Reward
-    DOMCacheGetOrSet('sGQM9').textContent = 'x' + format(player.worlds.applyBonus(1 / calculateQuarkMultiplier()), 3, true) //Patreon Bonus
-    DOMCacheGetOrSet('sGQM10').textContent = 'x' + format((G['isEvent'] ? 1 + calculateEventBuff('Quarks') + calculateEventBuff('One Mind') : 1), 3, true) //Event
-    DOMCacheGetOrSet('sGQM11').textContent = 'x' + format(1.1 + 0.15 / 75 * calculateEffectiveIALevel(), 3, true) //IA Rune
-    DOMCacheGetOrSet('sGQM12').textContent = 'x' + format(player.challenge15Exponent >= 1e15 ? 1 + 5/10000 * hepteractEffective('quark') : 1, 3, true) //Quark Hepteract
-    DOMCacheGetOrSet('sGQM13').textContent = 'x' + format(calculateQuarkMultFromPowder(), 3, true) //Powder
-    DOMCacheGetOrSet('sGQM14').textContent = 'x' + format(1 + player.achievements[266] * 0.1 * Math.min(1, player.ascensionCount / 1e15), 3, true) // Achievement 266
-    DOMCacheGetOrSet('sGQM15').textContent = 'x' + format(1 + player.singularityCount / 10, 3, true) //Singularity
-    DOMCacheGetOrSet('sGQM16').textContent = 'x' + format(calculateSingularityQuarkMilestoneMultiplier(), 3, true) // Singularity Milestones
-    DOMCacheGetOrSet('sGQM17').textContent = 'x' + format(1 + 0.10 * player.cubeUpgrades[53] / 100, 3, true) // Cube Upgrade 6x3 (Cx3)
-    DOMCacheGetOrSet('sGQM18').textContent = 'x' + format(1 + 1/10000 * player.cubeUpgrades[68] + 0.05 * (Math.floor(player.cubeUpgrades[68] / 1000)), 3, true)
-    DOMCacheGetOrSet('sGQM19').textContent = 'x' + format(1 + 0.02 * player.singularityUpgrades.intermediatePack.level +           // 1.02
-                                                            0.04 * player.singularityUpgrades.advancedPack.level +               // 1.06
-                                                            0.06 * player.singularityUpgrades.expertPack.level +                 // 1.12
-                                                            0.08 * player.singularityUpgrades.masterPack.level +                 // 1.20
-                                                            0.10 * player.singularityUpgrades.divinePack.level, 3, true)
-    DOMCacheGetOrSet('sGQM20').textContent = 'x' + format(1 + 0.25 * +player.octeractUpgrades.octeractStarter.getEffect().bonus, 3, true)
-    DOMCacheGetOrSet('sGQM21').textContent = 'x' + format(+player.octeractUpgrades.octeractQuarkGain.getEffect().bonus, 3, true)
-    DOMCacheGetOrSet('sGQM22').textContent = 'x' + format(calculateTotalOcteractQuarkBonus(), 3, true)
-    DOMCacheGetOrSet('sGQM23').textContent = 'x' + format(1 + +player.singularityUpgrades.singQuarkImprover1.getEffect().bonus, 3, true)
-    DOMCacheGetOrSet('sGQM24').textContent = 'x' + format(1 + 1/10000 * Math.floor(player.octeractUpgrades.octeractQuarkGain.level / 199) *
-                                                            player.octeractUpgrades.octeractQuarkGain2.level *
-                                                            Math.floor(1 + Math.log10(Math.max(1, player.hepteractCrafts.quark.BAL))),
-    3,
-    true)
-    DOMCacheGetOrSet('sGQMT').textContent = 'x' + format(player.worlds.applyBonus(1), 3, true)
+
+export const loadStatisticsQuarkMultiplier = () => {
+    const arr = calculateQuarkMultiplier().list;
+    const map: Record<number, { acc: number, math: string, desc: string }> = {
+        1: {acc: 3, math: 'x', desc: 'Base:'},
+        2: {acc: 3, math: '+', desc: 'Achievement Points:'},
+        3: {acc: 3, math: '+', desc: 'Maxed Research 8x25:'},
+        4: {acc: 3, math: '+', desc: 'Maxed Cube upgrade 5x10:'},
+        5: {acc: 3, math: '+', desc: 'Platonic ALPHA:'},
+        6: {acc: 3, math: '+', desc: 'Platonic BETA:'},
+        7: {acc: 3, math: '+', desc: 'Platonic OMEGA:'},
+        8: {acc: 3, math: '+', desc: 'Challenge 15 Reward:'},
+        9: {acc: 3, math: '+', desc: 'Event:'},
+        10: {acc: 3, math: '+', desc: 'Infinite Ascent:'},
+        11: {acc: 3, math: 'x', desc: 'Quark Hepteract:'},
+        12: {acc: 3, math: 'x', desc: 'Overflux Powder:'},
+        13: {acc: 3, math: 'x', desc: 'Achievement 266:'},
+        14: {acc: 3, math: 'x', desc: 'Unlimited growth:'},
+        15: {acc: 3, math: 'x', desc: 'Singularity Milestones:'},
+        16: {acc: 3, math: 'x', desc: 'Cube Upgrade 6x3 (Cx3):'},
+        17: {acc: 3, math: 'x', desc: 'Cube Upgrade 7x8 (Cx18):'},
+        18: {acc: 3, math: 'x', desc: 'All Pack Bonuses:'},
+        19: {acc: 3, math: 'x', desc: 'Octeracts for Dummies:'},
+        20: {acc: 3, math: 'x', desc: 'Quark Octeract:'},
+        21: {acc: 3, math: 'x', desc: 'Octeract Generated Quark:'},
+        22: {acc: 3, math: 'x', desc: 'Quark Gain Improver:'},
+        23: {acc: 3, math: 'x', desc: 'Octo-Hepteract Primality:'},
+        24: {acc: 3, math: 'x', desc: 'Bonus before Singularity:'}
+    }
+    let i = 0;
+    for (; i < arr.length; i++) {
+        const statGQM = DOMCacheGetOrSet(`statGQM${i + 1}`);
+        statGQM.childNodes[0].textContent = map[i + 1].desc;
+        DOMCacheGetOrSet(`sGQM${i + 1}`).textContent = `${map[i + 1].math}${format(arr[i], map[i + 1].acc, true)}`;
+    }
+    DOMCacheGetOrSet(`sGQM${i + 1}`).textContent = `x${format(1 + player.worlds.BONUS / 100, 3, true)}`;
+
+    DOMCacheGetOrSet('sGQMT').textContent = `x${format(player.worlds.applyBonus(1), 3, true)}`;
 }
+
 export const loadStatisticsCubeMultipliers = () => {
 
     const arr0 = calculateAllCubeMultiplier().list;
@@ -415,7 +419,7 @@ export const loadPowderMultiplier = () => {
 }
 
 export const loadStatisticsAscensionSpeedMultipliers = () => {
-    const arr = calculateAscensionSpeedMultiplier();
+    const arr = calculateAscensionAcceleration();
     const map7: Record<number, { acc: number, desc: string }> = {
         1: {acc: 2, desc: 'Chronometer:'},
         2: {acc: 2, desc: 'Chronometer 2:'},
@@ -432,7 +436,7 @@ export const loadStatisticsAscensionSpeedMultipliers = () => {
         13: {acc: 2, desc: 'Abstract Exokinetics:'},
         14: {acc: 2, desc: 'Event:'},
         15: {acc: 2, desc: 'Ascension Speedup 2 [GQ]:'},
-        16: {acc: 2, desc: 'Chronometer INF:'},
+        16: {acc: 2, desc: 'Chronometer ∞:'},
         17: {acc: 2, desc: 'Limited Ascensions Penalty:'},
         18: {acc: 2, desc: 'Limited Ascensions Reward:'},
         19: {acc: 2, desc: 'Ascension Speedup [GQ]:'},

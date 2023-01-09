@@ -95,7 +95,7 @@ export const generateExportSummary = async():Promise<void> => {
         ascension = ascension + `Ascension Timer: ${formatS(player.ascensionCounter)}\n`
         ascension = ascension + `Real Life Ascension Timer: ${formatS(player.ascensionCounterReal)}\n`
         ascension = ascension + `Truly Real Life Ascension Timer: ${formatS(player.ascensionCounterRealReal)}\n`
-        ascension = ascension + `Ascension Speed Multiplier: ${format(calculateAscensionAcceleration(), 2, true)}\n`
+        ascension = ascension + `Ascension Speed Multiplier: ${format(calculateAscensionAcceleration().mult, 2, true)}\n`
         ascension = ascension + `Challenge 11 Completions: ${player.challengecompletions[11]}/${getMaxChallenges(11)}\n`
         ascension = ascension + `Challenge 12 Completions: ${player.challengecompletions[12]}/${getMaxChallenges(12)}\n`
         ascension = ascension + `Challenge 13 Completions: ${player.challengecompletions[13]}/${getMaxChallenges(13)}\n`

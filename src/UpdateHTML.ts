@@ -933,7 +933,7 @@ const updateAscensionStats = () => {
         'ascHepteract': format(hepteract * (player.ascStatToggles[5] ? 1 : 1 / t), 3),
         'ascC10': `${format(player.challengecompletions[10])}`,
         'ascTimeAccel': `${format(calculateTimeAcceleration(), 3)}x`,
-        'ascAscensionTimeAccel': `${format(calculateAscensionAcceleration(), 3)}x${addedAsterisk ? '*' : ''}`,
+        'ascAscensionTimeAccel': `${format(calculateAscensionAcceleration().mult, 3)}x${addedAsterisk ? '*' : ''}`,
         'ascSingularityCount': format(player.singularityCount),
         'ascSingLen': formatTimeShort(player.singularityCounter)
     }

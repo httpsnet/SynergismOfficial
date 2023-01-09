@@ -1157,8 +1157,8 @@ export const singularity = async (setSingNumber = -1): Promise<void> => {
     }
 
     // Save some used code
-    hold.achievements[243] = player.achievements[243];
-    hold.achievements[244] = player.achievements[244];
+    const ach243 = player.achievements[243] > 0;
+    const ach244 = player.achievements[244] > 0;
     const saveCode42 = player.codes.get(42) ?? false
     const saveCode43 = player.codes.get(43) ?? false
     const saveCode44 = player.codes.get(44) ?? false
@@ -1174,6 +1174,14 @@ export const singularity = async (setSingNumber = -1): Promise<void> => {
     }*/
     await importSynergism(btoa(JSON.stringify(hold)), true);
     //Techically possible to import game during reset. But that will only "hurt" that imported save
+
+    // Achievements using codes are saved
+    if (ach243) {
+        achievementaward(243);
+    }
+    if (ach244) {
+        achievementaward(244);
+    }
 
     player.codes.set(39, true);
     player.codes.set(40, true);

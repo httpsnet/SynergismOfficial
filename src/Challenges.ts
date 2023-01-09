@@ -370,6 +370,9 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         } else {
             scoreDisplay = scoreArray1[i]
         }
+        if (i === 1) {
+            scoreDisplay += player.cubeUpgrades[56]
+        }
     }
     if (i > 5 && i <= 10){
         if (player.highestchallengecompletions[i] >= 60){
