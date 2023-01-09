@@ -570,7 +570,7 @@ const acalcs: {[key: number]: ((...args: number[]) => number)} = {
     216: (a) => a * 2 * Math.min(1, player.ascensionCount / 2e9),
     219: () => 4 / 100 * (player.achievements[219] + player.achievements[220] + player.achievements[221]) + 3 / 100 * player.achievements[222],
     223: (a) => a * 2 * Math.min(1, player.ascensionCount / 2.674e9),
-    240: (a) => a * Math.min(0.5, Math.max(0.1, 1 / 20 * Math.log10(calculateTimeAcceleration() + 0.01))),
+    240: (a) => a * Math.min(0.5, Math.max(0.1, 1 / 20 * Math.log10(calculateTimeAcceleration().mult + 0.01))),
     250: () => 0.6 * player.achievements[250] + 1 * player.achievements[251],
     251: () => 0.6 * player.achievements[250] + 1 * player.achievements[251],
     253: (a) => a * 0.1,
