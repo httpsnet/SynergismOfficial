@@ -6,7 +6,7 @@ import { achievementaward, totalachievementpoints } from './Achievements';
 import { displayRuneInformation } from './Runes';
 import { autoResearchEnabled } from './Research';
 import { visualUpdateBuildings, visualUpdateUpgrades, visualUpdateAchievements, visualUpdateRunes, visualUpdateChallenges, visualUpdateResearch, visualUpdateSettings, visualUpdateShop, visualUpdateSingularity, visualUpdateAnts, visualUpdateCubes, visualUpdateCorruptions } from './UpdateVisuals';
-import { getMaxChallenges } from './Challenges';
+import { getMaxChallenges, challengeDisplay } from './Challenges';
 import type { OneToFive, ZeroToFour, ZeroToSeven } from './types/Synergism';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { updateSingularityPenalties, updateSingularityPerks } from './singularity';
@@ -507,8 +507,7 @@ export const revealStuff = () => {
         'toggle43': player.highestSingularityCount >= 6, // Potion Autogenerator for Obtainium Potions
         'toggle44': player.highestSingularityCount >= 2, // Auto Restart Chal.10
         'toggle45': player.highestSingularityCount >= 101, // Ascension Challenge Sweep
-        'toggle46': player.highestSingularityCount >= 201, // Auto Ascension Enhance
-        'toggle47': player.highestSingularityCount >= 45 // Ascension Auto Add
+        'toggle46': player.highestSingularityCount >= 201 // Auto Ascension Enhance
     }
 
     Object.keys(automationUnlocks).forEach(key => {
@@ -594,6 +593,8 @@ export const hideStuff = () => {
     if (G['currentTab'] === 'challenges') {
         DOMCacheGetOrSet('challenges').style.display = 'block';
         DOMCacheGetOrSet('challengetab').style.backgroundColor = 'purple';
+        updateChallengeDisplay();
+        challengeDisplay(G['challengefocus']);
     }
     if (G['currentTab'] === 'researches') {
         DOMCacheGetOrSet('research').style.display = 'block';
@@ -853,6 +854,10 @@ export const buttoncolorchange = () => {
 }
 
 export const updateChallengeDisplay = () => {
+    if (G['currentTab'] !== 'challenges') {
+        return;
+    }
+
     //Sets background colors on load/challenge initiation
     for (let k = 1; k <= 15; k++) {
         const el = DOMCacheGetOrSet(`challenge${k}`)
@@ -879,6 +884,10 @@ export const updateChallengeDisplay = () => {
 }
 
 export const updateChallengeLevel = (k: number) => {
+    if (G['currentTab'] !== 'challenges') {
+        return;
+    }
+
     const el = DOMCacheGetOrSet(`challenge${k}level`);
     const maxChallenges = getMaxChallenges(k);
 

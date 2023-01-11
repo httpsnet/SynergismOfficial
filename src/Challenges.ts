@@ -90,6 +90,10 @@ export const getMaxChallenges = (i: number) => {
 }
 
 export const challengeDisplay = (i: number, changefocus = true) => {
+    if (!changefocus && G['currentTab'] !== 'challenges') {
+        return;
+    }
+
     let quarksMultiplier = 1;
 
     if (changefocus) {
@@ -402,12 +406,16 @@ export const challengeDisplay = (i: number, changefocus = true) => {
         el.style.display = i <= (autoAscensionChallengeSweepUnlock() ? 15 : 10) && player.researches[150] > 0 ? 'block' : 'none';
         el.style.border = player.autoChallengeToggles[i] ? '2px solid green' : '2px solid red';
         el.textContent = `${i >= 11 && i <= 15 ? 'Auto Ascension' : 'Automatically'} Run Chal.${i} [${player.autoChallengeToggles[i] ? 'ON' : 'OFF'}]`;
-    }
 
-    const ella = DOMCacheGetOrSet('toggleAutoChallengeStart');
-    (player.autoChallengeRunning) ?
-        (ella.textContent = 'Auto Challenge Sweep [ON]', ella.style.border = '2px solid gold') :
-        (ella.textContent = 'Auto Challenge Sweep [OFF]', ella.style.border = '2px solid red');
+        const ella = DOMCacheGetOrSet('toggleAutoChallengeStart');
+        if (player.autoChallengeRunning) {
+            ella.textContent = 'Auto Challenge Sweep [ON]'
+            ella.style.border = '2px solid gold';
+        } else {
+            ella.textContent = 'Auto Challenge Sweep [OFF]';
+            ella.style.border = '2px solid red';
+        }
+    }
 }
 
 export const getChallengeConditions = (i?: number) => {
@@ -472,9 +480,11 @@ export const calculateChallengeRequirementMultiplier = (
         case 'transcend':
             requirementMultiplier *= G['challenge15Rewards'].transcendChallengeReduction;
 
-            (completions >= 75) ?
-                requirementMultiplier *= Math.pow(1 + completions, 12) / Math.pow(75, 8) :
+            if (completions >= 75) {
+                requirementMultiplier *= Math.pow(1 + completions, 12) / Math.pow(75, 8);
+            } else {
                 requirementMultiplier *= Math.pow(1 + completions, 2);
+            }
 
             if (completions >= 1000) {
                 requirementMultiplier *= 10 * Math.pow(completions / 1000, 3)
@@ -493,9 +503,9 @@ export const calculateChallengeRequirementMultiplier = (
             if (completions >= 90) {
                 if (special === 6) {
                     requirementMultiplier *= 100
-                } else if (special == 7) {
+                } else if (special === 7) {
                     requirementMultiplier *= 50
-                } else if (special == 8) {
+                } else if (special === 8) {
                     requirementMultiplier *= 10
                 } else {
                     requirementMultiplier *= 4
@@ -539,9 +549,11 @@ export const calculateChallengeRequirementMultiplier = (
             return requirementMultiplier
         case 'ascension':
             if (special !== 15) {
-                (completions >= 10) ?
-                    requirementMultiplier *= (2 * (1 + completions) - 10) :
+                if (completions >= 10) {
+                    requirementMultiplier *= (2 * (1 + completions) - 10);
+                } else {
                     requirementMultiplier *= (1 + completions);
+                }
             } else {
                 requirementMultiplier *= Math.pow(1000, completions);
             }

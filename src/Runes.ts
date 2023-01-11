@@ -64,7 +64,7 @@ export const displayRuneInformation = (i: number, updatelevelup = true) => {
             offerings += arr[j]
             j++;
         }
-        const s = j === 1 ? 'once' : `${j} times`
+        const s = j === 1 ? 'once' : `${format(j)} times`
         DOMCacheGetOrSet('runeDisplayInfo').textContent = `+${format(amountPerOffering)} EXP per offering. ${format(offerings)} Offerings to level up ${s}.`
     }
 
@@ -138,6 +138,11 @@ export const redeemShards = (runeIndexPlusOne: number, auto = false, cubeUpgrade
             toSpendTotal -= toSpend
             player.runeshards -= toSpend
             player.runeexp[runeIndex] += toSpend * expPerOff
+            // TODO: not a good solution
+            if (isNaN(player.runeexp[runeIndex]) || player.runeexp[runeIndex] > 1e300) {
+                player.runeexp[runeIndex] = 1e300;
+                toSpendTotal = 0;
+            }
             all += toSpend
             while (player.runeexp[runeIndex] >= calculateRuneExpToLevel(runeIndex) && player.runelevels[runeIndex] < maxLevel) {
                 player.runelevels[runeIndex] += 1;
@@ -154,7 +159,9 @@ export const redeemShards = (runeIndexPlusOne: number, auto = false, cubeUpgrade
                 }
             }
         }
-        displayRuneInformation(runeIndexPlusOne);
+        if (!auto) {
+            displayRuneInformation(runeIndexPlusOne);
+        }
     }
     calculateRuneLevels();
     if (player.runeshards < 0 || !player.runeshards) {

@@ -1234,7 +1234,7 @@ export const buyAllBlessings = (type: 'Blessings' | 'Spirits', percentage = 100,
                 }
 
                 const [level, cost] = calculateSummationLinear(baseLevels, baseCost, runeshards, levelCap);
-                if (level > baseLevels && (!auto || (level - baseLevels) * 10000 > baseLevels)) {
+                if (level > baseLevels && (!auto || (level - baseLevels) * 1e9 > baseLevels)) {
                     if (type === 'Spirits') {
                         player.runeSpiritLevels[index] = level;
                     } else {

@@ -826,7 +826,7 @@ export const gameStages = (): Stage[] => {
         {stage: 19, tier: 5, name: 'omega-singularity', unlocked: player.singularityCount > 0 && player.runelevels[6] > 0, reset: player.achievements[183] === 1},
         {stage: 20, tier: 6, name: 'singularity-liquidation', unlocked: Boolean(player.singularityUpgrades.wowPass2.getEffect().bonus), reset: player.highestSingularityCount > 0},
         {stage: 21, tier: 6, name: 'liquidation-onemind', unlocked: Boolean(player.singularityUpgrades.oneMind.getEffect().bonus), reset: player.highestSingularityCount > 0},
-        {stage: 22, tier: 6, name: 'onemind-bbshards', unlocked: Boolean(player.singularityUpgrades.offeringAutomatic.getEffect().bonus > 0), reset: player.highestSingularityCount > 0},
+        {stage: 22, tier: 6, name: 'onemind-bbshards', unlocked: Boolean(player.singularityUpgrades.blueberries.getEffect().bonus > 0), reset: player.highestSingularityCount > 0},
         {stage: 23, tier: 6, name: 'bbshards-pen', unlocked: Boolean(player.singularityUpgrades.ultimatePen.getEffect().bonus), reset: player.highestSingularityCount > 0},
         {stage: 24, tier: 6, name: 'pen', unlocked: false, reset: player.highestSingularityCount > 0}
     ];

@@ -1179,12 +1179,11 @@ export const singularityPerks: SingularityPerk[] = [
     },
     {
         name: 'Enhanced Challenges',
-        levels: [2, 45, 101, 201],
+        levels: [2, 101, 201],
         description: (n: number, levels: number[]) => {
             let titleText = '';
             const textList = [
-                'Auto Restart Chal.10 is use Challenge 10 instead of Challenge 1 first in the Auto Challenge Sweep of the Ascension Challenge.',
-                'Ascension Auto Add is automatically uses 1 add just before doing Ascension, but requires Challenge 10.',
+                'Auto Restart Chal.10 is use Challenge 10 instead of Challenge 1 first in the Auto Challenge Sweep of the Ascension Challenge. Ascension reset advances initial automation timer by 90%.',
                 'Auto Challenge Sweep can run Ascension Challenges if you have better Instant Challenge Completions.',
                 'Auto Ascension Enhance can make many improvements in Auto Ascension.'
             ];
@@ -1711,6 +1710,9 @@ export type SingularityDebuffs = 'Offering' | 'Obtainium' | 'Global Speed' | 'Re
                                  'Platonic Costs' | 'Hepteract Costs'
 
 export const calculateEffectiveSingularities = (singularityCount: number = player.singularityCount): number => {
+    if (singularityCount < 0) {
+        return 0
+    }
     let effectiveSingularities = singularityCount;
     effectiveSingularities *= Math.min(4.75, 0.75 * singularityCount / 10 + 1)
 
@@ -1774,7 +1776,7 @@ export const calculateNextSpike = (singularityCount: number = player.singularity
     return -1;
 }
 export const calculateSingularityDebuff = (debuff: SingularityDebuffs, singularityCount: number=player.singularityCount) => {
-    if (singularityCount === 0) {
+    if (singularityCount <= 0) {
         return 1
     }
     if (player.runelevels[6] > 0) {

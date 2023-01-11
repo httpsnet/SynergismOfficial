@@ -29,7 +29,7 @@ import { corrChallengeMinimum, corruptionStatsUpdate, maxCorruptionLevel } from 
 import { toggleAutoChallengeModeText, toggleSubTab, toggleTabs } from './Toggles';
 import { DOMCacheGetOrSet } from './Cache/DOM';
 import { WowCubes } from './CubeExperimental';
-import { importSynergism, promocodes } from './ImportExport';
+import { importSynergism } from './ImportExport';
 import { resetShopUpgrades, shopData } from './Shop';
 import { QuarkHandler } from './Quark';
 import { calculateSingularityDebuff, getFastForwardTotalMultiplier } from './singularity';
@@ -264,12 +264,6 @@ const resetAddHistoryEntry = (input: resetNames, from = 'unknown') => {
 };
 
 export const reset = (input: resetNames, fast = false, from = 'unknown') => {
-    // Automatically use add at end of ascension if toggle is enabled
-    if ((input === 'ascension' || input === 'ascensionChallenge' || input === 'singularity') &&
-        player.toggles[47] && player.challengecompletions[10] > 0) {
-        void promocodes('add', 1);
-    }
-
     // Handle adding history entries before actually resetting data, to ensure optimal accuracy.
     resetAddHistoryEntry(input, from);
 
@@ -509,8 +503,7 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         player.currentChallenge.reincarnation = 0;
 
         // The start of the auto challenge to improve QoL starts with C10
-        if (input === 'ascensionChallenge' && player.toggles[44] === true && player.highestSingularityCount >= 2 &&
-            player.achievements[141] > 0 && player.currentChallenge.ascension > 10 && player.autoChallengeToggles[10]) {
+        if (player.toggles[44] && player.achievements[141] > 0 && player.autoChallengeToggles[10]) {
             player.autoChallengeIndex = 10;
         } else {
             player.autoChallengeIndex = 1;
@@ -530,6 +523,17 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         player.antSacrificePoints = 0;
         player.antSacrificeTimer = 0;
         player.antSacrificeTimerReal = 0;
+        player.sacrificeTimer = 0;
+
+        // Ascension early automation timer
+        if (player.toggles[44] && player.achievements[141] > 0) {
+            player.sacrificeTimer = 0.9;
+            if (player.autoAntSacrificeMode === 2) {
+                player.antSacrificeTimer = player.autoAntSacTimer * player.sacrificeTimer;
+                player.antSacrificeTimerReal = player.antSacrificeTimer;
+            }
+        }
+
         player.antUpgrades[12-1] = 0;
         for (let j = 61; j <= 80; j++) {
             player.upgrades[j] = 0;

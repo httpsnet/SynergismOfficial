@@ -193,12 +193,12 @@ export function calculateRuneExpGiven(runeIndex: number, all = false, runeLevel 
 
     const fact = [
         allRuneExpAdditiveMultiplier,
-        allRuneExpMultiplier,
+        Math.min(1e300, allRuneExpMultiplier),
         recycleMultiplier,
         runeExpMultiplier[runeIndex]
     ];
 
-    return returnFactors ? fact : Math.min(1e200, productContents(fact));
+    return returnFactors ? fact : Math.min(1e300, productContents(fact));
 }
 
 export const lookupTableGen = (runeLevel: number) => {
@@ -219,7 +219,7 @@ let lookupTableRuneExp: number[] | null = null;
 
 // Returns the amount of exp required to level a rune
 export const calculateRuneExpToLevel = (runeIndex: number, runeLevel = player.runelevels[runeIndex]) => {
-    lookupTableRuneExp ??= Array.from({ length: 40000 }, (_, i) => lookupTableGen(i));
+    lookupTableRuneExp ??= Array.from({ length: 40000 + 1 }, (_, i) => lookupTableGen(i));
 
     // For runes 6 and 7 we will apply a special multiplier
     let multiplier = lookupTableRuneExp[runeLevel]
@@ -374,7 +374,7 @@ export function calculateOfferings(input: resetNames, calcMult = true, statistic
     ];
 
     if (calcMult) {
-        q *= productContents(arr)
+        q *= Math.min(1e300, productContents(arr))
     } else {
         return arr;
     }
@@ -1548,7 +1548,7 @@ export const calculateAscensionSpeedMultiplier = () => {
         (player.singularityUpgrades.singAscensionSpeed2.level > 0 && player.runelevels[6] < 1) ? 6 : 1, // A mediocre ascension speedup!
         Math.pow(1.01, player.shopUpgrades.chronometerInfinity),                                         // Chronometer INF
         1 / calculateLimitedAscensionsDebuff(),                                                           // EXALT Debuff
-        Math.pow(1 + +player.singularityChallenges.limitedAscensions.rewards.ascensionSpeedMult, 1 + Math.max(0, Math.floor(Math.log10(player.ascensionCount)))) // EXALT Buff                                                                                                 // EXALT Buff
+        Math.pow(1 + +player.singularityChallenges.limitedAscensions.rewards.ascensionSpeedMult, 1 + Math.max(0, Math.floor(Math.log10(player.ascensionCount)))) // EXALT Buff
     ];
 
     // A hecking good ascension speedup!
