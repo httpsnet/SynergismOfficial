@@ -177,9 +177,9 @@ export const singularityChallengeData: Record<keyof Player['singularityUpgrades'
     noSingularityUpgrades: {
         name: 'No Singularity Upgrades',
         descripton: 'Simply put, you have to beat the target singularity without (most) Singularity Upgrades. Octeracts, Perks and Quality of Life Singularity Upgrades are preserved.',
-        rewardDescription: 'Each completion increases cube gain of every dimension by 50%! First completion gives +12% Golden Quarks. Final completion awards something `special` ;) (WIP)',
+        rewardDescription: 'Each completion increases cube gain of every dimension by 50%! First completion gives +12% Golden Quarks. 20th awards something `special` ;)',
         baseReq: 1,
-        maxCompletions: 20,
+        maxCompletions: 30,
         unlockSingularity: 25,
         HTMLTag: 'noSingularityUpgrades',
         singularityRequirement: (baseReq: number, completions: number) => {
@@ -188,16 +188,17 @@ export const singularityChallengeData: Record<keyof Player['singularityUpgrades'
         effect: (n: number) => {
             return {
                 cubes: 1 + 0.5 * n,
-                goldenQuarks: 1 + 0.12 * +(n > 0)
+                goldenQuarks: 1 + 0.12 * +(n > 0),
+                shopUpgrade: (n >= 20)
             }
         }
     },
     oneChallengeCap: {
         name: 'One Challenge Caps',
         descripton: 'Beat the target Singularity, but the first 14 Challenges have cap of only 1!',
-        rewardDescription: 'Each completion increases Corruption Multiplier Values by 0.03, no matter what. First Completion gives +3 to Reincarnation Challenge Cap. Final completion grants +1 free Corruption level!',
+        rewardDescription: 'Each completion increases Corruption Multiplier Values by 0.03, no matter what. First Completion gives +3 to Reincarnation Challenge Cap. 20th completion grants +1 free Corruption level!',
         baseReq: 10,
-        maxCompletions: 20,
+        maxCompletions: 25,
         unlockSingularity: 40,
         HTMLTag: 'oneChallengeCap',
         singularityRequirement: (baseReq: number, completions: number) => {
@@ -207,7 +208,7 @@ export const singularityChallengeData: Record<keyof Player['singularityUpgrades'
             return {
                 corrScoreIncrease: 0.03 * n,
                 capIncrease: 3 * +(n > 0),
-                freeCorruptionLevel: (n === 20)
+                freeCorruptionLevel: (n >= 20)
             }
         }
     },
@@ -227,6 +228,25 @@ export const singularityChallengeData: Record<keyof Player['singularityUpgrades'
                 octeractPow: 0.02 * n,
                 offeringBonus: (n > 0),
                 obtainiumBonus: (n === 10)
+            }
+        }
+    },
+    limitedAscensions: {
+        name: 'Twenty Ascensions Challenge',
+        descripton: 'Derpsmith put an embargo on Ascensions. Only (20 - completions) are allowed throughout the entire Singularity, before Ascensions trigger massive debuffs! Ascension Count Multiplier is hardcapped at 1. Oh and Delta is disabled. Ha.',
+        rewardDescription: 'Each completion grants 0.1% Ascension Speed per completion per digit in your Ascension count! First completion doubles the cap of all hepteract. Final completion adds another calculator in the shop!',
+        baseReq: 10,
+        maxCompletions: 25,
+        unlockSingularity: 50,
+        HTMLTag: 'limitedAscensions',
+        singularityRequirement: (baseReq: number, completions: number) => {
+            return baseReq + 10 * completions
+        },
+        effect: (n: number) => {
+            return {
+                ascensionSpeedMult: 0.1 * n / 100,
+                hepteractCap: (n > 0),
+                calculatorUnlock: (n >= 25)
             }
         }
     }

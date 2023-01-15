@@ -133,28 +133,14 @@ export const toggleChallenges = (i: number, auto = false) => {
 
 type ToggleBuy = 'coin' | 'crystal' | 'mythos' | 'particle' | 'offering' | 'tesseract';
 
-export const toggleBuyAmount = (quantity: 1 | 10 | 100 | 1000 | 10000 | 100000, type: ToggleBuy) => {
+export const toggleBuyAmount = (quantity: number, type: ToggleBuy) => {
     player[`${type}buyamount` as const] = quantity;
-    const a = ['one', 'ten', 'hundred', 'thousand', '10k', '100k'][quantity.toString().length - 1];
+    const buildingOrds = ['one', 'ten', 'hundred', 'thousand', '10k', '100k'];
+    const buildingOrdsToNum = [1, 10, 100, 1000, 10000, 100000];
 
-    DOMCacheGetOrSet(`${type}${a}`).style.backgroundColor = 'Green';
-    if (quantity !== 1) {
-        DOMCacheGetOrSet(`${type}one`).style.backgroundColor = ''
-    }
-    if (quantity !== 10) {
-        DOMCacheGetOrSet(`${type}ten`).style.backgroundColor = ''
-    }
-    if (quantity !== 100) {
-        DOMCacheGetOrSet(`${type}hundred`).style.backgroundColor = ''
-    }
-    if (quantity !== 1000) {
-        DOMCacheGetOrSet(`${type}thousand`).style.backgroundColor = ''
-    }
-    if (quantity !== 10000) {
-        DOMCacheGetOrSet(`${type}10k`).style.backgroundColor = ''
-    }
-    if (quantity !== 100000) {
-        DOMCacheGetOrSet(`${type}100k`).style.backgroundColor = ''
+    for (let index = 0; index < buildingOrdsToNum.length; index++) {
+        DOMCacheGetOrSet(`${type}${buildingOrds[index]}`).style.backgroundColor =
+            quantity === buildingOrdsToNum[index] ? 'green' : '';
     }
 }
 
@@ -428,7 +414,7 @@ export const toggleResearchBuy = () => {
 
 export const toggleAutoResearch = () => {
     const el = DOMCacheGetOrSet('toggleautoresearch')
-    if (player.autoResearchToggle) {
+    if (player.autoResearchToggle || player.shopUpgrades.obtainiumAuto < 1) {
         player.autoResearchToggle = false;
         el.textContent = 'Automatic: OFF';
         DOMCacheGetOrSet(`res${player.autoResearch || 1}`).classList.remove('researchRoomba');
@@ -446,7 +432,7 @@ export const toggleAutoResearch = () => {
 
 export const toggleAutoResearchMode = () => {
     const el = DOMCacheGetOrSet('toggleautoresearchmode')
-    if (player.autoResearchMode === 'cheapest') {
+    if (player.autoResearchMode === 'cheapest' || !autoResearchEnabled()) {
         player.autoResearchMode = 'manual';
         el.textContent = 'Automatic mode: Manual';
     } else {

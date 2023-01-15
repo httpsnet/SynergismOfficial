@@ -299,8 +299,7 @@ export const player: Player = {
         43: false,
         44: false,
         45: false,
-        46: false,
-        47: false
+        46: false
     },
 
     challengecompletions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -477,7 +476,8 @@ export const player: Player = {
         obtainiumEX3: 0,
         improveQuarkHept5: 0,
         seasonPassInfinity: 0,
-        chronometerInfinity: 0
+        chronometerInfinity: 0,
+        shopSingularityPenaltyDebuff: 0
     },
     shopBuyMaxToggle: false,
     shopHideToggle: false,
@@ -704,6 +704,7 @@ export const player: Player = {
     loadedV2927Hotfix1: true,
     loadedV2930Hotfix1: true,
     loadedV2931Hotfix1: true,
+    loadedV21003Hotfix1: true,
     version,
     rngCode: 0,
     promoCodeTiming: {
@@ -812,7 +813,8 @@ export const player: Player = {
         octeractFastForward: new OcteractUpgrade(octeractData['octeractFastForward']),
         octeractAutoPotionSpeed: new OcteractUpgrade(octeractData['octeractAutoPotionSpeed']),
         octeractAutoPotionEfficiency: new OcteractUpgrade(octeractData['octeractAutoPotionEfficiency']),
-        octeractOneMindImprover: new OcteractUpgrade(octeractData['octeractOneMindImprover'])
+        octeractOneMindImprover: new OcteractUpgrade(octeractData['octeractOneMindImprover']),
+        octeractAmbrosiaLuck: new OcteractUpgrade(octeractData['octeractAmbrosiaLuck'])
     },
 
     dailyCodeUsed: false,
@@ -823,7 +825,8 @@ export const player: Player = {
     singularityChallenges: {
         noSingularityUpgrades: new SingularityChallenge(singularityChallengeData['noSingularityUpgrades']),
         oneChallengeCap: new SingularityChallenge(singularityChallengeData['oneChallengeCap']),
-        noOcteracts: new SingularityChallenge(singularityChallengeData['noOcteracts'])
+        noOcteracts: new SingularityChallenge(singularityChallengeData['noOcteracts']),
+        limitedAscensions: new SingularityChallenge(singularityChallengeData['limitedAscensions'])
     }
 }
 
@@ -1276,6 +1279,13 @@ const loadSynergy = async () => {
             player.researchPoints = 0;
         }
 
+        // Variables stored with NaN seem to be null or undefined
+        for (let i = 0; i < player.runeexp.length; i++) {
+            if (!Number.isFinite(player.runeexp[i])) {
+                player.runeexp[i] = 0;
+            }
+        }
+
         if (player.resettoggle1 === 0) {
             player.resettoggle1 = 1;
             player.resettoggle2 = 1;
@@ -1405,7 +1415,7 @@ const loadSynergy = async () => {
         const buildingOrdsToNum = [1, 10, 100, 1000, 10000, 100000];
         for (let index = 0; index < buildingTypesAlternate.length; index++) {
             let curBuyAmount = player[`${buildingTypesAlternate[index]}buyamount` as const];
-            if (buildingOrdsToNum.indexOf(curBuyAmount) === -1) {
+            if (!buildingOrdsToNum.includes(curBuyAmount)) {
                 curBuyAmount = buildingOrdsToNum[0];
                 player[`${buildingTypesAlternate[index]}buyamount` as const] = curBuyAmount;
             }
@@ -1580,7 +1590,7 @@ const loadSynergy = async () => {
             (DOMCacheGetOrSet('buyRuneSpiritInput') as HTMLInputElement).value = ('' + (player.runeSpiritBuyAmount || blankSave.runeSpiritBuyAmount)).replace(omit, 'e');
             updateRuneBlessingBuyAmount(2);
         }
-        DOMCacheGetOrSet('buyRuneSpiritToggleValue').textContent = format(player.runeSpiritBuyAmount, 0, true);
+        DOMCacheGetOrSet('buyRuneSpiritToggleValue').textContent = format(player.runeSpiritBuyAmount);
 
         if (player.resettoggle1 === 1) {
             DOMCacheGetOrSet('prestigeautotoggle').textContent = 'Mode: AMOUNT'
@@ -1846,6 +1856,7 @@ const padEvery = (str: string, places = 3) => {
         newStr += dec + strParts[1];
     }
     // see https://www.npmjs.com/package/flatstr
+    // eslint-disable-next-line no-bitwise
     (newStr as unknown as number) | 0;
     return newStr;
 }
@@ -2699,30 +2710,21 @@ export const resourceGain = (dt: number): void => {
         ascensionAchievementCheck(2)
     }
 
-    if (player.researches[71] > 0.5 && player.challengecompletions[1] < (Math.min(player.highestchallengecompletions[1], 25 + 5 * player.researches[66] + 925 * player.researches[105])) && player.coins.gte(Decimal.pow(10, 1.25 * G['challengeBaseRequirements'][0] * Math.pow(1 + player.challengecompletions[1], 2)))) {
-        player.challengecompletions[1] += 1;
-        challengeachievementcheck(1, true)
-        updateChallengeLevel(1)
-    }
-    if (player.researches[72] > 0.5 && player.challengecompletions[2] < (Math.min(player.highestchallengecompletions[2], 25 + 5 * player.researches[67] + 925 * player.researches[105])) && player.coins.gte(Decimal.pow(10, 1.6 * G['challengeBaseRequirements'][1] * Math.pow(1 + player.challengecompletions[2], 2)))) {
-        player.challengecompletions[2] += 1
-        challengeachievementcheck(2, true)
-        updateChallengeLevel(2)
-    }
-    if (player.researches[73] > 0.5 && player.challengecompletions[3] < (Math.min(player.highestchallengecompletions[3], 25 + 5 * player.researches[68] + 925 * player.researches[105])) && player.coins.gte(Decimal.pow(10, 1.7 * G['challengeBaseRequirements'][2] * Math.pow(1 + player.challengecompletions[3], 2)))) {
-        player.challengecompletions[3] += 1
-        challengeachievementcheck(3, true)
-        updateChallengeLevel(3)
-    }
-    if (player.researches[74] > 0.5 && player.challengecompletions[4] < (Math.min(player.highestchallengecompletions[4], 25 + 5 * player.researches[69] + 925 * player.researches[105])) && player.coins.gte(Decimal.pow(10, 1.45 * G['challengeBaseRequirements'][3] * Math.pow(1 + player.challengecompletions[4], 2)))) {
-        player.challengecompletions[4] += 1
-        challengeachievementcheck(4, true)
-        updateChallengeLevel(4)
-    }
-    if (player.researches[75] > 0.5 && player.challengecompletions[5] < (Math.min(player.highestchallengecompletions[5], 25 + 5 * player.researches[70] + 925 * player.researches[105])) && player.coins.gte(Decimal.pow(10, 2 * G['challengeBaseRequirements'][4] * Math.pow(1 + player.challengecompletions[5], 2)))) {
-        player.challengecompletions[5] += 1
-        challengeachievementcheck(5, true)
-        updateChallengeLevel(5)
+    // transcension challenge can be completed during a reincarnate challenge
+    for (let i = 1; i <= 5; i++) {
+        const oneChallengeCapCompletions = player.singularityChallenges.oneChallengeCap.completions;
+        const maxCompletions = 1 + oneChallengeCapCompletions;
+        let completions = 0;
+        while (player.researches[70 + i] > 0.5 && completions < maxCompletions &&
+            player.challengecompletions[i] < Math.min(player.highestchallengecompletions[i], oneChallengeCapCompletions > 0 ? getMaxChallenges(i) : (25 + 5 * player.researches[65 + i] + 925 * player.researches[105])) &&
+            player.coinsThisTranscension.gte(challengeRequirement(i, player.challengecompletions[i], i))) {
+            player.challengecompletions[i] += 1;
+            completions += 1;
+        }
+        if (completions > 0) {
+            challengeachievementcheck(i, true);
+            updateChallengeLevel(i);
+        }
     }
 
     const chal = player.currentChallenge.transcension;
@@ -3542,13 +3544,7 @@ export const updateAll = (): void => {
         player.fifthGeneratedMythos = player.fifthGeneratedMythos.add(Decimal.pow(player.firstGeneratedParticles.add(player.firstOwnedParticles).add(1), c))
     }
 
-    if (player.runeshards > player.maxofferings) {
-        player.maxofferings = player.runeshards;
-    }
-    if (player.researchPoints > player.maxobtainium) {
-        player.maxobtainium = player.researchPoints;
-    }
-
+    // Need it because it can be NaN
     if (isNaN(player.runeshards)) {
         player.runeshards = 0;
     }
@@ -3560,6 +3556,13 @@ export const updateAll = (): void => {
     }
     if (player.researchPoints > 1e300) {
         player.researchPoints = 1e300;
+    }
+
+    if (player.runeshards > player.maxofferings) {
+        player.maxofferings = player.runeshards;
+    }
+    if (player.researchPoints > player.maxobtainium) {
+        player.maxobtainium = player.researchPoints;
     }
 
     G['effectiveLevelMult'] = 1;
@@ -3727,7 +3730,7 @@ const tick = () => {
 const tack = (dt: number) => {
     if (!G['timeWarp']) {
         //Adds Resources (coins, ants, etc)
-        const timeMult = calculateTimeAcceleration();
+        const timeMult = calculateTimeAcceleration().mult;
         resourceGain(dt * timeMult)
         //Adds time (in milliseconds) to all reset functions, and quarks timer.
         addTimers('prestige', dt)
@@ -3759,7 +3762,8 @@ const tack = (dt: number) => {
         }
 
         //Automatically tries and buys researches lol
-        if (player.autoResearchToggle && autoResearchEnabled() && player.autoResearch > 0 && player.autoResearch <= maxRoombaResearchIndex(player)) {
+        if (player.autoResearchToggle && player.autoResearch > 0 && player.autoResearch <= maxRoombaResearchIndex(player) &&
+                (autoResearchEnabled() || player.autoResearchMode === 'manual')) {
             // buyResearch() probably shouldn't even be called if player.autoResearch exceeds the highest unlocked research
             let counter = 0;
             const maxCount = 1 + player.challengecompletions[14];
