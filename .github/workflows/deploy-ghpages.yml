@@ -1,7 +1,7 @@
 name: Deploy to GitHub pages branch
 on:
   push:
-    branches: master
+    branches: exalt5_release
     
 jobs:
   build-and-deploy:
@@ -35,5 +35,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
+          BRANCH: gh-pages-exalt5_release
           FOLDER: targetdir

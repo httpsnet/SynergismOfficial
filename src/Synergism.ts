@@ -4286,9 +4286,10 @@ export const reloadShit = async (reset = false) => {
 
   setInterval(cacheReinitialize, 15000)
 
-  if (localStorage.getItem('pleaseStar') === null) {
-    void Alert(i18next.t('main.starRepo'))
-    localStorage.setItem('pleaseStar', '')
+  const pleaseUnofficial = Number(localStorage.getItem('pleaseUnofficial'))
+  if (pleaseUnofficial < 5) {
+    void Alert('🛑 Note! 🛑\n\nThis is an unofficial Synergism repository on httpsnet that is a fork of https://github.com/Pseudo-Corp/SynergismOfficial/tree/exalt5 \nI compile and publish the official exalt5 branch with some modifications. \nSave data played here cannot be used in official Synergism.')
+    localStorage.setItem('pleaseUnofficial', `${(pleaseUnofficial + 1)})`)
   }
 
   // All versions of Chrome and Firefox supported by the game have this API,
