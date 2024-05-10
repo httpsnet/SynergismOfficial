@@ -100,26 +100,12 @@ type ToggleBuy = 'coin' | 'crystal' | 'mythos' | 'particle' | 'offering' | 'tess
 
 export const toggleBuyAmount = (quantity: 1 | 10 | 100 | 1000 | 10000 | 100000, type: ToggleBuy) => {
   player[`${type}buyamount` as const] = quantity
-  const a = ['one', 'ten', 'hundred', 'thousand', '10k', '100k'][quantity.toString().length - 1]
+  const buildingOrdsToNum = [1, 10, 100, 1000, 10000, 100000] as const
+  const buildingOrdsToStr = ['one', 'ten', 'hundred', 'thousand', '10k', '100k'] as const
 
-  DOMCacheGetOrSet(`${type}${a}`).style.backgroundColor = 'Green'
-  if (quantity !== 1) {
-    DOMCacheGetOrSet(`${type}one`).style.backgroundColor = ''
-  }
-  if (quantity !== 10) {
-    DOMCacheGetOrSet(`${type}ten`).style.backgroundColor = ''
-  }
-  if (quantity !== 100) {
-    DOMCacheGetOrSet(`${type}hundred`).style.backgroundColor = ''
-  }
-  if (quantity !== 1000) {
-    DOMCacheGetOrSet(`${type}thousand`).style.backgroundColor = ''
-  }
-  if (quantity !== 10000) {
-    DOMCacheGetOrSet(`${type}10k`).style.backgroundColor = ''
-  }
-  if (quantity !== 100000) {
-    DOMCacheGetOrSet(`${type}100k`).style.backgroundColor = ''
+  for (let j = 0; j < buildingOrdsToNum.length; j++) {
+    const backgroundColor = quantity === buildingOrdsToNum[j] ? 'Green' : ''
+    DOMCacheGetOrSet(`${type}${buildingOrdsToStr[j]}`).style.backgroundColor = backgroundColor
   }
 }
 

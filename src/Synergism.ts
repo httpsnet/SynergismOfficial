@@ -2248,97 +2248,19 @@ const loadSynergy = async () => {
       updatePlatonicUpgradeBG(j)
     }
 
-    const q = [
-      'coin',
-      'crystal',
-      'mythos',
-      'particle',
-      'offering',
-      'tesseract'
-    ] as const
-    if (
-      player.coinbuyamount !== 1
-      && player.coinbuyamount !== 10
-      && player.coinbuyamount !== 100
-      && player.coinbuyamount !== 1000
-    ) {
-      player.coinbuyamount = 1
-    }
-    if (
-      player.crystalbuyamount !== 1
-      && player.crystalbuyamount !== 10
-      && player.crystalbuyamount !== 100
-      && player.crystalbuyamount !== 1000
-    ) {
-      player.crystalbuyamount = 1
-    }
-    if (
-      player.mythosbuyamount !== 1
-      && player.mythosbuyamount !== 10
-      && player.mythosbuyamount !== 100
-      && player.mythosbuyamount !== 1000
-    ) {
-      player.mythosbuyamount = 1
-    }
-    if (
-      player.particlebuyamount !== 1
-      && player.particlebuyamount !== 10
-      && player.particlebuyamount !== 100
-      && player.particlebuyamount !== 1000
-    ) {
-      player.particlebuyamount = 1
-    }
-    if (
-      player.offeringbuyamount !== 1
-      && player.offeringbuyamount !== 10
-      && player.offeringbuyamount !== 100
-      && player.offeringbuyamount !== 1000
-    ) {
-      player.offeringbuyamount = 1
-    }
-    if (
-      player.tesseractbuyamount !== 1
-      && player.tesseractbuyamount !== 10
-      && player.tesseractbuyamount !== 100
-      && player.tesseractbuyamount !== 1000
-    ) {
-      player.tesseractbuyamount = 1
-    }
-    for (let j = 0; j <= 5; j++) {
-      for (let k = 0; k < 4; k++) {
-        let d = ''
-        if (k === 0) {
-          d = 'one'
-        }
-        if (k === 1) {
-          d = 'ten'
-        }
-        if (k === 2) {
-          d = 'hundred'
-        }
-        if (k === 3) {
-          d = 'thousand'
-        }
-        const e = `${q[j]}${d}`
-        DOMCacheGetOrSet(e).style.backgroundColor = ''
+    const buildingTypesAlternate = ['coin', 'crystal', 'mythos', 'particle', 'tesseract', 'offering'] as const
+    const buildingOrdsToStr = ['one', 'ten', 'hundred', 'thousand', '10k', '100k'] as const
+    const buildingOrdsToNum = [1, 10, 100, 1000, 10000, 100000] as const
+    for (let j = 0; j < buildingTypesAlternate.length; j++) {
+      let curBuyAmount = player[`${buildingTypesAlternate[j]}buyamount` as const] as 1 | 10 | 100 | 1000 | 10000 | 100000
+      if (!buildingOrdsToNum.includes(curBuyAmount)) {
+        curBuyAmount = 1
+        player[`${buildingTypesAlternate[j]}buyamount` as const] = curBuyAmount
       }
-      let c = ''
-      const curBuyAmount = player[`${q[j]}buyamount` as const]
-      if (curBuyAmount === 1) {
-        c = 'one'
+      for (let k = 0; k < buildingOrdsToNum.length; k++) {
+        const backgroundColor = curBuyAmount === buildingOrdsToNum[k] ? 'Green' : ''
+        DOMCacheGetOrSet(`${buildingTypesAlternate[j]}${buildingOrdsToStr[k]}`).style.backgroundColor = backgroundColor
       }
-      if (curBuyAmount === 10) {
-        c = 'ten'
-      }
-      if (curBuyAmount === 100) {
-        c = 'hundred'
-      }
-      if (curBuyAmount === 1000) {
-        c = 'thousand'
-      }
-
-      const b = `${q[j]}${c}`
-      DOMCacheGetOrSet(b).style.backgroundColor = 'green'
     }
 
     const testArray = []
