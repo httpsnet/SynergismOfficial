@@ -996,24 +996,18 @@ export const buttoncolorchange = () => {
   }
 
   if (G.currentTab === Tabs.AntHill) {
-    ;(player.reincarnationPoints.gte(player.firstCostAnts))
-      ? DOMCacheGetOrSet('anttier1').classList.add('antTierBtnAvailable')
-      : DOMCacheGetOrSet('anttier1').classList.remove('antTierBtnAvailable')
+    DOMCacheGetOrSet('antSacrifice').classList.toggle('antSacrificeBtnAvailable', player.antPoints.gte('1e40'))
+    DOMCacheGetOrSet('anttier1').classList.toggle('antTierBtnAvailable', player.reincarnationPoints.gte(player.firstCostAnts))
     for (let i = 2; i <= 8; i++) {
       const costAnts = player[`${G.ordinals[(i - 1) as ZeroToSeven]}CostAnts` as const]
-      player.antPoints.gte(costAnts)
-        ? DOMCacheGetOrSet(`anttier${i}`).classList.add('antTierBtnAvailable')
-        : DOMCacheGetOrSet(`anttier${i}`).classList.remove('antTierBtnAvailable')
+      DOMCacheGetOrSet(`anttier${i}`).classList.toggle('antTierBtnAvailable', player.antPoints.gte(costAnts))
     }
     for (let i = 1; i <= 12; i++) {
-      player.antPoints.gte(
-          Decimal.pow(
-            G.antUpgradeCostIncreases[i - 1],
-            player.antUpgrades[i - 1]! * G.extinctionMultiplier[player.usedCorruptions[10]]
-          ).times(G.antUpgradeBaseCost[i - 1])
-        )
-        ? DOMCacheGetOrSet(`antUpgrade${i}`).classList.add('antUpgradeBtnAvailable')
-        : DOMCacheGetOrSet(`antUpgrade${i}`).classList.remove('antUpgradeBtnAvailable')
+      const costAnts = Decimal.pow(
+        G.antUpgradeCostIncreases[i - 1],
+        player.antUpgrades[i - 1]! * G.extinctionMultiplier[player.usedCorruptions[10]]
+      ).times(G.antUpgradeBaseCost[i - 1])
+      DOMCacheGetOrSet(`antUpgrade${i}`).classList.toggle('antUpgradeBtnAvailable', player.antPoints.gte(costAnts))
     }
   }
 }
