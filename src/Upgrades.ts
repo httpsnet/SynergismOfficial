@@ -166,11 +166,11 @@ const upgradetexts = [
     ),
   () => format(Math.min(2500, Math.floor(1 / 1000 * Decimal.log(G.taxdivisor, 10)))),
   () => {
-    const a = Decimal.pow(Decimal.log(G.reincarnationPointGain.add(10), 10), 0.5)
-    const b = Decimal.pow(Decimal.log(G.reincarnationPointGain.add(10), 10), 0.5)
+    const a = Math.pow(G.reincarnationPointGain.add(10).log10(), 0.5)
+    const b = Math.pow(G.reincarnationPointGain.add(10).log10(), 0.5)
     return {
-      x: format(Math.min(10, new Decimal(a).toNumber()), 2),
-      y: format(Math.min(3, new Decimal(b).toNumber()), 2)
+      x: format(Math.min(10, a), 2),
+      y: format(Math.min(3, b), 2)
     }
   },
   () => format(1 / 3 * Math.log(player.maxobtainium + 1) / Math.log(10), 2, true),

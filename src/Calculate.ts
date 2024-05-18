@@ -547,9 +547,7 @@ export const calculateObtainium = () => {
   if (player.upgrades[69] > 0) {
     G.obtainiumGain *= Math.min(
       10,
-      new Decimal(
-        Decimal.pow(Decimal.log(G.reincarnationPointGain.add(10), 10), 0.5)
-      ).toNumber()
+      Math.pow(G.reincarnationPointGain.add(10).log10(), 0.5)
     )
   }
   if (player.upgrades[72] > 0) {
@@ -678,8 +676,8 @@ export const calculateObtainium = () => {
   G.obtainiumGain *= calculateEXUltraObtainiumBonus()
   G.obtainiumGain *= calculateEXALTBonusMult()
 
-  if (!isFinite(G.obtainiumGain)) {
-    G.obtainiumGain = 1e300
+  if (isNaN(G.obtainiumGain)) {
+    G.obtainiumGain = 0
   }
   G.obtainiumGain = Math.min(1e300, G.obtainiumGain)
   G.obtainiumGain /= calculateSingularityDebuff('Obtainium')
@@ -1235,7 +1233,7 @@ export const calculateAntSacrificeRewards = (): IAntSacRewards => {
   const maxCap = 1e300
   const rewardsMult = Math.min(maxCap, G.timeMultiplier * G.upgradeMultiplier)
   const rewards: IAntSacRewards = {
-    antSacrificePoints: (G.effectiveELO * rewardsMult) / 85,
+    antSacrificePoints: Math.min(maxCap, G.effectiveELO * rewardsMult / 85),
     offerings: Math.min(
       maxCap,
       (player.offeringpersecond * 0.15 * G.effectiveELO * rewardsMult) / 180
@@ -1385,7 +1383,7 @@ export const calculateOffline = async (forceTime = 0) => {
     offering: Math.floor(timeAdd),
     transcension: timeAdd / Math.max(0.01, player.fastesttranscend),
     reincarnation: timeAdd / Math.max(0.01, player.fastestreincarnate),
-    obtainium: timeAdd * obtainiumGain * G.timeMultiplier
+    obtainium: Math.min(1e300, timeAdd * obtainiumGain * G.timeMultiplier)
   }
 
   const timerAdd = {
@@ -2264,7 +2262,7 @@ export const calculateLimitedAscensionsDebuff = () => {
         20 - player.singularityChallenges.limitedAscensions.completions
       )
     exponent = Math.max(0, exponent)
-    return Math.pow(2, exponent)
+    return Math.min(1e300, Math.pow(2, exponent))
   }
 }
 

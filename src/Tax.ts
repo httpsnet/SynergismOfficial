@@ -127,11 +127,11 @@ export const calculatetax = () => {
   }
 
   if (a2 >= 1) {
-    compareB = Decimal.pow(a2, 2).div(550)
+    compareB = Decimal.pow(a2, 2).dividedBy(550)
   }
 
-  compareC = Decimal.pow(G.maxexponent, 2).div(550)
+  compareC = Decimal.pow(G.maxexponent, 2).dividedBy(550)
 
-  G.taxdivisor = Decimal.pow(1.01, Decimal.mul(compareB, exponent))
-  G.taxdivisorcheck = Decimal.pow(1.01, Decimal.mul(compareC, exponent))
+  G.taxdivisor = Decimal.pow(1.01, Decimal.times(compareB, exponent))
+  G.taxdivisorcheck = Decimal.pow(1.01, Decimal.times(compareC, exponent))
 }
