@@ -1834,7 +1834,7 @@
           },
           "divinePack": {
               "name": "Divine Pack",
-              "description": "OHHHHH. Gain +10% Quarks stack with master, and multiply Octeract gain by 7.77 if corruptions are all set to 14.",
+              "description": "OHHHHH. Gain +10% Quarks stack with master, and multiply Octeract gain by 2 if corruptions are all set to 14.",
               "effectHave": "You have found the reason for existence.",
               "effectHaveNot": "You have not found the reason for existence."
           },
@@ -2330,7 +2330,7 @@
           "15": "Effect: Mint Generation x{{x}}",
           "16": "Effect: Gain {{x}}x more Diamonds on Prestige",
           "17": "Effect: Mint Production x1e100 (Duh)",
-          "18": "Effect: Printer Production x",
+          "18": "Effect: Printer Production x{{x}}",
           "19": "Effect: Investment Production x{{x}}",
           "20": "Effect: All coin production is further multiplied by {{x}} [Stacks with upgrade 1]!",
           "21": "Effect: {{x}} Multipliers, +{{y}} Accelerators.",
@@ -2781,7 +2781,7 @@
           },
           "octeractImprovedAscensionSpeed2": {
               "name": "Abstract Exokinetics",
-              "description": "Gain +0.02% Ascension Speed per level per singularity!",
+              "description": "Gain +0.05% Ascension Speed per level per singularity!",
               "effect": "Ascension Speed per singularity +{{n}}%"
           },
           "octeractImprovedFree": {

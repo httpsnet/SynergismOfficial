@@ -1802,7 +1802,7 @@
       },
       "divinePack": {
         "name": "Pack Divino",
-        "description": "OHHHHH. Gana +10% Quarks sumados a maestro, y multiplica la ganancia de Octeractos por 7,77 si todas las corrupciones son 14.",
+        "description": "OHHHHH. Gana +10% Quarks sumados a maestro, y multiplica la ganancia de Octeractos por 2 si todas las corrupciones son 14.",
         "effectHave": "Has encontrado la razón de tu existencia.",
         "effectHaveNot": "No has encontrado la razón de tu existencia."
       },
@@ -2295,7 +2295,7 @@
       "15": "Efecto: Generación de Casas de Moneda x{{x}}",
       "16": "Efecto: Gana {{x}}x más Diamantes al Prestigiar",
       "17": "Efecto: Producción de Casas de Moneda x1e100 (Duh)",
-      "18": "Efecto: Producción de Impresoras x",
+      "18": "Efecto: Producción de Impresoras x{{x}}",
       "19": "Efecto: Producción de Inversiones x{{x}}",
       "20": "Efecto: Toda la producción de monedas se multiplica aún más por {{x}} ¡[suma a mejora 1]!",
       "21": "Efecto: {{x}} Multiplicadores, +{{y}} Aceleradores.",
@@ -2745,7 +2745,7 @@
       },
       "octeractImprovedAscensionSpeed2": {
         "name": "Exoquinesis Abstracta",
-        "description": "¡Gana +0,02% Velocidad de Ascensión por nivel por singularidad!",
+        "description": "¡Gana +0,05% Velocidad de Ascensión por nivel por singularidad!",
         "effect": "Velocidad de Ascensión por singularidad +{{n}}%"
       },
       "octeractImprovedFree": {

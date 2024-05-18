@@ -1802,7 +1802,7 @@
       },
       "divinePack": {
         "name": "Paquet Divin",
-        "description": "OHHHHH. Gain +10% Quarks stack with master, and multiply Octeract gain by 7.77 if corruptions are all set to 14.",
+        "description": "OHHHHH. Gain +10% Quarks stack with master, and multiply Octeract gain by 2 if corruptions are all set to 14.",
         "effectHave": "You have found the reason for existence.",
         "effectHaveNot": "You have not found the reason for existence."
       },
@@ -2745,7 +2745,7 @@
       },
       "octeractImprovedAscensionSpeed2": {
         "name": "Abstract Exokinetics",
-        "description": "Gain +0.02% Ascension Speed per level per singularity!",
+        "description": "Gain +0.05% Ascension Speed per level per singularity!",
         "effect": "Ascension Speed per singularity +{{n}}%"
       },
       "octeractImprovedFree": {

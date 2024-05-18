@@ -423,7 +423,7 @@ export const octeractData: Record<keyof Player['octeractUpgrades'], IOcteractDat
       return {
         bonus: n / 2000,
         get desc () {
-          return i18next.t('octeract.data.octeractImprovedAscensionSpeed2.effect', { n: format(n / 50, 2, true) })
+          return i18next.t('octeract.data.octeractImprovedAscensionSpeed2.effect', { n: format(n / 20, 2, true) })
         }
       }
     }

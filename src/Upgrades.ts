@@ -47,9 +47,9 @@ const upgradetexts = [
   () => format((G.totalCoinOwned + 1) * Math.min(1e30, Math.pow(1.008, G.totalCoinOwned)), 2),
   () => format((G.totalCoinOwned + 1) * Math.min(1e30, Math.pow(1.008, G.totalCoinOwned)), 2),
   () => format((G.totalCoinOwned + 1) * Math.min(1e30, Math.pow(1.008, G.totalCoinOwned)), 2),
-  () => Math.min(4, 1 + Math.floor(Decimal.log(player.fifthOwnedCoin + 1, 10))),
-  () => Math.floor(player.multiplierBought / 7),
-  () => Math.floor(player.acceleratorBought / 10),
+  () => format(Math.min(4, 1 + Math.floor(Decimal.log(player.fifthOwnedCoin + 1, 10)))),
+  () => format(Math.floor(player.multiplierBought / 7)),
+  () => format(Math.floor(player.acceleratorBought / 10)),
   () => format(Decimal.pow(2, Math.min(50, player.secondOwnedCoin / 15)), 2),
   () => format(Decimal.pow(1.02, G.freeAccelerator), 2),
   () => format(Decimal.min(1e4, Decimal.pow(1.01, player.prestigeCount)), 2),
@@ -150,7 +150,7 @@ const upgradetexts = [
   () => null,
   () => null,
   () => null,
-  () => Math.floor(1 / 5 * (sumContents(player.challengecompletions))),
+  () => format(Math.floor(1 / 5 * (sumContents(player.challengecompletions)))),
   () => format(Decimal.min('1e6000', Decimal.pow(player.reincarnationPoints.add(1), 6))),
   () => format(Decimal.pow(player.reincarnationPoints.add(1), 2)),
   () => null,
@@ -176,11 +176,11 @@ const upgradetexts = [
   () => format(1 / 3 * Math.log(player.maxobtainium + 1) / Math.log(10), 2, true),
   () => null,
   () =>
-    Math.min(
+    format(Math.min(
       50,
       1 + 2 * player.challengecompletions[6] + 2 * player.challengecompletions[7] + 2 * player.challengecompletions[8]
         + 2 * player.challengecompletions[9] + 2 * player.challengecompletions[10]
-    ),
+    )),
   () => null,
   () => format(1 + 4 * Math.min(1, Math.pow(player.maxofferings / 100000, 0.5)), 2),
   () => format(1 + 2 * Math.min(1, Math.pow(player.maxobtainium / 30000000, 0.5)), 2),
