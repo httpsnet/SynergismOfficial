@@ -31,7 +31,7 @@ jobs:
           mkdir -p ${{ github.ref_name }}/targetdir/
           mv dist Pictures translations index.html Synergism.css favicon.ico package.json ${{ github.ref_name }}/targetdir/
       - name: Deploy with the $GME emoji for some reason 🚀
-        uses: JamesIves/github-pages-deploy-action@4.7.2
+        uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
