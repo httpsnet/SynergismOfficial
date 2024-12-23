@@ -30,7 +30,7 @@ jobs:
         run: |
           rm -rf targetdir/${{ github.ref_name }}/
           mkdir -p targetdir/${{ github.ref_name }}/
-          mv dist Pictures translations index.html Synergism.css favicon.ico package.json ${{ github.ref_name }}/targetdir/
+          mv dist Pictures translations index.html Synergism.css favicon.ico package.json /targetdir/${{ github.ref_name }}/
       - name: Deploy with the $GME emoji for some reason 🚀
         uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
