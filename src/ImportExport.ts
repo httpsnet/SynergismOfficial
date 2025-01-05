@@ -445,7 +445,7 @@ export const promocodes = async (input: string | null, amount?: number) => {
     player.codes.set(48, true)
     player.quarkstimer = quarkHandler().maxTime
     player.goldenQuarksTimer = 3600 * 24
-    addTimers('ascension', 8 * 3600)
+    addTimers('ascension', 8 * 3600, true)
     player.dailyCodeUsed = false
 
     if (
@@ -552,21 +552,49 @@ export const promocodes = async (input: string | null, amount?: number) => {
     await Alert(rewardMessage)
 
     if (player.highestSingularityCount > 0) {
+      const chance = +player.singularityChallenges.extra10.rewards.reward
       const upgradeDistribution = {
-        goldenQuarks3: { value: 0.2, pdf: (x: number) => 0 <= x && x <= 1 },
-        goldenQuarks2: { value: 0.2, pdf: (x: number) => 1 <= x && x <= 3 },
-        goldenQuarks1: { value: 0.2, pdf: (x: number) => 3 <= x && x <= 10 },
-        singCubes3: { value: 0.25, pdf: (x: number) => 10 < x && x <= 15 },
-        singObtainium3: { value: 0.25, pdf: (x: number) => 15 < x && x <= 20 },
-        singOfferings3: { value: 0.25, pdf: (x: number) => 20 < x && x <= 25 },
-        singCubes2: { value: 0.5, pdf: (x: number) => 25 < x && x <= 80 },
-        singObtainium2: { value: 0.5, pdf: (x: number) => 80 < x && x <= 140 },
-        singOfferings2: { value: 0.5, pdf: (x: number) => 140 < x && x <= 200 },
-        singCubes1: { value: 1, pdf: (x: number) => 200 < x && x <= 400 },
-        singObtainium1: { value: 1, pdf: (x: number) => 400 < x && x <= 600 },
-        singOfferings1: { value: 1, pdf: (x: number) => 600 < x && x <= 800 },
-        ascensions: { value: 1, pdf: (x: number) => 800 < x && x <= 1000 }
+        goldenQuarks3: { value: 0.2, max: 1e10, pdf: (x: number) => 0 <= x && x <= 1 },
+        goldenQuarks2: { value: 0.2, max: 1e10, pdf: (x: number) => 1 <= x && x <= 3 },
+        goldenQuarks1: { value: 0.2, max: 1e10, pdf: (x: number) => 3 <= x && x <= 10 },
+        singCubes3: { value: 0.25, max: 1e10, pdf: (x: number) => 10 < x && x <= 15 },
+        singObtainium3: { value: 0.25, max: 1e10, pdf: (x: number) => 15 < x && x <= 20 },
+        singOfferings3: { value: 0.25, max: 1e10, pdf: (x: number) => 20 < x && x <= 25 },
+        singCubes2: { value: 0.5, max: 1e10, pdf: (x: number) => 25 < x && x <= 80 },
+        singObtainium2: { value: 0.5, max: 1e10, pdf: (x: number) => 80 < x && x <= 140 },
+        singOfferings2: { value: 0.5, max: 1e10, pdf: (x: number) => 140 < x && x <= 200 },
+        singCubes1: { value: 1, max: 1e10, pdf: (x: number) => 200 < x && x <= 400 },
+        singObtainium1: { value: 1, max: 1e10, pdf: (x: number) => 400 < x && x <= 600 },
+        singOfferings1: { value: 1, max: 1e10, pdf: (x: number) => 600 < x && x <= 800 },
+        ascensions: { value: 1, max: 1e10, pdf: (x: number) => 800 < x && x <= 990 },
+
+        singOcteractGain: { value: chance, max: 1e10, pdf: (x: number) => 990 < x && x <= 990.5 },
+        singOcteractGain2: { value: chance / 250, max: 1e10, pdf: (x: number) => 990.5 < x && x <= 991 },
+        singOcteractGain3: { value: chance / 25000, max: 1e10, pdf: (x: number) => 991 < x && x <= 991.5 },
+        singOcteractGain4: { value: chance / 2500000, max: 1e10, pdf: (x: number) => 991.5 < x && x <= 992 },
+        singOcteractGain5: { value: chance / 250000000, max: 1e10, pdf: (x: number) => 992 < x && x <= 992.5 },
+        potionBuff: { value: chance / 20, max: 1e10, pdf: (x: number) => 992.5 < x && x <= 993 },
+        potionBuff2: { value: chance / 2000, max: 1e10, pdf: (x: number) => 993 < x && x <= 993.5 },
+        potionBuff3: { value: chance / 200000, max: 1e10, pdf: (x: number) => 993.5 < x && x <= 994 },
+        singAmbrosiaLuck2: { value: chance / 10, max: 1e10, pdf: (x: number) => 994 < x && x <= 995 },
+        singAmbrosiaLuck3: { value: chance / 1000, max: 1e10, pdf: (x: number) => 995 < x && x <= 995.5 },
+        singAmbrosiaLuck: { value: chance / 100000, max: 1e10, pdf: (x: number) => 995.5 < x && x <= 996 },
+        singAmbrosiaLuck4: { value: chance / 10000000, max: 1e10, pdf: (x: number) => 996 < x && x <= 996.5 },
+        singCitadel: { value: chance, max: 1e10, pdf: (x: number) => 996.5 < x && x <= 997.5 },
+        singCitadel2: { value: chance / 10000, max: 1e10, pdf: (x: number) => 997.5 < x && x <= 998 },
+        singAmbrosiaGeneration2: { value: chance / 100, max: 1e10, pdf: (x: number) => 998 < x && x <= 998.4 },
+        singAmbrosiaGeneration3: { value: chance / 10000, max: 1e10, pdf: (x: number) => 998.4 < x && x <= 998.6 },
+        singAmbrosiaGeneration: { value: chance / 1000000, max: 1e10, pdf: (x: number) => 998.6 < x && x <= 998.8 },
+        singAmbrosiaGeneration4: { value: chance / 100000000, max: 1e10, pdf: (x: number) => 998.8 < x && x <= 999 },
+        singChallengeExtension: { value: chance / 10, max: 2, pdf: (x: number) => 999.0 < x && x <= 999.2 },
+        singChallengeExtension2: { value: chance / 1000, max: 2, pdf: (x: number) => 999.2 < x && x <= 999.4 },
+        singChallengeExtension3: { value: chance / 100000, max: 2, pdf: (x: number) => 999.4 < x && x <= 999.6 },
+        singQuarkImprover1: { value: chance / 500, max: 1e10, pdf: (x: number) => 999.6 < x && x <= 999.7 },
+        singQuarkHepteract: { value: chance / 50000, max: 1, pdf: (x: number) => 999.7 < x && x <= 999.8 },
+        singQuarkHepteract2: { value: chance / 500000, max: 1, pdf: (x: number) => 999.8 < x && x <= 999.9 },
+        singQuarkHepteract3: { value: chance / 50000000, max: 1, pdf: (x: number) => 999.9 < x && x <= 1000 }
       }
+
       let rolls = 3 * Math.sqrt(player.highestSingularityCount)
       rolls += +player.octeractUpgrades.octeractImprovedDaily.getEffect().bonus
       rolls += player.shopUpgrades.shopImprovedDaily2
@@ -583,7 +611,7 @@ export const promocodes = async (input: string | null, amount?: number) => {
       if (player.highestSingularityCount >= 200) {
         rolls *= 2
       }
-
+      rolls *= 1 + Math.pow(+player.singularityChallenges.extra7.rewards.reward / 10, 2)
       rolls = Math.floor(rolls)
 
       const keys = Object.keys(player.singularityUpgrades).filter(
@@ -593,14 +621,22 @@ export const promocodes = async (input: string | null, amount?: number) => {
       rewardMessage = i18next.t('importexport.promocodes.daily.message2')
       // The same upgrade can be drawn several times, so we save the sum of the levels gained, to display them only once at the end
       const freeLevels: Record<string, number> = {}
+      const bigChance = +player.singularityChallenges.extra7.rewards.reward
       for (let i = 0; i < rolls; i++) {
         const num = 1000 * Math.random()
         for (const key of keys) {
-          if (upgradeDistribution[key].pdf(num)) {
+          if (upgradeDistribution[key].pdf(num) && upgradeDistribution[key].value > 0) {
+            let mul = 1
+            if ((1000 / +player.singularityChallenges.extra14.rewards.reward) < bigChance / Math.random()) {
+              mul *= 1 + +player.singularityChallenges.extra14.rewards.reward
+            }
             player.singularityUpgrades[key].freeLevels += upgradeDistribution[key].value
             freeLevels[key]
-              ? (freeLevels[key] += upgradeDistribution[key].value)
-              : (freeLevels[key] = upgradeDistribution[key].value)
+              ? (freeLevels[key] += upgradeDistribution[key].value * mul)
+              : (freeLevels[key] = upgradeDistribution[key].value * mul)
+            if (player.singularityUpgrades[key].freeLevels > upgradeDistribution[key].max) {
+              player.singularityUpgrades[key].freeLevels = upgradeDistribution[key].max
+            }
           }
         }
       }
@@ -754,7 +790,7 @@ export const promocodes = async (input: string | null, amount?: number) => {
     // Calculator Maxed: you don't need to insert anything!
     if (player.shopUpgrades.calculator === shopData.calculator.maxLevel) {
       player.worlds.add(actualQuarks)
-      addTimers('ascension', ascensionTimer)
+      addTimers('ascension', ascensionTimer, true)
       player.goldenQuarksTimer += gqTimer
       addTimers('octeracts', octeractTime)
       addTimers('ambrosia', blueberryTime)
@@ -810,7 +846,7 @@ export const promocodes = async (input: string | null, amount?: number) => {
 
     if (first + second === +addPrompt) {
       player.worlds.add(actualQuarks)
-      addTimers('ascension', ascensionTimer)
+      addTimers('ascension', ascensionTimer, true)
       player.goldenQuarksTimer += gqTimer
       addTimers('octeracts', octeractTime)
       addTimers('ambrosia', blueberryTime)
@@ -1038,6 +1074,8 @@ export const addCodeMaxUses = () => {
   arr.push(addCodeSingularityPerkBonus())
   maxUses *= addCodeSingularityPerkBonus()
 
+  maxUses *= 1 + (+player.singularityChallenges.extra8.rewards.reward / 2)
+
   return {
     list: arr,
     total: Math.ceil(maxUses)
@@ -1062,9 +1100,12 @@ export const addCodeInterval = () => {
     1 / addCodeSingularityPerkBonus()
   ]
 
+  let interval = productContents(arr)
+  interval /= 1 + (+player.singularityChallenges.extra8.rewards.reward / 10)
+
   return {
     list: arr,
-    time: productContents(arr)
+    time: interval
   }
 }
 
@@ -1156,7 +1197,7 @@ const dailyCodeFormatFreeLevelMessage = (
   const upgradeNiceName = upgradeKey in singularityData
     ? i18next.t(`singularity.data.${upgradeKey}.name`)
     : i18next.t(`octeract.data.${upgradeKey}.name`)
-  return `\n+${format(freeLevelAmount, 0, true)} extra levels of '${upgradeNiceName}'`
+  return `\n+${format(freeLevelAmount, 4, true)} extra levels of '${upgradeNiceName}'`
 }
 
 const dailyCodeReward = () => {

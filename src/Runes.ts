@@ -58,7 +58,7 @@ export const displayRuneInformation = (i: number, updatelevelup = true) => {
       percent2: format(1 * calculateEffectiveIALevel(), 0, true)
     }
   } else if (i === 7 && updatelevelup) {
-    options = { exp: format(1e256 * (1 + player.singularityCount)) }
+    options = { exp: format(player.singularityChallenges.extra5.enabled ? 1e128 : 1e256) }
   }
 
   if (updatelevelup) {

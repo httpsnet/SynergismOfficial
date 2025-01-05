@@ -573,6 +573,10 @@ export const constantUpgradeDescriptions = (i: number) => {
 }
 
 export const buyConstantUpgrades = (i: number, fast = false) => {
+  if (player.singularityChallenges.extra4.enabled || player.singularityChallenges.extra14.enabled) {
+    return
+  }
+
   const [level, cost] = getConstUpgradeMetadata(i)
   if (i <= 8 || (i >= 9 && player.constantUpgrades[i]! < 1)) {
     if (player.ascendShards.gte(cost)) {

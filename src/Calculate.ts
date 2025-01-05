@@ -313,7 +313,13 @@ export const calculateRuneExpToLevel = (
   if (runeIndex === 6) {
     multiplier = Math.pow(1e25, runeLevel) * (player.highestSingularityCount + 1)
   }
-  return multiplier * G.runeexpbase[runeIndex]
+  let runeexpbase = G.runeexpbase[runeIndex]
+
+  if (player.singularityChallenges.extra5.enabled && runeIndex === 6) {
+    runeexpbase = 1e128
+  }
+
+  return multiplier * runeexpbase
 }
 
 export const calculateMaxRunes = (i: number) => {
@@ -515,8 +521,18 @@ export function calculateOfferings (
   if (G.eventClicked && G.isEvent) {
     q *= 1.05
   }
+
+  if (player.singularityChallenges.extra12.enabled) {
+    q /= 1e20
+  }
+  if (player.singularityChallenges.extra20.enabled) {
+    q *= Math.min(Math.pow(player.singChallengeTimer / 31536000, 2), 100)
+    if (player.platonicUpgrades[20] > 0) {
+      q *= 1e30
+    }
+  }
+
   q /= calculateSingularityDebuff('Offering')
-  q = (Math.floor(q) * 100) / 100
   if (player.currentChallenge.ascension === 15) {
     q *= 1 + 7 * player.cubeUpgrades[62]
   }
@@ -688,6 +704,10 @@ export const calculateObtainium = () => {
     const comps = player.singularityChallenges.limitedTime.completions
     const time = player.singChallengeTimer
     G.obtainiumGain *= calculateExalt6Penalty(comps, time)
+  }
+
+  if (player.singularityChallenges.extra12.enabled) {
+    G.obtainiumGain *= 1e15
   }
 
   if (!isFinite(G.obtainiumGain)) {
@@ -1422,7 +1442,9 @@ export const calculateOffline = async (forceTime = 0) => {
   player.prestigeCount += resetAdd.prestige
   player.transcendCount += resetAdd.transcension
   player.reincarnationCount += resetAdd.reincarnation
-  timerAdd.ascension = player.ascensionCounter - timerAdd.ascension
+  if (!player.singularityChallenges.extra8.enabled) {
+    timerAdd.ascension = player.ascensionCounter - timerAdd.ascension
+  }
   timerAdd.quarks = quarkHandler().gain - timerAdd.quarks
 
   // 200 simulated all ticks [July 12, 2021]
@@ -1708,8 +1730,9 @@ export const calculateAllCubeMultiplier = () => {
   const arr = [
     // Ascension Time Multiplier to cubes
     Math.pow(Math.min(1, player.ascensionCounter / 10), 2)
-    * (1
-      + ((1 / 4) * player.achievements[204]
+    * (1 +
+      +!player.singularityChallenges.extra10.enabled
+      * ((1 / 4) * player.achievements[204]
           + (1 / 4) * player.achievements[211]
           + (1 / 2) * player.achievements[218])
         * Math.max(0, player.ascensionCounter / 10 - 1)),
@@ -1775,7 +1798,7 @@ export const calculateAllCubeMultiplier = () => {
     // Platonic DELTA
     1
     + +player.singularityUpgrades.platonicDelta.getEffect().bonus
-      * Math.min(9, (player.shopUpgrades.shopSingularitySpeedup > 0) ? player.singularityCounter * 20 / (3600 * 24) : player.singularityCounter / (3600 * 24)),
+    * Math.min(9 * Math.pow(2, +player.singularityChallenges.extra17.rewards.reward), (player.shopUpgrades.shopSingularitySpeedup > 0) ? player.singularityCounter * 20 / (3600 * 24) : player.singularityCounter / (3600 * 24)),
     // Wow Pass INF
     Math.pow(1.02, player.shopUpgrades.seasonPassInfinity),
     // Ambrosia Mult
@@ -1803,9 +1826,23 @@ export const calculateAllCubeMultiplier = () => {
     // Total Global Cube Multipliers: 34
   ]
 
+  let baseMultiplier = productContents(arr)
+  if (player.singularityChallenges.extra7.enabled) {
+    baseMultiplier = Math.pow(baseMultiplier, 2 / 3)
+    baseMultiplier *= Math.pow(2, Math.min(48, player.singChallengeTimer / 3600))
+  }
+  baseMultiplier *= Math.pow(1.5, +player.singularityChallenges.extra3.rewards.reward)
+  if (player.singularityChallenges.extra20.enabled) {
+    baseMultiplier *= Math.min(Math.pow(player.singChallengeTimer / 31536000, 3), 1)
+  }
+  if (player.singularityChallenges.extra11.enabled || player.singularityChallenges.extra19.enabled) {
+    baseMultiplier = 1
+  }
+  baseMultiplier = Math.min(1e300, baseMultiplier)
+
   const extraMult = G.isEvent && G.eventClicked ? 1.05 : 1
   return {
-    mult: productContents(arr) * extraMult,
+    mult: baseMultiplier * extraMult,
     list: arr
   }
 }
@@ -2259,9 +2296,22 @@ export const calculateTimeAcceleration = () => {
     Math.max(Math.pow(1.01, (player.singularityCount - 200) * player.shopUpgrades.shopChronometerS), 1) // Limited Time Upg Accels
   ]
 
-  const timeMult = productContents(preCorruptionArr)
+  let timeMult = productContents(preCorruptionArr)
     * productContents(corruptionArr)
     * productContents(postCorruptionArr)
+
+  timeMult *= player.singularityChallenges.extra2.enabled || player.singularityChallenges.extra15.enabled ? Math.min((player.singChallengeTimer + 1) / 86400, 1) : 1
+  timeMult *= player.singularityChallenges.extra13.enabled ? Math.min(Math.pow((player.singChallengeTimer + 1) / 604800, 2), 1) : 1
+  timeMult *= Math.pow(1.5, +player.singularityChallenges.extra2.rewards.reward)
+  timeMult *= Math.pow(1.2, +player.singularityChallenges.extra19.rewards.reward)
+  if (player.singularityChallenges.extra12.enabled) {
+    timeMult = Math.max(Number(player.worlds), 1) / 1e10
+    timeMult /= calculateSingularityDebuff('Global Speed')
+  }
+  if (player.singularityChallenges.extra20.enabled) {
+    timeMult *= Math.min(Math.pow(player.singChallengeTimer / 31536000, 2), 100)
+  }
+  timeMult = Math.min(1e300, timeMult)
 
   if (player.usedCorruptions[3] >= 6 && player.achievements[241] < 1) {
     achievementaward(241)
@@ -2350,6 +2400,25 @@ export const calculateAscensionSpeedMultiplier = () => {
   arr.push(1 / calculateSingularityDebuff('Ascension Speed'))
 
   let multiplier = productContents(arr)
+  multiplier *= player.singularityChallenges.extra2.enabled || player.singularityChallenges.extra15.enabled ? Math.min((player.singChallengeTimer + 1) / 86400, 1) : 1
+  multiplier *= player.singularityChallenges.extra13.enabled ? Math.min(Math.pow((player.singChallengeTimer + 1) / 2592000, 3), 1) : 1
+  multiplier *= Math.pow(1.5, +player.singularityChallenges.extra2.rewards.reward)
+  multiplier *= Math.pow(1.2, +player.singularityChallenges.extra19.rewards.reward)
+  if (player.singularityChallenges.extra12.enabled || player.singularityChallenges.extra20.enabled) {
+    multiplier = Math.max(Number(player.worlds), 1) / (player.singularityChallenges.extra12.enabled ? 1e10 : 1e5)
+    multiplier /= calculateSingularityDebuff('Ascension Speed')
+  }
+  if (player.singularityChallenges.extra19.enabled) {
+    let completions = 0
+    Object.values(player.singularityChallenges).forEach((value) => {
+      completions += value.completions
+    })
+    multiplier = 1
+    multiplier /= calculateSingularityDebuff('Ascension Speed')
+    multiplier *= Math.pow(1.5, completions)
+    multiplier = Math.min(1e300, multiplier)
+  }
+
   if (!isFinite(multiplier)) {
     multiplier = 0
   }
@@ -2486,6 +2555,10 @@ export const calculateQuarkMultiplier = () => {
     multiplier *= 1.25
   }
 
+  if (player.singularityChallenges.extra12.enabled || player.singularityChallenges.extra20.enabled) {
+    multiplier = 1
+  }
+
   return multiplier
 }
 
@@ -2534,9 +2607,12 @@ export const calculateGoldenQuarkMultiplier = (computeMultiplier = false) => {
         / productContents(arr)
   )
 
+  let multiplier = productContents(arr)
+  multiplier *= Math.pow(1.2, +player.singularityChallenges.extra12.rewards.reward)
+
   return {
     list: arr,
-    mult: productContents(arr)
+    mult: multiplier
   }
 }
 
@@ -2838,7 +2914,8 @@ export const calculateAscensionScore = () => {
     const exponent = i === 2 && player.usedCorruptions[i] >= 10
       ? 1
         + 2 * Math.min(1, player.platonicUpgrades[17])
-        + 0.04 * player.platonicUpgrades[17]
+      + 0.04 * player.platonicUpgrades[17]
+      + 0.1 * +player.singularityChallenges.extra16.rewards.reward
       : 1
     corruptionMultiplier *= Math.pow(
       G.corruptionPointMultipliers[player.usedCorruptions[i] + bonusLevel],
@@ -2949,7 +3026,7 @@ export const CalcCorruptionStuff = () => {
 export const calcAscensionCount = () => {
   let ascCount = 1
 
-  if (player.singularityChallenges.limitedAscensions.enabled) {
+  if (player.singularityChallenges.limitedAscensions.enabled || player.singularityChallenges.extra9.enabled) {
     return ascCount
   }
 
@@ -3328,8 +3405,13 @@ export const calculateAdditiveLuckMult = () => {
     G.isEvent ? calculateEventBuff(BuffType.AmbrosiaLuck) : 0 // Event
   ]
 
+  let multiplier = 1
+  multiplier *= Math.pow(1.2, +player.singularityChallenges.extra1.rewards.reward)
+  multiplier *= Math.pow(1.1, +player.singularityChallenges.extra6.rewards.reward)
+  multiplier *= Math.pow(1.1, +player.singularityChallenges.extra11.rewards.reward)
+
   return {
-    value: sumContents(arr),
+    value: sumContents(arr) * multiplier,
     array: arr
   }
 }
@@ -3396,8 +3478,14 @@ export const calculateAmbrosiaGenerationSpeed = () => {
     calculateCashGrabBlueberryBonus()
   ]
 
+  let multiplier = 1
+  multiplier *= Math.pow(1.2, +player.singularityChallenges.extra4.rewards.reward)
+  multiplier *= Math.pow(1.1, +player.singularityChallenges.extra6.rewards.reward)
+  multiplier *= Math.pow(1.1, +player.singularityChallenges.extra9.rewards.reward)
+  multiplier *= Math.pow(1.1, +player.singularityChallenges.extra15.rewards.reward)
+
   return {
-    value: productContents(arr),
+    value: productContents(arr) * multiplier,
     array: arr
   }
 }

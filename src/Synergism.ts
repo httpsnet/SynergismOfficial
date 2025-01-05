@@ -421,7 +421,9 @@ export const player: Player = {
     40: true,
     41: true,
     42: false,
-    43: false
+    43: false,
+    44: true,
+    45: true
   },
 
   challengecompletions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -1405,6 +1407,86 @@ export const player: Player = {
       singularityChallengeData.sadisticPrequel,
       'sadisticPrequel'
     ),
+    extra1: new SingularityChallenge(
+      singularityChallengeData.extra1,
+      'extra1'
+    ),
+    extra2: new SingularityChallenge(
+      singularityChallengeData.extra2,
+      'extra2'
+    ),
+    extra3: new SingularityChallenge(
+      singularityChallengeData.extra3,
+      'extra3'
+    ),
+    extra4: new SingularityChallenge(
+      singularityChallengeData.extra4,
+      'extra4'
+    ),
+    extra5: new SingularityChallenge(
+      singularityChallengeData.extra5,
+      'extra5'
+    ),
+    extra6: new SingularityChallenge(
+      singularityChallengeData.extra6,
+      'extra6'
+    ),
+    extra7: new SingularityChallenge(
+      singularityChallengeData.extra7,
+      'extra7'
+    ),
+    extra8: new SingularityChallenge(
+      singularityChallengeData.extra8,
+      'extra8'
+    ),
+    extra9: new SingularityChallenge(
+      singularityChallengeData.extra9,
+      'extra9'
+    ),
+    extra10: new SingularityChallenge(
+      singularityChallengeData.extra10,
+      'extra10'
+    ),
+    extra11: new SingularityChallenge(
+      singularityChallengeData.extra11,
+      'extra11'
+    ),
+    extra12: new SingularityChallenge(
+      singularityChallengeData.extra12,
+      'extra12'
+    ),
+    extra13: new SingularityChallenge(
+      singularityChallengeData.extra13,
+      'extra13'
+    ),
+    extra14: new SingularityChallenge(
+      singularityChallengeData.extra14,
+      'extra14'
+    ),
+    extra15: new SingularityChallenge(
+      singularityChallengeData.extra15,
+      'extra15'
+    ),
+    extra16: new SingularityChallenge(
+      singularityChallengeData.extra16,
+      'extra16'
+    ),
+    extra17: new SingularityChallenge(
+      singularityChallengeData.extra17,
+      'extra17'
+    ),
+    extra18: new SingularityChallenge(
+      singularityChallengeData.extra18,
+      'extra18'
+    ),
+    extra19: new SingularityChallenge(
+      singularityChallengeData.extra19,
+      'extra19'
+    ),
+    extra20: new SingularityChallenge(
+      singularityChallengeData.extra20,
+      'extra20'
+    ),
   },
 
   ambrosia: 0,
@@ -2131,6 +2213,8 @@ const loadSynergy = async () => {
     for (let j = 1; j <= platUpg.length; j++) {
       updatePlatonicUpgradeBG(j)
     }
+
+    cacheReinitialize()
 
     const q = [
       'coin',
@@ -4798,6 +4882,9 @@ export const resetCheck = async (
       }
       if (player.shopUpgrades.instantChallenge2 > 0) {
         maxInc += player.highestSingularityCount
+        if (player.highestSingularityCount >= 273) {
+          maxInc += player.highestSingularityCount * 4
+        }
       }
       if (player.currentChallenge.ascension === 13) {
         maxInc = 1
@@ -4881,6 +4968,9 @@ export const resetCheck = async (
       }
       if (player.shopUpgrades.instantChallenge2 > 0) {
         maxInc += player.highestSingularityCount
+        if (player.highestSingularityCount >= 273) {
+          maxInc += player.highestSingularityCount * 4
+        }
       }
       if (player.currentChallenge.ascension === 13) {
         maxInc = 1
@@ -5016,7 +5106,7 @@ export const resetCheck = async (
           && (autoAscensionChallengeSweepUnlock()
             || !player.autoChallengeRunning) // If not autochallenge, don't reset
           && player.autoAscend
-          && player.challengecompletions[11] > 0
+          && player.achievements[141] === 1
           && player.cubeUpgrades[10] > 0
         )
       ) {
@@ -6263,6 +6353,7 @@ export const reloadShit = async (reset = false) => {
   createTimer()
 
   // Reset Displays
+  /*
   if (!playerNeedsReminderToExport()) {
     changeTab(Tabs.Buildings)
   } else {
@@ -6270,6 +6361,7 @@ export const reloadShit = async (reset = false) => {
 
     void Alert(i18next.t('general.exportYourGame'))
   }
+  */
 
   changeSubTab(Tabs.Buildings, { page: 0 })
   changeSubTab(Tabs.Runes, { page: 0 }) // Set 'runes' subtab back to 'runes' tab
@@ -6301,11 +6393,11 @@ export const reloadShit = async (reset = false) => {
 
   setInterval(cacheReinitialize, 15000)
 
-  if (localStorage.getItem('pleaseStar') === null) {
-    void Alert(i18next.t('main.starRepo'))
-    localStorage.setItem('pleaseStar', '')
+  if (localStorage.getItem('pleaseUnofficial') === null) {
+    void Alert('🛑 Note! 🛑\n\nThis is an unofficial game page developed by httpsnet, forked from the Synergism repository, with 20 exalts added and some improvements and content pushes. The saves are in test mode so they cannot be used officially.')
+    localStorage.setItem('pleaseUnofficial', '')
   }
-
+　
   // All versions of Chrome and Firefox supported by the game have this API,
   // but not all versions of Edge and Safari do.
   if (

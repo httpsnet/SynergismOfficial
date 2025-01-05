@@ -158,6 +158,10 @@ export const awardAutosCookieUpgrade = () => {
 }
 
 export const buyCubeUpgrades = (i: number, buyMax = player.cubeUpgradesBuyMaxToggle, auto = false) => {
+  if (player.singularityChallenges.extra3.enabled || player.singularityChallenges.extra14.enabled) {
+    return
+  }
+
   // Actually lock for HTML exploit
   if (
     (i > 50 && i <= 55 && !player.singularityUpgrades.cookies.getEffect().bonus)

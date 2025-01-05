@@ -21,6 +21,10 @@ const getResearchCost = (index: number, buyAmount = 1, linGrowth = 0): IMultiBuy
 }
 
 export const updateAutoResearch = (index: number, auto: boolean) => {
+  if (player.singularityChallenges.extra4.enabled || player.singularityChallenges.extra14.enabled) {
+    return false
+  }
+
   /* If Cube Upgrade 9 (1x9) is purchased, then automation behaves differently.
      If not purchased, then clicking on a research icon while auto toggled will update research for you.*/
   if (autoResearchEnabled() && auto && player.autoResearchMode === 'cheapest') {
@@ -92,6 +96,10 @@ export const autoResearchEnabled = (): boolean => {
  * @returns
  */
 export const buyResearch = (index: number, auto = false, linGrowth = 0, hover = false): boolean => {
+  if (player.singularityChallenges.extra4.enabled || player.singularityChallenges.extra14.enabled) {
+    return false
+  }
+
   // Get our costs, and determine if anything is purchasable.
   const buyAmount = (player.researchBuyMaxToggle || auto || hover) ? 1e5 : 1
   const metaData = getResearchCost(index, buyAmount, linGrowth) /* Destructuring FTW! */

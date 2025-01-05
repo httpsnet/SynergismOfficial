@@ -24,7 +24,7 @@ export const getMaxChallenges = (i: number) => {
     }
     // Max T. Challenge depends on researches 3x16 to 3x20
     maxChallenge += 5 * player.researches[65 + i]
-    return maxChallenge
+    return Math.floor(maxChallenge)
   }
   // Reincarnation Challenges
   if (i <= 10 && i > 5) {
@@ -56,7 +56,7 @@ export const getMaxChallenges = (i: number) => {
 
     maxChallenge += +player.singularityChallenges.oneChallengeCap.rewards.capIncrease
     maxChallenge += +player.singularityChallenges.oneChallengeCap.rewards.reinCapIncrease2
-    return maxChallenge
+    return Math.floor(maxChallenge)
   }
   // Ascension Challenge
   if (i <= 15 && i > 10) {
@@ -86,10 +86,10 @@ export const getMaxChallenges = (i: number) => {
     maxChallenge += +player.singularityUpgrades.singChallengeExtension2.getEffect().bonus
     maxChallenge += +player.singularityUpgrades.singChallengeExtension3.getEffect().bonus
     maxChallenge += +player.singularityChallenges.oneChallengeCap.rewards.ascCapIncrease2
-    return maxChallenge
+    return Math.floor(maxChallenge)
   }
 
-  return maxChallenge
+  return Math.floor(maxChallenge)
 }
 
 export const challengeDisplay = (i: number, changefocus = true) => {
@@ -587,7 +587,7 @@ export const runChallengeSweep = (dt: number) => {
   if (
     autoAscensionChallengeSweepUnlock() && player.currentChallenge.ascension === 15
     && player.shopUpgrades.challenge15Auto === 0
-    && (action === 'start' || action === 'enter') && player.autoAscend && player.challengecompletions[11] > 0
+    && (action === 'start' || action === 'enter') && player.autoAscend && player.achievements[141] === 1
     && player.cubeUpgrades[10] > 0
     && player.autoAscendMode === 'realAscensionTime'
     && player.ascensionCounterRealReal >= Math.max(0.1, player.autoAscendThreshold - 5)

@@ -39,6 +39,7 @@ import { resetofferings } from './Runes'
 import { playerJsonSchema } from './saves/PlayerJsonSchema'
 import { resetShopUpgrades, shopData } from './Shop'
 import { calculateSingularityDebuff, getFastForwardTotalMultiplier } from './singularity'
+import { currentSingChallenge } from './SingularityChallenges'
 import { blankSave, format, player, saveSynergy, updateAll, updateEffectiveLevelMult } from './Synergism'
 import { changeSubTab, changeTab, Tabs } from './Tabs'
 import { updateTalismanAppearance, updateTalismanInventory } from './Talismans'
@@ -591,6 +592,11 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
     player.antSacrificePoints = 0
     player.antSacrificeTimer = 0
     player.antSacrificeTimerReal = 0
+    player.sacrificeTimer = 0
+    // Ascension early automation timer
+    if (player.autoSacrificeToggle) {
+      player.sacrificeTimer = 0.95
+    }
 
     player.antUpgrades[12 - 1] = 0
     for (let j = 61; j <= 80; j++) {
@@ -743,6 +749,19 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
       }
       return curr
     })
+
+    if (player.singularityChallenges.extra16.enabled && player.challengecompletions[11] > 0) {
+      for (let index = 2; index <= 9; index++) {
+        player.usedCorruptions[index] = Math.min(
+          maxLevel * (player.challengecompletions[corrChallengeMinimum(index)] > 0
+            || player.singularityUpgrades.platonicTau.getEffect().bonus
+            ? 1
+            : 0),
+          Math.floor((maxLevel + 0.9999999999) * Math.random())
+        )
+      }
+    }
+
     player.usedCorruptions[1] = 0
     player.prototypeCorruptions[1] = 0
     // fix c15 ascension bug by restoring the corruptions if the player ascended instead of leaving
@@ -771,7 +790,7 @@ export const reset = (input: resetNames, fast = false, from = 'unknown') => {
         craft.autoCraft(heptAutoSpend)
       }
 
-      if (player.overfluxOrbsAutoBuy) {
+      if (player.overfluxOrbsAutoBuy && !(player.singularityChallenges.extra5.enabled || player.singularityChallenges.extra18.enabled)) {
         const orbsAmount = Math.floor(heptAutoSpend / 250000)
         if (player.wowAbyssals - (250000 * orbsAmount) >= 0) {
           player.overfluxOrbs += orbsAmount
@@ -972,12 +991,13 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
     achievementaward(87)
   }
   if (player.achievements[277] > 0) { // Singularity 4
-    if (player.currentChallenge.ascension !== 14) {
+    const extra = currentSingChallenge()?.enabled || false
+    if (player.currentChallenge.ascension !== 14 && !extra) {
       player.researchPoints = Math.floor(
         500 * calculateSingularityDebuff('Offering') * calculateSingularityDebuff('Researches')
       )
     }
-    if (player.currentChallenge.ascension !== 12) {
+    if (player.currentChallenge.ascension !== 12 && !extra) {
       player.reincarnationPoints = new Decimal('1e16')
     }
     player.challengecompletions[6] = 1
@@ -1079,6 +1099,12 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
       updateResearchBG(j)
     }
   }
+
+  if (singularityReset && player.singularityChallenges.extra18.completions > 0) {
+    player.wowCubes.add(Math.pow(2, +player.singularityChallenges.extra18.rewards.reward - 1) * 500)
+    player.wowCubes.open(Math.floor(Number(player.wowCubes)), false)
+  }
+
   updateSingularityGlobalPerks()
   revealStuff()
 }
@@ -1196,7 +1222,7 @@ export const singularity = async (setSingNumber = -1): Promise<void> => {
   hold.goldenQuarks = player.goldenQuarks
   hold.shopUpgrades = player.shopUpgrades
 
-  if (!player.singularityChallenges.limitedTime.rewards.preserveQuarks) {
+  if (!player.singularityChallenges.limitedTime.rewards.preserveQuarks || player.singularityChallenges.extra12.enabled || player.singularityChallenges.extra20.enabled) {
     player.worlds.reset()
     hold.worlds = Number(hold.worlds)
   }
@@ -1330,6 +1356,14 @@ export const singularity = async (setSingNumber = -1): Promise<void> => {
   ) as Player['singularityChallenges']
   hold.iconSet = player.iconSet
 
+  if (hold.autoAscend) {
+    hold.autoAscend = player.autoAscend
+    hold.autoChallengeRunning = player.autoChallengeRunning
+  }
+  if (player.singularityChallenges.extra8.completions > 0) {
+    hold.rngCode = Math.floor(player.rngCode * Math.min(1, player.singularityChallenges.extra8.completions / 10))
+  }
+
   // Quark Hepteract craft is saved entirely. For other crafts we only save their auto setting
   hold.hepteractCrafts.quark = player.hepteractCrafts.quark
   for (const craftName of Object.keys(player.hepteractCrafts)) {
@@ -1371,7 +1405,9 @@ export const singularity = async (setSingNumber = -1): Promise<void> => {
   player.codes.set(46, saveCode46)
   player.codes.set(47, saveCode47)
   player.codes.set(48, saveCode48)
-  updateSingularityMilestoneAwards()
+  if (!(player.singularityChallenges.extra6.enabled || player.singularityChallenges.extra20.enabled)) {
+    updateSingularityMilestoneAwards()
+  }
 
   player.rngCode = Date.now()
   player.promoCodeTiming.time = Date.now()

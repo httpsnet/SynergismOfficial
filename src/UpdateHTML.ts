@@ -564,7 +564,9 @@ export const revealStuff = () => {
     toggle40: player.unlocks.prestige, // Number Hotkeys
     toggle41: player.challengecompletions[11] > 0, // Loadouts Notifx
     toggle42: player.highestSingularityCount >= 6, // Potion Autogenerator for Offering Potions
-    toggle43: player.highestSingularityCount >= 6 // Potion Autogenerator for Obtainium Potions
+    toggle43: player.highestSingularityCount >= 6, // Potion Autogenerator for Obtainium Potions
+    toggle44: player.highestSingularityCount >= 25,
+    toggle45: player.highestSingularityCount >= 25
   }
 
   Object.keys(automationUnlocks).forEach((key) => {

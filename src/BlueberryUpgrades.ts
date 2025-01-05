@@ -286,7 +286,7 @@ export class BlueberryUpgrade extends DynamicUpgrade {
   }
 
   public get rewardDesc (): string {
-    const effectiveLevel = (player.singularityChallenges.noAmbrosiaUpgrades.enabled || player.singularityChallenges.sadisticPrequel.enabled) ? 0 : this.level
+    const effectiveLevel = (player.singularityChallenges.noAmbrosiaUpgrades.enabled || player.singularityChallenges.sadisticPrequel.enabled || player.singularityChallenges.extra20.enabled) ? 0 : this.level
     if ('desc' in this.rewards(0)) {
       return String(this.rewards(effectiveLevel).desc)
     } else {
@@ -295,7 +295,7 @@ export class BlueberryUpgrade extends DynamicUpgrade {
   }
 
   public get bonus () {
-    const effectiveLevel = (player.singularityChallenges.noAmbrosiaUpgrades.enabled || player.singularityChallenges.sadisticPrequel.enabled) ? 0 : this.level
+    const effectiveLevel = (player.singularityChallenges.noAmbrosiaUpgrades.enabled || player.singularityChallenges.sadisticPrequel.enabled || player.singularityChallenges.extra20.enabled) ? 0 : this.level
     return this.rewards(effectiveLevel)
   }
 }
@@ -327,7 +327,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaQuarks1: {
-    maxLevel: 100,
+    maxLevel: 1000,
     costPerLevel: 1,
     blueberryCost: 0,
     costFormula: (level: number, baseCost: number): number => {
@@ -349,7 +349,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaCubes1: {
-    maxLevel: 100,
+    maxLevel: 1000,
     costPerLevel: 1,
     blueberryCost: 0,
     costFormula: (level: number, baseCost: number): number => {
@@ -371,7 +371,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaLuck1: {
-    maxLevel: 100,
+    maxLevel: 1000,
     costPerLevel: 1,
     blueberryCost: 0,
     costFormula: (level: number, baseCost: number): number => {
@@ -398,7 +398,7 @@ export const blueberryUpgradeData: Record<
     ]
   },
   ambrosiaQuarkCube1: {
-    maxLevel: 25,
+    maxLevel: 100,
     costPerLevel: 250,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -424,7 +424,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaLuckCube1: {
-    maxLevel: 25,
+    maxLevel: 100,
     costPerLevel: 250,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -448,7 +448,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaCubeQuark1: {
-    maxLevel: 25,
+    maxLevel: 100,
     costPerLevel: 500,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -480,7 +480,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaLuckQuark1: {
-    maxLevel: 25,
+    maxLevel: 100,
     costPerLevel: 500,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -509,7 +509,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaCubeLuck1: {
-    maxLevel: 25,
+    maxLevel: 100,
     costPerLevel: 100,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -545,7 +545,7 @@ export const blueberryUpgradeData: Record<
     ]
   },
   ambrosiaQuarkLuck1: {
-    maxLevel: 25,
+    maxLevel: 100,
     costPerLevel: 100,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -575,7 +575,7 @@ export const blueberryUpgradeData: Record<
     ]
   },
   ambrosiaQuarks2: {
-    maxLevel: 100,
+    maxLevel: 1000,
     costPerLevel: 500,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -601,7 +601,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaCubes2: {
-    maxLevel: 100,
+    maxLevel: 1000,
     costPerLevel: 500,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -629,7 +629,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaLuck2: {
-    maxLevel: 100,
+    maxLevel: 1000,
     costPerLevel: 250,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -683,7 +683,7 @@ export const blueberryUpgradeData: Record<
     ]
   },
   ambrosiaObtainium1: {
-    maxLevel: 2,
+    maxLevel: 10,
     costPerLevel: 50000,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -703,7 +703,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaOffering1: {
-    maxLevel: 2,
+    maxLevel: 10,
     costPerLevel: 50000,
     blueberryCost: 1,
     costFormula: (level: number, baseCost: number): number => {
@@ -723,7 +723,7 @@ export const blueberryUpgradeData: Record<
     }
   },
   ambrosiaHyperflux: {
-    maxLevel: 7,
+    maxLevel: 20,
     costPerLevel: 33333,
     blueberryCost: 3,
     costFormula: (level: number, baseCost: number): number => {

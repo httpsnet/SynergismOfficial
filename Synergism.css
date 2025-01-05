@@ -1575,7 +1575,9 @@ p#transcendhotkeys {
 .singularityChallenges {
     display: flex;
     justify-content: center;
-    column-gap: 4px;
+    gap: 4px;
+        flex-flow: wrap;
+        margin-bottom: 4px;
 }
 
 #challengesWrapper {
@@ -3596,6 +3598,7 @@ header #obtainiumDisplay { color: pink; }
 .rainbowBorder:hover {
     cursor: pointer;
     background-color: var(--hover-color);
+    filter: brightness(1);
 }
 
 .rainbowBorder::before {
@@ -3608,6 +3611,28 @@ header #obtainiumDisplay { color: pink; }
     content: "";
 }
 
+#singularityChallenges {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rainbowBorderA {
+    filter: brightness(0.8);
+}
+
+.rainbowBorderA::before {
+    animation: 1s linear infinite rotaterainbow;
+    filter: brightness(0.8);
+}
+
+.rainbowBorderB {
+    filter: brightness(0.6);
+}
+
+.rainbowBorderB::before {
+    animation: 0.2s linear infinite rotaterainbow;
+}
 @keyframes rotaterainbow {
     to { transform: rotate(360deg); }
 }

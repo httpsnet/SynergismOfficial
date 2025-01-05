@@ -123,6 +123,10 @@ export class HepteractCraft {
 
   // Add to balance through crafting.
   craft = async (max = false): Promise<HepteractCraft | void> => {
+    if ((player.singularityChallenges.extra5.enabled || player.singularityChallenges.extra18.enabled) && this.HTML_STRING !== 'abyss') {
+      return this
+    }
+
     let craftAmount = null
     const heptCap = this.computeActualCap()
     const craftCostMulti = calculateSingularityDebuff('Hepteract Costs')
@@ -264,6 +268,10 @@ export class HepteractCraft {
    * Expansion can only happen if your current balance is full.
    */
   expand = async (): Promise<HepteractCraft | void> => {
+    if ((player.singularityChallenges.extra5.enabled || player.singularityChallenges.extra18.enabled) && this.HTML_STRING !== 'abyss') {
+      return this
+    }
+
     const expandMultiplier = 2
     const currentBalance = this.BAL
     const heptCap = this.computeActualCap()
@@ -343,7 +351,11 @@ export class HepteractCraft {
     return this
   }
 
-  autoCraft (heptAmount: number): this {
+  autoCraft(heptAmount: number): this {
+    if ((player.singularityChallenges.extra5.enabled || player.singularityChallenges.extra18.enabled) && this.HTML_STRING !== 'abyss') {
+      return this
+    }
+
     const expandMultiplier = 2
     const craftCostMulti = calculateSingularityDebuff('Hepteract Costs')
     let heptCap = this.computeActualCap()
@@ -459,9 +471,9 @@ export const hepteractEffective = (data: hepteractTypes) => {
     exponentBoost += 1 / 750 * player.platonicUpgrades[19]
   }
   if (data === 'quark') {
-    exponentBoost += +player.singularityUpgrades.singQuarkHepteract.getEffect().bonus
-    exponentBoost += +player.singularityUpgrades.singQuarkHepteract2.getEffect().bonus
-    exponentBoost += +player.singularityUpgrades.singQuarkHepteract3.getEffect().bonus
+    exponentBoost += Math.min(+player.singularityUpgrades.singQuarkHepteract.getEffect().bonus, 0.05)
+    exponentBoost += Math.min(+player.singularityUpgrades.singQuarkHepteract2.getEffect().bonus, 0.05)
+    exponentBoost += Math.min(+player.singularityUpgrades.singQuarkHepteract3.getEffect().bonus, 0.05)
     exponentBoost += +player.octeractUpgrades.octeractImprovedQuarkHept.getEffect().bonus
     exponentBoost += player.shopUpgrades.improveQuarkHept / 100
     exponentBoost += player.shopUpgrades.improveQuarkHept2 / 100
@@ -606,6 +618,10 @@ export const hepteractToOverfluxOrbDescription = () => {
  * @returns Alert of either purchase failure or success
  */
 export const tradeHepteractToOverfluxOrb = async (buyMax?: boolean) => {
+  if (player.singularityChallenges.extra5.enabled || player.singularityChallenges.extra18.enabled) {
+    return
+  }
+
   const maxBuy = Math.floor(player.wowAbyssals / 250000)
   let toUse: number
 
@@ -715,6 +731,10 @@ export const overfluxPowderDescription = () => {
  * @returns Alert, either for success or failure of warping
  */
 export const overfluxPowderWarp = async (auto: boolean) => {
+  if (player.singularityChallenges.extra5.enabled || player.singularityChallenges.extra18.enabled) {
+    return
+  }
+
   if (!auto) {
     if (player.autoWarpCheck) {
       return Alert(i18next.t('hepteracts.warpImpossible'))
@@ -779,6 +799,10 @@ export const getAutoHepteractCrafts = () => {
   const autoHepteracts: HepteractCraft[] = []
   for (const craftName of Object.keys(player.hepteractCrafts)) {
     const craftKey = craftName as keyof Player['hepteractCrafts']
+    if ((player.singularityChallenges.extra5.enabled || player.singularityChallenges.extra18.enabled) && craftKey !== 'abyss') {
+      continue
+    }
+
     if (player.hepteractCrafts[craftKey].AUTO && player.hepteractCrafts[craftKey].UNLOCKED) {
       autoHepteracts.push(player.hepteractCrafts[craftKey])
     }

@@ -13,7 +13,7 @@ import {
 import { quarkHandler } from './Quark'
 import { checkMaxRunes, redeemShards, unlockedRune } from './Runes'
 import { useConsumable } from './Shop'
-import { player } from './Synergism'
+import { multipliers, player } from './Synergism'
 import { Tabs } from './Tabs'
 import { buyAllTalismanResources } from './Talismans'
 import { visualUpdateAmbrosia, visualUpdateOcteracts, visualUpdateResearch } from './UpdateVisuals'
@@ -36,7 +36,7 @@ type TimerInput =
  * @param input
  * @param time
  */
-export const addTimers = (input: TimerInput, time = 0) => {
+export const addTimers = (input: TimerInput, time = 0, add = false) => {
   const timeMultiplier = input === 'ascension'
       || input === 'quarks'
       || input === 'goldenQuarks'
@@ -66,8 +66,10 @@ export const addTimers = (input: TimerInput, time = 0) => {
           .bonus
         ? 10
         : calculateAscensionAcceleration()
-      player.ascensionCounter += time * timeMultiplier * ascensionSpeedMulti
-      player.ascensionCounterReal += time * timeMultiplier
+      if (add || !player.singularityChallenges.extra8.enabled) {
+        player.ascensionCounter += time * timeMultiplier * ascensionSpeedMulti
+        player.ascensionCounterReal += time * timeMultiplier
+      }
       break
     }
     case 'singularity': {
@@ -75,7 +77,11 @@ export const addTimers = (input: TimerInput, time = 0) => {
       player.singularityCounter += time * timeMultiplier
 
       if (player.insideSingularityChallenge) {
-        player.singChallengeTimer += time * timeMultiplier
+        let multiplier = 1
+        if (!(player.singularityChallenges.limitedTime.enabled || player.singularityChallenges.extra1.enabled || player.singularityChallenges.extra15.enabled)) {
+          multiplier *= Math.pow(1.2, +player.singularityChallenges.extra20.rewards.reward)
+        }
+        player.singChallengeTimer += time * timeMultiplier * multiplier
       }
       else {
         player.singChallengeTimer = 0

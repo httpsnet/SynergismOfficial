@@ -3153,6 +3153,106 @@
         "UniqueReward2": "10th - A first-tier <<pink|Exalt Upgrade>>",
         "UniqueReward3": "20th - A second-tier <<pink|Exalt Upgrade>>",
         "UniqueReward4": "30th - A particularly Sadistic <<gray|ULTRA Upgrade>>!"
+      },
+      "extra1": {
+        "name": "Added Singularity Debuffs",
+        "description": "<<red|Singularity Debuffs>> grow stronger over time",
+        "ScalingReward1": "x(1.2 ^ Completes) <<lime|&#9752 Ambrosia Luck>>"
+      },
+      "extra2": {
+        "name": "Speed Corruption",
+        "description": "Exalt timer multiplies Global Speed and Ascension Speed by 1 / days",
+        "ScalingReward1": "x(1.5 ^ Completes) <<orange|Global Speed>> and <<orange|Ascension Speed>>!"
+      },
+      "extra3": {
+        "name": "Upgrades Disabution I",
+        "description": "<<red|Platonic Statues>> and <<red|Cube Upgrades>> are disabled. Is that possible? Well... give it a try",
+        "ScalingReward1": "x(1.5 ^ Completes) increase to <<yellow|ALL Cube>>"
+      },
+      "extra4": {
+        "name": "Upgrades Disabution II",
+        "description": "<<red|Disable Research>> and <<red|Constant Upgrades>>. It's only going to get harder",
+        "ScalingReward1": "x(1.2 ^ Completes) <<var(--blueberry-box-color)|Blueberry Generation>> Speed"
+      },
+      "extra5": {
+        "name": "Upgrades Disabution III",
+        "description": "Disable <<red|Cube Tributes>> and <<red|Hepteract Forge>>. Why? Because httpsnet is sadistic.",
+        "ScalingReward1": "Every 5 completed <<lime|reduces singularity debuffs by 1>>"
+      },
+      "extra6": {
+        "name": "No Singularity Milestone",
+        "description": "All this exalt does is disable the <<red|Singularity Milestone>><br/><<red|The Challenges tab will be locked, we recommend exporting your save!>>",
+        "ScalingReward1": "x(1.1 ^ Completes) <<var(--blueberry-box-color)|Blueberry Generation Speed>> and <<lime|&#9752 Ambrosia Luck>>"
+      },
+      "extra7": {
+        "name": "All Cubes Corruption",
+        "description": "All Cubes will have a multiplier of ^ 2 / 3, but Cubes will double every hour (Maximum 2 days)",
+        "ScalingReward1": "x(1 + (Completes / 10) ^ 2) more <<orange|Free Upgrades>> from <<orange|'daily'>> code per completion!"
+      },
+      "extra8": {
+        "name": "'add' Exalt",
+        "description": "<<crimson|The Ascension Counter does not increase, orchid|but only 'add' does>>",
+        "ScalingReward1": "Each time you complete it, the <<orange|'add'>> code gets stronger"
+      },
+      "extra9": {
+        "name": "Ascension Hate Challenge",
+        "description": "<<red|Every ascension increases the singularity penalty by 1>>",
+        "ScalingReward1": "x(1.1 ^ Completes) <<var(--blueberry-box-color)|Blueberry Generation>> Speed"
+      },
+      "extra10": {
+        "name": "Ascension of a Bitter Smile",
+        "description": "There are no Cubes per second, and the ascension counter only increases by 1e-10, meaning you have to keep repeating the ascension to complete it",
+        "ScalingReward1": "Enhancement of free levels for <<orange|Singularity Upgrades>>"
+      },
+      "extra11": {
+        "name": "Division All Cubes Multiplier",
+        "description": "All cube multipliers are fixed at 1. Defeat the pseudo ant god!",
+        "ScalingReward1": "x(1.1 ^ Completes) <<lime|&#9752 Ambrosia Luck>>"
+      },
+      "extra12": {
+        "name": "Distorted Singularity",
+        "description": "Obtainium and Offerings have been significantly reduced, Global Speed and Ascension Speed multipliers are now based on 1e-10 times the amount of quarks you have.<br/>Quark multiplier is now fixed at 1x, and Quarks are lost at the start of the exalt",
+        "ScalingReward1": "x(1.2 ^ Completes) <<gold|Golden Quark>>"
+      },
+      "extra13": {
+        "name": "Speed Corruption II",
+        "description": "Exalt timer sets <<red|Global Speed>> to ^(1 / week) ^ 2 and <<red|Ascension Speed>> to (1 / month) ^ 3",
+        "ScalingReward1": "<<orange|Free Singularity Upgrades>> are now x(1.05 ^ Completes) effective"
+      },
+      "extra14": {
+        "name": "Upgrades Disabution Ⅳ",
+        "description": "There are <<red|Upgrades Disabution I>> and <<red|Upgrades Disabution II>>. oof",
+        "ScalingReward1": "Free Singularity Upgrades from <<orange|'daily'>> codes have <<orange|0.1% / Completes>> chance of multiplying by <<orange|Completes>>"
+      },
+      "extra15": {
+        "name": "Buffs And Debuffs",
+        "description": "Includes <<red|Speed Corruption>> and <<red|Added Singularity Debuffs>>. The longer it takes, the easier it gets and the stronger the penalties become",
+        "ScalingReward1": "x(1.1 ^ Completes) <<var(--blueberry-box-color)|Blueberry Generation>> Speed"
+      },
+      "extra16": {
+        "name": "Corruption Randomizer",
+        "description": "Corruption is random with each Ascension. Yes it very terrible. Good luck",
+        "ScalingReward1": "<<orchid|Corruption Score>> multiplier by the exponent +(0.1 * Completes)"
+      },
+      "extra17": {
+        "name": "No Exalt Challenge",
+        "description": "Did you know that exalt is already an upgrade? This exalt disables all of that. Hehehe",
+        "ScalingReward1": "<<orange|Delta>> effect duration is multiplied by (2 ^ Completes)"
+      },
+      "extra18": {
+        "name": "Wow Cubes Only Exalt",
+        "description": "<<red|Tesseract Gifts>>, <<red|Hypercube Benedictions>>, <<red|Platonic Statues>>, and <<red|non-Abyss Hepteract Forge>> are nullified. If you have a cube multiplier that's too strong, you should be able to achieve this...",
+        "ScalingReward1": "Open 500 * (2 ^ Completes) Cubes in Cube Tributes at the singularity start"
+      },
+      "extra19": {
+        "name": "Total Exalt Completed Challenge",
+        "description": "All Cubes Multipliers are fixed at 1, and Ascension Speed Multipliers are fixed at (1.5 ^ total exalt completions), but include a division for Singularity Penalties. If you have enough completions you may still progress beyond the highest singularity",
+        "ScalingReward1": "x(1.2 ^ Completes) <<orange|Global Speed>> and <<orange|Ascension Speed>>!"
+      },
+      "extra20": {
+        "name": "SADISTIC EXALT Ⅳ",
+        "description": "Includes <<red|SADISTIC EXALT III>> and the <<red|No Singularity Milestone>>, <<red|All Cubes>> multipliers are ^(1 / year) ^ 3, <<red|Offering>> multipliers and <<red|Global Speed>> multipliers are (1 / year) ^ 2, and <<red|Distorted Singularity>> Quark rules are applied. This exalt is very tedious",
+        "ScalingReward1": "<<crimson|Exalt Timer>> for non-timed exalts will be x(1.2 ^ Completes)"
       }
     },
     "intro": "Do you have what it takes to earn EXALT from Ant God?",

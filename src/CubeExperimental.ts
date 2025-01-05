@@ -171,7 +171,11 @@ export class WowCubes extends Cube {
     super('wowCubes', amount)
   }
 
-  open (value: number, max = false, free = false) {
+  open(value: number, max = false, free = false) {
+    if (player.singularityChallenges.extra5.enabled) {
+      return
+    }
+
     let toSpend = max ? Number(this) : (free ? value : Math.min(Number(this), value))
 
     if (value === 1 && player.cubeBlessings.accelerator >= 2e11 && player.achievements[246] < 1) {
@@ -237,7 +241,11 @@ export class WowTesseracts extends Cube {
     super('wowTesseracts', amount)
   }
 
-  open (value: number, max = false, free = false) {
+  open(value: number, max = false, free = false) {
+    if (player.singularityChallenges.extra18.enabled) {
+      return
+    }
+
     const toSpend = max ? Number(this) : (free ? value : Math.min(Number(this), value))
 
     if (!free) {
@@ -280,7 +288,11 @@ export class WowHypercubes extends Cube {
     super('wowHypercubes', amount)
   }
 
-  open (value: number, max = false, free = false) {
+  open(value: number, max = false, free = false) {
+    if (player.singularityChallenges.extra18.enabled) {
+      return
+    }
+
     const toSpend = max ? Number(this) : (free ? value : Math.min(Number(this), value))
 
     if (!free) {
@@ -323,7 +335,11 @@ export class WowPlatonicCubes extends Cube {
     super('wowPlatonicCubes', amount)
   }
 
-  open (value: number, max = false, free = false) {
+  open(value: number, max = false, free = false) {
+    if (player.singularityChallenges.extra3.enabled || player.singularityChallenges.extra14.enabled || player.singularityChallenges.extra18.enabled) {
+      return
+    }
+
     const toSpend = max ? Number(this) : (free ? value : Math.min(Number(this), value))
 
     if (!free) {

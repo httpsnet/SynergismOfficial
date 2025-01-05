@@ -28,6 +28,7 @@ export interface ISingularityChallengeData {
   enabled?: boolean
   highestSingularityCompleted?: number
   cacheUpdates?: (() => void)[]
+  extra?: boolean
 }
 
 export class SingularityChallenge {
@@ -45,6 +46,7 @@ export class SingularityChallenge {
   public effect
   public scalingrewardcount
   public uniquerewardcount
+  public extra
   readonly cacheUpdates: (() => void)[] | undefined
 
   public constructor (data: ISingularityChallengeData, key: string) {
@@ -66,20 +68,31 @@ export class SingularityChallenge {
     this.effect = data.effect
     this.scalingrewardcount = data.scalingrewardcount
     this.uniquerewardcount = data.uniquerewardcount
-
+    this.extra = data.extra ?? false
     this.updateIconHTML()
     this.updateChallengeCompletions()
     this.cacheUpdates = data.cacheUpdates ?? undefined
   }
 
-  public computeSingularityRquirement () {
-    return this.singularityRequirement(this.baseReq, this.completions)
+  public computeSingularityRequirement(baseReq = this.baseReq, completions = this.completions) {
+    let rqucompute = this.singularityRequirement(baseReq, completions)
+    let subtract = completions
+    if (rqucompute >= 272) {
+      rqucompute = 272
+      while (this.singularityRequirement(baseReq, subtract) >= 272
+      ) {
+        subtract--
+        rqucompute++
+      }
+    }
+
+    return rqucompute
   }
 
   public updateChallengeCompletions () {
     let updateVal = 0
     while (
-      this.singularityRequirement(this.baseReq, updateVal)
+      this.computeSingularityRequirement(this.baseReq, updateVal)
         <= this.highestSingularityCompleted
     ) {
       updateVal += 1
@@ -102,7 +115,7 @@ export class SingularityChallenge {
         i18next.t('singularityChallenge.enterChallenge.lowSingularity')
       )
     }
-    const confirmation = await Confirm(
+    const confirmation = !player.toggles[45] || await Confirm(
       i18next.t('singularityChallenge.enterChallenge.confirmation', {
         name: this.name
       })
@@ -113,7 +126,7 @@ export class SingularityChallenge {
     }
 
     if (!player.insideSingularityChallenge) {
-      const setSingularity = this.computeSingularityRquirement()
+      const setSingularity = this.computeSingularityRequirement()
       const holdSingTimer = player.singularityCounter
       const holdQuarkExport = player.quarkstimer
       const holdGoldenQuarkExport = player.goldenQuarksTimer
@@ -135,15 +148,15 @@ export class SingularityChallenge {
       player.goldenQuarksTimer = holdGoldenQuarkExport
 
       this.updateChallengeHTML()
-      return Alert(
+      return player.toggles[45] && Alert(
         i18next.t('singularityChallenge.enterChallenge.acceptSuccess', {
           name: this.name,
           tier: this.completions + 1,
-          singReq: this.computeSingularityRquirement()
+          singReq: this.computeSingularityRequirement()
         })
       )
     } else {
-      return Alert(
+      return player.toggles[45] && Alert(
         i18next.t('singularityChallenge.exitChallenge.acceptFailure')
       )
     }
@@ -180,7 +193,7 @@ export class SingularityChallenge {
       await singularity(highestSingularityHold)
       player.singularityCounter = holdSingTimer
       this.updateCaches()
-      return Alert(
+      return player.toggles[45] && Alert(
         i18next.t('singularityChallenge.exitChallenge.acceptSuccess', {
           tier: toOrdinal(this.completions),
           name: this.name
@@ -209,7 +222,7 @@ export class SingularityChallenge {
    * Given a Singularity Challenge, give a concise information regarding its data.
    * @returns A string that details the name, description, metadata.
    */
-  toString (): string {
+  toString(): string {
     const color = this.completions === this.maxCompletions
       ? 'var(--orchid-text-color)'
       : 'white'
@@ -240,16 +253,16 @@ export class SingularityChallenge {
         'singularityChallenge.toString.currentTierSingularity'
       )
     } <span style="color: var(--orchid-text-color)">${
-      this.singularityRequirement(
-        this.baseReq,
-        this.completions
-      )
+      this.computeSingularityRequirement()
     }</span></span>
     <span style="color: lightblue">${this.description}</span>`
   }
   // Numerates through total reward count for Scaling & Unique string for EXALTS.
-  scaleString (): string {
+  scaleString(): string {
     let text = ''
+    if (!player.toggles[44] && this.extra) {
+      return text
+    }
     for (let i = 1; i <= this.scalingrewardcount; i++) {
       const list = i18next.t(`singularityChallenge.data.${String(this.HTMLTag)}.ScalingReward${i}`)
       text += i > 1 ? `\n${list}` : list
@@ -260,6 +273,9 @@ export class SingularityChallenge {
   // Ditto. Also worth mentioning this implementation means the list size can be arbitrary!
   uniqueString (): string {
     let text = ''
+    if (!player.toggles[44] && this.extra) {
+      return text
+    }
     for (let i = 1; i <= this.uniquerewardcount; i++) {
       const list = i18next.t(`singularityChallenge.data.${String(this.HTMLTag)}.UniqueReward${i}`)
       text += i > 1 ? `\n${list}` : list
@@ -279,8 +295,12 @@ export class SingularityChallenge {
   }
 
   public get rewards () {
-    return this.effect(this.completions)
+    return this.effect((!player.toggles[44] && this.extra) || player.singularityChallenges.extra17.enabled ? 0 : this.completions)
   }
+}
+
+export const currentSingChallenge = (): SingularityChallenge | undefined => {
+  return Object.values(player.singularityChallenges).find((value) => value.enabled)
 }
 
 export const singularityChallengeData: Record<
@@ -289,7 +309,7 @@ export const singularityChallengeData: Record<
 > = {
   noSingularityUpgrades: {
     baseReq: 1,
-    maxCompletions: 30,
+    maxCompletions: 100,
     unlockSingularity: 25,
     HTMLTag: 'noSingularityUpgrades',
     singularityRequirement: (baseReq: number, completions: number) => {
@@ -320,7 +340,7 @@ export const singularityChallengeData: Record<
   },
   oneChallengeCap: {
     baseReq: 10,
-    maxCompletions: 25,
+    maxCompletions: 100,
     unlockSingularity: 40,
     HTMLTag: 'oneChallengeCap',
     singularityRequirement: (baseReq: number, completions: number) => {
@@ -342,7 +362,7 @@ export const singularityChallengeData: Record<
   },
   noOcteracts: {
     baseReq: 75,
-    maxCompletions: 10,
+    maxCompletions: 100,
     unlockSingularity: 100,
     HTMLTag: 'noOcteracts',
     singularityRequirement: (baseReq: number, completions: number) => {
@@ -361,7 +381,7 @@ export const singularityChallengeData: Record<
   },
   limitedAscensions: {
     baseReq: 10,
-    maxCompletions: 25,
+    maxCompletions: 100,
     unlockSingularity: 50,
     HTMLTag: 'limitedAscensions',
     singularityRequirement: (baseReq: number, completions: number) => {
@@ -381,7 +401,7 @@ export const singularityChallengeData: Record<
   },
   noAmbrosiaUpgrades: {
     baseReq: 150,
-    maxCompletions: 20,
+    maxCompletions: 100,
     unlockSingularity: 166,
     HTMLTag: 'noAmbrosiaUpgrades',
     singularityRequirement: (baseReq: number, completions: number) => {
@@ -403,7 +423,7 @@ export const singularityChallengeData: Record<
   },
   limitedTime: {
     baseReq: 203,
-    maxCompletions: 25,
+    maxCompletions: 100,
     unlockSingularity: 216,
     HTMLTag: 'limitedTime',
     singularityRequirement: (baseReq: number, completions: number) => {
@@ -424,7 +444,7 @@ export const singularityChallengeData: Record<
   },
   sadisticPrequel: {
     baseReq: 135,
-    maxCompletions: 30,
+    maxCompletions: 100,
     unlockSingularity: 273,
     HTMLTag: 'sadisticPrequel',
     singularityRequirement: (baseReq: number, completions: number) => {
@@ -442,5 +462,345 @@ export const singularityChallengeData: Record<
         shopUpgrade3: n >= 30
       }
     }
+  },
+  extra1: {
+    baseReq: 225,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra1',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra2: {
+    baseReq: 230,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra2',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra3: {
+    baseReq: 235,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra3',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra4: {
+    baseReq: 240,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra4',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra5: {
+    baseReq: 245,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra5',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: Math.floor(n * 0.2)
+      }
+    },
+    extra: true
+  },
+  extra6: {
+    baseReq: 250,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra6',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra7: {
+    baseReq: 250,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra7',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra8: {
+    baseReq: 250,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra8',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra9: {
+    baseReq: 250,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra9',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra10: {
+    baseReq: 250,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra10',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra11: {
+    baseReq: 100,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra11',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra12: {
+    baseReq: 230,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra12',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra13: {
+    baseReq: 240,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra13',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra14: {
+    baseReq: 210,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra14',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra15: {
+    baseReq: 250,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra15',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra16: {
+    baseReq: 260,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra16',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra17: {
+    baseReq: 260,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra17',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra18: {
+    baseReq: 260,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra18',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra19: {
+    baseReq: 260,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra19',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
+  },
+  extra20: {
+    baseReq: 1,
+    maxCompletions: 100,
+    unlockSingularity: 250,
+    HTMLTag: 'extra20',
+    singularityRequirement: (baseReq: number, completions: number) => {
+      return baseReq + 5 * completions
+    },
+    scalingrewardcount: 1,
+    uniquerewardcount: 0,
+    effect: (n: number) => {
+      return {
+        reward: n
+      }
+    },
+    extra: true
   }
 }

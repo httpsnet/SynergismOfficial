@@ -278,7 +278,7 @@ export class SingularityUpgrade extends DynamicUpgrade {
     let GQBudget = player.goldenQuarks
 
     if (event.shiftKey) {
-      maxPurchasable = 100000
+      maxPurchasable = 10000000
       const buy = Number(
         await Prompt(
           i18next.t('singularity.goldenQuarks.spendPrompt', {
@@ -360,7 +360,7 @@ export class SingularityUpgrade extends DynamicUpgrade {
 
   public computeFreeLevelSoftcap (): number {
 
-    const baseRealFreeLevels = player.shopUpgrades.shopSingularityPotency > 0 ? 7.66 * this.freeLevels : this.freeLevels
+    const baseRealFreeLevels = player.shopUpgrades.shopSingularityPotency > 0 ? 7.66 * Math.pow(1.05, +player.singularityChallenges.extra13.rewards.reward) * this.freeLevels : this.freeLevels
     return (
       Math.min(this.level, baseRealFreeLevels)
       + Math.sqrt(Math.max(0, baseRealFreeLevels - this.level))
@@ -388,7 +388,7 @@ export class SingularityUpgrade extends DynamicUpgrade {
 
   public actualTotalLevels (): number {
     if (
-      (player.singularityChallenges.noSingularityUpgrades.enabled || player.singularityChallenges.sadisticPrequel.enabled)
+      (player.singularityChallenges.noSingularityUpgrades.enabled || player.singularityChallenges.sadisticPrequel.enabled || player.singularityChallenges.extra20.enabled)
       && !this.qualityOfLife
     ) {
       return 0
@@ -2527,6 +2527,11 @@ export const calculateEffectiveSingularities = (
   singularityCount: number = player.singularityCount
 ): number => {
   let effectiveSingularities = singularityCount
+
+  if (player.singularityChallenges.extra9.enabled) {
+    effectiveSingularities += player.ascensionCount
+  }
+
   effectiveSingularities *= Math.min(4.75, (0.75 * singularityCount) / 10 + 1)
 
   if (player.insideSingularityChallenge) {
@@ -2590,6 +2595,14 @@ export const calculateEffectiveSingularities = (
     effectiveSingularities *= Math.pow(3, singularityCount - 269)
   }
 
+  // mod penalty
+  if (singularityCount > 299) {
+    effectiveSingularities *= Math.pow(1 + (singularityCount - 299) / 300, singularityCount - 299)
+  }
+  if (player.singularityChallenges.extra1.enabled || player.singularityChallenges.extra15.enabled) {
+    effectiveSingularities *= Math.pow(1.02, player.singChallengeTimer)
+  }
+
   return effectiveSingularities
 }
 
@@ -2599,6 +2612,7 @@ export const calculateNextSpike = (
   const singularityPenaltyThreshold = [11, 26, 37, 51, 101, 151, 201, 216, 230, 270]
   let penaltyDebuff = 0
   penaltyDebuff += player.shopUpgrades.shopSingularityPenaltyDebuff
+  penaltyDebuff -= +player.singularityChallenges.extra5.rewards.reward
 
   for (const sing of singularityPenaltyThreshold) {
     if (sing + penaltyDebuff > singularityCount) {
@@ -2620,6 +2634,7 @@ export const calculateSingularityDebuff = (
 
   let constitutiveSingularityCount = singularityCount
   constitutiveSingularityCount -= player.shopUpgrades.shopSingularityPenaltyDebuff
+  constitutiveSingularityCount -= +player.singularityChallenges.extra5.rewards.reward
   if (constitutiveSingularityCount < 1) {
     return 1
   }
