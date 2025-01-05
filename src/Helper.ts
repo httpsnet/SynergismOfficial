@@ -13,7 +13,7 @@ import {
 import { quarkHandler } from './Quark'
 import { checkMaxRunes, redeemShards, unlockedRune } from './Runes'
 import { useConsumable } from './Shop'
-import { multipliers, player } from './Synergism'
+import { player } from './Synergism'
 import { Tabs } from './Tabs'
 import { buyAllTalismanResources } from './Talismans'
 import { visualUpdateAmbrosia, visualUpdateOcteracts, visualUpdateResearch } from './UpdateVisuals'

@@ -158,8 +158,9 @@ export const generateEventHandlers = () => {
     'seventh',
     'eighth'
   ] as const
-/*
-  if (testing) {
+
+  // impossible
+  if (testing && player.singularityUpgrades.ultimatePen.level > 0 && player.highestSingularityCount >= 500) {
     const warp = document.createElement('button')
     const dayReset = document.createElement('button')
     warp.textContent = 'Click here to warp time! [TESTING ONLY]'
@@ -179,7 +180,7 @@ export const generateEventHandlers = () => {
     consumables.appendChild(warp)
     consumables.appendChild(dayReset)
   }
-*/
+
   // Offline Button
   DOMCacheGetOrSet('exitOffline').addEventListener('click', () => exitOffline())
   DOMCacheGetOrSet('offlineContainer').addEventListener('dblclick', () => exitOffline())

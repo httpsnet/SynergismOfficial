@@ -6353,7 +6353,6 @@ export const reloadShit = async (reset = false) => {
   createTimer()
 
   // Reset Displays
-  /*
   if (!playerNeedsReminderToExport()) {
     changeTab(Tabs.Buildings)
   } else {
@@ -6361,7 +6360,6 @@ export const reloadShit = async (reset = false) => {
 
     void Alert(i18next.t('general.exportYourGame'))
   }
-  */
 
   changeSubTab(Tabs.Buildings, { page: 0 })
   changeSubTab(Tabs.Runes, { page: 0 }) // Set 'runes' subtab back to 'runes' tab

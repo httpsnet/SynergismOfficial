@@ -1576,8 +1576,8 @@ p#transcendhotkeys {
     display: flex;
     justify-content: center;
     gap: 4px;
-        flex-flow: wrap;
-        margin-bottom: 4px;
+    flex-flow: wrap;
+    margin-bottom: 4px;
 }
 
 #challengesWrapper {
@@ -3632,9 +3632,6 @@ header #obtainiumDisplay { color: pink; }
 
 .rainbowBorderB::before {
     animation: 0.2s linear infinite rotaterainbow;
-}
-@keyframes rotaterainbow {
-    to { transform: rotate(360deg); }
 }
 
 .singularityUpgrade > img,
