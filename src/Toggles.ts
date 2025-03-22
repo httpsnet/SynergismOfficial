@@ -625,26 +625,20 @@ export const toggleAntMaxBuy = () => {
   player.antMax = !player.antMax
 }
 
-export const toggleAntAutoSacrifice = (mode = 0) => {
+export const toggleAntAutoSacrifice = (mode = -1) => {
+  const modes = ['ants.modeInGameTime', 'ants.modeInGameTime', 'ants.modeRealTime', 'ants.modeAntELO']
   if (mode === 0) {
-    const el = DOMCacheGetOrSet('toggleAutoSacrificeAnt')
-    if (player.autoAntSacrifice) {
-      player.autoAntSacrifice = false
-      el.textContent = i18next.t('ants.autoSacrificeOff')
-    } else {
-      player.autoAntSacrifice = true
-      el.textContent = i18next.t('ants.autoSacrificeOn')
-    }
+    player.autoAntSacrifice = !player.autoAntSacrifice
   } else if (mode === 1) {
-    const el = DOMCacheGetOrSet('autoSacrificeAntMode')
-    if (player.autoAntSacrificeMode === 1 || player.autoAntSacrificeMode === 0) {
-      player.autoAntSacrificeMode = 2
-      el.textContent = i18next.t('ants.modeRealTime')
-    } else {
+    player.autoAntSacrificeMode++
+    if (player.autoAntSacrificeMode >= modes.length) {
       player.autoAntSacrificeMode = 1
-      el.textContent = i18next.t('ants.modeInGameTime')
     }
   }
+  const el = DOMCacheGetOrSet('toggleAutoSacrificeAnt')
+  el.textContent = i18next.t(player.autoAntSacrifice ? 'ants.autoSacrificeOn' : 'ants.autoSacrificeOff')
+  const elm = DOMCacheGetOrSet('autoSacrificeAntMode')
+  elm.textContent = i18next.t(modes[player.autoAntSacrificeMode])
 }
 
 export const toggleMaxBuyCube = () => {

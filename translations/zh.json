@@ -666,6 +666,8 @@
     "autoSacrificeOff": "自动献祭：关",
     "modeRealTime": "模式：现实时间",
     "modeInGameTime": "模式：游戏时间",
+    "modeAntELO": "Mode: Ant ELO",
+    "sacrificeWhenELO": "Sacrifice when the Ant ELO is at least {{x}} amount, Currently: {{z}}",
     "sacrificeWhenTimer": "当时间至少经过{{x}}秒({{y}})后献祭蚂蚁，目前时间为：{{z}}秒",
     "yourAntELO": "<<plum|蚂蚁强度分为>><<gold|{{x}}>>[有效分{{y}}]",
     "upgradeMultiplier": "升级倍率：<<gold|{{x}}倍>>",

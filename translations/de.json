@@ -666,6 +666,8 @@
     "autoSacrificeOff": "Automatisches Opfern: AUS",
     "modeRealTime": "Modus: Echtzeit",
     "modeInGameTime": "Modus: Spiel-Zeit",
+    "modeAntELO": "Mode: Ant ELO",
+    "sacrificeWhenELO": "Sacrifice when the Ant ELO is at least {{x}} amount, Currently: {{z}}",
     "sacrificeWhenTimer": "Ameisen opfern, wenn der Timer mindestens {{x}} Sekunden beträgt ({{y}}). Aktuell: {{z}}",
     "yourAntELO": "<<plum|Dein Ameisen ELO ist>> <<gold|{{x}}>> [{{y}} effektiv]",
     "upgradeMultiplier": "Verbesserungs Multiplikator: <<gold|{{x}}x>>",

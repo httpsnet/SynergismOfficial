@@ -1060,7 +1060,7 @@ export const updateSingularityMilestoneAwards = (singularityReset = true): void 
     }
   }
   if (player.highestSingularityCount >= 25) {
-    player.eighthOwnedAnts = 1
+    player.eighthGeneratedAnts = new Decimal('1')
   }
   if (player.highestSingularityCount >= 30) {
     player.researches[130] = 1

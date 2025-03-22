@@ -2768,8 +2768,7 @@ const loadSynergy = () => {
 
     for (let i = 1; i <= 2; i++) {
       toggleAntMaxBuy()
-      toggleAntAutoSacrifice(0)
-      toggleAntAutoSacrifice(1)
+      toggleAntAutoSacrifice()
     }
 
     for (let i = 1; i <= 2; i++) {

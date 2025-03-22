@@ -666,6 +666,8 @@
     "autoSacrificeOff": "Auto Sacrificar: OFF",
     "modeRealTime": "Modo: Tiempo real",
     "modeInGameTime": "Modo: Tiempo del juego",
+    "modeAntELO": "Mode: Ant ELO",
+    "sacrificeWhenELO": "Sacrifice when the Ant ELO is at least {{x}} amount, Currently: {{z}}",
     "sacrificeWhenTimer": "Sacrificar cuando el cronómetro sea al menos {{x}} segundos ({{y}}), Actualmente: {{z}}",
     "yourAntELO": "<<plum|ELO de Hormigas es>> <<gold|{{x}}>> [{{y}} efectivo]",
     "upgradeMultiplier": "Multiplicador de Mejora: <<gold|{{x}}x>>",

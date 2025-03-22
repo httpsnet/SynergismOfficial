@@ -359,13 +359,10 @@ export const automaticTools = (input: AutoToolInput, time: number) => {
       player.antSacrificeTimerReal += time
 
       // Equal to real time iff "Real Time" option selected in ants tab.
-      const antSacrificeTimer = player.autoAntSacrificeMode === 2
-        ? player.antSacrificeTimerReal
-        : player.antSacrificeTimer
+      const antSacrificeTimer = [player.antSacrificeTimer, player.antSacrificeTimer, player.antSacrificeTimerReal, G.antELO]
 
       if (
-        antSacrificeTimer >= player.autoAntSacTimer
-        && player.antSacrificeTimerReal > 0.1
+        antSacrificeTimer[player.autoAntSacrificeMode] >= player.autoAntSacTimer
         && player.researches[124] === 1
         && player.autoAntSacrifice
         && player.antPoints.gte('1e40')

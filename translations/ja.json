@@ -666,6 +666,8 @@
     "autoSacrificeOff": "Auto Sacrifice: OFF",
     "modeRealTime": "Mode: Real-time",
     "modeInGameTime": "Mode: In-game time",
+    "modeAntELO": "Mode: Ant ELO",
+    "sacrificeWhenELO": "Sacrifice when the Ant ELO is at least {{x}} amount, Currently: {{z}}",
     "sacrificeWhenTimer": "Sacrifice when the timer is at least {{x}} seconds ({{y}}), Currently: {{z}}",
     "yourAntELO": "<<plum|Your Ant ELO is>> <<gold|{{x}}>> [{{y}} effective]",
     "upgradeMultiplier": "Upgrade Multiplier: <<gold|{{x}}x>>",

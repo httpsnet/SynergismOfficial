@@ -544,6 +544,8 @@
         "autoSacrificeOff": "",
         "modeRealTime": "",
         "modeInGameTime": "",
+        "modeAntELO": "Mode: Ant ELO",
+        "sacrificeWhenELO": "Sacrifice when the Ant ELO is at least {{x}} amount, Currently: {{z}}",
         "sacrificeWhenTimer": "",
         "yourAntELO": "",
         "upgradeMultiplier": "",

@@ -666,6 +666,8 @@
     "autoSacrificeOff": "Авто Пожертвование: ВЫКЛ",
     "modeRealTime": "Режим: В реальном времени",
     "modeInGameTime": "Режим: В игровом времени",
+    "modeAntELO": "Mode: Ant ELO",
+    "sacrificeWhenELO": "Sacrifice when the Ant ELO is at least {{x}} amount, Currently: {{z}}",
     "sacrificeWhenTimer": "Совершить пожертвование, когда таймер достигнет {{x}} секунд ({{y}}), Время сейчас: {{z}}",
     "yourAntELO": "<<plum|Ваш Муравьиный ЭЛО - >> <<gold|{{x}}>> [Эффективный - {{y}}]",
     "upgradeMultiplier": "Множитель улучшения: <<gold|{{x}}x>>",

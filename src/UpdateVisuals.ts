@@ -831,15 +831,13 @@ export const visualUpdateAnts = () => {
     }
   )
 
-  const mode = player.autoAntSacrificeMode === 2
-    ? i18next.t('ants.modeRealTime')
-    : i18next.t('ants.modeInGameTime')
-  const timer = player.autoAntSacrificeMode === 2
-    ? player.antSacrificeTimerReal
-    : player.antSacrificeTimer
+  const modes = ['ants.modeInGameTime', 'ants.modeInGameTime', 'ants.modeRealTime', 'ants.modeAntELO']
+  const timers = [player.antSacrificeTimer, player.antSacrificeTimer, player.antSacrificeTimerReal, G.antELO]
+  const timer = timers[player.autoAntSacrificeMode]
+  const mode = i18next.t(modes[player.autoAntSacrificeMode])
 
   DOMCacheGetOrSet('autoAntSacrifice').textContent = i18next.t(
-    'ants.sacrificeWhenTimer',
+    player.autoAntSacrificeMode === 3 ? 'ants.sacrificeWhenELO' : 'ants.sacrificeWhenTimer',
     {
       x: player.autoAntSacTimer,
       y: mode,

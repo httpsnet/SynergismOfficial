@@ -666,6 +666,8 @@
     "autoSacrificeOff": "Sacrifice auto : INACTIF",
     "modeRealTime": "Mode : temps réel",
     "modeInGameTime": "Mode : temps du jeu",
+    "modeAntELO": "Mode: Ant ELO",
+    "sacrificeWhenELO": "Sacrifice when the Ant ELO is at least {{x}} amount, Currently: {{z}}",
     "sacrificeWhenTimer": "Sacrifie lorsque le chronomètre est au moins à {{x}} secondes ({{y}}). Actuellement : {{z}}.",
     "yourAntELO": "<<plum|Votre ELO de Fourmi est>> <<gold|{{x}}>> [{{y}} effectif]",
     "upgradeMultiplier": "Multiplicateur d'Amélioration : <<gold|{{x}}x>>",
