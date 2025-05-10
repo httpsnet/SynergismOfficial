@@ -3,6 +3,7 @@ import { DOMCacheGetOrSet } from './Cache/DOM'
 import { calculateSingularityDebuff } from './singularity'
 import { format, player } from './Synergism'
 import { Alert, revealStuff } from './UpdateHTML'
+import { DOMResizeMinToMaxHeight } from './Utility'
 
 export interface IPlatBaseCost {
   obtainium: number
@@ -408,6 +409,8 @@ export const createPlatonicDescription = (index: number) => {
       'wowCubes.platonicUpgrades.descriptionBox.platonicCanBuyMaxed'
     )
   }
+
+  DOMResizeMinToMaxHeight(DOMCacheGetOrSet('cubeTab6'))
 }
 
 export const updatePlatonicUpgradeBG = (i: number) => {

@@ -35,7 +35,7 @@ import {
   visualUpdateSingularity,
   visualUpdateUpgrades
 } from './UpdateVisuals'
-import { createDeferredPromise } from './Utility'
+import { createDeferredPromise, DOMResizeMinToMaxWidth } from './Utility'
 import { Globals as G } from './Variables'
 
 export const revealStuff = () => {
@@ -1090,6 +1090,7 @@ const updateAscensionStats = () => {
       }
     }
   }
+  DOMResizeMinToMaxWidth(DOMCacheGetOrSet('ascLen'))
 }
 
 const tabColors: Partial<Record<Tabs, string>> = {

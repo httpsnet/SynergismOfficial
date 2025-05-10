@@ -3389,7 +3389,6 @@ header #obtainiumDisplay { color: pink; }
 
 #ascLen {
     color: var(--darkcyan-text-color);
-    min-width: 8em; /* prevent bouncing around */
 }
 
 #ascC10 {

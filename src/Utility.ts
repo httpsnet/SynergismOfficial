@@ -254,3 +254,26 @@ export const findInsertionIndex = (target: number, array: number[]): number => {
 
   return low + 1
 }
+
+// Prevents elements from shrinking in width automatically
+// Change if there is a better way
+export function DOMResizeMinToMax(element: HTMLElement) {
+  DOMResizeMinToMaxWidth(element)
+  DOMResizeMinToMaxHeight(element)
+}
+
+export function DOMResizeMinToMaxWidth(element: HTMLElement) {
+  const width = Math.ceil(element.offsetWidth)
+  if (width > 0 && width > Number((/\d+/).exec(element.style.minWidth))) {
+    element.style.minWidth = `${width}px`
+    element.style.boxSizing = 'border-box'
+  }
+}
+
+export function DOMResizeMinToMaxHeight(element: HTMLElement) {
+  const height = Math.ceil(element.offsetHeight)
+  if (height > 0 && height > Number((/\d+/).exec(element.style.minHeight))) {
+    element.style.minHeight = `${height}px`
+    element.style.boxSizing = 'border-box'
+  }
+}

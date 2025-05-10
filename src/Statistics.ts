@@ -98,7 +98,7 @@ import { shopData } from './Shop'
 import { calculateSingularityDebuff, getFastForwardTotalMultiplier } from './singularity'
 import { format, player } from './Synergism'
 import type { GlobalVariables } from './types/Synergism'
-import { sumContents } from './Utility'
+import { sumContents, DOMResizeMinToMaxHeight } from './Utility'
 import { Globals as G } from './Variables'
 
 export interface StatLine {
@@ -2841,6 +2841,8 @@ export const loadStatisticsUpdate = () => {
         break
     }
   }
+
+  DOMResizeMinToMaxHeight(DOMCacheGetOrSet('statisticsSubTab'))
 }
 
 export const loadStatistics = (
@@ -3308,6 +3310,9 @@ const updateDisplayC15Rewards = () => {
   } else {
     DOMCacheGetOrSet('c15NextReward').innerHTML = i18next.t('wowCubes.platonicUpgrades.c15Rewards.allUnlocked')
   }
+
+  DOMResizeMinToMaxHeight(DOMCacheGetOrSet('cubeTab6'))
+
   LOADED_STATS_HTMLS.challenge15 = true
 }
 

@@ -54,7 +54,7 @@ import { format, formatTimeShort, player } from './Synergism'
 import { getActiveSubTab, Tabs } from './Tabs'
 import { calculateMaxTalismanLevel } from './Talismans'
 import type { Player, ZeroToFour } from './types/Synergism'
-import { sumContents, timeReminingHours } from './Utility'
+import { sumContents, timeReminingHours, DOMResizeMinToMaxHeight } from './Utility'
 import { Globals as G } from './Variables'
 
 export const visualUpdateBuildings = () => {
@@ -1352,6 +1352,8 @@ export const visualUpdateCorruptions = () => {
       }
     )
   }
+
+  DOMResizeMinToMaxHeight(DOMCacheGetOrSet('corruptionMain'))
 }
 
 export const visualUpdateSettings = () => {
@@ -1507,6 +1509,8 @@ export const visualUpdateSingularity = () => {
       }
     }
   }
+
+  DOMResizeMinToMaxHeight(DOMCacheGetOrSet('singularityUpgradeShit'))
 }
 
 export const shopMouseover = (value: boolean) => {
@@ -1576,6 +1580,8 @@ export const visualUpdateOcteracts = () => {
       obtainiumBonus: format(cTOOOB, 3, true)
     }
   )
+
+  DOMResizeMinToMaxHeight(DOMCacheGetOrSet('octeractUpgradeValues'))
 }
 
 export const visualUpdateAmbrosia = () => {
@@ -1744,6 +1750,8 @@ export const visualUpdateAmbrosia = () => {
       }
     )
   }
+
+  DOMResizeMinToMaxHeight(DOMCacheGetOrSet('ambrosiaUpgradeValues'))
 }
 
 export const visualUpdateShop = () => {
@@ -1891,6 +1899,8 @@ export const visualUpdateShop = () => {
       getGoldenQuarkCost().cost
     )
   } Quarks Each`
+
+  DOMResizeMinToMaxHeight(DOMCacheGetOrSet('shopHovers'))
 }
 
 export const constructConsumableTimes = (p: PseudoCoinConsumableNames) => {

@@ -5,7 +5,7 @@ import { singularity } from './Reset'
 import { player } from './Synergism'
 import type { Player } from './types/Synergism'
 import { Alert, Confirm } from './UpdateHTML'
-import { toOrdinal } from './Utility'
+import { toOrdinal, DOMResizeMinToMaxHeight } from './Utility'
 import { Globals as G } from './Variables'
 
 export interface ISingularityChallengeData {
@@ -266,6 +266,8 @@ export class SingularityChallenge {
     DOMCacheGetOrSet('singularityChallengesInfo').innerHTML = this.toString()
     DOMCacheGetOrSet('singularityChallengesScalingRewards').innerHTML = this.scaleString()
     DOMCacheGetOrSet('singularityChallengesUniqueRewards').innerHTML = this.uniqueString()
+
+    DOMResizeMinToMaxHeight(DOMCacheGetOrSet('singularityChallenges'))
   }
 
   public updateIconHTML (): void {
