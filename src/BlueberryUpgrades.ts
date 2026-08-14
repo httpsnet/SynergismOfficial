@@ -1294,7 +1294,7 @@ export const ambrosiaUpgradeToString = (upgradeKey: AmbrosiaUpgradeNames): strin
   })
   const blueberryCostHTML = `${
     i18next.t('ambrosia.blueberryCost')
-  } <span style="color:blue">${upgrade.blueberryCost}</span>`
+    } <span style="color:var(--blueberry-box-color)">${upgrade.blueberryCost}</span>`
   const spentAmbrosiaHTML = `${i18next.t('general.spent')} ${
     i18next.t('ambrosia.ambrosia')
   }: <span style="color:orange">${format(upgrade.ambrosiaInvested, 0, true)}</span>`
@@ -1637,7 +1637,7 @@ export const displayProperLoadoutCount = () => {
   for (let i = 1; i <= MAX_BLUEBERRY_LOADOUT_COUNT; i++) {
     const elm = DOMCacheGetOrSet(`blueberryLoadout${i}`)
     if (i <= loadoutCount) {
-      elm.style.display = 'flex'
+      elm.style.display = 'inline-block'
       elm.removeAttribute('disabled')
     } else {
       elm.style.display = 'none'
