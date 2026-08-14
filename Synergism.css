@@ -1952,6 +1952,7 @@ p#promocodeinfo {
 #achievements {
     display: flex;
     justify-content: center;
+    gap: 0 2px;
 }
 
 #tieredAchievementsTable {
@@ -2025,6 +2026,7 @@ p#promocodeinfo {
     justify-content: center;
     align-items: center;
     gap: 5px;
+    margin: auto 10px;
 }
 
 .NotificationToggle > p {
@@ -2397,12 +2399,13 @@ p#prestigehotkeys {
     font-size: 1em;
 }
 
-.runeType:hover {
+.runeType:is(:hover, :has(button:focus-visible)) {
     box-shadow:
         0 0 15px var(--glow-color),
         0 0 30px var(--glow-color),
         0 0 45px var(--glow-color);
     background-color: var(--box-color);
+    z-index: 1;
 }
 
 .runeType > button,
@@ -2410,7 +2413,6 @@ p#prestigehotkeys {
     min-width: 100px;
     text-align: center;
     border: 2px solid gold;
-    cursor: default;
 }
 
 .runeTypeMobile > button {
@@ -2632,6 +2634,7 @@ img.runeTypeElement:hover {
     object-fit: none;
     background-color: var(--bg-color);
     border-radius: 3px;
+    box-sizing: content-box;
 }
 
 .talismanLevel {
@@ -2685,7 +2688,6 @@ img.runeTypeElement:hover {
     justify-content: left;
     align-items: center;
     gap: 5px;
-    margin-left: 10%;
 }
 
 .mobileTalismanShardContainers {
@@ -3337,13 +3339,17 @@ p#reincarnatehotkeys {
     margin: 0 auto;
 }
 
-.antUpgrade:hover,
-.antBtn:hover {
-    box-shadow:
-        0 0 3px var(--glow-color),
-        0 0 6px var(--glow-color),
-        0 0 9px var(--glow-color);
-    background-color: var(--glow-color);
+.antProducerColumn button:is(:hover, :focus-visible) {
+    z-index: 1;
+
+    .antUpgrade,
+    .antBtn {
+        box-shadow:
+            0 0 3px var(--glow-color),
+            0 0 6px var(--glow-color),
+            0 0 9px var(--glow-color);
+        background-color: var(--glow-color);
+    }
 }
 
 #antSubtab1,
@@ -3518,6 +3524,7 @@ p#reincarnatehotkeys {
 
 #altar p {
     margin: 0;
+    z-index: 1;
 }
 
 #autoSacrifice {
@@ -3533,16 +3540,19 @@ p#reincarnatehotkeys {
     color: gold;
 }
 
+#antSacrifice {
+    border-radius: 50%;
+}
+
 .canAntSacrifice {
     box-shadow:
         0 0 15px crimson,
         0 0 30px crimson,
         0 0 45px crimson;
     background-color: crimson;
-    border-radius: 50%;
 }
 
-.canAntSacrifice:hover {
+.canAntSacrifice:is(:hover, :focus-visible) {
     box-shadow:
         0 0 20px lightgoldenrodyellow,
         0 0 40px gold,
@@ -5268,6 +5278,7 @@ header #obtainiumDisplay { color: pink; }
     grid-column: 1 / 4;
     text-align: center;
     align-self: center;
+    box-sizing: content-box;
 }
 
 .meter > span {
