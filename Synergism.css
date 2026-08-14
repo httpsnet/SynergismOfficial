@@ -3254,7 +3254,11 @@ p#reincarnatehotkeys {
 }
 
 #ambrosiaTexts {
-    line-height: 5px;
+    margin: 8px 0;
+}
+
+#ambrosiaTexts > p {
+    margin: 0;
 }
 
 #totalOcteractsDisplay {
@@ -5562,6 +5566,7 @@ header #obtainiumDisplay { color: pink; }
 .blueberryUpgradeTier > div {
     width: 32px;
     height: 32px;
+    line-height: 0;
 }
 
 .singularityUpgrade,
@@ -6077,6 +6082,7 @@ img#singularityPerksIcon {
     height: 28px;
     width: 28px;
     border: 2px solid gold;
+    box-sizing: content-box;
 }
 
 /* Style for dimmed image */
@@ -6113,6 +6119,7 @@ img#singularityPerksIcon {
     position: relative;
     display: inline-block; /* Or block, depending on your layout */
     cursor: pointer;
+    line-height: 0;
 }
 
 .maxBlueberryLevel,
@@ -6421,6 +6428,8 @@ img#singularityPerksIcon {
 #pixelProgressBar {
     width: 25%;
     height: 30px;
+    min-width: 20em;
+    min-height: 1.2em;
     background-color: black;
     border: solid white;
     border-radius: 5px;
@@ -6446,11 +6455,14 @@ img#singularityPerksIcon {
     justify-content: center; /* Center the text horizontally */
     color: white;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 #ambrosiaProgressBar {
     width: 25%;
     height: 30px;
+    min-width: 20em;
+    min-height: 1.2em;
     background-color: black;
     border: solid white;
     border-radius: 5px;
@@ -6476,6 +6488,7 @@ img#singularityPerksIcon {
     justify-content: center; /* Center the text horizontally */
     color: white;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 #bbLoadoutContainer {
@@ -8123,10 +8136,6 @@ html[data-mobile="true"] .hideOnMobile {
     #singularityPerksDesc {
         height: unset;
         min-width: unset;
-    }
-
-    #ambrosiaTexts {
-        line-height: unset;
     }
 
     .blueberryUpgradeTier {
