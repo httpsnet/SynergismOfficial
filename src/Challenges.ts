@@ -825,8 +825,9 @@ export const getNextAscensionChallenge = (startIndex: number) => {
 
   for (let i = 0; i < 5; i++) {
     nextChallenge++
+    // If using C15 during Auto Ascend, leave the Ascension Challenge
     if (nextChallenge > 15) {
-      nextChallenge = 11
+      return 0
     }
     if (
       player.autoChallengeToggles[nextChallenge]
@@ -837,7 +838,7 @@ export const getNextAscensionChallenge = (startIndex: number) => {
   }
 
   // This returns the same as startIndex if no valid Challenges are found.
-  return nextChallenge
+  return startIndex
 }
 
 export const useChallenge13Modifiers = () => {

@@ -1204,6 +1204,7 @@ export const singularity = (setSingNumber = -1) => {
   hold.reincarnationamount = player.reincarnationamount
   hold.buyTalismanShardPercent = player.buyTalismanShardPercent
   hold.autoAscend = player.autoAscend
+  hold.autoChallengeRunning = player.autoChallengeRunning
   hold.autoAscendMode = player.autoAscendMode
   hold.autoAscendThreshold = player.autoAscendThreshold
   hold.autoResearch = 0

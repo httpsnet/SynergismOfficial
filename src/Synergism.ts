@@ -3704,7 +3704,6 @@ export const resetCheck = async (
           && (autoAscensionChallengeSweepUnlock()
             || !player.autoChallengeRunning) // If not autochallenge, don't reset
           && player.autoAscend
-          && player.challengecompletions[11] > 0
           && player.cubeUpgrades[10] > 0
         )
       ) {
@@ -4164,7 +4163,6 @@ export const updateAll = (): void => {
 
   if (
     player.autoAscend
-    && player.challengecompletions[11] > 0
     && player.cubeUpgrades[10] > 0
     && player.currentChallenge.reincarnation !== 10
   ) {
@@ -4182,28 +4180,37 @@ export const updateAll = (): void => {
     ) {
       ascension = true
     }
+    let ascend = false
     if (ascension && player.challengecompletions[10] > 0) {
       // Auto Ascension and Auto Challenge Sweep enables rotation of the Ascension Challenge
       if (
         autoAscensionChallengeSweepUnlock()
-        && player.currentChallenge.ascension !== 0
         && player.retrychallenges
         && player.researches[150] === 1
         && player.autoChallengeRunning
       ) {
-        let nextChallenge = getNextAscensionChallenge(player.currentChallenge.ascension)
-        if (
-          player.currentChallenge.ascension !== nextChallenge
-        ) {
-          void resetCheck('ascensionChallenge', false, true)
-          reset('ascensionChallenge', false)
-          applyChallengeInitialModifiers('ascensionChallenge', nextChallenge)
-          player.currentChallenge.ascension = nextChallenge
+        let currentAscensionChallenge = player.currentChallenge.ascension
+        if (currentAscensionChallenge === 0) {
+          currentAscensionChallenge = 10
         }
-      } else {
+        let nextChallenge = getNextAscensionChallenge(currentAscensionChallenge)
+        if (nextChallenge > 10) {
+          if (
+            player.currentChallenge.ascension !== nextChallenge
+          ) {
+            void resetCheck('ascensionChallenge', false, true)
+            reset('ascensionChallenge', false)
+            applyChallengeInitialModifiers('ascensionChallenge', nextChallenge)
+            player.currentChallenge.ascension = nextChallenge
+            ascend = true
+          }
+        }
+      }
+      if (!ascend) {
         if (player.currentChallenge.ascension !== 0) {
           void resetCheck('ascensionChallenge', false, true)
           reset('ascensionChallenge', false)
+          player.currentChallenge.ascension = 0
         } else {
           reset('ascension', false)
         }
