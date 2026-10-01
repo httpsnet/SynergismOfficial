@@ -7782,7 +7782,8 @@
     "invalidKey": "That key can't be used as a hotkey! Try a standard keyboard key instead.",
     "invalidKeybinding": "That key is already binded to an action, use another key instead!",
     "invalidTriggered": "No hotkey is triggered by {{oldKey}}!",
-    "resetConfirme": "Are you sure you want to default all the changed hotkeys?\nBelow is a history of hotkeys you have changed\n\n{{settext}}"
+    "resetConfirme": "Are you sure you want to default all the changed hotkeys?\nBelow is a history of hotkeys you have changed\n\n{{settext}}",
+    "lastEnabledKey": "Last enabled key: "
   },
   "versionChangeAnnouncements": {
     "ants": "蚂蚁进行了大量重制和平衡调整，因此您的蚁丘进度也进行了相应调整！"
