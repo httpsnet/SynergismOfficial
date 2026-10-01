@@ -9,7 +9,7 @@ import { runes } from './Runes'
 import { useConsumablePrompt } from './Shop'
 import { player, resetCheck, synergismHotkeys } from './Synergism'
 import { getActiveSubTab, keyboardTabChange as kbTabChange, tabRow, Tabs } from './Tabs'
-import { confirmReply, toggleAutoChallengeRun } from './Toggles'
+import { confirmReply, toggleAutoAscendResetActive, toggleAutoChallengeRun } from './Toggles'
 import { Alert, Confirm, Prompt } from './UpdateHTML'
 import { memoize } from './Utility'
 import { Globals as G } from './Variables'
@@ -22,6 +22,7 @@ interface Hotkey {
   hiddenOnMobile?: boolean
 }
 
+// Do not change the default hotkeys
 const defaultHotkeys = new Map<string, Hotkey>([
   ['A', { name: 'hotkeys.names.buyAccelerators', action: () => buyBuilding('accelerator') }],
   [
@@ -170,7 +171,15 @@ const defaultHotkeys = new Map<string, Hotkey>([
       unlocked: () => runes.antiquities.level > 0 || player.highestSingularityCount > 0
     }
   ],
-  ['CTRL+B', { name: 'hotkeys.names.unhideTabs', action: () => tabRow.reappend(), hiddenOnMobile: true }]
+  ['CTRL+B', { name: 'hotkeys.names.unhideTabs', action: () => tabRow.reappend(), hiddenOnMobile: true }],
+  [
+    'ALT+A',
+    {
+      name: 'hotkeys.names.autoAscend',
+      action: () => toggleAutoAscendResetActive(),
+      unlocked: () => player.highestSingularityCount > 0 || player.challengecompletions[11] > 0
+    }
+  ]
 ])
 
 let hotkeysEnabled = false
@@ -286,14 +295,7 @@ const makeSlot = (key: string, descr: string) => {
       ?? target.nextSibling?.textContent
 
     // new value to set key as, unformatted
-    const newKey = await Prompt(`
-        Enter the new key you want to activate ${name} with.
-
-        MDN has a list of values for "special keys" if you would like to use one:
-        https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
-
-        You can also prefix your hotkey with [Ctrl,Shift,Alt]+<key>
-        `)
+    const newKey = await Prompt(i18next.t('hotkeys.newKeyPrompt', { name: name }))
 
     if (typeof newKey !== 'string') {
       return
@@ -302,12 +304,12 @@ const makeSlot = (key: string, descr: string) => {
     const toSet = newKey.toUpperCase()
 
     if (newKey.length === 0) {
-      void Alert('You didn\'t enter anything, canceled!')
+      void Alert(i18next.t('hotkeys.invalidEmptyKey'))
       return
     }
 
     if (!isNaN(Number(newKey))) {
-      void Alert('Number keys are currently unavailable!')
+      void Alert(i18next.t('hotkeys.invalidNumberKey'))
       return
     }
 
@@ -317,7 +319,7 @@ const makeSlot = (key: string, descr: string) => {
     }
 
     if (hotkeys.has(toSet) || oldKey === toSet) {
-      void Alert('That key is already binded to an action, use another key instead!')
+      void Alert(i18next.t('hotkeys.invalidKeybinding'))
       return
     } else if (hotkeys.has(oldKey)) {
       const old = hotkeys.get(oldKey)!
@@ -332,7 +334,7 @@ const makeSlot = (key: string, descr: string) => {
 
       enableHotkeys()
     } else {
-      void Alert(`No hotkey is triggered by ${oldKey}!`)
+      void Alert(i18next.t('hotkeys.invalidTriggered', { oldKey: oldKey }))
       return
     }
   })
@@ -474,15 +476,13 @@ export const resetHotkeys = async () => {
     const toSet = player.hotkeys[key][1]
     if (hotkey.has(oldKey)) {
       const old = hotkey.get(oldKey)!
-      settext += `\t${oldKey}[${old.name}] to ${toSet}, `
+      settext += `\t${oldKey}[${i18next.t(old.name)}] to ${toSet}, `
       hotkey.set(toSet, old)
       hotkey.delete(oldKey)
     }
   }
 
-  const confirmed = await Confirm(
-    `Are you sure you want to default all the changed hotkeys?\nBelow is a history of hotkeys you have changed\n\n${settext}`
-  )
+  const confirmed = await Confirm(i18next.t('hotkeys.resetConfirme', { settext: settext }))
   if (confirmed) {
     hotkeys = new Map(defaultHotkeys)
     player.hotkeys = {}

@@ -7771,10 +7771,18 @@
       "useOffPotion": "使用祭品药剂",
       "useObtPotion": "使用难得素药剂",
       "resetSingularity": "进入奇点",
-      "unhideTabs": "取消隐藏选项卡"
+      "unhideTabs": "取消隐藏选项卡",
+      "autoAscend": "Auto Ascend"
     },
     "hotkeysON": "快捷键：开",
-    "hotkeysOFF": "快捷键：关"
+    "hotkeysOFF": "快捷键：关",
+    "newKeyPrompt": "Enter the new key you want to activate {{name}} with.\n\nMDN has a list of values for \"special keys\" if you would like to use one:\nhttps://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values\n\nYou can also prefix your hotkey with [Ctrl,Shift,Alt]+<key>",
+    "invalidEmptyKey": "You didn't enter anything, canceled!",
+    "invalidNumberKey": "Number keys are currently unavailable!",
+    "invalidKey": "That key can't be used as a hotkey! Try a standard keyboard key instead.",
+    "invalidKeybinding": "That key is already binded to an action, use another key instead!",
+    "invalidTriggered": "No hotkey is triggered by {{oldKey}}!",
+    "resetConfirme": "Are you sure you want to default all the changed hotkeys?\nBelow is a history of hotkeys you have changed\n\n{{settext}}"
   },
   "versionChangeAnnouncements": {
     "ants": "蚂蚁进行了大量重制和平衡调整，因此您的蚁丘进度也进行了相应调整！"
