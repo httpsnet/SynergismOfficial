@@ -3700,7 +3700,8 @@ export const resetCheck = async (
     if (!player.retrychallenges || manual || leaving) {
       if (
         !(
-          !manual
+          a !== 15
+          && !manual
           && (autoAscensionChallengeSweepUnlock()
             || !player.autoChallengeRunning) // If not autochallenge, don't reset
           && player.autoAscend
@@ -4198,7 +4199,9 @@ export const updateAll = (): void => {
           if (
             player.currentChallenge.ascension !== nextChallenge
           ) {
-            void resetCheck('ascensionChallenge', false, true)
+            if (player.currentChallenge.ascension === 15) {
+              void resetCheck('ascensionChallenge', false, true)
+            }
             reset('ascensionChallenge', false)
             applyChallengeInitialModifiers('ascensionChallenge', nextChallenge)
             player.currentChallenge.ascension = nextChallenge
@@ -4208,7 +4211,9 @@ export const updateAll = (): void => {
       }
       if (!ascend) {
         if (player.currentChallenge.ascension !== 0) {
-          void resetCheck('ascensionChallenge', false, true)
+          if (player.currentChallenge.ascension === 15) {
+            void resetCheck('ascensionChallenge', false, true)
+          }
           reset('ascensionChallenge', false)
           player.currentChallenge.ascension = 0
         } else {
