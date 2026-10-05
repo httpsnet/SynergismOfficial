@@ -37,6 +37,8 @@ import {
   corruptionCleanseConfirm,
   maxNextCorruptionLevel,
   registerCorruptionDetailsModal,
+  resetCorruptionProgress,
+  setCorruptionAutoClimb,
   setNextCorruptionLevel,
   toggleCorruptionAutoIncrease,
   toggleCorruptionCleanseToHighest
@@ -897,6 +899,15 @@ export const generateEventHandlers = () => {
     const consumables = DOMCacheGetOrSet('actualConsumables')
     consumables.appendChild(warp)
     consumables.appendChild(dayReset)
+
+    const corruptionReset = document.createElement('button')
+    corruptionReset.textContent = i18next.t('corruptions.resetProgress.button')
+    corruptionReset.setAttribute(
+      'style',
+      'width: auto; height: 30px; border: 2px solid crimson;'
+    )
+    corruptionReset.addEventListener('click', () => resetCorruptionProgress())
+    DOMCacheGetOrSet('corruptionDisplays').after(corruptionReset)
   }
   // Offline Button
   DOMCacheGetOrSet('exitOffline').addEventListener('click', () => exitOffline())
@@ -1615,6 +1626,9 @@ export const generateEventHandlers = () => {
   DOMCacheGetOrSet('corruptionLevelMax').addEventListener('click', () => maxNextCorruptionLevel())
   DOMCacheGetOrSet('corruptionLevelInput').addEventListener('change', (event) => {
     setNextCorruptionLevel(Number((event.target as HTMLInputElement).value))
+  })
+  DOMCacheGetOrSet('corruptionAutoClimbInput').addEventListener('change', (event) => {
+    setCorruptionAutoClimb(Number((event.target as HTMLInputElement).value))
   })
 
   // Extra toggle

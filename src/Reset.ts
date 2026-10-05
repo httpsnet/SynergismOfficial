@@ -20,6 +20,7 @@ import {
 import { campaignTokenRewardHTMLUpdate, earnCampaignTokens, updateMaxTokens, updateTokens } from './Campaign'
 import { CalcECC, challengeRequirement, resetChallengeSweep } from './Challenges'
 import {
+  autoClimbCorruptionLevel,
   c15CorruptionLevel,
   clearCorruptionLevel,
   corruptionPresetTableUpdate,
@@ -550,7 +551,7 @@ export const reset = (input: resetNames, _fast = false, from = 'unknown') => {
   }
 
   if (input === 'reincarnation' || input === 'reincarnationChallenge') {
-    if (player.corruptions.used >= 100 && player.platonicUpgrades[11] > 0) {
+    if (player.corruptions.used >= c15CorruptionLevel && player.platonicUpgrades[11] > 0) {
       player.prestigePoints = player.prestigePoints.add(G.reincarnationPointGain)
     }
   }
@@ -771,6 +772,7 @@ export const reset = (input: resetNames, _fast = false, from = 'unknown') => {
       earnCampaignTokens(player.corruptions.used, c10Completions)
       if (player.currentChallenge.ascension !== 15) {
         clearCorruptionLevel(player.corruptions.used)
+        autoClimbCorruptionLevel()
       }
     }
 
@@ -1180,6 +1182,8 @@ export const singularity = (setSingNumber = -1) => {
   hold.saveString = player.saveString
   hold.corruptions.presets = player.corruptions.presets.map((preset) => ({ ...preset }))
   hold.corruptions.autoIncrease = player.corruptions.autoIncrease
+  hold.corruptions.autoClimb = player.corruptions.autoClimb
+  hold.corruptions.highestCleared = player.corruptions.highestCleared
   hold.corruptions.cleanseToHighest = player.corruptions.cleanseToHighest
   hold.toggles = player.toggles
   hold.retrychallenges = player.retrychallenges
