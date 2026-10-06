@@ -26,7 +26,8 @@ import {
   calculateChallenge15Score,
   challenge15ScoreMultiplier,
   challengeRequirement,
-  getMaxChallenges
+  getMaxChallenges,
+  autoAscensionChallengeSweepUnlock
 } from './Challenges'
 import { revealCorruptions } from './Corruptions'
 import { canBuyAntMastery } from './Features/Ants/AntMasteries/lib/get-buyable'
@@ -415,6 +416,9 @@ export const revealStuff = () => {
     player.highestSingularityCount >= 50 ? 'true' : 'false'
   document.documentElement.dataset.autoPlatonicUpgrades = // Auto Platonic Upgrades
     player.highestSingularityCount >= 50 ? 'true' : 'false'
+
+  document.documentElement.dataset.sweepomatic = // Automatic Sweep-o-matic Mk.2 and Instant Challenge 2
+    autoAscensionChallengeSweepUnlock() ? 'true' : 'false'
 
   // Singularity confirmation toggle pic
   document.documentElement.dataset.singularityConfirmation =

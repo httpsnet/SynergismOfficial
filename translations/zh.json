@@ -5178,7 +5178,9 @@
       "on": "自动飞升[开]",
       "off": "自动飞升[关]",
       "modeCompletions": "模式：挑战10完成数",
-      "modeRealTime": "模式：现实时间"
+      "modeRealTime": "模式：现实时间",
+      "autoAscensionChallengeSweep": "Sweep the Ascension Challenge",
+      "autoAscensionChallengeSweepInOut": "Entering/Exiting the Ascension Challenge"
     },
     "importLoadoutInTextFormat": "以字符串形式导入腐化预设",
     "loadoutApplied": "之前周目的腐化已载入。飞升后即可生效。"

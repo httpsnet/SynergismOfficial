@@ -5178,7 +5178,9 @@
       "on": "Auto Ascension [ACTIF]",
       "off": "Auto Ascension [INACTIF]",
       "modeCompletions": "Mode : complétions de C10",
-      "modeRealTime": "Mode : temps réel"
+      "modeRealTime": "Mode : temps réel",
+      "autoAscensionChallengeSweep": "Sweep the Ascension Challenge",
+      "autoAscensionChallengeSweepInOut": "Entering/Exiting the Ascension Challenge"
     },
     "importLoadoutInTextFormat": "Importez un ensemble de corruption en format texte.",
     "loadoutApplied": "L'ensemble de corruption de la précédente Ascension a été appliqué. Il prendra effet à la prochaine Ascension."

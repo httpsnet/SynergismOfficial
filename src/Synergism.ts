@@ -138,6 +138,7 @@ import {
   initializeMonospaceFont,
   setAutoAscendResetActiveText,
   setAutoAscendResetModeText,
+  updateAutoAscensionChallengeSweepCheck,
   setAutoResetModeTexts,
   settingMonospaceFont,
   toggleAscStatPerSecond,
@@ -978,6 +979,8 @@ export const player: Player = {
   autoAscend: false,
   autoAscendMode: AutoAscensionResetModes.c10Completions,
   autoAscendThreshold: 1,
+  autoAscensionChallengeSweep: false,
+  autoAscensionChallengeSweepInOut: false,
   autoOpenCubes: false,
   openCubes: 0,
   autoOpenTesseracts: false,
@@ -1957,6 +1960,7 @@ const loadSynergy = (saveString: string): boolean => {
 
     setAutoAscendResetActiveText()
     setAutoAscendResetModeText()
+    updateAutoAscensionChallengeSweepCheck()
 
     DOMCacheGetOrSet('historyTogglePerSecondButton').textContent = player.historyShowPerSecond
       ? i18next.t('history.perSecondOn')
@@ -3684,7 +3688,15 @@ export const resetCheck = async (
     ) {
       player.highestchallengecompletions[a] += 1
       player.wowHypercubes.add(1)
-      if (player.highestchallengecompletions[a] >= maxCompletions) {
+      if (
+        player.highestchallengecompletions[a] >= maxCompletions
+        && !(
+          (autoAscensionChallengeSweepUnlock()
+            || !player.autoChallengeRunning) // If not autochallenge, don't reset
+          && player.autoAscend
+          && player.cubeUpgrades[10] > 0
+        )
+      ) {
         leaving = true
       }
     }
@@ -3703,18 +3715,7 @@ export const resetCheck = async (
     }
 
     if (!player.retrychallenges || manual || leaving) {
-      if (
-        !(
-          a !== 15
-          && !manual
-          && (autoAscensionChallengeSweepUnlock()
-            || !player.autoChallengeRunning) // If not autochallenge, don't reset
-          && player.autoAscend
-          && player.cubeUpgrades[10] > 0
-        )
-      ) {
-        challengeExit('ascension')
-      }
+      challengeExit('ascension')
     }
 
     if (manual || (a !== 15 && !getShopUpgradeEffects('instantChallenge2', 'unlocked'))) {
@@ -4186,44 +4187,39 @@ export const updateAll = (): void => {
     ) {
       ascension = true
     }
-    let ascend = false
     if (ascension && player.challengecompletions[10] > 0) {
       // Auto Ascension and Auto Challenge Sweep enables rotation of the Ascension Challenge
+      let nextAscensionChallenge = player.currentChallenge.ascension
       if (
         autoAscensionChallengeSweepUnlock()
         && player.retrychallenges
         && player.researches[150] === 1
         && player.autoChallengeRunning
+        && player.autoAscensionChallengeSweep
       ) {
-        let currentAscensionChallenge = player.currentChallenge.ascension
-        if (currentAscensionChallenge === 0) {
-          currentAscensionChallenge = 10
-        }
-        let nextChallenge = getNextAscensionChallenge(currentAscensionChallenge)
-        if (nextChallenge > 10) {
-          if (
-            player.currentChallenge.ascension !== nextChallenge
-          ) {
-            if (player.currentChallenge.ascension === 15) {
-              void resetCheck('ascensionChallenge', false, true)
-            }
-            reset('ascensionChallenge', false)
-            applyChallengeInitialModifiers('ascensionChallenge', nextChallenge)
-            player.currentChallenge.ascension = nextChallenge
-            ascend = true
+        let currentAscensionChallenge = Math.max(10, player.currentChallenge.ascension)
+        if (player.autoAscensionChallengeSweepInOut || nextAscensionChallenge > 10) {
+          nextAscensionChallenge = getNextAscensionChallenge(currentAscensionChallenge)
+          if (!player.autoAscensionChallengeSweepInOut && nextAscensionChallenge === 0) {
+            nextAscensionChallenge = getNextAscensionChallenge(10)
           }
         }
       }
-      if (!ascend) {
-        if (player.currentChallenge.ascension !== 0) {
-          if (player.currentChallenge.ascension === 15) {
-            void resetCheck('ascensionChallenge', false, true)
-          }
-          reset('ascensionChallenge', false)
-          player.currentChallenge.ascension = 0
-        } else {
-          reset('ascension', false)
+      if (nextAscensionChallenge > 10) {
+        if (player.currentChallenge.ascension === 15) {
+          void resetCheck('ascensionChallenge', false, true)
         }
+        reset('ascensionChallenge', false)
+        applyChallengeInitialModifiers('ascensionChallenge', nextAscensionChallenge)
+        player.currentChallenge.ascension = nextAscensionChallenge
+      } else if (player.currentChallenge.ascension !== 0) {
+        if (player.currentChallenge.ascension === 15) {
+          void resetCheck('ascensionChallenge', false, true)
+        }
+        reset('ascensionChallenge', false)
+        player.currentChallenge.ascension = 0
+      } else {
+        reset('ascension', false)
       }
     }
   }

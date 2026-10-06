@@ -261,7 +261,7 @@ textarea {
 }
 
 input:disabled {
-    color: gray;
+    color: var(--gray-text-color)
 }
 
 input {
@@ -273,6 +273,10 @@ input {
 
 input[type="checkbox"] {
     min-height: auto;
+}
+
+input[type="checkbox"]:disabled + :is(span, div) {
+    color: var(--gray-text-color)
 }
 
 button {
@@ -5939,6 +5943,20 @@ html[data-mobile="true"] #statisticsSubTab > .statContainer {
     border: 1px solid orange;
     color: gold;
     background-color: var(--blackbtn-color);
+}
+
+.autoAscendToggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+.autoAscendToggle > input {
+  margin: 0;
+  cursor: pointer;
+  transform: scale(1.4);
 }
 
 #corruptionAutoClimb {

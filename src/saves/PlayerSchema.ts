@@ -854,6 +854,8 @@ export const playerSchema = z.object({
     z.number()
   ]).default(() => blankSave.autoAscendMode),
   autoAscendThreshold: z.number().default(() => blankSave.autoAscendThreshold),
+  autoAscensionChallengeSweep: z.boolean().default(() => blankSave.autoAscensionChallengeSweep),
+  autoAscensionChallengeSweepInOut: z.boolean().default(() => blankSave.autoAscensionChallengeSweepInOut),
   autoOpenCubes: z.boolean().default(() => blankSave.autoOpenCubes),
   openCubes: z.number().default(() => blankSave.openCubes),
   autoOpenTesseracts: z.boolean().default(() => blankSave.autoOpenTesseracts),

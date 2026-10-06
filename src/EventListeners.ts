@@ -184,6 +184,8 @@ import {
   toggleautobuytesseract,
   toggleAutoChallengeRun,
   toggleAutoChallengesIgnore,
+  toggleAutoAscensionChallengeSweep,
+  toggleAutoAscensionChallengeSweepInOut,
   toggleautoopensCubes,
   toggleAutoPrestigeMode,
   toggleAutoReincarnateMode,
@@ -1634,6 +1636,15 @@ export const generateEventHandlers = () => {
   // Extra toggle
   DOMCacheGetOrSet('ascensionAutoEnable').addEventListener('click', () => toggleAutoAscendResetActive())
   DOMCacheGetOrSet('ascensionAutoToggle').addEventListener('click', () => toggleAutoAscendResetMode())
+
+  DOMCacheGetOrSet('autoAscensionChallengeSweepToggle').addEventListener(
+    'change',
+    () => toggleAutoAscensionChallengeSweep()
+  )
+  DOMCacheGetOrSet('autoAscensionChallengeSweepInOutToggle').addEventListener(
+    'change',
+    () => toggleAutoAscensionChallengeSweepInOut()
+  )
 
   // SETTNGS TAB
   const t = document.querySelectorAll<HTMLElement>('.statsNerds')

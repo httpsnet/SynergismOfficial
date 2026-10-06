@@ -781,7 +781,7 @@ export function tickChallengeSweep (dt: number): void {
 }
 
 export const autoAscensionChallengeSweepUnlock = () => {
-  return player.highestSingularityCount >= 101 // I believe this is a perk...
+  return player.highestSingularityCount >= 101 // Automatic Sweep-o-matic Mk.2
     && getShopUpgradeEffects('instantChallenge2', 'unlocked')
 }
 

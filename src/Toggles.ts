@@ -6,7 +6,7 @@ import {
   updateAllUngroupedAchievementProgress
 } from './Achievements'
 import { DOMCacheGetOrSet } from './Cache/DOM'
-import { type AutoChallengeStates, getChallengeConditions, resetChallengeSweep } from './Challenges'
+import { type AutoChallengeStates, getChallengeConditions, resetChallengeSweep, autoAscensionChallengeSweepUnlock } from './Challenges'
 import { storageGetItem, storageSetItem } from './events/storage-events'
 import { renderCaptcha } from './Login'
 import { initializeMessages } from './Messages'
@@ -864,6 +864,24 @@ export const toggleAutoAscendResetMode = () => {
     player.autoAscendMode = nextEnum
     setAutoAscendResetModeText()
   }
+}
+
+export const toggleAutoAscensionChallengeSweep = () => {
+  player.autoAscensionChallengeSweep = autoAscensionChallengeSweepUnlock() && !player.autoAscensionChallengeSweep
+  updateAutoAscensionChallengeSweepCheck()
+}
+
+export const toggleAutoAscensionChallengeSweepInOut = () => {
+  player.autoAscensionChallengeSweepInOut = autoAscensionChallengeSweepUnlock() && !player.autoAscensionChallengeSweepInOut
+  updateAutoAscensionChallengeSweepCheck()
+}
+
+export const updateAutoAscensionChallengeSweepCheck = () => {
+  const aacst = DOMCacheGetOrSet('autoAscensionChallengeSweepToggle') as HTMLInputElement
+  const aacsiot = DOMCacheGetOrSet('autoAscensionChallengeSweepInOutToggle') as HTMLInputElement
+  aacst.checked = player.autoAscensionChallengeSweep
+  aacsiot.checked = player.autoAscensionChallengeSweepInOut
+  aacsiot.disabled = !player.autoAscensionChallengeSweep
 }
 
 export const toggleautoopensCubes = (i: number) => {
