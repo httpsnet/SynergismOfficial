@@ -5178,7 +5178,9 @@
       "on": "Auto Ascender [ON]",
       "off": "Auto Ascender [OFF]",
       "modeCompletions": "Modo: Finalizaciones de C10",
-      "modeRealTime": "Modo: Tiempo real"
+      "modeRealTime": "Modo: Tiempo real",
+      "autoAscensionChallengeSweep": "Sweep the Ascension Challenge",
+      "autoAscensionChallengeSweepInOut": "Entering/Exiting the Ascension Challenge"
     },
     "importLoadoutInTextFormat": "Importa la Carga de Corrupciones en formato texto",
     "loadoutApplied": "Carga de Corrupción anterior aplicada. Tendrá efecto en la siguiente Ascensión."

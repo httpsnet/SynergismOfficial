@@ -5178,7 +5178,9 @@
       "on": "Авто Вознесение [ON]",
       "off": "Авто Вознесение [OFF]",
       "modeCompletions": "Режим: Выполнения И10",
-      "modeRealTime": "Режим: Реальное Время"
+      "modeRealTime": "Режим: Реальное Время",
+      "autoAscensionChallengeSweep": "Sweep the Ascension Challenge",
+      "autoAscensionChallengeSweepInOut": "Entering/Exiting the Ascension Challenge"
     },
     "importLoadoutInTextFormat": "Импортировать Заготовку Порчи в текстовом виде",
     "loadoutApplied": "Заготовка Порчи с прошлого вознесения была применена. Эффект вступит в силу в следующем Вознесении."

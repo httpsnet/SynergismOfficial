@@ -5822,7 +5822,9 @@
       "on": "Auto Ascend [ON]",
       "off": "Auto Ascend [OFF]",
       "modeCompletions": "Mode: C10 Completions",
-      "modeRealTime": "Mode: Real time"
+      "modeRealTime": "Mode: Real time",
+      "autoAscensionChallengeSweep": "Sweep the Ascension Challenge",
+      "autoAscensionChallengeSweepInOut": "Entering/Exiting the Ascension Challenge"
     },
     "loadoutApplied": "The level from that run has been applied. This will take effect on the next Ascension.",
     "toggles": {
