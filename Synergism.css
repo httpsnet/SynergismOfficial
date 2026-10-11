@@ -5939,10 +5939,24 @@ html[data-mobile="true"] #statisticsSubTab > .statContainer {
 }
 
 #ascensionAmount,
-#corruptionAutoClimbInput {
+#corruptionAutoClimbInput,
+#autoAscendForceAscensionInput {
     border: 1px solid orange;
     color: gold;
     background-color: var(--blackbtn-color);
+}
+
+#autoAscendForceAscension {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+}
+
+#autoAscendForceAscensionInput {
+    width: 5em;
+    min-height: auto;
+    margin: 0;
 }
 
 .autoAscendToggle {
