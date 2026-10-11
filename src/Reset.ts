@@ -768,15 +768,27 @@ export const reset = (input: resetNames, _fast = false, from = 'unknown') => {
       }
     }
 
-    if (c10Completions > 0) {
-      earnCampaignTokens(player.corruptions.used, c10Completions)
-      if (player.currentChallenge.ascension !== 15) {
-        clearCorruptionLevel(player.corruptions.used)
-        autoClimbCorruptionLevel()
+    if (player.highestchallengecompletions[11] > 0) {
+      if (c10Completions > 0) {
+        earnCampaignTokens(player.corruptions.used, c10Completions)
+        if (player.currentChallenge.ascension !== 15) {
+          clearCorruptionLevel(player.corruptions.used)
+          autoClimbCorruptionLevel()
+        }
+      } else if (
+        player.autoAscendChallenge10Count >= 1
+        && player.challenge10Count >= player.autoAscendChallenge10Count
+      ) {
+        if (player.currentChallenge.ascension !== 15) {
+          clearCorruptionLevel(player.corruptions.used)
+          autoClimbCorruptionLevel(-1)
+        }
       }
     }
 
     player.corruptions.used = normalizeCorruptionLevel(player.corruptions.next)
+
+    player.challenge10Count = 0
 
     // fix c15 ascension bug by restoring the corruptions if the player ascended instead of leaving
     if (player.currentChallenge.ascension === 15 && (input === 'ascension' || input === 'ascensionChallenge')) {
@@ -1213,6 +1225,7 @@ export const singularity = (setSingNumber = -1) => {
   hold.autoAscendThreshold = player.autoAscendThreshold
   hold.autoAscensionChallengeSweep = player.autoAscensionChallengeSweep
   hold.autoAscensionChallengeSweepInOut = player.autoAscensionChallengeSweepInOut
+  hold.autoAscendChallenge10Count = player.autoAscendChallenge10Count
   hold.autoResearch = 0
   hold.autoTesseracts = player.autoTesseracts
   hold.tesseractAutoBuyerToggle = player.tesseractAutoBuyerToggle

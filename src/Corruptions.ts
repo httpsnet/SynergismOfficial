@@ -283,12 +283,12 @@ export const maxCorruptionLevel = () => {
   return Math.max(highest, Math.min(corruptionLevelCap(), highest + corruptionClimbStep()))
 }
 
-export const autoClimbCorruptionLevel = () => {
+export const autoClimbCorruptionLevel = (multiplier = 1) => {
   if (player.corruptions.autoClimb <= 0) {
     return
   }
-  const target = Math.min(maxCorruptionLevel(), player.corruptions.used + player.corruptions.autoClimb)
-  player.corruptions.next = Math.max(player.corruptions.next, target)
+  const target = Math.round(Math.max(0, Math.min(maxCorruptionLevel(), player.corruptions.used + player.corruptions.autoClimb * multiplier)))
+  player.corruptions.next = target
 }
 
 export const setCorruptionAutoClimb = (amount: number) => {

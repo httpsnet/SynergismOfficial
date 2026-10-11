@@ -28,6 +28,7 @@ import { updateTalismanInventory } from './Talismans'
 import { settingSymbols } from './Themes'
 import type { BuildingSubtab, BuyAmount, Player } from './types/Synergism'
 import { Alert, challengeExit, Confirm, createFitties, Prompt, updateChallengeDisplay } from './UpdateHTML'
+import { validateNonnegativeInteger } from './Utility'
 import { Globals as G } from './Variables'
 
 type ToggleBuy = 'coin' | 'crystal' | 'mythos' | 'particle' | 'offering' | 'tesseract'
@@ -864,6 +865,17 @@ export const toggleAutoAscendResetMode = () => {
     player.autoAscendMode = nextEnum
     setAutoAscendResetModeText()
   }
+}
+
+export const setAutoAscendForceAscension = (amount: number) => {
+  console.log("setAutoAscendForceAscension", amount)
+  player.autoAscendChallenge10Count = validateNonnegativeInteger(amount) ? amount : 0
+  updateAutoAscendForceAscensionText()
+}
+
+export const updateAutoAscendForceAscensionText = () => {
+  const aafai = DOMCacheGetOrSet('autoAscendForceAscensionInput') as HTMLInputElement
+  aafai.value = `${player.autoAscendChallenge10Count}`
 }
 
 export const toggleAutoAscensionChallengeSweep = () => {

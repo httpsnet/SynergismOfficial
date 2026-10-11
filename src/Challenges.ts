@@ -639,6 +639,11 @@ function sweepTransitionFunc (
         elapsedTime >= timers.exit
         || player.challengecompletions[state.index] === getMaxChallenges(state.index)
       ) {
+        // This counts the number of times Challenge 10 was not completed due to Auto Ascend
+        if (state.index === 10) {
+          player.challenge10Count++
+        }
+
         // Find next challenge
         const nextChallenge = getNextRegularChallenge(state.index, state.explored)
 
