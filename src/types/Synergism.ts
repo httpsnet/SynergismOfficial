@@ -419,6 +419,8 @@ export interface Player {
   autoAscendThreshold: number
   autoAscensionChallengeSweep: boolean
   autoAscensionChallengeSweepInOut: boolean
+  autoAscendChallenge10Count: number
+  challenge10Count: number
   roombaResearchIndex: number
   ascStatToggles: Record<number, boolean>
 

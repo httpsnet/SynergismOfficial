@@ -184,6 +184,7 @@ import {
   toggleautobuytesseract,
   toggleAutoChallengeRun,
   toggleAutoChallengesIgnore,
+  setAutoAscendForceAscension,
   toggleAutoAscensionChallengeSweep,
   toggleAutoAscensionChallengeSweepInOut,
   toggleautoopensCubes,
@@ -1637,6 +1638,9 @@ export const generateEventHandlers = () => {
   DOMCacheGetOrSet('ascensionAutoEnable').addEventListener('click', () => toggleAutoAscendResetActive())
   DOMCacheGetOrSet('ascensionAutoToggle').addEventListener('click', () => toggleAutoAscendResetMode())
 
+  DOMCacheGetOrSet('autoAscendForceAscensionInput').addEventListener('change', (event) => {
+    setAutoAscendForceAscension(Number((event.target as HTMLInputElement).value))
+  })
   DOMCacheGetOrSet('autoAscensionChallengeSweepToggle').addEventListener(
     'change',
     () => toggleAutoAscensionChallengeSweep()

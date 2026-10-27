@@ -5823,6 +5823,7 @@
       "off": "Auto Ascend [OFF]",
       "modeCompletions": "Mode: C10 Completions",
       "modeRealTime": "Mode: Real time",
+      "forceAscension": "Ascend from a count that cannot complete Challenge 10 (0 = off): ",
       "autoAscensionChallengeSweep": "Sweep the Ascension Challenge",
       "autoAscensionChallengeSweepInOut": "Entering/Exiting the Ascension Challenge"
     },

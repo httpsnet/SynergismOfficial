@@ -138,6 +138,7 @@ import {
   initializeMonospaceFont,
   setAutoAscendResetActiveText,
   setAutoAscendResetModeText,
+  updateAutoAscendForceAscensionText,
   updateAutoAscensionChallengeSweepCheck,
   setAutoResetModeTexts,
   settingMonospaceFont,
@@ -981,6 +982,8 @@ export const player: Player = {
   autoAscendThreshold: 1,
   autoAscensionChallengeSweep: false,
   autoAscensionChallengeSweepInOut: false,
+  autoAscendChallenge10Count: 0,
+  challenge10Count: 0,
   autoOpenCubes: false,
   openCubes: 0,
   autoOpenTesseracts: false,
@@ -1960,6 +1963,7 @@ const loadSynergy = (saveString: string): boolean => {
 
     setAutoAscendResetActiveText()
     setAutoAscendResetModeText()
+    updateAutoAscendForceAscensionText()
     updateAutoAscensionChallengeSweepCheck()
 
     DOMCacheGetOrSet('historyTogglePerSecondButton').textContent = player.historyShowPerSecond
@@ -4174,6 +4178,7 @@ export const updateAll = (): void => {
     && player.currentChallenge.reincarnation !== 10
   ) {
     let ascension = false
+    let c10Requirement = player.challengecompletions[10] > 0
     if (
       player.autoAscendMode === AutoAscensionResetModes.c10Completions
       && player.challengecompletions[10] >= Math.max(1, player.autoAscendThreshold)
@@ -4187,7 +4192,16 @@ export const updateAll = (): void => {
     ) {
       ascension = true
     }
-    if (ascension && player.challengecompletions[10] > 0) {
+    // Auto Challenge Sweep will force an ascension if the number of times C10 cannot be completed exceeds a set value
+    if (
+      player.highestchallengecompletions[11] > 0
+      && player.autoAscendChallenge10Count >= 1
+      && player.challenge10Count >= player.autoAscendChallenge10Count
+    ) {
+      ascension = true
+      c10Requirement = true
+    }
+    if (ascension && c10Requirement) {
       // Auto Ascension and Auto Challenge Sweep enables rotation of the Ascension Challenge
       let nextAscensionChallenge = player.currentChallenge.ascension
       if (
@@ -4597,7 +4611,7 @@ export const synergismHotkeys = (event: KeyboardEvent, key: string): void => {
     if (key === 'BACKQUOTE') {
       num = -1
     }
-    if (player.challengecompletions[11] > 0 && !isNaN(num)) {
+    if (player.highestchallengecompletions[11] > 0 && !isNaN(num)) {
       if (isCorruptionPresetUnlocked(num)) {
         if (player.toggles[41]) {
           void Notification(
